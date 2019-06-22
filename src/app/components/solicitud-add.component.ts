@@ -51,8 +51,8 @@ export class SolicitudAddComponent{
 
 	saveSolicitud(){
 			this._solicitudService.addSolicitud(this.solicitud).subscribe(
-				/* response => {
-					if(response.code == 202){
+				response => {
+					if(response['code'] == 202){
 						this._router.navigate(['/solicitudes']);
 					}else{
 						console.log(response);
@@ -60,7 +60,7 @@ export class SolicitudAddComponent{
 				},
 				error => {
 					console.log(<any>error);
-				} */
+				}
 			);
 	}
 

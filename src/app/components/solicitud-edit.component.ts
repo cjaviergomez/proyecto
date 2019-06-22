@@ -56,8 +56,8 @@ export class SolicitudEditComponent{
 			let id = params['id'];
 
 			this._solicitudService.editSolicitud(id, this.solicitud).subscribe(
-				/* response => {
-					if(response.code == 202){
+				response => {
+					if(response['code'] == 202){
 						this._router.navigate(['/solicitud', id]);
 					}else{
 						console.log(response);
@@ -65,7 +65,7 @@ export class SolicitudEditComponent{
 				},
 				error => {
 					console.log(<any>error);
-				} */
+				}
 			);
 		});
 	}
@@ -80,16 +80,16 @@ export class SolicitudEditComponent{
 			let id = params['id'];
 
 			this._solicitudService.getSolicitud(id).subscribe(
-				/* response => {
-					if(response.code == 202){
-						this.solicitud = response.data;
+				response => {
+					if(response['code'] == 202){
+						this.solicitud = response['data'];
 					}else{
 						this._router.navigate(['/solicitudes']);
 					}
 				},
 				error => {
 					console.log(<any>error);
-				} */
+				}
 			);
 		});
 	}

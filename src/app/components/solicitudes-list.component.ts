@@ -33,11 +33,10 @@ export class SolicitudesListComponent{
 		this._solicitudService.getSolicitudes().subscribe(
 
 			result => {
-				console.log(result.code);
-				if(result.code != 202){
+				if(result['code'] != 202){
 					console.log(result);
 				}else{
-					this.solicitudes = result.data;
+					this.solicitudes = result['data'];
 				}
 
 			},
@@ -57,8 +56,8 @@ export class SolicitudesListComponent{
 
 	onDeleteSolicitud(id:number){
 		this._solicitudService.deleteSolicitud(id).subscribe(
-			/* response => {
-				if(response.code == 202){
+			 response => {
+				if(response['code'] == 202){
 					this.getSolicitudes();
 				}else{
 					alert('Error al borrar la solicitud');
@@ -66,7 +65,7 @@ export class SolicitudesListComponent{
 			},
 			error => {
 				console.log(<any>error);
-			} */
+			}
 		);
 	}
 
