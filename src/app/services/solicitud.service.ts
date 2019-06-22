@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-//import { Observable } from 'rxjs/Observable';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Solicitud } from '../models/solicitud';
 import { GLOBAL } from './global';
 
@@ -16,31 +14,31 @@ export class SolicitudService{
 	}
 
 	getSolicitudes(){
-		//return this._http.get(this.url+'productos').map(res => res.json());
+		return this._http.get(this.url+'solicitudes');
 	}
 
-	getSolicitud(id){
-		//return this._http.get(this.url+'producto/'+id).map(res => res.json());
+	getSolicitud(id:number){
+		return this._http.get(this.url+'solicitud/'+id);
 	}
 
 	addSolicitud(solicitud: Solicitud){
 		let json = JSON.stringify(solicitud);
 		let params = 'json='+json;
-		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		let headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
 
-		//return this._http.post(this.url+'productos', params, {headers: headers}) .map(res => res.json());
+		return this._http.post(this.url+'solicitudes', params, {headers: headers});
 	}
 
-	editSolicitud(id, solicitud: Solicitud){
+	editSolicitud(id:number, solicitud: Solicitud){
 		let json = JSON.stringify(solicitud);
 		let params = "json="+json;
-		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		let headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
 
-		//return this._http.post(this.url+'update-producto/'+id, params, {headers: headers}).map(res => res.json());
+		return this._http.post(this.url+'update-solicitud/'+id, params, {headers: headers});
 	}
 
-	deleteSolicitud(id){
-		//return this._http.get(this.url+'delete-producto/'+id).map(res => res.json());
+	deleteSolicitud(id:number){
+		return this._http.get(this.url+'delete-solicitud/'+id);
 	}
 
 	makeFileRequest(url: string, params: Array<string>, files: Array<File>){
@@ -54,7 +52,7 @@ export class SolicitudService{
 
 			xhr.onreadystatechange = function(){
 				if(xhr.readyState == 4){
-					if(xhr.status == 200){
+					if(xhr.status == 202){
 						resolve(JSON.parse(xhr.response));
 					}else{
 						reject(xhr.response);

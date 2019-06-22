@@ -21,7 +21,7 @@ export class SolicitudAddComponent{
 		private _route: ActivatedRoute,
 		private _router: Router
 	){
-		this.titulo = 'Crear un nuevo producto';
+		this.titulo = 'Crear una nueva solicitud';
 		this.solicitud = new Solicitud(0,'','',0,'');
 	}
 
@@ -38,29 +38,29 @@ export class SolicitudAddComponent{
 
 				this.resultUpload = result;
 				this.solicitud.imagen = this.resultUpload.filename;
-				this.saveProducto();
+				this.saveSolicitud();
 
 			}, (error) =>{
 				console.log(error);
 			});
 		}else{
-			this.saveProducto();
+			this.saveSolicitud();
 		}
 
 	}
 
-	saveProducto(){
-			this._solicitudService.addProducto(this.solicitud).subscribe(
-				response => {
-					if(response.code == 200){
-						this._router.navigate(['/productos']);
+	saveSolicitud(){
+			this._solicitudService.addSolicitud(this.solicitud).subscribe(
+				/* response => {
+					if(response.code == 202){
+						this._router.navigate(['/solicitudes']);
 					}else{
 						console.log(response);
 					}
 				},
 				error => {
 					console.log(<any>error);
-				}
+				} */
 			);
 	}
 

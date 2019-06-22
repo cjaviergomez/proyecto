@@ -28,7 +28,7 @@ export class SolicitudEditComponent{
 
 	ngOnInit(){
 		console.log(this.titulo);
-		this.getProducto();
+		this.getSolicitud();
 	}
 
 	onSubmit(){
@@ -40,32 +40,32 @@ export class SolicitudEditComponent{
 
 				this.resultUpload = result;
 				this.solicitud.imagen = this.resultUpload.filename;
-				this.updateProducto();
+				this.updateSolicitud();
 
 			}, (error) =>{
 				console.log(error);
 			});
 		}else{
-			this.updateProducto();
+			this.updateSolicitud();
 		}
 
 	}
 
-	updateProducto(){
+	updateSolicitud(){
 		this._route.params.forEach((params: Params) => {
 			let id = params['id'];
 
-			this._solicitudService.editProducto(id, this.solicitud).subscribe(
-				response => {
-					if(response.code == 200){
-						this._router.navigate(['/producto', id]);
+			this._solicitudService.editSolicitud(id, this.solicitud).subscribe(
+				/* response => {
+					if(response.code == 202){
+						this._router.navigate(['/solicitud', id]);
 					}else{
 						console.log(response);
 					}
 				},
 				error => {
 					console.log(<any>error);
-				}
+				} */
 			);
 		});
 	}
@@ -75,21 +75,21 @@ export class SolicitudEditComponent{
 		console.log(this.filesToUpload);
 	}
 
-	getProducto(){
-		this._route.params.forEach((params: Params) => {
+	getSolicitud(){
+		 this._route.params.forEach((params: Params) => {
 			let id = params['id'];
 
-			this._solicitudService.getProducto(id).subscribe(
-				response => {
-					if(response.code == 200){
+			this._solicitudService.getSolicitud(id).subscribe(
+				/* response => {
+					if(response.code == 202){
 						this.solicitud = response.data;
 					}else{
-						this._router.navigate(['/productos']);
+						this._router.navigate(['/solicitudes']);
 					}
 				},
 				error => {
 					console.log(<any>error);
-				}
+				} */
 			);
 		});
 	}

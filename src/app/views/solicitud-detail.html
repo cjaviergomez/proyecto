@@ -1,7 +1,7 @@
-<div *ngIf="!producto">
+<div *ngIf="!solicitud">
 	<p>Cargando solicitud...</p>
 </div>
-<div class="row" *ngIf="producto">
+<div class="row" *ngIf="solicitud">
 	<div class="col-lg-4" *ngIf="solicitud.imagen">
 		<br>
 		<img src="http://localhost/curso-angular4-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>

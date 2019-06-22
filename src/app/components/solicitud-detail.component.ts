@@ -28,17 +28,17 @@ export class SolicitudDetailComponent{
 		this._route.params.forEach((params: Params) => {
 			let id = params['id'];
 
-			this._solicitudService.getProducto(id).subscribe(
-				response => {
-					if(response.code == 200){
-						this.producto = response.data;
+			this._solicitudService.getSolicitud(id).subscribe(
+				/* response => {
+					if(response.code == 202){
+						this.solicitud = response.data;
 					}else{
-						this._router.navigate(['/productos']);
+						this._router.navigate(['/solicitudes']);
 					}
 				},
 				error => {
 					console.log(<any>error);
-				}
+				} */
 			);
 		});
 	}

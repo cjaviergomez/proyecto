@@ -1,7 +1,7 @@
 <h3>{{titulo}}</h3>
 <hr/>
 
-<div *ngIf="!productos">
+<div *ngIf="!solicitudes">
 	Cargando listado de solicitudes...
 </div>
 <div *ngIf="solicitudes">
@@ -9,7 +9,7 @@
 		<div class="col-lg-3" *ngFor="let solicitud of solicitudes">
 			<div class="thumbnail">
 				<div *ngIf="solicitud.imagen" class="imagen_container">
-					<img src="http://localhost/curso-angular4-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>
+					<img src="http://localhost/proyecto-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>
 				</div>
 				<div *ngIf="!solicitud.imagen">
 					<div class="imagen_relleno"></div>

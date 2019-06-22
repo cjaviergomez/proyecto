@@ -8,10 +8,10 @@ import { GLOBAL } from './services/global';
 })
 export class AppComponent {
   public title:string = 'CampusGIS';
-  //public header_color: string;
+  public header_color: string;
 
   constructor(){
-  	//this.header_color = GLOBAL.header_color;
+  	this.header_color = GLOBAL.header_color;
   }
 
 }
