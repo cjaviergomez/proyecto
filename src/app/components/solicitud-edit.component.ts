@@ -12,6 +12,8 @@ import { GLOBAL } from '../services/global';
 export class SolicitudEditComponent{
 	public titulo: string;
 	public solicitud: Solicitud;
+	public fecha_actual:Date;
+	public hora;
 	public filesToUpload;
 	public resultUpload;
 	public is_edit;
@@ -22,7 +24,7 @@ export class SolicitudEditComponent{
 		private _router: Router
 	){
 		this.titulo = 'Editar solicitud';
-		this.solicitud = new Solicitud(1,'','',1,'');
+		this.solicitud = new Solicitud(0, 1 ,'Mecánica', 1, 45, 'Pendiente', '','', this.fecha_actual, this.hora, '', '');
 		this.is_edit = true;
 	}
 
@@ -39,7 +41,7 @@ export class SolicitudEditComponent{
 				console.log(result);
 
 				this.resultUpload = result;
-				this.solicitud.imagen = this.resultUpload.filename;
+				//this.solicitud.imagen = this.resultUpload.filename;
 				this.updateSolicitud();
 
 			}, (error) =>{

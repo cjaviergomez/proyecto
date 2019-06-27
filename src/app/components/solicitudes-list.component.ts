@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+
 import { SolicitudService } from '../services/solicitud.service';
 import { Solicitud } from '../models/solicitud';
 
@@ -13,15 +11,15 @@ import { Solicitud } from '../models/solicitud';
 export class SolicitudesListComponent{
 	public titulo: string;
 	public solicitudes: Solicitud[];
-	public confirmado;
+	public confirmado: number;
+	public cont:number; //variable para saber la cantidad de solicitudes. 
 
 	constructor(
-		private _route: ActivatedRoute,
-		private _router: Router,
 		private _solicitudService: SolicitudService
 	){
 		this.titulo = 'Listado de solicitudes';
 		this.confirmado = null;
+		this.cont = 0;
 	}
 
 	ngOnInit(){
@@ -29,16 +27,16 @@ export class SolicitudesListComponent{
 		this.getSolicitudes();
 	}
 
+	//Metodo para obtener todas las solicitudes usando el metodo getSolicitudes del servicio.
 	getSolicitudes(){
 		this._solicitudService.getSolicitudes().subscribe(
-
 			result => {
 				if(result['code'] != 202){
 					console.log(result);
-				}else{
+				} else {
 					this.solicitudes = result['data'];
+					this.cont = this.solicitudes.length;
 				}
-
 			},
 			error => {
 				console.log(<any>error);

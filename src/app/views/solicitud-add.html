@@ -1,32 +1,128 @@
-<h3>{{titulo}}</h3>
+<h3 id="centrado">{{titulo}}</h3>
 <hr/>
 
-<form #formSolicitud="ngForm" (ngSubmit)="onSubmit()" class="col-lg-6" id="form-solicitud">
+<div class="col-lg-10 col-lg-offset-3">
 
-	<label>
-		Nombre
-		<span *ngIf="!nombre.valid && nombre.touched" class="label label-danger">El nombre es obligatorio</span>
-	</label>
-	<input type="text" #nombre="ngModel" name="nombre" [(ngModel)]="solicitud.nombre" class="form-control" required />
+	<form #formSolicitud="ngForm" (ngSubmit)="onSubmit()" class="col-lg-6" id="form-solicitud">
+		<hr/>
+		<h4 id='centrado'>{{seccion}}</h4>
+		<hr/>
+		<!-- Seccion 1-->
+	 <div *ngIf="seccion == 'Descripción del servicio'">
+		 <label>
+			 UAA o entidad solicitante
+			 <span *ngIf="!entidad_solicitante.valid && entidad_solicitante.touched" class="label label-danger">El campo es obligatorio</span>
+		 </label>
+			<input type="text" #entidad_solicitante="ngModel" name="entidad_solicitante" [(ngModel)]="solicitud.entidad_solicitante" class="form-control" required />
 
-	<label>
-		Descripción
-		<span *ngIf="!descripcion.valid && descripcion.touched" class="label label-danger">La descripción es obligatorio</span>
-	</label>
-	<textarea #descripcion="ngModel" name="descripcion" [(ngModel)]="solicitud.descripcion" class="form-control" required></textarea>
+			<div id="divFecha">
+				<label>Fecha de solicitud (dd/mm/aa)</label>
+				<input type="text" #fecha="ngModel" name="fecha" [(ngModel)]="solicitud.fecha" class="form-control" disabled/>
+			</div>
 
-	<label>
-		Precio
-		<span *ngIf="!precio.valid && precio.touched" class="label label-danger">El precio no es correcto</span>
-	</label>
-	<input type="text" #precio="ngModel" name="precio" [(ngModel)]="solicitud.precio" class="form-control" required pattern="[0-9]+"/>
+			<div id="divHora">
+				<label>Hora:</label>
+				<input type="text" #hora="ngModel" name="hora" [(ngModel)]="solicitud.hora" class="form-control" disabled />
+			</div>
 
-	<label>Imagen</label>
-	<div *ngIf="is_edit">
-		<img src="http://localhost/proyecto-backend/uploads/{{solicitud.imagen}}" width="60"/>
-	</div>
-	<input type="file" class="form-control" (change)="fileChangeEvent($event)"/>
+			<label>
+				Nombre del solicitante
+				<span *ngIf="!nombre_solicitante.valid && nombre_solicitante.touched" class="label label-danger">El nombre es obligatorio</span>
+			</label>
+ 			<input type="text" #nombre_solicitante="ngModel" name="nombre_solicitante" [(ngModel)]="solicitud.nombre_solicitante" class="form-control" required />
 
-	<br/>
-	<input type="submit" value="{{titulo}}" [disabled]="!formSolicitud.form.valid" class="btn btn-success"/>
-</form>
+			<label>
+				Descripción del servicio solicitado
+				<span *ngIf="!descripcion.valid && descripcion.touched" class="label label-danger">La descripción es obligatoria</span>
+			</label>
+			<textarea #descripcion="ngModel" name="descripcion" [(ngModel)]="solicitud.descripcion" class="form-control" required></textarea>
+
+			<br/>
+			<button class="btn btn-success col-lg-offset-10" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid">
+				Siguiente
+			</button>
+
+		</div>
+
+		<!-- Seccion 2-->
+		<div *ngIf="seccion == 'Certificado de visita'">
+			<div id="divFecha">
+ 				<label>Fecha de visita (dd/mm/aa):</label>
+ 				<input type="date" #fecha_visita="ngModel" name="fecha_visita" [(ngModel)]="solicitud.fecha_visita" class="form-control" />
+ 			</div>
+
+ 			<div id="divHora">
+ 				<label>Hora de visita:</label>
+ 				<input type="time" #hora_visita="ngModel" name="hora_visita" [(ngModel)]="solicitud.hora_visita" class="form-control" />
+ 			</div>
+
+	 		<label>
+	 			Funcionario asignado a la solicitud:
+	 			<span *ngIf="!funcionario_asignado.valid && funcionario_asignado.touched" class="label label-danger">El campo es obligatorio</span>
+	 		</label>
+	 		<input  #funcionario_asignado="ngModel" name="funcionario_asignado" [(ngModel)]="solicitud.funcionario_asignado" class="form-control" required />
+
+	 		<label>
+	 			Funcionario que atiende la visita:
+	 			<span *ngIf="!funcionario_visita.valid && funcionario_visita.touched" class="label label-danger">El campo no es obligatorio</span>
+	 		</label>
+	 		<input type="text" #funcionario_visita="ngModel" name="funcionario_visita" [(ngModel)]="solicitud.funcionario_visita" class="form-control" required/>
+
+	 		<br/>
+			<div class="col-lg-10 col-lg-offset-8">
+				<button class="btn btn-primary" (click) = "seccionAnterior()">Atrás</button>
+				<button class="btn btn-success" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid">
+					Siguiente
+				</button>
+			</div>
+
+	 	</div>
+
+		<!-- Seccion 3-->
+		<div *ngIf="seccion == 'Requerimientos'">
+	 	 <label>
+	 		 Listado de materiales:
+	 		 <span *ngIf="!nombre.valid && nombre.touched" class="label label-danger">El nombre es obligatorio</span>
+	 	 </label>
+	 		<input type="text" #nombre="ngModel" name="nombre" [(ngModel)]="solicitud.nombre" class="form-control" required />
+
+	 		<label>
+				Elementos de protección
+	 			<span *ngIf="!descripcion.valid && descripcion.touched" class="label label-danger">La descripción es obligatorio</span>
+	 		</label>
+	 		<textarea #descripcion="ngModel" name="descripcion" [(ngModel)]="solicitud.descripcion" class="form-control" required></textarea>
+
+	 		<label>
+	 			Especiales
+	 			<span *ngIf="!precio.valid && precio.touched" class="label label-danger">El precio no es correcto</span>
+	 		</label>
+	 		<input type="text" #precio="ngModel" name="precio" [(ngModel)]="solicitud.precio" class="form-control" required pattern="[0-9]+"/>
+
+
+	 		<br/>
+			<div class="col-lg-10 col-lg-offset-8">
+				<button class="btn btn-primary" (click) = "seccionAnterior()">Atrás</button>
+				<button class="btn btn-success" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid">
+					Siguiente
+				</button>
+			</div>
+
+	 	</div>
+
+		<!-- Seccion 4-->
+		<div *ngIf="seccion == 'Observaciones'">
+
+	 		<label>
+	 			Observaciones(Opcional)
+	 			<span *ngIf="!descripcion.valid && descripcion.touched" class="label label-danger">La descripción es obligatorio</span>
+	 		</label>
+	 		<textarea #observaciones="ngModel" name="observaciones" [(ngModel)]="solicitud.observaciones" class="form-control" required></textarea>
+
+
+	 		<br/>
+	 		<input type="submit" value="{{titulo}}" [disabled]="!formSolicitud.form.valid" class="btn btn-success"/>
+
+	 	</div>
+	</form>
+
+</div>

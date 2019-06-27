@@ -1,34 +1,48 @@
-<h3>{{titulo}}</h3>
-<hr/>
-
 <div *ngIf="!solicitudes">
 	Cargando listado de solicitudes...
 </div>
 <div *ngIf="solicitudes">
-	<div class="row">
-		<div class="col-lg-3" *ngFor="let solicitud of solicitudes">
-			<div class="thumbnail">
-				<div *ngIf="solicitud.imagen" class="imagen_container">
-					<img src="http://localhost/proyecto-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>
-				</div>
-				<div *ngIf="!solicitud.imagen">
-					<div class="imagen_relleno"></div>
-				</div>
-				<div class="caption">
-					<h3>{{solicitud.nombre}}</h3>
-					<p>{{solicitud.precio}} €</p>
 
-					<div class="botones" *ngIf="confirmado != solicitud.id">
-						<a [routerLink]="['/solicitud', solicitud.id]" class="btn btn-md btn-primary">Ver</a>
-						<a [routerLink]="['/editar-solicitud', solicitud.id]" class="btn btn-md btn-warning">Editar</a>
-						<a (click)="borrarConfirm(solicitud.id)" class="btn btn-md btn-danger">Borrar</a>
+	<div *ngIf="cont == 0">
+		<div class="col-lg-10 col-lg-offset-1">
+			<div class="jumbotron">
+				<img src="../assets/img/error.png" id="img">
+				<div id="centrado">
+					<p>¡No tienes solicitudes realizadas!</p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div *ngIf = "cont > 0">
+		<h3 id="centrado">{{titulo}}</h3>
+		<hr/>
+		<div class="row">
+			<div class="col-lg-3" *ngFor="let solicitud of solicitudes">
+				<div class="thumbnail">
+					<div *ngIf="solicitud.imagen" class="imagen_container">
+						<img src="http://localhost/proyecto-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>
 					</div>
+					<div *ngIf="!solicitud.imagen">
+						<div class="imagen_relleno"></div>
+					</div>
+					<div class="caption">
+						<h3>{{solicitud.nombre_edificio}}</h3>
+						<p>{{solicitud.piso_edificio}} €</p>
 
-					<div class="seguro" *ngIf="confirmado == solicitud.id">
-						<a (click)="onDeleteSolicitud(solicitud.id)" class="btn btn-md btn-danger">
-							Quiero eliminarlo
-						</a>
-						<a (click)="cancelarConfirm()" class="btn btn-md btn-warning">Cancelar</a>
+						<div class="botones" *ngIf="confirmado != solicitud.solicitud_id">
+							<a [routerLink]="['/solicitud', solicitud.solicitud_id]" class="btn btn-md btn-primary">Ver</a>
+							<a [routerLink]="['/editar-solicitud', solicitud.solicitud_id]" class="btn btn-md btn-warning">Editar</a>
+							<a (click)="borrarConfirm(solicitud.solicitud_id)" class="btn btn-md btn-danger">Borrar</a>
+						</div>
+
+						<div class="seguro" *ngIf="confirmado == solicitud.solicitud_id">
+							<a (click)="onDeleteSolicitud(solicitud.solicitud_id)" class="btn btn-md btn-danger">
+								Quiero eliminarlo
+							</a>
+							<a (click)="cancelarConfirm()" class="btn btn-md btn-warning">Cancelar</a>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -100,5 +100,19 @@
 	height: 70px;
 }
 #centrado{
-	text-align: center
+	text-align: center;
+}
+#subtitulo{
+	color: gray;
+}
+
+#divFecha{
+	float: left;
+	width: 67%;
+}
+
+#divHora{
+	float: left;
+	width: 30%;
+	margin-left: 10px;
 }
