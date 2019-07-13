@@ -12,7 +12,7 @@ export class SolicitudesListComponent{
 	public titulo: string;
 	public solicitudes: Solicitud[];
 	public confirmado: number;
-	public cont:number; //variable para saber la cantidad de solicitudes. 
+	public cont:number; //variable para saber la cantidad de solicitudes.
 
 	constructor(
 		private _solicitudService: SolicitudService
@@ -55,6 +55,7 @@ export class SolicitudesListComponent{
 	onDeleteSolicitud(id:number){
 		this._solicitudService.deleteSolicitud(id).subscribe(
 			 response => {
+				 console.log(response['message']);
 				if(response['code'] == 202){
 					this.getSolicitudes();
 				}else{

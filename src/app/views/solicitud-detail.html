@@ -2,13 +2,13 @@
 	<p>Cargando solicitud...</p>
 </div>
 <div class="row" *ngIf="solicitud">
-	<div class="col-lg-4" *ngIf="solicitud.imagen">
+	<div class="col-lg-4">
 		<br>
-		<img src="http://localhost/curso-angular4-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>
+		<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="solicitud_imagen"/>
 	</div>
 	<div class="col-lg-8">
-		<h3>{{solicitud.nombre}}</h3>
-		<p><strong>{{solicitud.precio}} €</strong></p>
-		<p>{{solicitud.descripcion}}</p>
+		<h3>{{solicitud.nombre_edificio}}</h3>
+		<p>{{solicitud.piso}} </p>
+		<p><strong>{{solicitud.estado}}</strong></p>
 	</div>
 </div>

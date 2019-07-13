@@ -21,29 +21,37 @@
 		<div class="row">
 			<div class="col-lg-3" *ngFor="let solicitud of solicitudes">
 				<div class="thumbnail">
-					<div *ngIf="solicitud.imagen" class="imagen_container">
-						<img src="http://localhost/proyecto-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>
-					</div>
-					<div *ngIf="!solicitud.imagen">
-						<div class="imagen_relleno"></div>
-					</div>
-					<div class="caption">
-						<h3>{{solicitud.nombre_edificio}}</h3>
-						<p>{{solicitud.piso_edificio}} €</p>
-
-						<div class="botones" *ngIf="confirmado != solicitud.solicitud_id">
-							<a [routerLink]="['/solicitud', solicitud.solicitud_id]" class="btn btn-md btn-primary">Ver</a>
-							<a [routerLink]="['/editar-solicitud', solicitud.solicitud_id]" class="btn btn-md btn-warning">Editar</a>
-							<a (click)="borrarConfirm(solicitud.solicitud_id)" class="btn btn-md btn-danger">Borrar</a>
+					<div> <!-- Div imagen-->
+						<div *ngIf="solicitud.imagen" class="imagen_container">
+							<img src="http://localhost/proyecto-backend/uploads/{{solicitud.imagen}}" class="solicitud_imagen"/>
 						</div>
-
-						<div class="seguro" *ngIf="confirmado == solicitud.solicitud_id">
-							<a (click)="onDeleteSolicitud(solicitud.solicitud_id)" class="btn btn-md btn-danger">
-								Quiero eliminarlo
-							</a>
-							<a (click)="cancelarConfirm()" class="btn btn-md btn-warning">Cancelar</a>
+						<div *ngIf="!solicitud.imagen" class="imagen_container">
+							<!-- <div class="imagen_relleno"></div> -->
+							<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="solicitud_imagen"/>
 						</div>
 					</div>
+
+					<div> <!--Div texto -->
+						<div class="caption">
+							<h4>{{solicitud.nombre_edificio}}</h4>
+							<p>{{solicitud.estado}} </p>
+							<p>{{solicitud.piso_edificio}} </p>
+
+
+							<div class="botones" *ngIf="confirmado != solicitud.solicitud_id">
+								<a [routerLink]="['/solicitud', solicitud.solicitud_id]" class="btn btn-md btn-primary">Ver</a>
+								<a [routerLink]="['/editar-solicitud', solicitud.solicitud_id]" class="btn btn-md btn-warning">Editar</a>
+								<a (click)="borrarConfirm(solicitud.solicitud_id)" class="btn btn-md btn-danger">Borrar</a>
+							</div>
+							<div class="seguro" *ngIf="confirmado == solicitud.solicitud_id">
+								<a (click)="onDeleteSolicitud(solicitud.solicitud_id)" class="btn btn-md btn-danger">
+									Quiero eliminarlo
+								</a>
+								<a (click)="cancelarConfirm()" class="btn btn-md btn-warning">Cancelar</a>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>

@@ -6,7 +6,7 @@ export class Solicitud{
 		public piso_edificio: number,
 		public objectID: number,
 		public estado:string,
-		public formulario:JSON,
+		public formulario:JSON
 
 		//seccion 1
 		/* public entidad_solicitante: string,

@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { loadModules } from 'esri-loader';  //Para trabajar con la API de ArcGIS
+import esri = __esri;
+
 import { GLOBAL } from './services/global';
 
 @Component({

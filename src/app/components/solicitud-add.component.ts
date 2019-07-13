@@ -14,7 +14,8 @@ import { GLOBAL } from '../services/global';
 export class SolicitudAddComponent{
 	public titulo: string;
 	public solicitud: Solicitud;
-	public seccion: string;
+	public seccion: number;  //Para trabajar el formulario por secciones, la variable empieza en 1.
+	public formulario;
 	public fecha_actual;
 	public hora;
 	public filesToUpload;
@@ -27,11 +28,19 @@ export class SolicitudAddComponent{
 		private datePipe: DatePipe
 	){
 		this.titulo = 'Crear una nueva solicitud';
-		this.seccion = "Descripción del servicio";
+		this.seccion = 1;
 		this.fecha_actual = new Date();
 		this.hora = this.fecha_actual.toLocaleTimeString('en-US', {hour12:true, hour:'numeric', minute: 'numeric'});
 		this.fecha_actual = this.datePipe.transform(this.fecha_actual, 'dd/MM/yyyy');
-		this.solicitud = new Solicitud(0, 1 ,'Mecánica', 1, 45, 'Pendiente', '','', this.fecha_actual, this.hora, '', '','','','','');
+
+		this.formulario = {
+			'fecha': this.fecha_actual,
+			'hora': this.hora,
+			'elementos': {},
+			'especial': {}
+		};
+
+		this.solicitud = new Solicitud(0, 1 ,'Ingeniería Mecánica', 1, 45, 'Pendiente', this.formulario);
 	}
 
 	ngOnInit(){
@@ -39,7 +48,7 @@ export class SolicitudAddComponent{
 	}
 
 	onSubmit(){
-		console.log(this.solicitud);
+		console.log(this.solicitud.formulario);
 
 		if(this.filesToUpload && this.filesToUpload.length >= 1){
 			this._solicitudService.makeFileRequest(GLOBAL.url+'upload-file', [], this.filesToUpload).then((result) => {
@@ -62,9 +71,10 @@ export class SolicitudAddComponent{
 			this._solicitudService.addSolicitud(this.solicitud).subscribe(
 				response => {
 					if(response['code'] == 202){
-						this._router.navigate(['/solicitudes']);
+						this._router.navigate(['/solicitud-creada']);
 					}else{
 						console.log(response);
+						this._router.navigate(['/solicitud-error']);
 					}
 				},
 				error => {
@@ -79,22 +89,10 @@ export class SolicitudAddComponent{
 	}
 
 	seccionSiguiente(){
-		if(this.seccion == 'Descripción del servicio'){
-			this.seccion = 'Certificado de visita';
-		}else if(this.seccion == 'Certificado de visita'){
-			this.seccion = 'Requerimientos';
-		}else if(this.seccion == 'Requerimientos'){
-			this.seccion = 'Observaciones';
-		}
+		this.seccion = this.seccion + 1;
 	}
 
 	seccionAnterior(){
-		if(this.seccion == 'Certificado de visita'){
-			this.seccion = 'Descripción del servicio';
-		}else if(this.seccion == 'Requerimientos'){
-			this.seccion = 'Certificado de visita';
-		}else if(this.seccion == 'Observaciones'){
-			this.seccion = 'Requerimientos';
-		}
+		this.seccion = this.seccion - 1;
 	}
 }

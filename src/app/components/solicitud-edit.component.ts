@@ -24,7 +24,7 @@ export class SolicitudEditComponent{
 		private _router: Router
 	){
 		this.titulo = 'Editar solicitud';
-		this.solicitud = new Solicitud(0, 1 ,'Mecánica', 1, 45, 'Pendiente', '','', this.fecha_actual, this.hora, '', '');
+		this.solicitud = new Solicitud(0, 1 ,'Mecánica', 1, 45, 'Pendiente', JSON);
 		this.is_edit = true;
 	}
 
