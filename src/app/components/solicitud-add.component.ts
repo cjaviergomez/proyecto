@@ -27,7 +27,7 @@ export class SolicitudAddComponent{
 		private _router: Router,
 		private datePipe: DatePipe
 	){
-		this.titulo = 'Crear una nueva solicitud';
+		this.titulo = 'Solictud de remodelación y/o adecuación';
 		this.seccion = 1;
 		this.fecha_actual = new Date();
 		this.hora = this.fecha_actual.toLocaleTimeString('en-US', {hour12:true, hour:'numeric', minute: 'numeric'});
