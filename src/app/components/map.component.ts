@@ -125,6 +125,10 @@ export class EsriMapComponent implements OnInit {
               //this.datos_formulario.emit({ "edificio": this.edificio, "capa": this.capa, "objecto": this.objecto});
             }
 
+            function irAReformas(){
+              window.open("http://localhost:4200/reformas");
+            }
+
             // This event fires for each click on any action
             view.popup.on("trigger-action", function(event){
               // If the zoom-out action is clicked, fire the zoomOut() function
@@ -132,6 +136,8 @@ export class EsriMapComponent implements OnInit {
                 irAlformulario();
               }else if(event.action.id === "ver-solicitudes"){
                 irASolicitudes();
+              }else if(event.action.id === "ver-reformas"){
+                irAReformas();
               }
             });
 
@@ -139,14 +145,14 @@ export class EsriMapComponent implements OnInit {
               if (graphic) {
                 graphic.layer.allSublayers.forEach(function(layer:esri.Layer) {
                   if(layer.title == graphic.attributes.BaseCategory){
-                    view.goTo({
+                    /* view.goTo({
                         target: graphic,
                         tilt: 60
                       },
                       {
                         duration: 1500,
                         easing: "out-expo"
-                      });
+                      }); */
                     showInfo(graphic.layer, layer, graphic.attributes);
                   }
                 });

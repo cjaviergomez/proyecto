@@ -4,13 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';  //Para trabajar con peticciones
 
-//Para trabajar con las animaciones del checkbox
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatCardModule } from '@angular/material';
-
 // Rutas
 import { routing, appRoutingProviders } from './app.routing';
+
+//Servicios
+import { AuthService } from "./services/auth.service";
+import {AuthGuard } from "./services/auth-guard.service";
 
 // Componentes
 import { AppComponent } from './app.component';
@@ -23,6 +22,8 @@ import { SolicitudAddedComponent } from './components/solicitud-added.component'
 import { SolicitudDetailComponent } from './components/solicitud-detail.component';
 import { SolicitudEditComponent } from './components/solicitud-edit.component';
 import { EsriMapComponent } from './components/map.component';
+import { FooterComponent} from './components/footer.component';
+import { ReformasListComponent } from './components/reformas-list.component';
 
 @NgModule({
   declarations: [
@@ -35,20 +36,21 @@ import { EsriMapComponent } from './components/map.component';
     SolicitudAddErrorComponent,
     SolicitudDetailComponent,
     SolicitudEditComponent,
-    EsriMapComponent
+    EsriMapComponent,
+    FooterComponent,
+    ReformasListComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     routing,
-    MatCheckboxModule,
-    MatCardModule,
-    BrowserAnimationsModule,
     ReactiveFormsModule
   ],
   providers: [
-    appRoutingProviders
+    appRoutingProviders,
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

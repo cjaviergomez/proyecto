@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { SolicitudService } from '../services/solicitud.service';
+import { UnidadService } from '../services/unidad.service';
 import { Solicitud } from '../models/solicitud';
+import { Unidad } from '../models/unidad';
 import { GLOBAL } from '../services/global';
 
 @Component({
 	selector: 'solicitud-add',
 	templateUrl: '../views/solicitud-add.html',
-	providers: [SolicitudService, DatePipe]
+	styleUrls: ['../app.component.css'],
+	providers: [SolicitudService, DatePipe, UnidadService]
 })
-export class SolicitudAddComponent{
-	public titulo: string;
+export class SolicitudAddComponent implements OnInit{
 	public solicitud: Solicitud;
+	public unidades:Unidad[];
 	public seccion: number;  //Para trabajar el formulario por secciones, la variable empieza en 1.
 	public formulario;
 	public fecha_actual;
@@ -23,11 +26,11 @@ export class SolicitudAddComponent{
 
 	constructor(
 		private _solicitudService: SolicitudService,
+		private _unidadService: UnidadService,
 		private _route: ActivatedRoute,
 		private _router: Router,
 		private datePipe: DatePipe
 	){
-		this.titulo = 'Crear una nueva solicitud';
 		this.seccion = 1;
 		this.fecha_actual = new Date();
 		this.hora = this.fecha_actual.toLocaleTimeString('en-US', {hour12:true, hour:'numeric', minute: 'numeric'});
@@ -35,21 +38,37 @@ export class SolicitudAddComponent{
 
 		this.formulario = {
 			'fecha': this.fecha_actual,
+			'entidad_solicitante': "",
 			'hora': this.hora,
 			'elementos': {},
-			'especial': {}
+			'especiales': {}
 		};
-
-		this.solicitud = new Solicitud(0, 1 ,'Ingeniería Mecánica', 1, 45, 'Pendiente', this.formulario);
+		this.solicitud = new Solicitud(0,'Ingenieria Mecanica', 1, 45, 'Pendiente', this.formulario);
 	}
 
 	ngOnInit(){
 		console.log('solicitud-add.component.ts cargado...');
+		this.getUnidades();
+
+	}
+
+	//Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.
+	getUnidades(){
+		this._unidadService.getUnidades().subscribe(
+			result => {
+				if(result['code'] != 202){
+					console.log(result);
+				} else {
+					this.unidades = result['data'];
+				}
+			},
+			error => {
+				console.log(<any>error);
+			}
+		);
 	}
 
 	onSubmit(){
-		console.log(this.solicitud.formulario);
-
 		if(this.filesToUpload && this.filesToUpload.length >= 1){
 			this._solicitudService.makeFileRequest(GLOBAL.url+'upload-file', [], this.filesToUpload).then((result) => {
 				console.log(result);
@@ -94,5 +113,9 @@ export class SolicitudAddComponent{
 
 	seccionAnterior(){
 		this.seccion = this.seccion - 1;
+	}
+
+	actualSeccion(sesion:number){
+		this.seccion = sesion;
 	}
 }

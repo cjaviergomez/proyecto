@@ -10,8 +10,4 @@ export class ErrorComponent {
 	constructor(){
 		this.titulo = "¡Error! Página no encontrada."
 	}
-
-	ngOnInit(){
-		console.log("Componente error.component.ts cargado");
-	}
 }

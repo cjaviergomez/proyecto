@@ -1,23 +1,39 @@
-<div id="content" class="col-lg-12">
-	<header id="header" class="row justify-content-md-center" [style.background]="header_color">
-		<h1 class="col col-lg-2">{{title}}</h1>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="">CampusGIS</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Home </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/reformas']" [routerLinkActive]="['activado']">Reformas</a>
+      </li>
+			<li class="nav-item">
+        <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
+      </li>
+    </ul>
+    <span class="navbar-text">
+      <button (click)="login()"
+							*ngIf="!auth.loggedIn"
+							type="button"
+							class="btn btn-outline-primary btn-sm">Ingresar</button>
+			<button (click)="salir()"
+							*ngIf="auth.loggedIn"
+							type="button"
+							class="btn btn-outline-primary">Salir</button>
+    </span>
+  </div>
+</nav>
 
-		<nav id="nav" class="col col-lg-10">
-			<ul>
-				 <li><a [routerLink]="['/home']" [routerLinkActive]="['activado']">Home</a></li>
-				<li><a [routerLink]="['/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a></li>
-				<li><a [routerLink]="['/crear-solicitud']" [routerLinkActive]="['activado']">Hacer Solicitud</a></li>
-				<li><a [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a></li>
-			</ul>
-		</nav>
-	</header>
+<section id="main" class="col-12">
+<!-- Componente actual -->
+	<router-outlet></router-outlet>
+</section>
 
-	<section id="main" class="col-lg-12">
-		<!-- Componente actual -->
-		<router-outlet></router-outlet>
-	</section>
-
-	<footer id="footer" class="col-lg-12">
-		<p>Pie de página</p>
-	</footer>
-</div>
+<app-footer></app-footer>

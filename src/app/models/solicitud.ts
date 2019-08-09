@@ -1,7 +1,6 @@
 export class Solicitud{
 	constructor(
 		public solicitud_id: number,
-		public user_id: number,
 		public nombre_edificio: string,
 		public piso_edificio: number,
 		public objectID: number,

@@ -1,20 +1,28 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { loadModules } from 'esri-loader';  //Para trabajar con la API de ArcGIS
-import esri = __esri;
-
-import { GLOBAL } from './services/global';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   public title:string = 'CampusGIS';
-  public header_color: string;
 
-  constructor(){
-  	this.header_color = GLOBAL.header_color;
+  constructor( public auth:AuthService){
+  }
+
+  ngOnInit() {
+    // On initial load, set up local auth streams
+    this.auth.localAuthSetup();
+  }
+
+  login(){
+    this.auth.login();
+  }
+
+  salir(){
+    this.auth.logout();
   }
 
 }
