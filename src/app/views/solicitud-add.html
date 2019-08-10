@@ -1,134 +1,243 @@
-<h3 id="centrado">{{titulo}}</h3>
-<hr/>
+<div class="card text-left">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" *ngIf="seccion == 1">Solicitante</a>
+				<a class="nav-link" *ngIf="seccion != 1">Solicitante</a>
+      </li>
+      <li class="nav-item">
+				<a class="nav-link active" *ngIf="seccion == 2">Requerimientos</a>
+				<a class="nav-link" *ngIf="seccion != 2">Requerimientos</a>
+      </li>
+			<li class="nav-item">
+				<a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
+				<a class="nav-link" *ngIf="seccion != 3">Observaciones</a>
+      </li>
+    </ul>
+  </div>
 
-<div class="col-lg-10 col-lg-offset-3">
-
-	<form #formSolicitud="ngForm" (ngSubmit)="onSubmit()" class="col-lg-6" id="form-solicitud">
-		<!--<hr/>
-		 <h4 id='centrado'>{{seccion}}</h4>
-		<hr/> -->
+	<form #formSolicitud="ngForm" (ngSubmit)="onSubmit()" novalidate="" >
 		<!-- Seccion 1-->
-	 <div *ngIf="seccion == 1">
+		<div class="card-body" *ngIf="seccion == 1">
+			<div class="form-group">
+				<label for="entidad_solicitante">UAA o entidad solicitante</label>
+				<div class="">
+					<select class="form-control"
+									#entidad_solicitante="ngModel" name="entidad_solicitante"
+									[(ngModel)]="solicitud.formulario['entidad_solicitante']" required>
+								<option value="" disabled>Seleccione una entidad</option>
+								<option *ngFor="let unidad of unidades"
+									[value]="unidad.nombre_unidad"> {{ unidad.nombre_unidad }} </option>
 
-		 <label>
-			 UAA o entidad solicitante
-			 <span *ngIf="!entidad_solicitante.valid && entidad_solicitante.touched" class="label label-danger">El campo es obligatorio</span>
-		 </label>
-			<input type="text" #entidad_solicitante="ngModel" name="entidad_solicitante" [(ngModel)]="solicitud.formulario['entidad_solicitante']" class="form-control" required />
+					</select>
+				</div>
+		  </div>
 
-			<div id="divLeft">
-				<label>Fecha de solicitud (dd/mm/aa)</label>
-				<input type="text" #fecha="ngModel" name="fecha" [(ngModel)]="solicitud.formulario['fecha']" class="form-control" disabled/>
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="inputfecha">Fecha de solicitud (dd/mm/aa)</label>
+					<input type="text" name="fecha" [(ngModel)]="solicitud.formulario['fecha']" class="form-control" disabled/>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="hora">Hora:</label>
+					<input type="text" name="hora" [(ngModel)]="solicitud.formulario['hora']" class="form-control" disabled />
+				</div>
 			</div>
 
-			<div id="divRight">
-				<label>Hora:</label>
-				<input type="text" #hora="ngModel" name="hora" [(ngModel)]="solicitud.formulario['hora']" class="form-control" disabled />
+			<div class="form-group">
+				<label for="nombre_solicitante">Nombre del solicitante</label>
+				<input type="text" #nombre_solicitante="ngModel" name="nombre_solicitante"
+							[(ngModel)]="solicitud.formulario['nombre_solicitante']"
+							class="form-control"
+							[ngClass]="{'is-invalid': !nombre_solicitante.valid && nombre_solicitante.touched}"
+							required />
+				<div class="invalid-feedback" *ngIf="!nombre_solicitante.valid && nombre_solicitante.touched">
+					Este campo es requerido
+				</div>
 			</div>
 
-			<label>
-				Nombre del solicitante
-				<span *ngIf="!nombre_solicitante.valid && nombre_solicitante.touched" class="label label-danger">El nombre es obligatorio</span>
-			</label>
- 			<input type="text" #nombre_solicitante="ngModel" name="nombre_solicitante" [(ngModel)]="solicitud.formulario['nombre_solicitante']" class="form-control" required />
+			<div class="form-row">
+				<div class="form-group col">
+					<label for="descripcionServicio">Descripción del servicio solicitado</label>
+					<textarea  #descripcion="ngModel" name="descripcion"
+										[(ngModel)]="solicitud.formulario['descripcion']"
+										class="form-control"
+										[ngClass]="{'is-invalid': !descripcion.valid && descripcion.touched }"
+										required></textarea>
+					<div class="invalid-feedback" *ngIf="!descripcion.valid && descripcion.touched">
+						Este campo es requerido
+					</div>
+				</div>
+			</div>
 
-			<label>
-				Descripción del servicio solicitado
-				<span *ngIf="!descripcion.valid && descripcion.touched" class="label label-danger">La descripción es obligatoria</span>
-			</label>
-			<textarea #descripcion="ngModel" name="descripcion" [(ngModel)]="solicitud.formulario['descripcion']" class="form-control" required></textarea>
-
-			<br/>
-			<button class="btn btn-success col-lg-offset-10" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid">
-				Siguiente
-			</button>
-
+			<button class="btn btn-primary col align-self-end" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid"> Siguiente</button>
 		</div>
 
 		<!-- Seccion 2-->
-		<div *ngIf="seccion == 2">
-			<div id="divFecha">
- 				<label>Fecha de visita (dd/mm/aa):</label>
- 				<input type="date" #fecha_visita="ngModel" name="fecha_visita" [(ngModel)]="solicitud.formulario['fecha_visita']" class="form-control" required/>
- 			</div>
+		<div class="card-body" *ngIf="seccion == 2">
+			<div class="form-group">
+				<label for="materiales">Listado de materiales</label>
+		    <input type="text" name="materiales" [(ngModel)]="solicitud.formulario['materiales']" class="form-control" id="materiales" required>
+		  </div>
 
- 			<div id="divHora">
- 				<label>Hora de visita:</label>
- 				<input type="time" #hora_visita="ngModel" name="hora_visita" [(ngModel)]="solicitud.formulario['hora_visita']" class="form-control" required/>
- 			</div>
+			<label for="">Elementos de protección</label>
+			<div class="form-row">
+				<div class="form-group col-md-10">
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+						  <input
+									type="checkbox"
+									class="custom-control-input"
+									id="respirador"
+									name="respirador"
+									[(ngModel)]="solicitud.formulario.elementos['Respirador']">
+						  <label class="custom-control-label" for="respirador">Respirador</label>
+						</div>
+					</div>
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+							<input
+									type="checkbox"
+									class="custom-control-input"
+									name="guantes"
+									 [(ngModel)]="solicitud.formulario.elementos['Guantes']"
+									id="guantes">
+							<label class="custom-control-label" for="guantes">Guantes</label>
+						</div>
+					</div>
 
-	 		<label>
-	 			Funcionario asignado a la solicitud:
-	 			<span *ngIf="!funcionario_asignado.valid && funcionario_asignado.touched" class="label label-danger">El campo es obligatorio</span>
-	 		</label>
-	 		<input  #funcionario_asignado="ngModel" name="funcionario_asignado" [(ngModel)]="solicitud.formulario['funcionario_asignado']" class="form-control" required />
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+							<input
+									type="checkbox"
+									class="custom-control-input"
+									name="trabajo"
+									 [(ngModel)]="solicitud.formulario.elementos['trabajo en alturas']"
+									id="trabajo">
+							<label class="custom-control-label" for="trabajo">Trabajo en alturas</label>
+						</div>
+					</div>
 
-	 		<label>
-	 			Funcionario que atiende la visita:
-	 			<span *ngIf="!funcionario_visita.valid && funcionario_visita.touched" class="label label-danger">El campo no es obligatorio</span>
-	 		</label>
-	 		<input type="text" #funcionario_visita="ngModel" name="funcionario_visita" [(ngModel)]="solicitud.formulario['funcionario_visita']" class="form-control" required/>
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+							<input
+									type="checkbox"
+									class="custom-control-input"
+									name="gafas"
+									[(ngModel)]="solicitud.formulario.elementos['Gafas']"
+									id="gafas">
+							<label class="custom-control-label" for="gafas">Gafas</label>
+						</div>
+					</div>
 
-	 		<br/>
-			<div class="col-lg-10 col-lg-offset-8">
-				<button class="btn btn-primary" (click) = "seccionAnterior()">Atrás</button>
-				<button class="btn btn-success" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid">
-					Siguiente
-				</button>
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+							<input
+									type="checkbox"
+									name="otros"
+									[(ngModel)]="solicitud.formulario.elementos['otros']"
+									class="custom-control-input"
+									id="otros">
+							<label class="custom-control-label" for="otros">Otros</label>
+						</div>
+					</div>
+
+					<div *ngIf="solicitud.formulario.elementos['otros'] == true" class="form-group form-check form-check-inline">
+						<input
+								type="text"
+								class="form-control form-control-sm"
+								name="otro"
+								[(ngModel)]="solicitud.formulario.elementos['otro']"
+								id="otro"
+								required>
+					</div>
+
+				</div>
 			</div>
 
-	 	</div>
+			<label for="">Especiales</label>
+			<div class="form-row">
+				<div class="form-group col-md-10">
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+						  <input
+									type="checkbox"
+									class="custom-control-input"
+									id="energia"
+									name="energia"
+									[(ngModel)]="solicitud.formulario.especiales['corteEnergia']">
+						  <label class="custom-control-label" for="energia">Corte de Energia</label>
+						</div>
+					</div>
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+							<input
+									type="checkbox"
+									class="custom-control-input"
+									name="agua"
+									 [(ngModel)]="solicitud.formulario.especiales['corteAgua']"
+									id="agua">
+							<label class="custom-control-label" for="agua">Corte de Agua</label>
+						</div>
+					</div>
+
+					<div class="form-group form-check form-check-inline">
+						<div class="custom-control custom-checkbox">
+							<input
+									type="checkbox"
+									name="especialesOtros"
+									[(ngModel)]="solicitud.formulario.especiales['especialesOtros']"
+									class="custom-control-input"
+									id="especialesOtros">
+							<label class="custom-control-label" for="especialesOtros">Otros</label>
+						</div>
+					</div>
+
+					<div *ngIf="solicitud.formulario.especiales['especialesOtros'] == true" class="form-group form-check form-check-inline">
+						<input
+								type="text"
+								class="form-control form-control-sm"
+								name="especialesOtro"
+								[(ngModel)]="solicitud.formulario.especiales['otro']"
+								id="especialesOtro"
+								required>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- Botones-->
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<button class="btn btn-primary col align-self-end" (click) = "seccionAnterior()"> Atrás</button>
+				</div>
+				<div class="form-group col-md-6">
+					<button class="btn btn-primary col align-self-end" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid"> Siguiente</button>
+				</div>
+			</div>
+
+		</div>
 
 		<!-- Seccion 3-->
-		<div *ngIf="seccion == 3">
-	 	 <label>
-	 		 Listado de materiales
-	 		 <span *ngIf="!materiales.valid && materiales.touched" class="label label-danger">El nombre es obligatorio</span>
-	 	 </label>
-	 		<input type="text" #materiales="ngModel" name="materiales" [(ngModel)]="solicitud.formulario['materiales']" class="form-control" required />
-
-			<label>Elementos de protección </label> <br>
-
-			<mat-checkbox class="example-margin" color="primary" name="elemento1" [(ngModel)]="solicitud.formulario.elementos['Respirador']">Respirador</mat-checkbox>
-			<mat-checkbox class="example-margin" color="primary" name="elemento2" [(ngModel)]="solicitud.formulario.elementos['Guantes']">Guantes</mat-checkbox>
-			<mat-checkbox class="example-margin" color="primary" name="elemento3" [(ngModel)]="solicitud.formulario.elementos['TrabajoAl']">Trabajo en alturas</mat-checkbox>
-			<mat-checkbox class="example-margin" color="primary" name="elemento4" [(ngModel)]="solicitud.formulario.elementos['Gafas']">Gafas</mat-checkbox>
-			<mat-checkbox class="example-margin" color="primary" name="elemento5" [(ngModel)]="solicitud.formulario.elementos['Otros']">Otros</mat-checkbox>
-			<br>
-
-	 		<label>Especiales</label>
-			<br>
-
-			<mat-checkbox class="example-margin" color="primary" name="especial1" [(ngModel)]="solicitud.formulario.especial['Energia']">Corte de energía</mat-checkbox>
-			<mat-checkbox class="example-margin" color="primary" name="especial2" [(ngModel)]="solicitud.formulario.especial['Agua']">Corte de agua</mat-checkbox>
-			<mat-checkbox class="example-margin" color="primary" name="especial3" [(ngModel)]="solicitud.formulario.especial['TrabajoAl']">Otros</mat-checkbox>
-
-			<br>
-
-
-	 		<br/>
-			<div class="col-lg-10 col-lg-offset-8">
-				<button class="btn btn-primary" (click) = "seccionAnterior()">Atrás</button>
-				<button class="btn btn-success" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid">
-					Siguiente
-				</button>
+		<div class="card-body" *ngIf="seccion == 3">
+			<div class="form-row">
+				<div class="form-group col">
+					<label for="observaciones">Observaciones (Opcional)</label>
+					<textarea name="observaciones" [(ngModel)]="solicitud.formulario['observaciones']" class="form-control" id="observaciones" rows="3"></textarea>
+				</div>
 			</div>
 
-	 	</div>
-
-		<!-- Seccion 4-->
-		<div *ngIf="seccion == 4">
-
-	 		<label> Observaciones(Opcional)</label>
-	 		<textarea #observaciones="ngModel" name="observaciones" [(ngModel)]="solicitud.formulario['observaciones']" class="form-control"></textarea>
-
-	 		<br/>
-			<div class="col-lg-10 col-lg-offset-8">
-				<button class="btn btn-primary" (click) = "seccionAnterior()">Atrás</button>
-				<input type="submit" value="Enviar" [disabled]="!formSolicitud.form.valid" class="btn btn-success"/>
+			<!-- Botones-->
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<button class="btn btn-primary col align-self-end" (click) = "seccionAnterior()"> Atrás</button>
+				</div>
+				<div class="form-group col-md-6">
+					<button type="submit" class="btn btn-primary col align-self-end" [disabled]="!formSolicitud.form.valid"> Enviar</button>
+				</div>
 			</div>
+		</div>
 
-	 	</div>
 	</form>
 
 </div>

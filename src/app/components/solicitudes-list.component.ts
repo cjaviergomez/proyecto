@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { SolicitudService } from '../services/solicitud.service';
 import { Solicitud } from '../models/solicitud';
@@ -8,7 +8,7 @@ import { Solicitud } from '../models/solicitud';
 	templateUrl: '../views/solicitudes-list.html',
 	providers: [SolicitudService]
 })
-export class SolicitudesListComponent{
+export class SolicitudesListComponent implements OnInit{
 	public titulo: string;
 	public solicitudes: Solicitud[];
 	public confirmado: number;
@@ -17,7 +17,7 @@ export class SolicitudesListComponent{
 	constructor(
 		private _solicitudService: SolicitudService
 	){
-		this.titulo = 'Listado de solicitudes';
+		this.titulo = 'Solicitudes';
 		this.confirmado = null;
 		this.cont = 0;
 	}

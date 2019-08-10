@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { SolicitudService } from '../services/solicitud.service';
 import { Solicitud } from '../models/solicitud';
@@ -9,7 +9,7 @@ import { GLOBAL } from '../services/global';
 	templateUrl: '../views/solicitud-add.html',
 	providers: [SolicitudService]
 })
-export class SolicitudEditComponent{
+export class SolicitudEditComponent implements OnInit{
 	public titulo: string;
 	public solicitud: Solicitud;
 	public fecha_actual:Date;
@@ -24,7 +24,7 @@ export class SolicitudEditComponent{
 		private _router: Router
 	){
 		this.titulo = 'Editar solicitud';
-		this.solicitud = new Solicitud(0, 1 ,'Mecánica', 1, 45, 'Pendiente', JSON);
+		this.solicitud = new Solicitud(0 ,'Mecánica', 1, 45, 'Pendiente', JSON);
 		this.is_edit = true;
 	}
 
