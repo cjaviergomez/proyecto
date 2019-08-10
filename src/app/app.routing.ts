@@ -12,6 +12,7 @@ import { SolicitudDetailComponent } from './components/solicitud-detail.componen
 import { SolicitudEditComponent } from './components/solicitud-edit.component';
 import { EsriMapComponent } from './components/map.component';
 import { ReformasListComponent } from './components/reformas-list.component';
+import { CallbackComponent } from './components/callback.component';
 
 import {	AuthGuard } from "./services/auth-guard.service";
 
@@ -27,7 +28,8 @@ const appRoutes: Routes = [
 	{path: 'editar-solicitud/:id', component: SolicitudEditComponent, canActivate: [ AuthGuard ]},
 	{path: 'map', component: EsriMapComponent},
 	//{path: '**', component: ErrorComponent},
-	{path: 'reformas', component: ReformasListComponent}
+	{path: 'reformas', component: ReformasListComponent},
+	{path: 'callback', component: CallbackComponent}
 ];
 
 export const appRoutingProviders: any[] = [];

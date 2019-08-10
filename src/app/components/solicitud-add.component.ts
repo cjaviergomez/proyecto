@@ -31,10 +31,6 @@ export class SolicitudAddComponent implements OnInit{
 		private _router: Router,
 		private datePipe: DatePipe
 	){
-<<<<<<< HEAD
-		this.titulo = 'Solictud de remodelación y/o adecuación';
-=======
->>>>>>> 9a96b78fcf534d3f56a46df87992928ef15ee10a
 		this.seccion = 1;
 		this.fecha_actual = new Date();
 		this.hora = this.fecha_actual.toLocaleTimeString('en-US', {hour12:true, hour:'numeric', minute: 'numeric'});

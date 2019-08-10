@@ -24,6 +24,7 @@ import { SolicitudEditComponent } from './components/solicitud-edit.component';
 import { EsriMapComponent } from './components/map.component';
 import { FooterComponent} from './components/footer.component';
 import { ReformasListComponent } from './components/reformas-list.component';
+import { CallbackComponent } from './components/callback.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ReformasListComponent } from './components/reformas-list.component';
     SolicitudEditComponent,
     EsriMapComponent,
     FooterComponent,
-    ReformasListComponent
+    ReformasListComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule,
