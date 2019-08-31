@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from "../services/auth.service";
 
 @Component({
 	selector: 'home',
@@ -8,16 +7,12 @@ import { AuthService } from "../services/auth.service";
 export class HomeComponent{
 	public titulo: string;
 
-	constructor( public auth:AuthService){
+	constructor(){
 		this.titulo = 'Página Principal';
 	}
 
 	ngOnInit(){
 		console.log('Se ha cargado el componente home.component.ts');
-		this.auth.localAuthSetup();
 	}
 
-	login(){
-		this.auth.login();
-	}
 }

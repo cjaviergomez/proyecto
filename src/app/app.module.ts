@@ -7,10 +7,6 @@ import { HttpClientModule } from '@angular/common/http';  //Para trabajar con pe
 // Rutas
 import { routing, appRoutingProviders } from './app.routing';
 
-//Servicios
-import { AuthService } from "./services/auth.service";
-import {AuthGuard } from "./services/auth-guard.service";
-
 // Componentes
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home.component';
@@ -24,7 +20,6 @@ import { SolicitudEditComponent } from './components/solicitud-edit.component';
 import { EsriMapComponent } from './components/map.component';
 import { FooterComponent} from './components/footer.component';
 import { ReformasListComponent } from './components/reformas-list.component';
-import { CallbackComponent } from './components/callback.component';
 
 @NgModule({
   declarations: [
@@ -39,8 +34,7 @@ import { CallbackComponent } from './components/callback.component';
     SolicitudEditComponent,
     EsriMapComponent,
     FooterComponent,
-    ReformasListComponent,
-    CallbackComponent
+    ReformasListComponent
   ],
   imports: [
     BrowserModule,
@@ -50,9 +44,7 @@ import { CallbackComponent } from './components/callback.component';
     ReactiveFormsModule
   ],
   providers: [
-    appRoutingProviders,
-    AuthService,
-    AuthGuard
+    appRoutingProviders
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -9,20 +8,10 @@ import { AuthService } from "./services/auth.service";
 export class AppComponent implements OnInit{
   public title:string = 'CampusGIS';
 
-  constructor( public auth:AuthService){
+  constructor(){
   }
 
   ngOnInit() {
-    // On initial load, set up local auth streams
-    this.auth.localAuthSetup();
   }
-
-  login(){
-    this.auth.login();
-  }
-
-  salir(){
-    this.auth.logout();
-  }
-
+  
 }

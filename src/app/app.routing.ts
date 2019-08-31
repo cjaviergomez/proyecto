@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 // Componentes
 import { HomeComponent } from './components/home.component';
-//import { ErrorComponent } from './components/error.component';
+import { ErrorComponent } from './components/error.component';
 import { SolicitudesListComponent } from './components/solicitudes-list.component';
 import { SolicitudAddComponent } from './components/solicitud-add.component';
 import { SolicitudAddedComponent } from './components/solicitud-added.component';
@@ -12,9 +12,6 @@ import { SolicitudDetailComponent } from './components/solicitud-detail.componen
 import { SolicitudEditComponent } from './components/solicitud-edit.component';
 import { EsriMapComponent } from './components/map.component';
 import { ReformasListComponent } from './components/reformas-list.component';
-import { CallbackComponent } from './components/callback.component';
-
-import {	AuthGuard } from "./services/auth-guard.service";
 
 
 const appRoutes: Routes = [
@@ -24,12 +21,11 @@ const appRoutes: Routes = [
 	{path: 'crear-solicitud', component: SolicitudAddComponent },
 	{path: 'solicitud-creada', component: SolicitudAddedComponent},
 	{path: 'solicitud-error', component: SolicitudAddErrorComponent},
-	{path: 'solicitud/:id', component: SolicitudDetailComponent, canActivate: [ AuthGuard ]},
-	{path: 'editar-solicitud/:id', component: SolicitudEditComponent, canActivate: [ AuthGuard ]},
+	{path: 'solicitud/:id', component: SolicitudDetailComponent },
+	{path: 'editar-solicitud/:id', component: SolicitudEditComponent },
 	{path: 'map', component: EsriMapComponent},
-	//{path: '**', component: ErrorComponent},
-	{path: 'reformas', component: ReformasListComponent},
-	{path: 'callback', component: CallbackComponent}
+	{path: '**', component: ErrorComponent},
+	{path: 'reformas', component: ReformasListComponent}
 ];
 
 export const appRoutingProviders: any[] = [];
