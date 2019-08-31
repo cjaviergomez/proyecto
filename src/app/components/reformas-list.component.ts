@@ -15,7 +15,7 @@ export class ReformasListComponent implements OnInit{
 	public cont:number; //variable para saber la cantidad de solicitudes.
 
 	constructor(
-		private _solicitudService: ReformaService
+		private _reformaService: ReformaService
 	){
 		this.titulo = 'Reformas';
 		this.confirmado = null;
@@ -24,12 +24,12 @@ export class ReformasListComponent implements OnInit{
 
 	ngOnInit(){
 		console.log('reformas-list.component.ts cargado');
-		this.getSolicitudes();
+		this.getReformas();
 	}
 
-	//Metodo para obtener todas las solicitudes usando el metodo getSolicitudes del servicio.
-	getSolicitudes(){
-		this._solicitudService.getReformas().subscribe(
+	//Metodo para obtener todas las Reformas usando el metodo getReformas del servicio.
+	getReformas(){
+		this._reformaService.getReformas().subscribe(
 			result => {
 				if(result['code'] != 202){
 					console.log(result);
