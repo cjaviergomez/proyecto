@@ -17,7 +17,7 @@ import esri = __esri; // Esri TypeScript Types
 @Component({
   selector: 'app-esri-map',
   templateUrl: '../views/map.html',
-  styleUrls: ['../esri-map.component.css']
+  styleUrls: ['../../assets/css/esri-map.component.css']
 })
 export class EsriMapComponent implements OnInit {
   //Esta variable tendra los datos que se le pasarán al formulario de la solicitud(Edificio, capa, objecto)
