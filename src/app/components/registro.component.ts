@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 //Models
 import { Unidad } from '../models/unidad';
@@ -10,12 +12,13 @@ import { AreaTecnica } from '../models/areaTecnica';
 import { UnidadService } from '../services/unidad.service';
 import { PerfilService } from '../services/perfil.service';
 import { AreaTecnicaService } from '../services/areaTecnica.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-registro',
   templateUrl: '../views/registro.component.html',
   styleUrls: ['../../assets/css/login.css'],
-  providers: [UnidadService, PerfilService, AreaTecnicaService]
+  providers: [UnidadService, PerfilService, AreaTecnicaService, AuthService]
 })
 export class RegistroComponent implements OnInit {
   public perfiles: Perfil[];
@@ -23,9 +26,11 @@ export class RegistroComponent implements OnInit {
   public areasTecnicas:AreaTecnica[];
   public usuario:Usuario;
 
-  constructor(private _unidadService: UnidadService,
+  constructor(private _router: Router,
+              private _unidadService: UnidadService,
               private _perfilService: PerfilService,
-              private _areaTecnicaService: AreaTecnicaService) {
+              private _areaTecnicaService: AreaTecnicaService,
+              private _authService: AuthService) {
     this.usuario = new Usuario();
     this.usuario.perfil_id = null;
     this.usuario.area_id = null;
@@ -39,8 +44,25 @@ export class RegistroComponent implements OnInit {
     this.getAreasTecnicas();
    }
 
-   onSubmit(){
+   onSubmit(form: NgForm){
+     if(form.invalid){
+       return;
+     }
+     this._authService.registerUser(this.usuario).subscribe(
+       response => {
+         if(response['code'] == 202){
+           console.log(response['message']);
+         }else{
+           console.log(response['message']);
+         }
+       },
+       error => {
+         console.log(<any>error);
+       }
+     );
+
      console.log(this.usuario);
+     console.log(form);
    }
 
    //Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.

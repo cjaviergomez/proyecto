@@ -1,4 +1,4 @@
-<form #formRegistro="ngForm" (ngSubmit)="onSubmit()" novalidate="" class="form-signin">
+<form #formRegistro="ngForm" (ngSubmit)="onSubmit(formRegistro)" novalidate="" class="form-signin animated fadeInRight">
   <h1 class="h3 mb-3 font-weight-normal text-center">Registrarse</h1>
 
   <label for="inputNombres" class="sr-only">Nombre</label>
@@ -6,63 +6,75 @@
          #inputNombres="ngModel"
          name="inputNombres"
          [(ngModel)]="usuario.usuario_nombres"
-         [ngClass]="{'is-invalid': !inputNombres.valid && inputNombres.touched}"
+         [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['inputNombres'].errors }"
          id="inputNombres"
          class="form-control mt-3"
          minlength="10"
          maxlength="40"
          pattern="[A-Z a-z]+"
          placeholder="Nombre Completo" required autofocus>
-  <div class="invalid-feedback" *ngIf="!inputNombres.valid && inputNombres.touched">
-           Introduce un nombre valido
+  <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['inputNombres'].errors">
+           Introduce un nombre válido.
   </div>
 
   <div class="mt-2">
     <select class="form-control"
             #selectPerfil="ngModel"
             name="selectPerfil"
+            [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectPerfil'].errors }"
             [(ngModel)]="usuario.perfil_id" required>
           <option value="null" disabled>Seleccione un perfil</option>
           <option *ngFor="let perfil of perfiles"
             [value]="perfil.perfil_id"> {{ perfil.perfil_nombre }} </option>
     </select>
+    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectPerfil'].errors">
+             Elige un perfil.
+    </div>
   </div>
 
   <div *ngIf="usuario.perfil_id == 2" class="mt-2">
     <select class="form-control"
             #selectUnidad="ngModel"
             name="selectUnidad"
+            [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectUnidad'].errors }"
             [(ngModel)]="usuario.unidad_id" required>
           <option value="null" disabled>Seleccione una UAA</option>
           <option *ngFor="let unidad of unidades"
             [value]="unidad.unidad_id"> {{ unidad.unidad_nombre }} </option>
     </select>
+    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectUnidad'].errors">
+             Elige la unidad a la que pertenece.
+    </div>
   </div>
 
   <div *ngIf="usuario.perfil_id == 6" class="mt-2">
     <select class="form-control"
             #selectArea="ngModel"
             name="selectArea"
+            [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectArea'].errors }"
             [(ngModel)]="usuario.area_id" required>
           <option value="null" disabled>Seleccione area técnica</option>
           <option *ngFor="let area of areasTecnicas"
             [value]="area.area_id"> {{ area.area_nombre }} </option>
     </select>
+    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectArea'].errors">
+             Elige el área a la que pertenece.
+    </div>
   </div>
 
-  <label for="inputEmail" class="sr-only">Correo</label>
+  <label for="correo" class="sr-only">Correo</label>
   <input type="email"
-         id="inputEmail"
-         #inputEmail="ngModel"
+         id="correo"
+         #correo="ngModel"
          name="correo"
          [(ngModel)]="usuario.correo"
-         [ngClass]="{'is-invalid': !inputEmail.valid && inputEmail.touched}"
+         [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['correo'].errors }"
          class="form-control mt-2"
          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@uis.edu.co"
          maxlength="50"
          placeholder="ejemplo@uis.edu.co" required>
-  <div class="invalid-feedback" *ngIf="!inputEmail.valid && inputEmail.touched">
-                  Introduce un correo valido.
+  <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['correo'].errors">
+                  Introduce un correo válido.
   </div>
 
   <label for="inputPassword" class="sr-only">Contraseña</label>
@@ -71,16 +83,16 @@
          #inputPassword="ngModel"
          name="password"
          [(ngModel)]="usuario.password"
-         [ngClass]="{'is-invalid': !inputPassword.valid && inputPassword.touched}"
+         [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['password'].errors}"
          class="form-control mt-2"
          minlength="6"
          maxlength="40"
          placeholder="Contraseña" required>
-  <div class="invalid-feedback" *ngIf="!inputPassword.valid && inputPassword.touched">
-            Introduce al menos 6 letras.
+  <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['password'].errors">
+            Introduce al menos 6 caracteres.
   </div>
 
-  <button class="btn btn-lg btn-primary btn-block mt-2" type="submit" [disabled]="!formRegistro.form.valid">CREAR CUENTA</button>
+  <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">CREAR CUENTA</button>
 
   <div class="pt-4 text-center">
     <a routerLink="/login">¿Ya tienes cuenta?</a>

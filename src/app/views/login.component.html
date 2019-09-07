@@ -1,31 +1,40 @@
-<form #formIngreso="ngForm" (ngSubmit)="onSubmit()" novalidate="" class="form-signin">
+<form #formIngreso="ngForm" (ngSubmit)="onSubmit(formIngreso)" novalidate="" class="form-signin animated fadeInLeft">
   <h1 class="h3 mb-3 font-weight-normal text-center">Iniciar sesión</h1>
-  <label for="inputEmail" class="sr-only">Correo</label>
+  <label for="correo" class="sr-only">Correo</label>
   <input type="email"
-         id="inputEmail"
-         #inputEmail="ngModel"
-         name="inputEmail"
+         id="correo"
+         #correo="ngModel"
+         name="correo"
          [(ngModel)]="usuario.correo"
+         [ngClass]="{'is-invalid': formIngreso.submitted && formIngreso.controls['correo'].errors }"
          class="form-control"
+         pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@uis.edu.co"
          placeholder="Correo" required autofocus>
+  <div class="invalid-feedback animated fadeIn" *ngIf="formIngreso.submitted && formIngreso.controls['correo'].errors">
+              Introduce un correo válido.
+  </div>
 
   <label for="inputPassword" class="sr-only">Contraseña</label>
   <input type="password"
          id="inputPassword"
          #inputPassword="ngModel"
-         name="inputPassword"
+         name="password"
          [(ngModel)]="usuario.password"
+         [ngClass]="{'is-invalid': formIngreso.submitted && formIngreso.controls['password'].errors}"
          class="form-control mt-2"
+         minlength="6"
+         maxlength="40"
          placeholder="Contraseña" required>
+  <div class="invalid-feedback animated fadeIn" *ngIf="formIngreso.submitted && formIngreso.controls['password'].errors">
+            Introduce al menos 6 caracteres.
+  </div>
 
-  <div class="flex-sb-m w-full p-t-3 p-b-2">
+  <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Ingresar</button>
+
+  <div class="flex-sb-m w-full mt-2 p-b-2">
     <div class="checkbox mb-3">
       <a routerLink="/registro">¿Olvidó la contraseña?</a>
       <a routerLink="/registro" class="ml-1">¿No tienes cuenta?</a>
     </div>
-
-
   </div>
-
-  <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!formIngreso.form.valid">Ingresar</button>
 </form>

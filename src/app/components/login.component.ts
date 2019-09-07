@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../models/usuario';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -10,17 +11,19 @@ export class LoginComponent implements OnInit {
   public usuario: Usuario;
 
   constructor() {
-  this.usuario = new Usuario(0, null, null, null, null, null, null);
+  this.usuario = new Usuario();
  }
 
   ngOnInit() {
   }
 
-  onSubmit(){
+  onSubmit(form: NgForm){
+    if(form.invalid){
+      return;
+    }
     console.log("Formulario enviado");
     console.log(this.usuario);
-    console.log(this.usuario.correo);
-    console.log(this.usuario.password);
+    console.log(form);
   }
 
 }
