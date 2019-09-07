@@ -1,21 +1,31 @@
-<form class="form-signin">
+<form #formIngreso="ngForm" (ngSubmit)="onSubmit()" novalidate="" class="form-signin">
   <h1 class="h3 mb-3 font-weight-normal text-center">Iniciar sesión</h1>
   <label for="inputEmail" class="sr-only">Correo</label>
-  <input type="email" id="inputEmail" class="form-control" placeholder="Correo" required autofocus>
+  <input type="email"
+         id="inputEmail"
+         #inputEmail="ngModel"
+         name="inputEmail"
+         [(ngModel)]="usuario.correo"
+         class="form-control"
+         placeholder="Correo" required autofocus>
+
   <label for="inputPassword" class="sr-only">Contraseña</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
+  <input type="password"
+         id="inputPassword"
+         #inputPassword="ngModel"
+         name="inputPassword"
+         [(ngModel)]="usuario.password"
+         class="form-control mt-2"
+         placeholder="Contraseña" required>
 
   <div class="flex-sb-m w-full p-t-3 p-b-2">
     <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Recordar usuario
-      </label>
-
-      <a routerLink="/registro" class="p-l-25">¿No tienes cuenta?</a>
+      <a routerLink="/registro">¿Olvidó la contraseña?</a>
+      <a routerLink="/registro" class="ml-1">¿No tienes cuenta?</a>
     </div>
 
 
   </div>
 
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!formIngreso.form.valid">Ingresar</button>
 </form>

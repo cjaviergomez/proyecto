@@ -20,9 +20,11 @@
     </ul>
     <span class="navbar-text">
       <button [routerLink]="['/login']"
+              [routerLinkActive]="['active']"
 							type="button"
-							class="btn btn-outline-primary btn-sm">Ingresar</button>
+							class="btn btn-outline-primary btn-sm mr-2">Ingresar</button>
       <button [routerLink]="['/registro']"
+              [routerLinkActive]="['active']"
         			type="button"
         			class="btn btn-outline-primary btn-sm">Registrarse</button>
     </span>
