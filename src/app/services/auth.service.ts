@@ -4,7 +4,9 @@ import { Usuario } from '../models/usuario';
 
 import { GLOBAL } from './global';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class AuthService{
 	public url: string;
 
@@ -21,7 +23,7 @@ export class AuthService{
 		return this._http.post(this.url+'register', params, {headers: headers});
   }
 
-  //Metodo para cerrar la sesisiòn de un usuario
+  //Metodo para cerrar la sesisión de un usuario
   logout(){
 
   }

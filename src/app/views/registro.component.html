@@ -36,13 +36,13 @@
     <select class="form-control"
             #selectUnidad="ngModel"
             name="selectUnidad"
-            [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectUnidad'].errors }"
+            [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectUnidad'] && formRegistro.controls['selectUnidad'].errors }"
             [(ngModel)]="usuario.unidad_id" required>
           <option value="null" disabled>Seleccione una UAA</option>
           <option *ngFor="let unidad of unidades"
             [value]="unidad.unidad_id"> {{ unidad.unidad_nombre }} </option>
     </select>
-    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectUnidad'].errors">
+    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectUnidad'] && formRegistro.controls['selectUnidad'].errors">
              Elige la unidad a la que pertenece.
     </div>
   </div>
@@ -51,13 +51,13 @@
     <select class="form-control"
             #selectArea="ngModel"
             name="selectArea"
-            [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectArea'].errors }"
+            [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectArea'] && formRegistro.controls['selectArea'].errors }"
             [(ngModel)]="usuario.area_id" required>
           <option value="null" disabled>Seleccione area técnica</option>
           <option *ngFor="let area of areasTecnicas"
             [value]="area.area_id"> {{ area.area_nombre }} </option>
     </select>
-    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectArea'].errors">
+    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectArea'] && formRegistro.controls['selectArea'].errors">
              Elige el área a la que pertenece.
     </div>
   </div>

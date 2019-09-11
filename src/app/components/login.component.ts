@@ -11,7 +11,7 @@ export class LoginComponent implements OnInit {
   public usuario: Usuario;
 
   constructor() {
-  this.usuario = new Usuario();
+  this.usuario = new Usuario(null, null, null, null, null, null, null, 'Pendiente');
  }
 
   ngOnInit() {

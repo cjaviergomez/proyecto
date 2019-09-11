@@ -30,29 +30,31 @@ export class RegistroComponent implements OnInit {
               private _unidadService: UnidadService,
               private _perfilService: PerfilService,
               private _areaTecnicaService: AreaTecnicaService,
-              private _authService: AuthService) {
-    this.usuario = new Usuario(null, null, null, null, null, null, null, 'Pendiente');
-  }
+              private _authService: AuthService) { }
 
   ngOnInit() {
     console.log('registro.component.ts cargado...');
+    this.usuario = new Usuario(null, null, null, null, null, null, null, 'Pendiente');
     this.getUnidades();
     this.getPerfiles();
     this.getAreasTecnicas();
    }
 
    onSubmit(form: NgForm){
+     console.log(this.usuario);
+     console.log(form);
+     if(form.invalid){ return;}
+     if(this.usuario.unidad_id == null ){ this.usuario.unidad_id = 1;}
+     if(this.usuario.area_id == null){ this.usuario.area_id = 1; }
+
+     //Convierte los strings en enteros (actualmente son strings).
      this.usuario.perfil_id = +this.usuario.perfil_id;
-     if(form.invalid){
-       return;
-     }
-     if(this.usuario.perfil_id != 6 ){
-       this.usuario.area_id = 1;
-     }else{
-       this.usuario.unidad_id = 1;
-     }
      this.usuario.unidad_id = +this.usuario.unidad_id;
      this.usuario.area_id = +this.usuario.area_id;
+
+     if(this.usuario.perfil_id == 2){this.usuario.area_id = 1;}
+     else if(this.usuario.perfil_id == 6){this.usuario.unidad_id = 1;}
+     else{this.usuario.area_id = 1;this.usuario.unidad_id = 1;}
 
      this._authService.registerUser(this.usuario).subscribe(
        response => {
@@ -66,10 +68,7 @@ export class RegistroComponent implements OnInit {
          console.log(<any>error);
        }
      );
-
-     console.log(this.usuario);
-     console.log(form);
-   }
+   } //end onSubmit
 
    //Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.
    getUnidades(){
