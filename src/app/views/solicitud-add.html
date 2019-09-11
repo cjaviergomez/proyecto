@@ -27,7 +27,7 @@
 									[(ngModel)]="solicitud.formulario['entidad_solicitante']" required>
 								<option value="" disabled>Seleccione una entidad</option>
 								<option *ngFor="let unidad of unidades"
-									[value]="unidad.nombre_unidad"> {{ unidad.nombre_unidad }} </option>
+									[value]="unidad.unidad_nombre"> {{ unidad.unidad_nombre }} </option>
 
 					</select>
 				</div>

@@ -4,9 +4,7 @@ import { Usuario } from '../models/usuario';
 
 import { GLOBAL } from './global';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService{
 	public url: string;
 

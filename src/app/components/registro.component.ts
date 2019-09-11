@@ -31,10 +31,7 @@ export class RegistroComponent implements OnInit {
               private _perfilService: PerfilService,
               private _areaTecnicaService: AreaTecnicaService,
               private _authService: AuthService) {
-    this.usuario = new Usuario();
-    this.usuario.perfil_id = null;
-    this.usuario.area_id = null;
-    this.usuario.unidad_id = null;
+    this.usuario = new Usuario(null, null, null, null, null, null, null, 'Pendiente');
   }
 
   ngOnInit() {
@@ -45,9 +42,18 @@ export class RegistroComponent implements OnInit {
    }
 
    onSubmit(form: NgForm){
+     this.usuario.perfil_id = +this.usuario.perfil_id;
      if(form.invalid){
        return;
      }
+     if(this.usuario.perfil_id != 6 ){
+       this.usuario.area_id = 1;
+     }else{
+       this.usuario.unidad_id = 1;
+     }
+     this.usuario.unidad_id = +this.usuario.unidad_id;
+     this.usuario.area_id = +this.usuario.area_id;
+
      this._authService.registerUser(this.usuario).subscribe(
        response => {
          if(response['code'] == 202){
