@@ -22,6 +22,7 @@ import { FooterComponent} from './components/footer.component';
 import { ReformasListComponent } from './components/reformas-list.component';
 import { LoginComponent } from './components/login.component';
 import { RegistroComponent } from './components/registro.component';
+import { UsuariosComponent } from './components/usuarios.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { RegistroComponent } from './components/registro.component';
     FooterComponent,
     ReformasListComponent,
     LoginComponent,
-    RegistroComponent
+    RegistroComponent,
+    UsuariosComponent
   ],
   imports: [
     BrowserModule,

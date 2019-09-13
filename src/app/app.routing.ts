@@ -14,6 +14,7 @@ import { EsriMapComponent } from './components/map.component';
 import { ReformasListComponent } from './components/reformas-list.component';
 import { LoginComponent } from './components/login.component';
 import { RegistroComponent } from './components/registro.component';
+import { UsuariosComponent } from './components/usuarios.component';
 
 import { AuthGuard } from './guards/auth.guard';
 
@@ -21,16 +22,17 @@ import { AuthGuard } from './guards/auth.guard';
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
 	{path: 'home', component: HomeComponent},
-	{path: 'solicitudes', component: SolicitudesListComponent},
-	{path: 'crear-solicitud', component: SolicitudAddComponent },
-	{path: 'solicitud-creada', component: SolicitudAddedComponent},
-	{path: 'solicitud-error', component: SolicitudAddErrorComponent},
+	{path: 'solicitudes', component: SolicitudesListComponent, canActivate: [ AuthGuard ]},
+	{path: 'crear-solicitud', component: SolicitudAddComponent, canActivate: [ AuthGuard ] },
+	{path: 'solicitud-creada', component: SolicitudAddedComponent, canActivate: [ AuthGuard ]},
+	{path: 'solicitud-error', component: SolicitudAddErrorComponent, canActivate: [ AuthGuard ]},
 	{path: 'solicitud/:id', component: SolicitudDetailComponent },
-	{path: 'editar-solicitud/:id', component: SolicitudEditComponent },
+	{path: 'editar-solicitud/:id', component: SolicitudEditComponent, canActivate: [ AuthGuard ] },
 	{path: 'map', component: EsriMapComponent, canActivate: [ AuthGuard ] },
-	{path: 'reformas', component: ReformasListComponent},
+	{path: 'reformas', component: ReformasListComponent, canActivate: [ AuthGuard ]},
 	{path: 'login', component: LoginComponent},
 	{path: 'registro', component: RegistroComponent},
+	{path: 'usuarios', component: UsuariosComponent},
 	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la ultima que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];
 

@@ -46,13 +46,12 @@ export class RegistroComponent implements OnInit {
      if(this.usuario.unidad_id == null ){ this.usuario.unidad_id = 1;}
      if(this.usuario.area_id == null){ this.usuario.area_id = 1; }
 
-     //Convierte los strings en enteros (actualmente son strings).
-     this.usuario.perfil_id = +this.usuario.perfil_id;
+     
      this.usuario.unidad_id = +this.usuario.unidad_id;
      this.usuario.area_id = +this.usuario.area_id;
 
-     if(this.usuario.perfil_id == 2){this.usuario.area_id = 1;}
-     else if(this.usuario.perfil_id == 6){this.usuario.unidad_id = 1;}
+     if(this.usuario.perfil == "Solicitante"){this.usuario.area_id = 1;}
+     else if(this.usuario.perfil == "6"){this.usuario.unidad_id = 1;}
      else{this.usuario.area_id = 1;this.usuario.unidad_id = 1;}
 
      Swal.fire({

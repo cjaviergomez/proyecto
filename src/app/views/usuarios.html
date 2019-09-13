@@ -1,0 +1,68 @@
+
+<h2 class="mt-4 text-center">Listado de Usuarios</h2>
+<hr>
+
+<table *ngIf="!cargando && usuarios.length > 0"
+       class="table mt-3 animated fadeIn faster animated fadeIn faster">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Perfil</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Tools</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios; let i = index">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ usuario.usuario_nombres}}</td>
+      <td>{{ usuario.perfil }}</td>
+      <td>
+
+        <label *ngIf="usuario.estado == 'Activado'" class="badge badge-success">Activado</label>
+        <label *ngIf="usuario.estado == 'Desactivado'" class="badge badge-danger">Desactivado</label>
+        <label *ngIf="usuario.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
+
+      </td>
+      <td>
+
+        <button *ngIf="usuario.estado == 'Activado'"
+                class="btn btn-info mr-1"
+                (click)="cambiarEstado( usuario, 'Desactivado' )"> Desactivar
+        </button>
+
+        <button *ngIf="usuario.estado == 'Desactivado' || usuario.estado == 'Pendiente'"
+                class="btn btn-info mr-1"
+                (click)="cambiarEstado( usuario, 'Activado' )"> Activar
+        </button>
+
+        <button class="btn btn-danger"
+                (click)="borrarUsuario( usuario, i ) ">
+          <i class="fa fa-trash"></i>
+        </button>
+
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!cargando && usuarios.length === 0"
+     class="alert alert-warning text-center mt-3 animated fadeIn faster">
+    <h4 class="alert-heading">No hay registros</h4>
+    <p>
+      <i class="fa fa-exclamation fa-2x"></i>
+    </p>
+</div>
+
+<div *ngIf="cargando"
+     class="alert alert-info text-center mt-3 animated fadeIn faster">
+  <h4 class="alert-heading">Cargando</h4>
+  <p>
+    <i class="fa fa-sync-alt fa-spin fa-2x"></i>
+  </p>
+  <p class="mb-0">
+    Espere por favor
+  </p>
+</div>

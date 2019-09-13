@@ -33,14 +33,10 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
-
     this._authService.login( this.usuario )
       .subscribe( resp => {
-
-        console.log(resp);
         Swal.close();
-
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/map');
 
       }, (err) => {
 

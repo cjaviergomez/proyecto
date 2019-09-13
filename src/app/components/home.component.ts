@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { AuthService } from '../services/auth.service';
+
 @Component({
 	selector: 'home',
 	templateUrl: '../views/home.html'
@@ -7,7 +9,7 @@ import { Component } from '@angular/core';
 export class HomeComponent{
 	public titulo: string;
 
-	constructor(){
+	constructor(private auth: AuthService){
 		this.titulo = 'Página Principal';
 	}
 

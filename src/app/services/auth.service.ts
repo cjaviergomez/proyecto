@@ -38,6 +38,7 @@ export class AuthService{
 	}
 
   //Metodo para 'cerrar la sesisión' de un usuario
+	//Este metodo destruye el token del localStorage
   logout(){
 		localStorage.removeItem('token');
   }
@@ -74,19 +75,15 @@ export class AuthService{
   }
 
 	leerToken() {
-
+		this.userToken = '';
     if ( localStorage.getItem('token') ) {
       this.userToken = localStorage.getItem('token');
-    } else {
-      this.userToken = '';
     }
-
     return this.userToken;
 
   }
 
 	estaAutenticado(): boolean {
-
     if ( this.userToken.length < 2 ) {
       return false;
     }

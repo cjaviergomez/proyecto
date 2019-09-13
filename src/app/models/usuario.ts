@@ -3,7 +3,7 @@ export class Usuario{
 	constructor(
 		public usuario_id: number,
 		public usuario_nombres: string,
-		public perfil_id:number,
+		public perfil:String,
 		public unidad_id:number,
 		public area_id:number,
 		public correo: string,

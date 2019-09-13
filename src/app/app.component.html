@@ -5,28 +5,34 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!auth.estaAutenticado()">
         <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Home </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="auth.estaAutenticado()">
         <a class="nav-link" [routerLink]="['/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="auth.estaAutenticado()">
         <a class="nav-link" [routerLink]="['/reformas']" [routerLinkActive]="['activado']">Reformas</a>
       </li>
-			<li class="nav-item">
+			<li class="nav-item" *ngIf="auth.estaAutenticado()">
         <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
       </li>
     </ul>
     <span class="navbar-text">
-      <button [routerLink]="['/login']"
+      <button *ngIf="!auth.estaAutenticado()"
+              [routerLink]="['/login']"
               [routerLinkActive]="['active']"
 							type="button"
 							class="btn btn-outline-primary btn-sm mr-2">Ingresar</button>
-      <button [routerLink]="['/registro']"
+      <button *ngIf="!auth.estaAutenticado()"
+              [routerLink]="['/registro']"
               [routerLinkActive]="['active']"
         			type="button"
         			class="btn btn-outline-primary btn-sm">Registrarse</button>
+      <button *ngIf="auth.estaAutenticado()"
+              (click)="salir()"
+              type="button"
+              class="btn btn-outline-primary btn-sm">Salir</button>
     </span>
   </div>
 </nav>

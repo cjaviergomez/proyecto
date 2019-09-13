@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +12,17 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit{
   public title:string = 'CampusGIS';
 
-  constructor(){
+  constructor(private auth: AuthService,
+              private router: Router){
   }
 
   ngOnInit() {
   }
-  
+
+  salir(){
+    this.auth.logout();
+    this.auth.leerToken();
+    this.router.navigateByUrl('/login');
+    }
+
 }

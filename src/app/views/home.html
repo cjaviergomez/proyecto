@@ -2,9 +2,14 @@
 	<div class="jumbotron">
 		<h2>{{titulo}}</h2>
 		<p>Realiza solicitudes de remodelación de edificaciones con la aplicación web CampusGIS</p>
-		<p>
+		<p *ngIf="auth.estaAutenticado()">
 			<a [routerLink]="['/solicitudes']" class="btn btn-lg btn-primary mr-2">Ver solicitudes</a>
 			<a [routerLink]="['/reformas']"  class="btn btn-lg btn-info">Ver reformas</a>
+		</p>
+
+		<p *ngIf="!auth.estaAutenticado()">
+			<a [routerLink]="['/login']" class="btn btn-lg btn-primary mr-2">Iniciar Sesión</a>
+			<a [routerLink]="['/reformas']"  class="btn btn-lg btn-info">Registrarse</a>
 		</p>
 	</div>
 </div>
