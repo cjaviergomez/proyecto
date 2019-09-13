@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import Swal from 'sweetalert2';
 
 //Models
 import { Unidad } from '../models/unidad';
@@ -41,8 +42,6 @@ export class RegistroComponent implements OnInit {
    }
 
    onSubmit(form: NgForm){
-     console.log(this.usuario);
-     console.log(form);
      if(form.invalid){ return;}
      if(this.usuario.unidad_id == null ){ this.usuario.unidad_id = 1;}
      if(this.usuario.area_id == null){ this.usuario.area_id = 1; }
@@ -56,18 +55,29 @@ export class RegistroComponent implements OnInit {
      else if(this.usuario.perfil_id == 6){this.usuario.unidad_id = 1;}
      else{this.usuario.area_id = 1;this.usuario.unidad_id = 1;}
 
-     this._authService.registerUser(this.usuario).subscribe(
-       response => {
-         if(response['code'] == 202){
-           console.log(response['message']);
-         }else{
-           console.log(response['message']);
-         }
-       },
-       error => {
-         console.log(<any>error);
-       }
-     );
+     Swal.fire({
+       allowOutsideClick: false,
+       type: 'info',
+       text: 'Espere por favor...'
+     });
+     Swal.showLoading();
+
+     this._authService.nuevoUsuario( this.usuario )
+       .subscribe( resp => {
+
+         console.log(resp);
+         Swal.close();
+
+         this._router.navigateByUrl('/home');
+
+       }, (err) => {
+         console.log(err.error.error.message);
+         Swal.fire({
+           type: 'error',
+           title: 'Error al autenticar',
+           text: err.error.error.message
+         });
+       });
    } //end onSubmit
 
    //Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.

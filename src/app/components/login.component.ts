@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../models/usuario';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import Swal from 'sweetalert2';
+
+import { Usuario } from '../models/usuario';
+import { AuthService } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -10,7 +15,8 @@ import { NgForm } from '@angular/forms';
 export class LoginComponent implements OnInit {
   public usuario: Usuario;
 
-  constructor() {
+  constructor(private _authService: AuthService,
+              private router: Router) {
   this.usuario = new Usuario(null, null, null, null, null, null, null, 'Pendiente');
  }
 
@@ -18,12 +24,34 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(form: NgForm){
-    if(form.invalid){
-      return;
-    }
-    console.log("Formulario enviado");
-    console.log(this.usuario);
-    console.log(form);
+    if (  form.invalid ) { return; }
+
+    Swal.fire({
+      allowOutsideClick: false,
+      type: 'info',
+      text: 'Espere por favor...'
+    });
+    Swal.showLoading();
+
+
+    this._authService.login( this.usuario )
+      .subscribe( resp => {
+
+        console.log(resp);
+        Swal.close();
+
+        this.router.navigateByUrl('/home');
+
+      }, (err) => {
+
+        console.log(err.error.error.message);
+        Swal.fire({
+          type: 'error',
+          title: 'Error al autenticar',
+          text: err.error.error.message
+        });
+      });
+
   }
 
 }

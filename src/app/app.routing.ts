@@ -15,6 +15,8 @@ import { ReformasListComponent } from './components/reformas-list.component';
 import { LoginComponent } from './components/login.component';
 import { RegistroComponent } from './components/registro.component';
 
+import { AuthGuard } from './guards/auth.guard';
+
 
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
@@ -25,11 +27,11 @@ const appRoutes: Routes = [
 	{path: 'solicitud-error', component: SolicitudAddErrorComponent},
 	{path: 'solicitud/:id', component: SolicitudDetailComponent },
 	{path: 'editar-solicitud/:id', component: SolicitudEditComponent },
-	{path: 'map', component: EsriMapComponent},
+	{path: 'map', component: EsriMapComponent, canActivate: [ AuthGuard ] },
 	{path: 'reformas', component: ReformasListComponent},
 	{path: 'login', component: LoginComponent},
 	{path: 'registro', component: RegistroComponent},
-	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la ultima que se declare, si se declara una ruta despues de esta, siempre va a tomar esta. 
+	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la ultima que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];
 
 export const appRoutingProviders: any[] = [];
