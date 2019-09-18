@@ -10,9 +10,10 @@ import { Usuario } from '../models/usuario';
 import { AreaTecnica } from '../models/areaTecnica';
 
 //Services
-import { UnidadService } from '../services/unidad.service';
 import { PerfilService } from '../services/perfil.service';
+import { UnidadService } from '../services/unidad.service';
 import { AreaTecnicaService } from '../services/areaTecnica.service';
+import { UsuarioService } from '../services/usuario.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -22,7 +23,7 @@ import { AuthService } from '../services/auth.service';
   providers: [UnidadService, PerfilService, AreaTecnicaService, AuthService]
 })
 export class RegistroComponent implements OnInit {
-  public perfiles: Perfil[];
+  public perfiles: Perfil[] = [];
   public unidades:Unidad[];
   public areasTecnicas:AreaTecnica[];
   public usuario:Usuario;
@@ -31,29 +32,24 @@ export class RegistroComponent implements OnInit {
               private _unidadService: UnidadService,
               private _perfilService: PerfilService,
               private _areaTecnicaService: AreaTecnicaService,
+              private _usuarioService: UsuarioService,
               private _authService: AuthService) { }
 
   ngOnInit() {
     console.log('registro.component.ts cargado...');
-    this.usuario = new Usuario(null, null, null, null, null, null, null, 'Pendiente');
-    this.getUnidades();
+    this.usuario = new Usuario();
+    this.usuario.perfil = null;
+    this.usuario.unidad_id = null;
+    this.usuario.area_id = null;
+    this.usuario.estado = 'Pendiente';
     this.getPerfiles();
+    this.getUnidades();
     this.getAreasTecnicas();
    }
 
    onSubmit(form: NgForm){
      if(form.invalid){ return;}
-     if(this.usuario.unidad_id == null ){ this.usuario.unidad_id = 1;}
-     if(this.usuario.area_id == null){ this.usuario.area_id = 1; }
-
-     
-     this.usuario.unidad_id = +this.usuario.unidad_id;
-     this.usuario.area_id = +this.usuario.area_id;
-
-     if(this.usuario.perfil == "Solicitante"){this.usuario.area_id = 1;}
-     else if(this.usuario.perfil == "6"){this.usuario.unidad_id = 1;}
-     else{this.usuario.area_id = 1;this.usuario.unidad_id = 1;}
-
+     this.validarUsuario();
      Swal.fire({
        allowOutsideClick: false,
        type: 'info',
@@ -63,11 +59,15 @@ export class RegistroComponent implements OnInit {
 
      this._authService.nuevoUsuario( this.usuario )
        .subscribe( resp => {
-
-         console.log(resp);
          Swal.close();
+         this.guardarUsuario();
 
-         this._router.navigateByUrl('/home');
+         Swal.fire({
+           allowOutsideClick: false,
+           type: 'success',
+           title: 'Registro Exitoso',
+           text: 'Su cuenta se ha registrado con éxito. Por favor Inicie Sesión'
+         });
 
        }, (err) => {
          console.log(err.error.error.message);
@@ -82,48 +82,40 @@ export class RegistroComponent implements OnInit {
    //Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.
    getUnidades(){
      this._unidadService.getUnidades().subscribe(
-       result => {
-         if(result['code'] != 202){
-           console.log(result);
-         } else {
-           this.unidades = result['data'];
-         }
-       },
-       error => {
-         console.log(<any>error);
-       }
-     );
+       resp => {
+         this.unidades = resp;
+       });
    }
 
    //Metodo para obtener de la base de datos todos los perfiles haciendo uso del servicio
    getPerfiles(){
      this._perfilService.getPerfiles().subscribe(
-       result => {
-         if(result['code'] != 202){
-           console.log(result);
-         } else {
-           this.perfiles = result['data'];
-         }
-       },
-       error => {
-         console.log(<any>error);
-       }
-     );
+       resp => {
+         this.perfiles = resp;
+       });
    }
+
 
    //Metodo para obtener de la base de datos todas las areas tecnicas haciendo uso del servicio
    getAreasTecnicas(){
      this._areaTecnicaService.getAreasTecnicas().subscribe(
-       result => {
-         if(result['code'] != 202){
-           console.log(result);
-         } else {
-           this.areasTecnicas = result['data'];
-         }
-       },
-       error => {
-         console.log(<any>error);
-       }
-     );
+       resp => {
+         this.areasTecnicas = resp;
+       });
+   }
+
+   //Metodo para guardar en firebase la informacion del usuario registrado haciendo uso del servicio.
+   guardarUsuario(){
+     return this._usuarioService.crearUsuario( this.usuario )
+        .subscribe( resp => {
+        });
+   }
+
+   //Metodo para verificar que cada usuario tenga la informaciòn adecuada.
+   //EJ: Si se registra un usuario con el perfil solicitante, que no vaya a tener asignado el atributo area_id porque un solicitante no pertenece a ningun area tecnica
+   validarUsuario(){
+     if(this.usuario.perfil == 'Solicitante'){ delete this.usuario.area_id;} //Si el usuario es un solicitante, elimino la propiedad area_id
+     else if(this.usuario.perfil == 'UAA Asesora'){ delete this.usuario.unidad_id;}  //Si el usuario es una UAA Asesora, elimino la propiedad unidad_id
+     else{delete this.usuario.area_id;delete this.usuario.unidad_id;} //Si no es ni un solicitante ni una UAA Asesora, elimino las propiedades area_id y unidad_id
    }
 }

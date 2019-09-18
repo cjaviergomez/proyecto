@@ -31,7 +31,6 @@ export class AuthService{
 			authData
 		).pipe(
       map( resp => {
-        this.guardarToken( resp['idToken'] );
         return resp;
       })
     );

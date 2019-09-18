@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { map, delay } from 'rxjs/operators';
 
-import { GLOBAL } from './global';
+import { AreaTecnica } from '../models/areaTecnica';
 
 @Injectable()
 export class AreaTecnicaService{
@@ -10,11 +11,33 @@ export class AreaTecnicaService{
 	constructor(
 		public _http: HttpClient
 	){
-		this.url = GLOBAL.url;
+		this.url = "https://campusgis-f9154.firebaseio.com";
 	}
 
 	getAreasTecnicas(){
-		return this._http.get(this.url+'areasTecnicas');
+		return this._http.get(`${this.url}/areasTecnicas.json`)
+            .pipe(
+              map( this.crearArreglo ),
+              delay(0)
+            );
+	}
+
+	//Metodo para convertir en un arreglo de perfiles el json que extraigo de Firebase
+	private crearArreglo( areasObj: object){
+
+		const areas: AreaTecnica[] = [];
+
+		if(areasObj === null){ return []; }
+
+		Object.keys( areasObj ).forEach( key => {
+
+			const area: AreaTecnica = areasObj[key];
+			area.id = key;
+
+			areas.push( area );
+		});
+
+		return areas;
 	}
 
 }

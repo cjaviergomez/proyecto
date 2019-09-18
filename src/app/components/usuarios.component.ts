@@ -5,7 +5,8 @@ import Swal from 'sweetalert2';
 import { Usuario } from '../models/usuario';
 
 //services
-//import { HeroesService } from '../../services/heroes.service';
+import { UsuarioService } from '../services/usuario.service';
+
 @Component({
   selector: 'app-usuarios',
   templateUrl: '../views/usuarios.html',
@@ -18,16 +19,16 @@ export class UsuariosComponent implements OnInit {
   cargando = false;
 
 
-  constructor() { }
+  constructor(private _usuarioService: UsuarioService) { }
 
   ngOnInit() {
 
-    //this.cargando = true;
-    /* this.heroesService.getHeroes()
+    this.cargando = true;
+    this._usuarioService.getUsuarios()
       .subscribe( resp => {
-        this.heroes = resp;
+        this.usuarios = resp;
         this.cargando = false;
-      }); */
+      });
 
   }
 
@@ -39,7 +40,7 @@ export class UsuariosComponent implements OnInit {
 
     Swal.fire({
       title: '¿Está seguro?',
-      text: `Está seguro que desea borrar a ${ usuario.usuario_nombres }`,
+      text: `Está seguro que desea borrar a ${ usuario.nombres }`,
       type: 'question',
       showConfirmButton: true,
       showCancelButton: true
@@ -47,7 +48,7 @@ export class UsuariosComponent implements OnInit {
 
       if ( resp.value ) {
         this.usuarios.splice(i, 1);
-        //this.heroesService.borrarHeroe( heroe.id ).subscribe();
+        this._usuarioService.borrarUsuario( usuario.id ).subscribe();
       }
 
     });
