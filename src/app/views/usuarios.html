@@ -7,7 +7,8 @@
   <thead class="thead-light">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Nombre</th>
+      <th scope="col">Nombres</th>
+      <th scope="col">Correo</th>
       <th scope="col">Perfil</th>
       <th scope="col">Estado</th>
       <th scope="col">Tools</th>
@@ -17,6 +18,7 @@
     <tr *ngFor="let usuario of usuarios; let i = index">
       <th scope="row">{{ i + 1 }}</th>
       <td>{{ usuario.nombres}}</td>
+      <td>{{ usuario.correo }}</td>
       <td>{{ usuario.perfil }}</td>
       <td>
 
@@ -28,12 +30,12 @@
       <td>
 
         <button *ngIf="usuario.estado == 'Activado'"
-                class="btn btn-info mr-1"
+                class="btn btn-outline-primary mr-1"
                 (click)="cambiarEstado( usuario, 'Desactivado' )"> Desactivar
         </button>
 
         <button *ngIf="usuario.estado == 'Desactivado' || usuario.estado == 'Pendiente'"
-                class="btn btn-info mr-1"
+                class="btn btn-outline-primary mr-1"
                 (click)="cambiarEstado( usuario, 'Activado' )"> Activar
         </button>
 

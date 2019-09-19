@@ -4,7 +4,9 @@ import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { Usuario } from '../models/usuario';
+
 import { AuthService } from '../services/auth.service';
+import { UsuarioService } from '../services/usuario.service';
 
 
 @Component({
@@ -16,11 +18,13 @@ export class LoginComponent implements OnInit {
   public usuario: Usuario;
 
   constructor(private _authService: AuthService,
+              private _usuarioService: UsuarioService,
               private router: Router) {
   this.usuario = new Usuario();
  }
 
   ngOnInit() {
+
   }
 
   onSubmit(form: NgForm){
@@ -33,20 +37,34 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
-    this._authService.login( this.usuario )
+    this._usuarioService.isActive(this.usuario)
       .subscribe( resp => {
-        Swal.close();
-        this.router.navigateByUrl('/map');
+        if(resp == true){
+          this._authService.login( this.usuario )
+            .subscribe( resp => {
+              Swal.close();
+              this.router.navigateByUrl('/map');
 
-      }, (err) => {
+            }, (err) => {
 
-        console.log(err.error.error.message);
-        Swal.fire({
-          type: 'error',
-          title: 'Error al autenticar',
-          text: err.error.error.message
-        });
+              console.log(err.error.error.message);
+              Swal.fire({
+                type: 'error',
+                title: 'Error al autenticar',
+                text: err.error.error.message
+              });
+            });
+        }else{
+          console.log('Usuario no activo');
+          Swal.fire({
+            type: 'error',
+            title: 'Cuenta no activa',
+            text: 'Su cuenta no esta activa, por favor comuniquese con el admin'
+          });
+        }
       });
+
+
 
   }
 

@@ -22,37 +22,41 @@ export class UsuariosComponent implements OnInit {
   constructor(private _usuarioService: UsuarioService) { }
 
   ngOnInit() {
-
-    this.cargando = true;
-    this._usuarioService.getUsuarios()
-      .subscribe( resp => {
-        this.usuarios = resp;
-        this.cargando = false;
-      });
-
+    this.cargarUsuarios();
   }
 
+  //Metodo para cambiar el estado de los usuarios
   cambiarEstado(usuario: Usuario, estado: string){
-
+    usuario.estado = estado;
+    this._usuarioService.actualizarUsuario( usuario ).subscribe();
   }
 
+  //Borra un usuario de la base de datos y del arreglo de usuarios.
   borrarUsuario( usuario: Usuario, i: number ) {
-
     Swal.fire({
       title: '¿Está seguro?',
-      text: `Está seguro que desea borrar a ${ usuario.nombres }`,
+      text: `Está seguro que desea eliminar a ${ usuario.nombres }`,
       type: 'question',
       showConfirmButton: true,
       showCancelButton: true
     }).then( resp => {
 
       if ( resp.value ) {
-        this.usuarios.splice(i, 1);
-        this._usuarioService.borrarUsuario( usuario.id ).subscribe();
+        this.usuarios.splice(i, 1); //Borra al usuario del arreglo de usuarios
+        this._usuarioService.borrarUsuario( usuario.id ).subscribe(); //usa el servicio para borrar al usuario de Firebase
       }
 
     });
   }
 
+  //Metodo para cargar los usuarios de firebase haciendo uso del servicio.
+  cargarUsuarios(){
+    this.cargando = true;
+    this._usuarioService.getUsuarios()
+      .subscribe( resp => {
+        this.usuarios = resp;
+        this.cargando = false;
+      });
+  }
 
 }
