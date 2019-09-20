@@ -16,6 +16,7 @@ import { UsuarioService } from '../services/usuario.service';
 })
 export class LoginComponent implements OnInit {
   public usuario: Usuario;
+  private active: boolean;
 
   constructor(private _authService: AuthService,
               private _usuarioService: UsuarioService,
@@ -39,32 +40,32 @@ export class LoginComponent implements OnInit {
 
     this._usuarioService.isActive(this.usuario)
       .subscribe( resp => {
-        if(resp == true){
-          this._authService.login( this.usuario )
-            .subscribe( resp => {
-              Swal.close();
-              this.router.navigateByUrl('/map');
-
-            }, (err) => {
-
-              console.log(err.error.error.message);
-              Swal.fire({
-                type: 'error',
-                title: 'Error al autenticar',
-                text: err.error.error.message
-              });
-            });
-        }else{
-          console.log('Usuario no activo');
-          Swal.fire({
-            type: 'error',
-            title: 'Cuenta no activa',
-            text: 'Su cuenta no esta activa, por favor comuniquese con el admin'
-          });
-        }
+        this.active = resp;
       });
 
+    this._authService.login( this.usuario )
+          .subscribe( resp => {
+            Swal.close();
+            if(this.active == false){
+              this._authService.logout();
+              this._authService.leerToken();
+              Swal.fire({
+                type: 'error',
+                title: 'Cuenta no activa',
+                text: 'Por favor espere a que su cuenta sea activada por un administrador'
+              });
 
+            }else{
+              this.router.navigateByUrl('/map');
+            }
+          }, (err) => {
+            console.log(err.error.error.message);
+            Swal.fire({
+              type: 'error',
+              title: 'Error al autenticar',
+              text: err.error.error.message
+            });
+          });
 
   }
 

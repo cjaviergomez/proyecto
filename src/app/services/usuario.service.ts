@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, delay } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 import { Usuario } from '../models/usuario';
 
@@ -10,8 +11,12 @@ import { Usuario } from '../models/usuario';
 export class UsuarioService{
 	private url: string;
 
+	private usuariosCollection: AngularFirestoreCollection<Usuario>;
+	public usuarios: Usuario[] = [];
+
 	constructor(
-		public _http: HttpClient
+		public _http: HttpClient,
+		private afs: AngularFirestore
 	){
 		this.url = "https://campusgis-f9154.firebaseio.com";
 	}
@@ -21,12 +26,10 @@ export class UsuarioService{
   }
 
 
+	//Metodo para obtener todos los usuarios registrados en la base de datos.
   getUsuarios(){
-		return this._http.get(`${this.url}/usuarios.json`)
-            .pipe(
-              map( this.crearArreglo ),
-              delay(0)
-            );
+		this.usuariosCollection = this.afs.collection<Usuario>('usuarios');
+		return this.usuariosCollection.valueChanges();
 	}
 
 	actualizarUsuario( usuario: Usuario ) {
@@ -61,7 +64,7 @@ export class UsuarioService{
 	private buscarUsuario( usuariosObj: object, correo: string){
 		let active: boolean = false;
 
-		if(usuariosObj === null){ return []; }
+		if(usuariosObj === null){ return false; }
 
 		Object.keys( usuariosObj ).forEach( key => {
 

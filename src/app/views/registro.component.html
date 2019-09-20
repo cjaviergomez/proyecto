@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div *ngIf="usuario.perfil_id == '1'" class="mt-2">
+  <div *ngIf="usuario.perfil == 'Solicitante'" class="mt-2">
     <select class="form-control"
             #selectUnidad="ngModel"
             name="selectUnidad"
@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  <div *ngIf="usuario.perfil_id == '5'" class="mt-2">
+  <div *ngIf="usuario.perfil == 'UAA Asesora'" class="mt-2">
     <select class="form-control"
             #selectArea="ngModel"
             name="selectArea"

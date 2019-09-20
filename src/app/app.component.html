@@ -9,14 +9,15 @@
         <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Home </a>
       </li>
       <li class="nav-item" *ngIf="auth.estaAutenticado()">
+        <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
+      </li>
+      <li class="nav-item" *ngIf="auth.estaAutenticado()">
         <a class="nav-link" [routerLink]="['/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
       </li>
       <li class="nav-item" *ngIf="auth.estaAutenticado()">
         <a class="nav-link" [routerLink]="['/reformas']" [routerLinkActive]="['activado']">Reformas</a>
       </li>
-			<li class="nav-item" *ngIf="auth.estaAutenticado()">
-        <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
-      </li>
+
     </ul>
     <span class="navbar-text">
       <button *ngIf="!auth.estaAutenticado()"

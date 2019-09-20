@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
 import Swal from 'sweetalert2';
 
 import { AuthService } from './services/auth.service';
@@ -13,7 +14,8 @@ export class AppComponent implements OnInit{
   public title:string = 'CampusGIS';
 
   constructor(private auth: AuthService,
-              private router: Router){
+              private router: Router,
+              private db: AngularFirestore){
   }
 
   ngOnInit() {

@@ -73,7 +73,7 @@ export class RegistroComponent implements OnInit {
          console.log(err.error.error.message);
          Swal.fire({
            type: 'error',
-           title: 'Error al autenticar',
+           title: 'Error al registrar',
            text: err.error.error.message
          });
        });

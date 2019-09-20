@@ -4,6 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';  //Para trabajar con peticciones http
 
+//Para trabajar con Firebase
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
+
 // Rutas
 import { routing, appRoutingProviders } from './app.routing';
 
@@ -47,7 +54,11 @@ import { UsuariosComponent } from './components/usuarios.component';
     FormsModule,
     HttpClientModule,
     routing,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule, // imports firebase/firestore, only needed for database features
+   AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
+   AngularFireStorageModule // imports firebase/storage only needed for storage features
   ],
   providers: [
     appRoutingProviders
