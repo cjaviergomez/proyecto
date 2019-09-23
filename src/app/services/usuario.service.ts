@@ -14,15 +14,12 @@ export class UsuarioService{
 	private usuariosCollection: AngularFirestoreCollection<Usuario>;
 	public usuarios: Usuario[] = [];
 
-	constructor(
-		public _http: HttpClient,
-		private afs: AngularFirestore
-	){
+	constructor( public _http: HttpClient, private afs: AngularFirestore ){
 		this.url = "https://campusgis-f9154.firebaseio.com";
 	}
 
   crearUsuario(usuario: Usuario){
-    return this._http.post(`${ this.url }/usuarios.json`, usuario);
+    return 	this.usuariosCollection.add(usuario);
   }
 
 

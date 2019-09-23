@@ -106,9 +106,7 @@ export class RegistroComponent implements OnInit {
 
    //Metodo para guardar en firebase la informacion del usuario registrado haciendo uso del servicio.
    guardarUsuario(){
-     return this._usuarioService.crearUsuario( this.usuario )
-        .subscribe( resp => {
-        });
+     return this._usuarioService.crearUsuario( this.usuario );
    }
 
    //Metodo para verificar que cada usuario tenga la informaciòn adecuada.
