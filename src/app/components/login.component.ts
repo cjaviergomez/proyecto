@@ -9,6 +9,7 @@ import { AuthService } from '../services/auth.service';
 import { UsuarioService } from '../services/usuario.service';
 
 
+
 @Component({
   selector: 'app-login',
   templateUrl: '../views/login.component.html',
@@ -18,8 +19,8 @@ export class LoginComponent implements OnInit {
   public usuario: Usuario;
   private active: boolean;
 
-  constructor(private _authService: AuthService,
-              private _usuarioService: UsuarioService,
+  constructor(private authService: AuthService,
+              private usuarioService: UsuarioService,
               private router: Router) {
   this.usuario = new Usuario();
  }
@@ -28,8 +29,8 @@ export class LoginComponent implements OnInit {
 
   }
 
-  onSubmit(form: NgForm){
-    if (  form.invalid ) { return; }
+  onSubmit(form: NgForm) {
+    if (form.invalid) { return; }
 
     Swal.fire({
       allowOutsideClick: false,
@@ -38,24 +39,24 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
-    this._usuarioService.isActive(this.usuario)
+    this.usuarioService.isActive(this.usuario)
       .subscribe( resp => {
         this.active = resp;
       });
 
-    this._authService.login( this.usuario )
+    this.authService.login( this.usuario )
           .subscribe( resp => {
             Swal.close();
-            if(this.active == false){
-              this._authService.logout();
-              this._authService.leerToken();
+            if (this.active == false){
+              this.authService.logout();
+              this.authService.leerToken();
               Swal.fire({
                 type: 'error',
                 title: 'Cuenta no activa',
                 text: 'Por favor espere a que su cuenta sea activada por un administrador'
               });
 
-            }else{
+            } else {
               this.router.navigateByUrl('/map');
             }
           }, (err) => {

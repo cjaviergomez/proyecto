@@ -1,5 +1,5 @@
 {
-  "extends": "tslint:recommended",
+  "extends":  ["tslint:latest"],
   "rules": {
     "array-type": false,
     "arrow-parens": false,
@@ -24,7 +24,7 @@
     "import-blacklist": [
       true,
       "rxjs/Rx"
-    ],
+    ], 
     "interface-name": false,
     "max-classes-per-file": false,
     "max-line-length": [

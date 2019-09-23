@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
 
-//Servicios
+// Servicios
 import { AuthService } from '../services/auth.service';
 
 @Component({
-	selector: 'home',
+    selector: 'home',
 	templateUrl: '../views/home.html'
 })
-export class HomeComponent{
+export class HomeComponent {
 	public titulo: string;
-	
-	constructor(private auth: AuthService) { 
-		this.titulo = 'Página Principal'; 
+
+	constructor(private auth: AuthService) {
+		this.titulo = 'Página Principal';
 	}
 
-	ngOnInit(){
+	ngOnInit() {
 		console.log('Se ha cargado el componente home.component.ts');
 	}
 
