@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+//Servicios
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -8,9 +9,9 @@ import { AuthService } from '../services/auth.service';
 })
 export class HomeComponent{
 	public titulo: string;
-
-	constructor(private auth: AuthService){
-		this.titulo = 'Página Principal';
+	
+	constructor(private auth: AuthService) { 
+		this.titulo = 'Página Principal'; 
 	}
 
 	ngOnInit(){
