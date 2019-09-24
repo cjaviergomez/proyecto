@@ -1,6 +1,6 @@
 export class Usuario{
 
-	public id: string;
+	public id?: string;
 	public nombres: string;
 	public perfil:String;
 	public unidad_id?:number;

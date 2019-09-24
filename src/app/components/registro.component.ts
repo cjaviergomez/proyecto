@@ -38,6 +38,10 @@ export class RegistroComponent implements OnInit {
   ngOnInit() {
     console.log('registro.component.ts cargado...');
     this.usuario = {
+      nombres: '',
+      correo: '',
+      password: '',
+      foto:'',
       perfil: null,
       unidad_id: null,
       area_id: null,
