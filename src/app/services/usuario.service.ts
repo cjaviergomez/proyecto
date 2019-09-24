@@ -19,6 +19,7 @@ export class UsuarioService{
 	}
 
   crearUsuario(usuario: Usuario){
+	this.usuariosCollection = this.afs.collection<Usuario>('usuarios');
     return 	this.usuariosCollection.add(usuario);
   }
 

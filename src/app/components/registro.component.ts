@@ -37,11 +37,13 @@ export class RegistroComponent implements OnInit {
 
   ngOnInit() {
     console.log('registro.component.ts cargado...');
-    this.usuario = new Usuario();
-    this.usuario.perfil = null;
-    this.usuario.unidad_id = null;
-    this.usuario.area_id = null;
-    this.usuario.estado = 'Pendiente';
+    this.usuario = {
+      perfil: null,
+      unidad_id: null,
+      area_id: null,
+      estado: 'Pendiente',
+    };
+  
     this.getPerfiles();
     this.getUnidades();
     this.getAreasTecnicas();
@@ -60,7 +62,7 @@ export class RegistroComponent implements OnInit {
      this._authService.nuevoUsuario( this.usuario )
        .subscribe( resp => {
          Swal.close();
-         this.guardarUsuario();
+         this.guardarUsuario(this.usuario);
 
          Swal.fire({
            allowOutsideClick: false,
@@ -105,8 +107,10 @@ export class RegistroComponent implements OnInit {
    }
 
    //Metodo para guardar en firebase la informacion del usuario registrado haciendo uso del servicio.
-   guardarUsuario(){
-     return this._usuarioService.crearUsuario( this.usuario );
+   guardarUsuario(usuario:Usuario){
+     return this._usuarioService.crearUsuario( usuario )
+                .then( () => { console.log('Usuario agregado'); })
+                .catch( (err) => { console.log('ERROR AL GUARDAR', err); });
    }
 
    //Metodo para verificar que cada usuario tenga la informaciòn adecuada.
