@@ -2,7 +2,7 @@ export class Usuario{
 
 	public id?: string;
 	public nombres: string;
-	public perfil:String;
+	public perfil: string;
 	public unidad_id?:number;
 	public area_id?:number;
 	public correo: string;

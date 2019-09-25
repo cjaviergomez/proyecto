@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 //Models
@@ -28,12 +28,12 @@ export class RegistroComponent implements OnInit {
   public areasTecnicas:AreaTecnica[];
   public usuario:Usuario;
 
-  constructor(private _router: Router,
-              private _unidadService: UnidadService,
-              private _perfilService: PerfilService,
-              private _areaTecnicaService: AreaTecnicaService,
-              private _usuarioService: UsuarioService,
-              private _authService: AuthService) { }
+  constructor(private router: Router,
+              private unidadService: UnidadService,
+              private perfilService: PerfilService,
+              private areaTecnicaService: AreaTecnicaService,
+              private usuarioService: UsuarioService,
+              private authService: AuthService) { }
 
   ngOnInit() {
     console.log('registro.component.ts cargado...');
@@ -56,6 +56,7 @@ export class RegistroComponent implements OnInit {
    onSubmit(form: NgForm){
      if(form.invalid){ return;}
      this.validarUsuario();
+     
      Swal.fire({
        allowOutsideClick: false,
        type: 'info',
@@ -63,31 +64,38 @@ export class RegistroComponent implements OnInit {
      });
      Swal.showLoading();
 
-     this._authService.nuevoUsuario( this.usuario )
-       .subscribe( resp => {
+     this.authService.nuevoUsuario( this.usuario )
+       .then( resp => {
          Swal.close();
          this.guardarUsuario(this.usuario);
-
-         Swal.fire({
-           allowOutsideClick: false,
-           type: 'success',
-           title: 'Registro Exitoso',
-           text: 'Su cuenta se ha registrado con éxito. Por favor Inicie Sesión'
-         });
-
-       }, (err) => {
-         console.log(err.error.error.message);
-         Swal.fire({
-           type: 'error',
-           title: 'Error al registrar',
-           text: err.error.error.message
-         });
+         this.registroMensaje('sucess');
+       }).catch( err => {
+         this.registroMensaje(err.code);
        });
    } //end onSubmit
 
+   //Metodo para mostrar un mensaje si el usuario se registro correctamente o no.
+   registroMensaje(code: string){
+    if(code == 'sucess'){
+      Swal.fire({
+        allowOutsideClick: false,
+        type: 'success',
+        title: 'Registro Exitoso',
+        text: 'Su cuenta se ha registrado con éxito. Por favor Inicie Sesión'
+      });
+    }else if(code == 'auth/email-already-in-use'){
+      Swal.fire({
+        allowOutsideClick: false,
+        type: 'error',
+        title: 'Error al registrar',
+        text: 'El correo ya esta en uso. Por favor intente con un correo diferente o inicie sesión.'
+      });
+    }
+   }
+
    //Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.
    getUnidades(){
-     this._unidadService.getUnidades().subscribe(
+     this.unidadService.getUnidades().subscribe(
        resp => {
          this.unidades = resp;
        });
@@ -95,7 +103,7 @@ export class RegistroComponent implements OnInit {
 
    //Metodo para obtener de la base de datos todos los perfiles haciendo uso del servicio
    getPerfiles(){
-     this._perfilService.getPerfiles().subscribe(
+     this.perfilService.getPerfiles().subscribe(
        resp => {
          this.perfiles = resp;
        });
@@ -104,7 +112,7 @@ export class RegistroComponent implements OnInit {
 
    //Metodo para obtener de la base de datos todas las areas tecnicas haciendo uso del servicio
    getAreasTecnicas(){
-     this._areaTecnicaService.getAreasTecnicas().subscribe(
+     this.areaTecnicaService.getAreasTecnicas().subscribe(
        resp => {
          this.areasTecnicas = resp;
        });
@@ -112,7 +120,7 @@ export class RegistroComponent implements OnInit {
 
    //Metodo para guardar en firebase la informacion del usuario registrado haciendo uso del servicio.
    guardarUsuario(usuario:Usuario){
-     return this._usuarioService.crearUsuario( usuario )
+     return this.usuarioService.crearUsuario( usuario )
                 .then( () => { console.log('Usuario agregado'); })
                 .catch( (err) => { console.log('ERROR AL GUARDAR', err); });
    }

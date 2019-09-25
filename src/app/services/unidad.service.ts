@@ -16,6 +16,8 @@ export class UnidadService{
 		this.url = "https://campusgis-f9154.firebaseio.com";
 	}
 
+	//TODO: Actualizar metodo a AngularFire2
+	//Metodo para obtener de la base de datos de firebase las unidades.
 	getUnidades(){
 		return this._http.get(`${this.url}/unidades.json`)
             .pipe(
