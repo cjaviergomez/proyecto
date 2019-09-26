@@ -5,24 +5,24 @@ import { map, delay } from 'rxjs/operators';
 import { AreaTecnica } from '../models/areaTecnica';
 
 @Injectable()
-export class AreaTecnicaService{
+export class AreaTecnicaService {
 	public url: string;
 
 	constructor(
-		public _http: HttpClient
-	){
-		this.url = "https://campusgis-f9154.firebaseio.com";
+		public http: HttpClient
+	) {
+		this.url = 'https://campusgis-f9154.firebaseio.com';
 	}
 
-	getAreasTecnicas(){
-		return this._http.get(`${this.url}/areasTecnicas.json`)
-            .pipe(
-              map( this.crearArreglo ),
-              delay(0)
-            );
-	}
+	getAreasTecnicas() {
+		return this.http.get(`${this.url}/areasTecnicas.json`)
+			.pipe(
+				map(this.crearArreglo),
+				delay(0)
+				);
+			}
 
-	//Metodo para convertir en un arreglo de perfiles el json que extraigo de Firebase
+	// Metodo para convertir en un arreglo de perfiles el json que extraigo de Firebase
 	private crearArreglo( areasObj: object){
 
 		const areas: AreaTecnica[] = [];

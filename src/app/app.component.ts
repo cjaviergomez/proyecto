@@ -11,8 +11,9 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  public title:string = 'CampusGIS';
-  public islogged: boolean = false;
+
+  public title = 'CampusGIS';
+  public islogged = false;
 
   constructor(private auth: AuthService,
               private router: Router){
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit{
 
   //Metodo para saber si hay un usuario logeado actualmente.
   getCurrentUser(){
-    this.auth.estaAutenticado().subscribe( auth=> {
+    this.auth.estaAutenticado().subscribe( auth => {
       if(auth){
         this.islogged = true;
       } else {

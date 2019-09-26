@@ -8,14 +8,12 @@ import { GLOBAL } from './global';
 export class ReformaService{
 	public url: string;
 
-	constructor(
-		public _http: HttpClient
-	){
+	constructor(public http: HttpClient) {
 		this.url = GLOBAL.url;
 	}
 
 	getReformas(){
-		return this._http.get(this.url+'reformas');
+		return this.http.get(this.url + 'reformas');
 	}
 
 }
