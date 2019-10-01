@@ -34,20 +34,20 @@ export class RegistroComponent implements OnInit {
      	        private unidadService: UnidadService,
 			  	private perfilService: PerfilService,
 			  	private areaTecnicaService: AreaTecnicaService,
-			  	private usuarioService: UsuarioService,
-			  	private authService: AuthService) { }
+			    private usuarioService: UsuarioService,
+			    private authService: AuthService) { }
 
-  	ngOnInit() {
-		console.log('registro.component.ts cargado...');
+  ngOnInit() {
+    console.log('registro.component.ts cargado...');
 		this.usuario = {
-			  nombres: '',
-			  correo: '',
-			  password: '',
-			  foto: '',
-			  perfil: null,
-			  unidad_id: null,
-			  area_id: null,
-			  estado: 'Pendiente',
+      nombres: '',
+			correo: '',
+			password: '',
+			foto: '',
+			perfil: null,
+			unidad_id: null,
+			area_id: null,
+			estado: 'Pendiente',
 			};
 		this.getPerfiles();
 		this.getUnidades();
@@ -63,19 +63,21 @@ export class RegistroComponent implements OnInit {
 			type: 'info',
 			text: 'Espere por favor...'
 		});
-		Swal.showLoading();
 
-		this.authService.nuevoUsuario(this.usuario)
-			.then(resp => {
-				Swal.close();
-				this.guardarUsuario(this.usuario);
-				this.registroMensaje('sucess');
+		Swal.showLoading(); // Iniciamos el loading.
+
+		this.authService.nuevoUsuario(this.usuario) // Metodo para guardar en firebase auth al usuario.
+			.then((resp) => {
+				this.guardarUsuario(); // Guardamos el usuario en la base de datos firebase.
+				this.modificarUsuario(); // Le modificamos el nombre y la foto al usuario recien creado. 
+				Swal.close(); // Cerramos el loading
+				this.registroMensaje('sucess'); // Mostramos un mensaje de exito para indicarle al usuario que se creó el usuario correctamente.	
 			}).catch(err => {
 				this.registroMensaje(err.code);
 			});
+		
 		} // end onSubmit
 
-  
   	// Metodo para mostrar un mensaje si el usuario se registro correctamente o no.
 	registroMensaje(code: string) {
 		if (code == 'sucess') {
@@ -121,10 +123,12 @@ export class RegistroComponent implements OnInit {
 		}
 
 	// Metodo para guardar en firebase la informacion del usuario registrado haciendo uso del servicio.
-	guardarUsuario(usuario: Usuario) {
-		return this.usuarioService.crearUsuario(usuario)
-			.then(() => { console.log('Usuario agregado'); })
-			.catch((err) => { console.log('ERROR AL GUARDAR', err); });
+	guardarUsuario() {
+		this.usuarioService.crearUsuario(this.usuario)
+					.then(() => { 
+						console.log('Usuario agregado');
+						this.authService.logout(); })
+					.catch((err) => { console.log('ERROR AL GUARDAR', err); });
 		}
 
 	// Metodo para verificar que cada usuario tenga la informaciòn adecuada.
@@ -136,4 +140,18 @@ export class RegistroComponent implements OnInit {
       else {
         delete this.usuario.area_id; delete this.usuario.unidad_id; } // Si no es ni un solicitante ni una UAA Asesora, elimino las propiedades area_id y unidad_id
 		}
+
+	// Metodo para modificarle al usuario registrado las propiedades de nombre y foto. 
+	// El usuario tendrá una foto por defecto que se encuentra almacenada en Firebase
+	modificarUsuario(){
+		this.authService.estaAutenticado().subscribe( user => {
+			if (user) {
+				user.updateProfile({
+					displayName: this.usuario.nombres,
+					photoURL: 'https://firebasestorage.googleapis.com/v0/b/campusgis-f9154.appspot.com/o/img%2Fperfil.png?alt=media&token=fbb69c8f-c256-4851-9749-d93269cf6596'
+				}).then( () => { console.log('User Update');
+				}).catch( (error) => console.log('error', error));
+			}
+		});
+	}
 }

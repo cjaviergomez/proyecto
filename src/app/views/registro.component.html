@@ -41,7 +41,7 @@
               [(ngModel)]="usuario.unidad_id" required>
             <option value="null" disabled>Seleccione una UAA</option>
             <option *ngFor="let unidad of unidades"
-              [value]="unidad.id"> {{ unidad.nombre }} </option>
+              [value]="unidad.nombre"> {{ unidad.nombre }} </option>
       </select>
       <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectUnidad'] && formRegistro.controls['selectUnidad'].errors">
               Elige la unidad a la que pertenece.
@@ -56,7 +56,7 @@
               [(ngModel)]="usuario.area_id" required>
             <option value="null" disabled>Seleccione area técnica</option>
             <option *ngFor="let area of areasTecnicas"
-              [value]="area.id"> {{ area.nombre }} </option>
+              [value]="area.nombre"> {{ area.nombre }} </option>
       </select>
       <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectArea'] && formRegistro.controls['selectArea'].errors">
               Elige el área a la que pertenece.

@@ -1,4 +1,4 @@
 export let GLOBAL = {
-	url: 'http://localhost/proyecto-backend/index.php/',
+	url: '',
 	header_color: '#696D64'
 };
