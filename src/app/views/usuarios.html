@@ -41,7 +41,7 @@
 
         <button class="btn btn-danger"
                 (click)="borrarUsuario( usuario, i ) ">
-          <i class="fa fa-trash"></i>
+                <fa-icon [icon]="faTrashAlt"></fa-icon>
         </button>
 
 
@@ -54,7 +54,7 @@
      class="alert alert-warning text-center mt-3 animated fadeIn faster">
     <h4 class="alert-heading">No hay registros</h4>
     <p>
-      <i class="fa fa-exclamation fa-2x"></i>
+      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
     </p>
 </div>
 

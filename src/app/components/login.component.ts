@@ -26,7 +26,10 @@ export class LoginComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.usuario = new Usuario();
+    this.usuario = {
+      nombres: '',
+      correo: ''
+    }
   }
 
   onSubmit(form: NgForm) {

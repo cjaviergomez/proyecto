@@ -1,14 +1,12 @@
-export class Usuario{
+export interface Usuario{
+	id?: string;
+	nombres?: string;
+	perfil?: string;
+	unidad_id?:number;
+	area_id?:number;
+	correo?: string;
+	password?: string;
+	estado?: string;
+	photoUrl?:string;
 
-	public id?: string;
-	public nombres: string;
-	public perfil: string;
-	public unidad_id?:number;
-	public area_id?:number;
-	public correo: string;
-	public password: string;
-	public estado: string;
-	public foto:string;
-
-	constructor(){}
 }

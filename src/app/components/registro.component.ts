@@ -40,10 +40,10 @@ export class RegistroComponent implements OnInit {
   ngOnInit() {
     console.log('registro.component.ts cargado...');
 		this.usuario = {
-      nombres: '',
+     		nombres: '',
 			correo: '',
 			password: '',
-			foto: '',
+			photoUrl: '',
 			perfil: null,
 			unidad_id: null,
 			area_id: null,
@@ -68,8 +68,8 @@ export class RegistroComponent implements OnInit {
 
 		this.authService.nuevoUsuario(this.usuario) // Metodo para guardar en firebase auth al usuario.
 			.then((resp) => {
-				this.guardarUsuario(); // Guardamos el usuario en la base de datos firebase.
 				this.modificarUsuario(); // Le modificamos el nombre y la foto al usuario recien creado. 
+				this.guardarUsuario(); // Guardamos el usuario en la base de datos firebase.
 				Swal.close(); // Cerramos el loading
 				this.registroMensaje('sucess'); // Mostramos un mensaje de exito para indicarle al usuario que se creó el usuario correctamente.	
 			}).catch(err => {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
+import { faTrashAlt, faExclamation} from '@fortawesome/free-solid-svg-icons';
+
 // Models
 import { Usuario } from '../models/usuario';
 
@@ -16,6 +18,10 @@ export class UsuariosComponent implements OnInit {
 
   usuarios: Usuario[] = [];
   cargando = false;
+  
+  // Icons
+  faTrashAlt = faTrashAlt; // Icono a implementar en el botón de borrar.
+  faExclamation = faExclamation; // Icono de exclamación.
 
   constructor(private usuarioService: UsuarioService) { }
 

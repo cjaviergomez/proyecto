@@ -8,12 +8,22 @@ import { AuthService } from '../services/auth.service';
 })
 export class AuthGuard implements CanActivate {
 
+  userlogged: boolean;
+
   constructor( private auth: AuthService,
                private router: Router) {}
 
   canActivate(): boolean  {
 
-    if ( this.auth.estaAutenticado() ) {
+    this.auth.estaAutenticado().subscribe( user => {
+      if (user) {
+         this.userlogged = true;
+      } else {
+        this.userlogged = false;
+      }
+    });
+
+    if ( this.userlogged ) {
       return true;
     } else {
       this.router.navigateByUrl('/login');

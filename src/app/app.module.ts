@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';  //Para trabajar con peticciones http
 
+// FontAwesome
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 //Para trabajar con Firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -31,6 +34,7 @@ import { ReformasListComponent } from './components/reformas-list.component';
 import { LoginComponent } from './components/login.component';
 import { RegistroComponent } from './components/registro.component';
 import { UsuariosComponent } from './components/usuarios.component';
+import { PerfilComponent } from './components/perfil.component';
 
 @NgModule({
   declarations: [
@@ -48,11 +52,13 @@ import { UsuariosComponent } from './components/usuarios.component';
     ReformasListComponent,
     LoginComponent,
     RegistroComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    PerfilComponent 
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    FontAwesomeModule,
     HttpClientModule,
     routing,
     ReactiveFormsModule,
