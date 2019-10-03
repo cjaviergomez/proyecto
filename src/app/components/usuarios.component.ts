@@ -29,12 +29,14 @@ export class UsuariosComponent implements OnInit {
     this.cargarUsuarios();
   }
 
+  // TODO: Actualizar metodo
   // Metodo para cambiar el estado de los usuarios
   cambiarEstado(usuario: Usuario, estado: string) {
     usuario.estado = estado;
-    this.usuarioService.actualizarUsuario(usuario).subscribe();
+    this.usuarioService.actualizarUsuario(usuario);
   }
 
+  // TODO: Actualizar Metodo
   // Borra un usuario de la base de datos y del arreglo de usuarios.
   borrarUsuario(usuario: Usuario, i: number) {
     Swal.fire({
@@ -46,7 +48,7 @@ export class UsuariosComponent implements OnInit {
     }).then(resp => {
       if (resp.value) {
         this.usuarios.splice(i, 1); // Borra al usuario del arreglo de usuarios
-        this.usuarioService.borrarUsuario(usuario.id).subscribe(); // usa el servicio para borrar al usuario de Firebase
+        this.usuarioService.borrarUsuario(usuario.id); // usa el servicio para borrar al usuario de Firebase
       }
     });
   }

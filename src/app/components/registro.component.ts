@@ -44,7 +44,7 @@ export class RegistroComponent implements OnInit {
 			correo: '',
 			password: '',
 			photoUrl: '',
-			perfil: null,
+			perfil_id: '',
 			unidad_id: null,
 			area_id: null,
 			estado: 'Pendiente',
@@ -135,10 +135,11 @@ export class RegistroComponent implements OnInit {
     // EJ: Si se registra un usuario con el perfil solicitante, que no vaya a tener 
     // asignado el atributo area_id porque un solicitante no pertenece a ningun area tecnica
 	validarUsuario() {
-      if (this.usuario.perfil == 'Solicitante') { delete this.usuario.area_id; } 
-      else if (this.usuario.perfil == 'UAA Asesora') { delete this.usuario.unidad_id; }
-      else {
-        delete this.usuario.area_id; delete this.usuario.unidad_id; } // Si no es ni un solicitante ni una UAA Asesora, elimino las propiedades area_id y unidad_id
+		// TODO: Falta modificar el perfil. crear una funcion que obtenga el nombre del perfil pasandole el id
+		if (this.usuario.perfil_id == 'Solicitante') { delete this.usuario.area_id; } 
+      	else if (this.usuario.perfil_id == 'UAA Asesora') { delete this.usuario.unidad_id; }
+      	else {
+			delete this.usuario.area_id; delete this.usuario.unidad_id; } // Si no es ni un solicitante ni una UAA Asesora, elimino las propiedades area_id y unidad_id
 		}
 
 	// Metodo para modificarle al usuario registrado las propiedades de nombre y foto. 

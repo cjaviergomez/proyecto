@@ -1,6 +1,6 @@
 export class Reforma{
 	constructor(
-		public reforma_id: number,
+		public id: string,
 		public descripcion: string
 	){}
 }

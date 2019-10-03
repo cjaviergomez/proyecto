@@ -3,5 +3,22 @@
 }
 
 .dropdown-item:hover{
-  background: #3288E5;
+  background: #E0E0E0;
+}
+
+.dataPerfil{
+  width:50%;
+  height:20%;
+}
+
+.alinear{
+  text-align: right;
+  padding: 0px !important;
+  margin: 0px !important;
+  max-width: 90px;
+  max-height: 100px;
+}
+
+.alCentro{
+  text-align: center;
 }

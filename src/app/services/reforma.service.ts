@@ -1,19 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Reforma } from '../models/reforma';
-import { GLOBAL } from './global';
 
 @Injectable()
 export class ReformaService{
-	public url: string;
+	private reformasCollection: AngularFirestoreCollection<Reforma>;
+	private reformas: Observable<Reforma[]>
 
-	constructor(public http: HttpClient) {
-		this.url = GLOBAL.url;
+	constructor(private afs: AngularFirestore) {
+		this.reformasCollection = this.afs.collection<Reforma>('reformas');
+		this.reformas = this.reformasCollection.valueChanges();	
 	}
 
 	getReformas(){
-		return this.http.get(this.url + 'reformas');
+		return this.reformas = this.reformasCollection.snapshotChanges()
+		.pipe(map( changes => {
+			return changes.map( action => {
+				const data = action.payload.doc.data() as Reforma;
+				data.id = action.payload.doc.id;
+				return data;
+			})
+		}));
 	}
 
 }

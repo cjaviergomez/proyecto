@@ -19,7 +19,7 @@ import { UsuarioService } from '../services/usuario.service';
 })
 export class LoginComponent implements OnInit {
   public usuario: Usuario;
-  private active: boolean;
+  private active: boolean = true; //TODO: Cambiar este valor cuando se cree bien el metodo isActive
 
   constructor(private authService: AuthService,
               private usuarioService: UsuarioService,
@@ -42,10 +42,6 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
-    this.usuarioService.isActive(this.usuario)
-      .subscribe( resp => {
-        this.active = resp;
-      });
 
     this.authService.login( this.usuario )
           .then( resp => {
@@ -67,7 +63,7 @@ export class LoginComponent implements OnInit {
       Swal.fire({
         type: 'error',
         title: 'Error al autenticar',
-        text: 'Correo no resgistrado. Por favor verifique que el correo sea el correcto o registrese.'
+        text: 'Correo no registrado. Por favor verifique que el correo sea el correcto o registrese.'
       });
     } else if(code == 'auth/wrong-password'){
       Swal.fire({

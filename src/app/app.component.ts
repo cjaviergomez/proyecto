@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 //Servicios
 import { AuthService } from './services/auth.service';
 
+// Models
+import { Usuario } from './models/usuario';
+
 
 @Component({
   selector: 'app-root',
@@ -14,6 +17,11 @@ export class AppComponent implements OnInit{
 
   public title = 'CampusGIS';
   public islogged = false;
+  usuario: Usuario = {
+    nombres: '',
+    correo: '',
+    photoUrl: ''
+};
 
   constructor(private auth: AuthService,
               private router: Router){
@@ -31,9 +39,12 @@ export class AppComponent implements OnInit{
 
   //Metodo para saber si hay un usuario logeado actualmente.
   getCurrentUser(){
-    this.auth.estaAutenticado().subscribe( auth => {
-      if(auth){
+    this.auth.estaAutenticado().subscribe( user => {
+      if(user){
         this.islogged = true;
+        this.usuario.nombres = user.displayName;
+        this.usuario.correo = user.email;
+        this.usuario.photoUrl = user.photoURL;
       } else {
         this.islogged = false;
       }

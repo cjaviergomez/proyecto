@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, delay } from 'rxjs/operators';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 // Modelos
 import { Usuario } from '../models/usuario';
@@ -10,14 +11,15 @@ import { Usuario } from '../models/usuario';
 	providedIn: 'root'
 })
 export class UsuarioService {
-
-	private url: string;
+	
 	private usuariosCollection: AngularFirestoreCollection<Usuario>;
-	public usuarios: Usuario[] = [];
+	private usuarios: Observable<Usuario[]>;
+	private usuarioDoc: AngularFirestoreDocument<Usuario>;
+	private usuario: Observable<Usuario>;
 
 	constructor(public http: HttpClient, private afs: AngularFirestore) {
-		this.url = 'https://campusgis-f9154.firebaseio.com';
-		this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('perfil', '>', 'Administrador'));
+		this.usuariosCollection = this.afs.collection<Usuario>('usuarios');
+		this.usuarios = this.usuariosCollection.valueChanges();
 	}
 
 	// Metodo para crear un nuevo usuario en la base de datos de firebase.
@@ -25,9 +27,16 @@ export class UsuarioService {
 		return this.usuariosCollection.add(usuario);
 	}
 
-	// Metodo para obtener todos los usuarios registrados en la base de datos.
+	// Metodo para obtener todos los usuarios registrados en la base de datos incluido su id.
 	getUsuarios() {
-		return this.usuariosCollection.valueChanges();
+		return this.usuarios = this.usuariosCollection.snapshotChanges()
+				.pipe(map( changes => {
+					return changes.map( action => {
+						const data = action.payload.doc.data() as Usuario;
+						data.id = action.payload.doc.id;
+						return data;
+					})
+				}));
 	}
 
 	// TODO:Falta actualizar metodo. Implementar AngularFire2
@@ -37,29 +46,33 @@ export class UsuarioService {
 			...usuario
 		};
 		delete usuarioTemp.id;
-		return this.http.put(`${ this.url }/usuarios/${ usuario.id }.json`, usuarioTemp);
+		return "this.http.put(`${ this.url }/usuarios/${ usuario.id }.json`, usuarioTemp)";
 	 }
 
 	// TODO: Falta actualizar metodo. Implementar AngularFire2
 	borrarUsuario(id: string) {
-		return this.http.delete(`${ this.url }/usuarios/${ id }.json`);
+		return "this.http.delete(`${ this.url }/usuarios/${ id }.json`)";
 	}
 
-	// TODO: Falta actualizar metodo. Implementar AngularFire2
-	// Metodo para obtener un usuario de Firebase.
+	// Metodo para obtener un usuario especifico de Firebase.
 	getUsuario(id: string) {
-		return this.http.get(`${ this.url }/usuarios/${ id }.json`);
+		this.usuarioDoc = this.afs.doc<Usuario>(`usuarios/${id}`); // Ruta del usuario en particular. 
+		return this.usuario = this.usuarioDoc.snapshotChanges().pipe(map( action =>{
+			if(action.payload.exists == false){
+				return null;
+			}else{
+				const data = action.payload.data() as Usuario;
+				data.id = action.payload.id;
+				return data;
+			}
+		}));
 	}
 
 	// TODO: Falta actualizar metodo. Implementar AngularFire2
 	// Metodo para saber si un usuario esta activo
 	// Si el usuario esta activado returna true
 	isActive(usuario: Usuario){
-		return this.http.get(`${this.url}/usuarios.json`)
-			.pipe(
-				map(resp => this.buscarUsuario(resp, usuario.correo)),
-				delay(0)
-				);
+		return true;
 	}
 
 	// TODO: Falta actualizar metodo. Implementar AngularFire2
