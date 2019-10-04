@@ -53,7 +53,7 @@ export class SolicitudesListComponent implements OnInit{
 	}
 
 	onDeleteSolicitud(id:number){
-		this._solicitudService.deleteSolicitud(id).subscribe(
+		/* this._solicitudService.deleteSolicitud(id).subscribe(
 			 response => {
 				 console.log(response['message']);
 				if(response['code'] == 202){
@@ -65,7 +65,7 @@ export class SolicitudesListComponent implements OnInit{
 			error => {
 				console.log(<any>error);
 			}
-		);
+		); */
 	}
 
 }

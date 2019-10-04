@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
-import { faTrashAlt, faExclamation} from '@fortawesome/free-solid-svg-icons';
+import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 // Models
 import { Usuario } from '../models/usuario';
+import { Perfil } from '../models/perfil';
 
 // services
 import { UsuarioService } from '../services/usuario.service';
+import { PerfilService } from '../services/perfil.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -20,23 +22,37 @@ export class UsuariosComponent implements OnInit {
   cargando = false;
   
   // Icons
-  faTrashAlt = faTrashAlt; // Icono a implementar en el botón de borrar.
+  faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private usuarioService: UsuarioService, private perfilService: PerfilService) { }
 
   ngOnInit() {
     this.cargarUsuarios();
   }
 
-  // TODO: Actualizar metodo
   // Metodo para cambiar el estado de los usuarios
   cambiarEstado(usuario: Usuario, estado: string) {
-    usuario.estado = estado;
-    this.usuarioService.actualizarUsuario(usuario);
+    let estadoInfinitivo: string;
+    if ( estado == 'Desactivado'){
+      estadoInfinitivo = 'desactivar';
+    } else {
+      estadoInfinitivo = 'activar';
+    }
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `Está seguro que desea ${estadoInfinitivo} a ${ usuario.nombres }`,
+      type: 'question',
+      showConfirmButton: true,
+      showCancelButton: true
+    }).then(resp => {
+      if (resp.value) {
+        usuario.estado = estado;
+        this.usuarioService.actualizarUsuario(usuario);
+      }
+    });
   }
 
-  // TODO: Actualizar Metodo
   // Borra un usuario de la base de datos y del arreglo de usuarios.
   borrarUsuario(usuario: Usuario, i: number) {
     Swal.fire({
@@ -61,6 +77,7 @@ export class UsuariosComponent implements OnInit {
         this.usuarios = usuarios;
         this.cargando = false;
       });
+  
   }
 
 }

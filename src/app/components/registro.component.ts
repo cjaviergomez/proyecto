@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 // Models
@@ -30,24 +29,22 @@ export class RegistroComponent implements OnInit {
 	public areasTecnicas: AreaTecnica[];
 	public usuario: Usuario;
 	
-	constructor(private router: Router, 
-     	        private unidadService: UnidadService,
+	constructor(private unidadService: UnidadService,
 			  	private perfilService: PerfilService,
 			  	private areaTecnicaService: AreaTecnicaService,
 			    private usuarioService: UsuarioService,
 			    private authService: AuthService) { }
 
-  ngOnInit() {
-    console.log('registro.component.ts cargado...');
+  	ngOnInit() {
 		this.usuario = {
-     		nombres: '',
-			correo: '',
-			password: '',
-			photoUrl: '',
-			perfil_id: '',
+			perfil: {
+				roles:{
+					editor:true
+				}
+			},
 			unidad_id: null,
 			area_id: null,
-			estado: 'Pendiente',
+			estado: 'Pendiente'
 			};
 		this.getPerfiles();
 		this.getUnidades();
@@ -94,6 +91,13 @@ export class RegistroComponent implements OnInit {
 				title: 'Error al registrar',
 				text: 'El correo ya esta en uso. Por favor intente con un correo diferente o inicie sesión.'
 			});
+		} else {
+			Swal.fire({
+				allowOutsideClick: false,
+				type: 'error',
+				title: 'Error al registrar',
+				text: 'Ha ocurrido un error inesperado. Por favor intentelo de nuevo'
+			});
 		}
 	}
 
@@ -112,7 +116,6 @@ export class RegistroComponent implements OnInit {
 				this.perfiles = resp;
 			});
 		}
-
 
 	// Metodo para obtener de la base de datos todas las areas tecnicas haciendo uso del servicio
 	getAreasTecnicas() {
@@ -133,17 +136,18 @@ export class RegistroComponent implements OnInit {
 
 	// Metodo para verificar que cada usuario tenga la informaciòn adecuada.
     // EJ: Si se registra un usuario con el perfil solicitante, que no vaya a tener 
-    // asignado el atributo area_id porque un solicitante no pertenece a ningun area tecnica
+    // asignado el atributo area_id porque un solicitante no pertenece a ningun area tecnica.
 	validarUsuario() {
-		// TODO: Falta modificar el perfil. crear una funcion que obtenga el nombre del perfil pasandole el id
-		if (this.usuario.perfil_id == 'Solicitante') { delete this.usuario.area_id; } 
-      	else if (this.usuario.perfil_id == 'UAA Asesora') { delete this.usuario.unidad_id; }
+		// Si es solicitante
+		if (this.usuario.perfil.id == 'qOTNuQsTZ2plZ0ehw63f') { delete this.usuario.area_id; } 
+		// Si es UAA Asesora
+      	else if (this.usuario.perfil.id == 'IyKMtPdSc2mAZM8hDkci') { delete this.usuario.unidad_id; }
       	else {
 			delete this.usuario.area_id; delete this.usuario.unidad_id; } // Si no es ni un solicitante ni una UAA Asesora, elimino las propiedades area_id y unidad_id
 		}
 
 	// Metodo para modificarle al usuario registrado las propiedades de nombre y foto. 
-	// El usuario tendrá una foto por defecto que se encuentra almacenada en Firebase
+	// El usuario tendrá una foto por defecto que se encuentra almacenada en Firebase.
 	modificarUsuario(){
 		this.authService.estaAutenticado().subscribe( user => {
 			if (user) {

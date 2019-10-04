@@ -23,17 +23,18 @@
               #selectPerfil="ngModel"
               name="selectPerfil"
               [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectPerfil'].errors }"
-              [(ngModel)]="usuario.perfil_id" required>
-            <option value="" disabled>Seleccione un perfil</option>
+              [(ngModel)]="usuario.perfil" required>
+            <option value="null" disabled>Seleccione un perfil</option>
             <option *ngFor="let perfil of perfiles"
-              [value]="perfil.id"> {{ perfil.nombre }} </option>
+              [value]="perfil"> {{ perfil.nombre }} </option>
       </select>
       <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectPerfil'].errors">
               Elige un perfil.
       </div>
     </div>
 
-    <div *ngIf="usuario.perfil_id == 'Solicitante'" class="mt-2">
+    <!-- Perfil solicitante -->
+    <div *ngIf="usuario.perfil.id == 'qOTNuQsTZ2plZ0ehw63f'" class="mt-2">  
       <select class="form-control"
               #selectUnidad="ngModel"
               name="selectUnidad"
@@ -48,7 +49,8 @@
       </div>
     </div>
 
-    <div *ngIf="usuario.perfil_id == 'UAA Asesora'" class="mt-2">
+    <!-- Perfil UAA Asesora -->
+    <div *ngIf="usuario.perfil.id == 'IyKMtPdSc2mAZM8hDkci'" class="mt-2">
       <select class="form-control"
               #selectArea="ngModel"
               name="selectArea"

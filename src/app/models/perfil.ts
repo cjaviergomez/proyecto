@@ -1,7 +1,8 @@
-export class Perfil{
-	public id: string;
-	public nombre: string;
-	public descripcion: string;
+import { Roles } from './roles';
 
-	constructor(){}
+export class Perfil{
+	id?: string;
+	nombre?: string;
+	roles?: Roles;
+	descripcion?: string;
 }

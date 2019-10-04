@@ -18,8 +18,9 @@ import { UsuarioService } from '../services/usuario.service';
   styleUrls: ['../../assets/css/login.css']
 })
 export class LoginComponent implements OnInit {
+  
   public usuario: Usuario;
-  private active: boolean = true; //TODO: Cambiar este valor cuando se cree bien el metodo isActive
+  private active: boolean = false; 
 
   constructor(private authService: AuthService,
               private usuarioService: UsuarioService,
@@ -42,6 +43,11 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
+    this.usuarioService.getUserEstado(this.usuario.correo).subscribe( user => {
+      if (user[0].estado == 'Activado'){
+        this.active = true;
+      }
+    });
 
     this.authService.login( this.usuario )
           .then( resp => {

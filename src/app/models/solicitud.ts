@@ -1,11 +1,11 @@
-export class Solicitud{
-	constructor(
-		public id: string,
-		public nombre_edificio: string,
-		public piso_edificio: number,
-		public objectID: number,
-		public estado:string,
-		public formulario:JSON
+export interface Solicitud {
+	id?: string,
+	nombre_edificio?: string,
+	piso_edificio?: number,
+	objectID?: number,
+	estado:string,
+	formulario?:JSON
+
 
 		//seccion 1
 		/* public entidad_solicitante: string,
@@ -19,5 +19,5 @@ export class Solicitud{
 		public hora_visita: string,
 		public funcionario_asignado:string,
 		public funcionario_visita:string */
-	){}
+	
 }

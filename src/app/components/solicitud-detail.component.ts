@@ -28,7 +28,7 @@ export class SolicitudDetailComponent{
 		this._route.params.forEach((params: Params) => {
 			let id = params['id'];
 
-			this._solicitudService.getSolicitud(id).subscribe(
+			/* this._solicitudService.getSolicitud(id).subscribe(
 				response => {
 					if(response['code'] == 202){
 						this.solicitud = response['data'];
@@ -39,7 +39,7 @@ export class SolicitudDetailComponent{
 				error => {
 					console.log(<any>error);
 				}
-			);
+			); */
 		});
 	}
 

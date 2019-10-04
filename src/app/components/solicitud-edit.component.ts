@@ -24,7 +24,9 @@ export class SolicitudEditComponent implements OnInit{
 		private _router: Router
 	){
 		this.titulo = 'Editar solicitud';
-		this.solicitud = new Solicitud(0 ,'Mecánica', 1, 45, 'Pendiente', JSON);
+		this.solicitud = {
+			 estado: 'Pendiente'
+		}
 		this.is_edit = true;
 	}
 
@@ -35,29 +37,14 @@ export class SolicitudEditComponent implements OnInit{
 
 	onSubmit(){
 		console.log(this.solicitud);
-
-		if(this.filesToUpload && this.filesToUpload.length >= 1){
-			this._solicitudService.makeFileRequest(GLOBAL.url+'upload-file', [], this.filesToUpload).then((result) => {
-				console.log(result);
-
-				this.resultUpload = result;
-				//this.solicitud.imagen = this.resultUpload.filename;
-				this.updateSolicitud();
-
-			}, (error) =>{
-				console.log(error);
-			});
-		}else{
-			this.updateSolicitud();
-		}
-
+		this.updateSolicitud();
 	}
 
 	updateSolicitud(){
 		this._route.params.forEach((params: Params) => {
 			let id = params['id'];
 
-			this._solicitudService.editSolicitud(id, this.solicitud).subscribe(
+			/* this._solicitudService.editSolicitud(id, this.solicitud).subscribe(
 				response => {
 					if(response['code'] == 202){
 						this._router.navigate(['/solicitud', id]);
@@ -68,7 +55,7 @@ export class SolicitudEditComponent implements OnInit{
 				error => {
 					console.log(<any>error);
 				}
-			);
+			); */
 		});
 	}
 
@@ -81,7 +68,7 @@ export class SolicitudEditComponent implements OnInit{
 		 this._route.params.forEach((params: Params) => {
 			let id = params['id'];
 
-			this._solicitudService.getSolicitud(id).subscribe(
+			/* this._solicitudService.getSolicitud(id).subscribe(
 				response => {
 					if(response['code'] == 202){
 						this.solicitud = response['data'];
@@ -92,7 +79,7 @@ export class SolicitudEditComponent implements OnInit{
 				error => {
 					console.log(<any>error);
 				}
-			);
-		});
+			); */
+		}); 
 	}
 }

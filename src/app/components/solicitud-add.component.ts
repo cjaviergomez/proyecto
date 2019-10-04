@@ -43,7 +43,9 @@ export class SolicitudAddComponent implements OnInit{
 			'elementos': {},
 			'especiales': {}
 		};
-		this.solicitud = new Solicitud(0,'Ingenieria Mecanica', 1, 45, 'Pendiente', this.formulario);
+		this.solicitud = {
+			estado: 'Pendiente'
+		}
 	}
 
 	ngOnInit(){
@@ -69,25 +71,11 @@ export class SolicitudAddComponent implements OnInit{
 	}
 
 	onSubmit(){
-		if(this.filesToUpload && this.filesToUpload.length >= 1){
-			this._solicitudService.makeFileRequest(GLOBAL.url+'upload-file', [], this.filesToUpload).then((result) => {
-				console.log(result);
-
-				this.resultUpload = result;
-				//this.solicitud.imagen = this.resultUpload.filename;
-				this.saveSolicitud();
-
-			}, (error) =>{
-				console.log(error);
-			});
-		}else{
-			this.saveSolicitud();
-		}
-
+		this.saveSolicitud();
 	}
 
 	saveSolicitud(){
-			this._solicitudService.addSolicitud(this.solicitud).subscribe(
+			/* this._solicitudService.addSolicitud(this.solicitud).subscribe(
 				response => {
 					if(response['code'] == 202){
 						this._router.navigate(['/solicitud-creada']);
@@ -99,7 +87,7 @@ export class SolicitudAddComponent implements OnInit{
 				error => {
 					console.log(<any>error);
 				}
-			);
+			); */
 	}
 
 	fileChangeEvent(fileInput: any){

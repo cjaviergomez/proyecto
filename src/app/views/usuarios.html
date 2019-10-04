@@ -19,7 +19,7 @@
       <th scope="row">{{ i + 1 }}</th>
       <td>{{ usuario.nombres}}</td>
       <td>{{ usuario.correo }}</td>
-      <td>{{ usuario.perfil_id }}</td>
+      <td>{{ usuario.perfil.nombre }}</td>
       <td>
 
         <label *ngIf="usuario.estado == 'Activado'" class="badge badge-success">Activado</label>
@@ -29,19 +29,19 @@
       </td>
       <td>
 
+        <button class="btn btn-primary"
+                (click)="borrarUsuario( usuario, i )">
+          <fa-icon [icon]="faSearchPlus" title="Ver usuario"></fa-icon>
+        </button>
+
         <button *ngIf="usuario.estado == 'Activado'"
-                class="btn btn-outline-primary mr-1"
+                class="btn btn-outline-primary ml-1"
                 (click)="cambiarEstado( usuario, 'Desactivado' )"> Desactivar
         </button>
 
         <button *ngIf="usuario.estado == 'Desactivado' || usuario.estado == 'Pendiente'"
-                class="btn btn-outline-primary mr-1"
+                class="btn btn-outline-primary ml-1"
                 (click)="cambiarEstado( usuario, 'Activado' )"> Activar
-        </button>
-
-        <button class="btn btn-danger"
-                (click)="borrarUsuario( usuario, i ) ">
-                <fa-icon [icon]="faTrashAlt"></fa-icon>
         </button>
 
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, delay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -39,19 +39,18 @@ export class UsuarioService {
 				}));
 	}
 
-	// TODO:Falta actualizar metodo. Implementar AngularFire2
 	// Metodo para actualizar la informaciòn de un usuario en Firebase.
-	actualizarUsuario(usuario: Usuario) {
-		const usuarioTemp = {
-			...usuario
-		};
-		delete usuarioTemp.id;
-		return "this.http.put(`${ this.url }/usuarios/${ usuario.id }.json`, usuarioTemp)";
+	actualizarUsuario(usuario: Usuario): void {
+		let idUsuario = usuario.id;
+		delete usuario.id; // Le borramos el id al usuario para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
+		this.usuarioDoc = this.afs.doc<Usuario>(`usuarios/${idUsuario}`);
+		this.usuarioDoc.update(usuario);
 	 }
 
-	// TODO: Falta actualizar metodo. Implementar AngularFire2
-	borrarUsuario(id: string) {
-		return "this.http.delete(`${ this.url }/usuarios/${ id }.json`)";
+	// Metodo para borrar a un usuario de la base de datos de firebase.
+	borrarUsuario(id: string): void {
+		this.usuarioDoc = this.afs.doc<Usuario>(`usuarios/${id}`);
+		this.usuarioDoc.delete();
 	}
 
 	// Metodo para obtener un usuario especifico de Firebase.
@@ -68,30 +67,12 @@ export class UsuarioService {
 		}));
 	}
 
-	// TODO: Falta actualizar metodo. Implementar AngularFire2
-	// Metodo para saber si un usuario esta activo
-	// Si el usuario esta activado returna true
-	isActive(usuario: Usuario){
-		return true;
-	}
-
-	// TODO: Falta actualizar metodo. Implementar AngularFire2
-	// Metodo para buscar un usuario que coincida con el correo y su estado sea activado
-	private buscarUsuario(usuariosObj: object, correo: string) {
-		let active: boolean = false;
-
-		if (usuariosObj === null) { return false; }
-
-		Object.keys(usuariosObj).forEach(key => {
-
-			const usuario: Usuario = usuariosObj[key];
-			usuario.id = key;
-			if(usuario.correo === correo && usuario.estado === 'Activado'){
-				active = true;
-			}
-		});
-
-		return active;
+	// Este metodo se usa en el login para saber las propiedades del usuario que se está logueando.
+	// Busca entre los usuario almacenados en firebase el que tenga el correo indicado.
+	// Devuelve el observable que contiene la informaciòn del usuario.
+	getUserEstado(correo: string){
+		this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('correo', '==', correo));
+		return this.usuariosCollection.valueChanges();
 	}
 
 }
