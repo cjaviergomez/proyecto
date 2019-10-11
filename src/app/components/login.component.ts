@@ -20,22 +20,21 @@ import { UsuarioService } from '../services/usuario.service';
 export class LoginComponent implements OnInit {
   
   public usuario: Usuario;
-  private active: boolean = false; 
 
   constructor(private authService: AuthService,
               private usuarioService: UsuarioService,
-              private router: Router) { }
+              private router: Router) {}
 
   ngOnInit() {
     this.usuario = {
       nombres: '',
       correo: ''
-    }
+    };
   }
 
   onSubmit(form: NgForm) {
     if (form.invalid) { return; }
-
+   
     Swal.fire({
       allowOutsideClick: false,
       type: 'info',
@@ -43,22 +42,19 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
-    this.usuarioService.getUserEstado(this.usuario.correo).subscribe( user => {
-      if (user[0].estado == 'Activado'){
-        this.active = true;
-      }
-    });
-
     this.authService.login( this.usuario )
           .then( resp => {
-            console.log(resp); //TODO: Esta respuesta contiene la informacion del usuario, se puede utilizar para mostrar esa informacion. 
             Swal.close();
-            if (this.active == false){
-              this.authService.logout();
-              this.errorLogin('noActive');
-            } else {
-              this.router.navigateByUrl('/map');
-            }
+            this.usuarioService.getUserEstado(this.usuario.correo).subscribe( user => {
+              console.log(user);
+              if (user[0].estado == 'Activado'){
+                this.router.navigateByUrl('/map');
+              } else {
+                this.authService.logout();
+                this.errorLogin('noActive');
+              }
+            });
+            console.log(resp); //TODO: Esta respuesta contiene la informacion del usuario, se puede utilizar para mostrar esa informacion.
           }).catch( err => {
             this.errorLogin(err.code);
           });

@@ -1,6 +1,6 @@
 import { Perfil } from './perfil';
 
-export interface Usuario{
+export interface Usuario {
 	id?: string;
 	nombres?: string;
 	perfil?: Perfil;

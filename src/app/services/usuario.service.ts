@@ -59,7 +59,7 @@ export class UsuarioService {
 		return this.usuario = this.usuarioDoc.snapshotChanges().pipe(map( action =>{
 			if(action.payload.exists == false){
 				return null;
-			}else{
+			} else {
 				const data = action.payload.data() as Usuario;
 				data.id = action.payload.id;
 				return data;

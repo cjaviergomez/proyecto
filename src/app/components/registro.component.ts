@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
 // Models
@@ -12,7 +13,6 @@ import { AreaTecnica } from '../models/areaTecnica';
 import { PerfilService } from '../services/perfil.service';
 import { UnidadService } from '../services/unidad.service';
 import { AreaTecnicaService } from '../services/areaTecnica.service';
-import { UsuarioService } from '../services/usuario.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -22,25 +22,23 @@ import { AuthService } from '../services/auth.service';
 	providers: [UnidadService, PerfilService, AreaTecnicaService, AuthService]
 })
 
-export class RegistroComponent implements OnInit {
+export class RegistroComponent implements OnInit, OnDestroy {
 
 	public perfiles: Perfil[] = [];
 	public unidades: Unidad[];
 	public areasTecnicas: AreaTecnica[];
 	public usuario: Usuario;
+	private subcripcion: Subscription;
 	
 	constructor(private unidadService: UnidadService,
 			  	private perfilService: PerfilService,
 			  	private areaTecnicaService: AreaTecnicaService,
-			    private usuarioService: UsuarioService,
 			    private authService: AuthService) { }
 
   	ngOnInit() {
 		this.usuario = {
 			perfil: {
-				roles:{
-					editor:true
-				}
+				id: null
 			},
 			unidad_id: null,
 			area_id: null,
@@ -49,11 +47,10 @@ export class RegistroComponent implements OnInit {
 		this.getPerfiles();
 		this.getUnidades();
 		this.getAreasTecnicas();
-		}
+	}
 
 	onSubmit(form: NgForm) {
 		if (form.invalid) { return; }
-		this.validarUsuario();
 		
 		Swal.fire({
 			allowOutsideClick: false,
@@ -62,18 +59,22 @@ export class RegistroComponent implements OnInit {
 		});
 
 		Swal.showLoading(); // Iniciamos el loading.
-
+		this.perfilService.getPerfil(this.usuario.perfil.id).subscribe( resp => {
+			this.usuario.perfil = resp;
+			this.validarUsuario();
+		});
+		
 		this.authService.nuevoUsuario(this.usuario) // Metodo para guardar en firebase auth al usuario.
-			.then((resp) => {
+			.then( resp => {
+				console.log(resp['user']);
 				this.modificarUsuario(); // Le modificamos el nombre y la foto al usuario recien creado. 
-				this.guardarUsuario(); // Guardamos el usuario en la base de datos firebase.
 				Swal.close(); // Cerramos el loading
-				this.registroMensaje('sucess'); // Mostramos un mensaje de exito para indicarle al usuario que se creó el usuario correctamente.	
+				this.registroMensaje('sucess'); // Mostramos un mensaje de exito para indicarle al usuario que se creó el usuario correctamente.
 			}).catch(err => {
 				this.registroMensaje(err.code);
 			});
-		
-		} // end onSubmit
+			
+	} // end onSubmit
 
   	// Metodo para mostrar un mensaje si el usuario se registro correctamente o no.
 	registroMensaje(code: string) {
@@ -125,38 +126,39 @@ export class RegistroComponent implements OnInit {
 			});
 		}
 
-	// Metodo para guardar en firebase la informacion del usuario registrado haciendo uso del servicio.
-	guardarUsuario() {
-		this.usuarioService.crearUsuario(this.usuario)
-					.then(() => { 
-						console.log('Usuario agregado');
-						this.authService.logout(); })
-					.catch((err) => { console.log('ERROR AL GUARDAR', err); });
-		}
-
 	// Metodo para verificar que cada usuario tenga la informaciòn adecuada.
     // EJ: Si se registra un usuario con el perfil solicitante, que no vaya a tener 
     // asignado el atributo area_id porque un solicitante no pertenece a ningun area tecnica.
 	validarUsuario() {
 		// Si es solicitante
-		if (this.usuario.perfil.id == 'qOTNuQsTZ2plZ0ehw63f') { delete this.usuario.area_id; } 
+		if (this.usuario.perfil.nombre == 'Solicitante') { delete this.usuario.area_id; } 
 		// Si es UAA Asesora
-      	else if (this.usuario.perfil.id == 'IyKMtPdSc2mAZM8hDkci') { delete this.usuario.unidad_id; }
+      	else if (this.usuario.perfil.nombre == 'UAA Asesora') { delete this.usuario.unidad_id; }
       	else {
 			delete this.usuario.area_id; delete this.usuario.unidad_id; } // Si no es ni un solicitante ni una UAA Asesora, elimino las propiedades area_id y unidad_id
 		}
-
+	
 	// Metodo para modificarle al usuario registrado las propiedades de nombre y foto. 
 	// El usuario tendrá una foto por defecto que se encuentra almacenada en Firebase.
 	modificarUsuario(){
-		this.authService.estaAutenticado().subscribe( user => {
+		this.subcripcion = this.authService.estaAutenticado().subscribe( user => {
 			if (user) {
+				console.log(user);
 				user.updateProfile({
 					displayName: this.usuario.nombres,
 					photoURL: 'https://firebasestorage.googleapis.com/v0/b/campusgis-f9154.appspot.com/o/img%2Fperfil.png?alt=media&token=fbb69c8f-c256-4851-9749-d93269cf6596'
-				}).then( () => { console.log('User Update');
+				}).then( () => { 
+					this.authService.logout();
 				}).catch( (error) => console.log('error', error));
 			}
 		});
+
+	}
+
+	// Called once, before the instance is destroyed.
+	ngOnDestroy(): void {
+		if(this.subcripcion){
+			this.subcripcion.unsubscribe();
+		}
 	}
 }

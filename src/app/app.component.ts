@@ -7,7 +7,6 @@ import { AuthService } from './services/auth.service';
 // Models
 import { Usuario } from './models/usuario';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,11 +20,9 @@ export class AppComponent implements OnInit{
     nombres: '',
     correo: '',
     photoUrl: ''
-};
+  };
 
-  constructor(private auth: AuthService,
-              private router: Router){
-  }
+  constructor(private auth: AuthService, private router: Router){}
 
   ngOnInit() {
     this.getCurrentUser();
@@ -34,7 +31,7 @@ export class AppComponent implements OnInit{
   //Metodo para cerrar la sesiòn de un usuario haciendo uso del servicio
   salir(){
     this.auth.logout();
-    this.router.navigateByUrl('/login');
+    this.router.navigate(['/login']);
     }
 
   //Metodo para saber si hay un usuario logeado actualmente.

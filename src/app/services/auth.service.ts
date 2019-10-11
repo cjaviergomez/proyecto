@@ -19,9 +19,11 @@ export class AuthService {
   nuevoUsuario(usuario: Usuario) {
     return new Promise((resolve, reject) => {
       this.afsAuth.auth.createUserWithEmailAndPassword(usuario.correo, usuario.password)
-            .then(userData => resolve(userData),
-                  err => reject(err));
-                });
+        .then(userData => {
+          resolve(userData),
+          this.updateUserData(userData.user, usuario)
+        }).catch(err => console.log(reject(err)))
+    });
   }
 
   // Loguear a un usuario con correo y contraseña.
@@ -43,22 +45,15 @@ export class AuthService {
     return this.afsAuth.authState.pipe(map(auth => auth));
   }
 
-  private updateUserData( user) {
+  private updateUserData( user: any, usuario: Usuario) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`usuarios/${user.uid}`);
     const data: Usuario = {
-      id: user.uid,
-      correo: user.email,
-      perfil: {
-        roles:{
-          editor: true
-        }
-      }
-    }
-    return userRef.set(data, { merge: true })
+      ...usuario
+    };
+    return userRef.set(data, { merge: true });
   }
 
-
-  isUserAdmin(userUid) {
+  isUserAdmin(userUid: string) {
     return this.afs.doc<Usuario>(`usuarios/${userUid}`).valueChanges();
   }
 }

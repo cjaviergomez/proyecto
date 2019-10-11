@@ -23,10 +23,10 @@
               #selectPerfil="ngModel"
               name="selectPerfil"
               [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectPerfil'].errors }"
-              [(ngModel)]="usuario.perfil" required>
+              [(ngModel)]="usuario.perfil.id" required>
             <option value="null" disabled>Seleccione un perfil</option>
             <option *ngFor="let perfil of perfiles"
-              [value]="perfil"> {{ perfil.nombre }} </option>
+              [value]="perfil.id"> {{ perfil.nombre }} </option>
       </select>
       <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectPerfil'].errors">
               Elige un perfil.
