@@ -2,7 +2,7 @@
 <h2 class="mt-4 text-center">Listado de Usuarios</h2>
 <hr>
 
-<table *ngIf="!cargando && usuarios.length > 0"
+<table *ngIf="!cargando && usuariosArray.length > 0"
        class="table mt-3 animated fadeIn faster animated fadeIn faster">
   <thead class="thead-light">
     <tr>
@@ -15,7 +15,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let usuario of usuarios; let i = index">
+    <tr *ngFor="let usuario of usuariosArray; let i = index">
       <th scope="row">{{ i + 1 }}</th>
       <td>{{ usuario.nombres}}</td>
       <td>{{ usuario.correo }}</td>
@@ -50,7 +50,7 @@
   </tbody>
 </table>
 
-<div *ngIf="!cargando && usuarios.length === 0"
+<div *ngIf="!cargando && usuariosArray.length === 0"
      class="alert alert-warning text-center mt-3 animated fadeIn faster">
     <h4 class="alert-heading">No hay registros</h4>
     <p>

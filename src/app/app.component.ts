@@ -12,7 +12,7 @@ import { Usuario } from './models/usuario';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
   public title = 'CampusGIS';
   public islogged = false;
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit{
     this.router.navigate(['/login']);
     }
 
-  //Metodo para saber si hay un usuario logeado actualmente.
+  // Metodo para saber si hay un usuario logeado actualmente.
   getCurrentUser(){
     this.auth.estaAutenticado().subscribe( user => {
       if(user){

@@ -20,10 +20,13 @@ import { UsuarioService } from '../services/usuario.service';
 export class LoginComponent implements OnInit {
   
   public usuario: Usuario;
+  private isActive: boolean;
 
   constructor(private authService: AuthService,
               private usuarioService: UsuarioService,
-              private router: Router) {}
+              private router: Router) {
+                this.isActive = false;
+              }
 
   ngOnInit() {
     this.usuario = {
@@ -42,18 +45,22 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
+    this.usuarioService.getUserEstado(this.usuario.correo).subscribe( user => {
+      if (user.length > 0 && user[0].estado == 'Activado'){
+        this.isActive = true;
+      }
+    });
+
     this.authService.login( this.usuario )
           .then( resp => {
             Swal.close();
-            this.usuarioService.getUserEstado(this.usuario.correo).subscribe( user => {
-              console.log(user);
-              if (user[0].estado == 'Activado'){
-                this.router.navigateByUrl('/map');
-              } else {
-                this.authService.logout();
-                this.errorLogin('noActive');
-              }
-            });
+            if(this.isActive == true){
+              this.router.navigateByUrl('/map');
+            } else {
+              this.authService.logout();
+              this.errorLogin('noActive');
+            }
+            
             console.log(resp); //TODO: Esta respuesta contiene la informacion del usuario, se puede utilizar para mostrar esa informacion.
           }).catch( err => {
             this.errorLogin(err.code);

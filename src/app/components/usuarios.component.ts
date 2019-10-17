@@ -1,31 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import Swal from 'sweetalert2';
+import { Subscription } from 'rxjs';
 
 import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 // Models
 import { Usuario } from '../models/usuario';
-import { Perfil } from '../models/perfil';
 
 // services
 import { UsuarioService } from '../services/usuario.service';
-import { PerfilService } from '../services/perfil.service';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: '../views/usuarios.html',
   providers: []
 })
-export class UsuariosComponent implements OnInit {
+export class UsuariosComponent implements OnInit, OnDestroy {
 
-  usuarios: Usuario[] = [];
+  usuariosArray: Usuario[] = [];
   cargando = false;
+  private subscripcion: Subscription;
   
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
 
-  constructor(private usuarioService: UsuarioService, private perfilService: PerfilService) { }
+  constructor(private usuarioService: UsuarioService) { }
 
   ngOnInit() {
     this.cargarUsuarios();
@@ -63,7 +63,7 @@ export class UsuariosComponent implements OnInit {
       showCancelButton: true
     }).then(resp => {
       if (resp.value) {
-        this.usuarios.splice(i, 1); // Borra al usuario del arreglo de usuarios
+        this.usuariosArray.splice(i, 1); // Borra al usuario del arreglo de usuarios
         this.usuarioService.borrarUsuario(usuario.id); // usa el servicio para borrar al usuario de Firebase
       }
     });
@@ -72,12 +72,20 @@ export class UsuariosComponent implements OnInit {
   // Metodo para cargar los usuarios de firebase haciendo uso del servicio.
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioService.getUsuarios()
+    this.subscripcion = this.usuarioService.getUsuarios()
       .subscribe((usuarios: Usuario[]) => {
-        this.usuarios = usuarios;
+        this.usuariosArray = usuarios;
         this.cargando = false;
+        console.log('CargarUsuarios', this.usuariosArray);
       });
   
   }
+
+  // Called once, before the instance is destroyed.
+	ngOnDestroy(): void {
+		if(this.subscripcion){
+			this.subscripcion.unsubscribe();
+		}
+	}
 
 }

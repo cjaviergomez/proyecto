@@ -66,7 +66,6 @@ export class RegistroComponent implements OnInit, OnDestroy {
 		
 		this.authService.nuevoUsuario(this.usuario) // Metodo para guardar en firebase auth al usuario.
 			.then( resp => {
-				console.log(resp['user']);
 				this.modificarUsuario(); // Le modificamos el nombre y la foto al usuario recien creado. 
 				Swal.close(); // Cerramos el loading
 				this.registroMensaje('sucess'); // Mostramos un mensaje de exito para indicarle al usuario que se creó el usuario correctamente.
@@ -143,7 +142,6 @@ export class RegistroComponent implements OnInit, OnDestroy {
 	modificarUsuario(){
 		this.subcripcion = this.authService.estaAutenticado().subscribe( user => {
 			if (user) {
-				console.log(user);
 				user.updateProfile({
 					displayName: this.usuario.nombres,
 					photoURL: 'https://firebasestorage.googleapis.com/v0/b/campusgis-f9154.appspot.com/o/img%2Fperfil.png?alt=media&token=fbb69c8f-c256-4851-9749-d93269cf6596'

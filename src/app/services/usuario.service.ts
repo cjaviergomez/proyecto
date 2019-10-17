@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
@@ -17,7 +16,7 @@ export class UsuarioService {
 	private usuarioDoc: AngularFirestoreDocument<Usuario>;
 	private usuario: Observable<Usuario>;
 
-	constructor(public http: HttpClient, private afs: AngularFirestore) {
+	constructor(private afs: AngularFirestore) {
 		this.usuariosCollection = this.afs.collection<Usuario>('usuarios');
 		this.usuarios = this.usuariosCollection.valueChanges();
 	}
