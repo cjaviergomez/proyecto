@@ -32,7 +32,7 @@ export class PerfilService{
 
 	// Metodo para obtener un Perfil especifico de Firebase.
 	getPerfil(id: string) {
-		this.perfilDoc = this.afs.doc<Perfil>(`perfiles/${id}`); // Ruta del usuario en particular. 
+		this.perfilDoc = this.afs.doc<Perfil>(`perfiles/${id}`); // Ruta del usuario en particular.
 		return this.perfil = this.perfilDoc.snapshotChanges().pipe(map( action =>{
 			if(action.payload.exists == false){
 				return null;

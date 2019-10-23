@@ -17,7 +17,9 @@ import { RegistroComponent } from './components/registro.component';
 import { UsuariosComponent } from './components/usuarios.component';
 import { PerfilComponent } from './components/perfil.component';
 
+// Guards
 import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 
 const appRoutes: Routes = [
@@ -33,7 +35,7 @@ const appRoutes: Routes = [
 	{path: 'reformas', component: ReformasListComponent, canActivate: [ AuthGuard ]},
 	{path: 'login', component: LoginComponent},
 	{path: 'registro', component: RegistroComponent},
-	{path: 'usuarios', component: UsuariosComponent, canActivate: [ AuthGuard ]},
+	{path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ]},
 	{path: 'perfil', component: PerfilComponent, canActivate: [ AuthGuard ]},
 	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la ultima que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];

@@ -17,10 +17,10 @@ import { UsuarioService } from '../services/usuario.service';
 })
 export class UsuariosComponent implements OnInit, OnDestroy {
 
-  usuariosArray: Usuario[] = [];
+  usuarios: Usuario[] = [];
   cargando = false;
   private subscripcion: Subscription;
-  
+
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
@@ -63,7 +63,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       showCancelButton: true
     }).then(resp => {
       if (resp.value) {
-        this.usuariosArray.splice(i, 1); // Borra al usuario del arreglo de usuarios
+        this.usuarios.splice(i, 1); // Borra al usuario del arreglo de usuarios
         this.usuarioService.borrarUsuario(usuario.id); // usa el servicio para borrar al usuario de Firebase
       }
     });
@@ -74,11 +74,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.cargando = true;
     this.subscripcion = this.usuarioService.getUsuarios()
       .subscribe((usuarios: Usuario[]) => {
-        this.usuariosArray = usuarios;
+        this.usuarios = usuarios;
         this.cargando = false;
-        console.log('CargarUsuarios', this.usuariosArray);
       });
-  
   }
 
   // Called once, before the instance is destroyed.

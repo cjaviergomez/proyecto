@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
 
   public title = 'CampusGIS';
   public islogged = false;
+  public isAdmin: any = null;
   usuario: Usuario = {
     nombres: '',
     correo: '',
@@ -42,6 +43,13 @@ export class AppComponent implements OnInit {
         this.usuario.nombres = user.displayName;
         this.usuario.correo = user.email;
         this.usuario.photoUrl = user.photoURL;
+
+        this.auth.isUserAdmin(user.uid).subscribe(userRole => {
+          if(userRole){
+            this.isAdmin = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
+          }
+        });
+
       } else {
         this.islogged = false;
       }
