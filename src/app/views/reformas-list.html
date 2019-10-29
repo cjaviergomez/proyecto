@@ -1,32 +1,35 @@
-<div *ngIf="!reformas">
-	Cargando listado de solicitudes...
+<!-- Div para mostrar mensaje cuando no hay solicitudes-->
+<div *ngIf="!cargando && reformas.length === 0"
+     class="alert alert-primary text-center mt-3 animated fadeIn faster">
+    <h4 class="alert-heading">No hay reformas</h4>
+    <p>
+      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+    </p>
 </div>
-<div *ngIf="reformas">
 
-	<div *ngIf="cont == 0">
-		<div class="col">
-			<div class="jumbotron">
-				<img src="../assets/img/error.png" id="img">
-				<div id="centrado">
-					<p>¡Aún no se han realizado reformas!</p>
-				</div>
-			</div>
-		</div>
+<!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
+<div *ngIf="cargando"
+     class="alert alert-info text-center mt-3 animated fadeIn faster">
+  <h4 class="alert-heading">Cargando</h4>
+  <p>
+    <i class="fa fa-sync-alt fa-spin fa-2x"></i>
+  </p>
+  <p class="mb-0">
+    Espere por favor
+  </p>
+</div>
 
-	</div>
+<!--Div para mostrar las solicitudes que se obtuvieron de la base de datos-->
+<div *ngIf="!cargando && reformas.length > 0">
+	<h3 id="centrado">{{titulo}}</h3>
+	<hr/>
 
-	<div *ngIf = "cont > 0">
-		<h3 id="centrado">{{titulo}}</h3>
-		<hr/>
-
-		<div *ngFor="let reforma of reformas">
-			<div class="card" style="width: 18rem;">
-				<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title">{{reforma.reforma_id}}</h5>
-					<p class="card-text">{{reforma.descripcion}}</p>
-					
-				</div>
+	<div *ngFor="let reforma of reformas">
+		<div class="card" style="width: 18rem;">
+			<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="card-img-top" alt="...">
+			<div class="card-body">
+				<h5 class="card-title">{{ reforma.id }}</h5>
+				<p class="card-text">{{ reforma.descripcion }}</p>
 			</div>
 		</div>
 	</div>

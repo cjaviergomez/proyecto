@@ -21,7 +21,6 @@ import { PerfilComponent } from './components/perfil.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 
-
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
 	{path: 'home', component: HomeComponent},
@@ -37,7 +36,7 @@ const appRoutes: Routes = [
 	{path: 'registro', component: RegistroComponent},
 	{path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ]},
 	{path: 'perfil', component: PerfilComponent, canActivate: [ AuthGuard ]},
-	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la ultima que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
+	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la última que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];
 
 export const appRoutingProviders: any[] = [];

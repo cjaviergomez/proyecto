@@ -1,46 +1,37 @@
 import { Component, OnInit } from '@angular/core';
-
+// Servicios
 import { ReformaService } from '../services/reforma.service';
+// Modelos
 import { Reforma } from '../models/reforma';
+// Iconos
+import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'reformas-list',
 	templateUrl: '../views/reformas-list.html',
 	providers: [ReformaService]
 })
-export class ReformasListComponent implements OnInit{
-	public titulo: string;
-	public reformas: Reforma[];
-	public confirmado: number;
-	public cont:number; //variable para saber la cantidad de solicitudes.
 
-	constructor(
-		private _reformaService: ReformaService
-	){
-		this.titulo = 'Reformas';
-		this.confirmado = null;
-		this.cont = 0;
-	}
+export class ReformasListComponent implements OnInit {
+	public titulo = 'Reformas';
+  public reformas: Reforma[];
+  cargando = false;
+  // Icons
+  faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
+  faExclamation = faExclamation; // Icono de exclamación.
 
-	ngOnInit(){
-		console.log('reformas-list.component.ts cargado');
+	constructor(private reformaService: ReformaService) {}
+
+	ngOnInit() {
 		this.getReformas();
 	}
 
 	//Metodo para obtener todas las Reformas usando el metodo getReformas del servicio.
 	getReformas(){
-		this._reformaService.getReformas().subscribe(
-			result => {
-				if(result['code'] != 202){
-					console.log(result);
-				} else {
-					this.reformas = result['data'];
-					this.cont = this.reformas.length;
-				}
-			},
-			error => {
-				console.log(<any>error);
-			}
-		);
+    this.cargando = true;
+		this.reformaService.getReformas().subscribe((reformas: Reforma[]) => {
+      this.reformas = reformas;
+      this.cargando = false;
+    });
 	}
 }

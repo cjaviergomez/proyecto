@@ -27,20 +27,12 @@ export class SolicitudService {
 		}));
 	}
 
-	getSolicitud(id:string){
-		
-	}
+	getSolicitud(id:string){}
 
-	addSolicitud(solicitud: Solicitud){
-		
-	}
+	addSolicitud(solicitud: Solicitud){}
 
-	editSolicitud(id:number, solicitud: Solicitud){
-		
-	}
+	editSolicitud(id:number, solicitud: Solicitud){}
 
-	deleteSolicitud(id:number){
-		
-	}
+	deleteSolicitud(id:number){}
 
 }

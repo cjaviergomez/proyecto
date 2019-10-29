@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,7 +10,9 @@ import { Unidad } from '../models/unidad';
 })
 export class UnidadService {
 	private unidadesCollection: AngularFirestoreCollection<Unidad>;
-	private unidades: Observable<Unidad[]>
+  private unidades: Observable<Unidad[]>
+  private unidadDoc: AngularFirestoreDocument<Unidad>;
+  private unidad: Observable<Unidad>;
 
 
 	constructor(private afs: AngularFirestore) {
@@ -27,6 +29,20 @@ export class UnidadService {
 				data.id = action.payload.doc.id;
 				return data;
 			})
+		}));
+  }
+
+  	// Metodo para obtener una unidad especifica de Firebase.
+	getUnidad(id: string) {
+		this.unidadDoc = this.afs.doc<Unidad>(`unidades/${id}`); // Ruta de la unidad en particular.
+		return this.unidad = this.unidadDoc.snapshotChanges().pipe(map( action =>{
+			if(action.payload.exists == false){
+				return null;
+			} else {
+				const data = action.payload.data() as Unidad;
+				data.id = action.payload.id;
+				return data;
+			}
 		}));
 	}
 

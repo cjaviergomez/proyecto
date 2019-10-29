@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 
+// Iconos
 import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 // Models

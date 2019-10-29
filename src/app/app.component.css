@@ -22,3 +22,7 @@
 .alCentro{
   text-align: center;
 }
+
+span.perfil{
+  font-family: "Consolas", monospace;
+}

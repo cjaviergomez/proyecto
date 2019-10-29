@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 //Servicios
 import { AuthService } from './services/auth.service';
+import { UsuarioService } from './services/usuario.service';
 
 // Models
 import { Usuario } from './models/usuario';
@@ -16,14 +17,19 @@ export class AppComponent implements OnInit {
 
   public title = 'CampusGIS';
   public islogged = false;
-  public isAdmin: any = null;
+  public isVerificador: any = null;
   usuario: Usuario = {
     nombres: '',
     correo: '',
-    photoUrl: ''
+    photoUrl: '',
+    perfil: {
+      nombre: ''
+    }
   };
 
-  constructor(private auth: AuthService, private router: Router){}
+  constructor(private auth: AuthService,
+              private usuarioService: UsuarioService,
+              private router: Router){}
 
   ngOnInit() {
     this.getCurrentUser();
@@ -40,14 +46,20 @@ export class AppComponent implements OnInit {
     this.auth.estaAutenticado().subscribe( user => {
       if(user){
         this.islogged = true;
+        // Se obtienen los valores de la sesion de firebase.
         this.usuario.nombres = user.displayName;
         this.usuario.correo = user.email;
         this.usuario.photoUrl = user.photoURL;
 
         this.auth.isUserAdmin(user.uid).subscribe(userRole => {
           if(userRole){
-            this.isAdmin = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
+            this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
           }
+        });
+
+        this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
+          // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
+          this.usuario.perfil.nombre = usuario.perfil.nombre;
         });
 
       } else {

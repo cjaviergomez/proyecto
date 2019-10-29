@@ -1,71 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 
+// Servicios
 import { SolicitudService } from '../services/solicitud.service';
+
+// Modelos
 import { Solicitud } from '../models/solicitud';
+
+// Iconos
+import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'solicitudes-list',
 	templateUrl: '../views/solicitudes-list.html',
 	providers: [SolicitudService]
 })
-export class SolicitudesListComponent implements OnInit{
-	public titulo: string;
-	public solicitudes: Solicitud[];
-	public confirmado: number;
-	public cont:number; //variable para saber la cantidad de solicitudes.
+export class SolicitudesListComponent implements OnInit {
 
-	constructor(
-		private _solicitudService: SolicitudService
-	){
-		this.titulo = 'Solicitudes';
-		this.confirmado = null;
-		this.cont = 0;
-	}
+	public titulo = 'Solicitudes';
+	public solicitudes: Solicitud[];
+  cargando = false;
+  // Icons
+  faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
+  faExclamation = faExclamation; // Icono de exclamación.
+
+	constructor(private solicitudService: SolicitudService){}
 
 	ngOnInit(){
-		console.log('solicitudes-list.component.ts cargado');
 		this.getSolicitudes();
 	}
 
 	//Metodo para obtener todas las solicitudes usando el metodo getSolicitudes del servicio.
 	getSolicitudes(){
-		this._solicitudService.getSolicitudes().subscribe(
-			result => {
-				if(result['code'] != 202){
-					console.log(result);
-				} else {
-					this.solicitudes = result['data'];
-					this.cont = this.solicitudes.length;
-				}
-			},
-			error => {
-				console.log(<any>error);
-			}
-		);
+    this.cargando = true;
+		this.solicitudService.getSolicitudes().subscribe( solicitudes => {
+      this.solicitudes = solicitudes;
+      this.cargando = false;
+    });
 	}
 
-	borrarConfirm(id:number){
-		this.confirmado = id;
-	}
-
-	cancelarConfirm(){
-		this.confirmado = null;
-	}
-
-	onDeleteSolicitud(id:number){
-		/* this._solicitudService.deleteSolicitud(id).subscribe(
-			 response => {
-				 console.log(response['message']);
-				if(response['code'] == 202){
-					this.getSolicitudes();
-				}else{
-					alert('Error al borrar la solicitud');
-				}
-			},
-			error => {
-				console.log(<any>error);
-			}
-		); */
-	}
+	onDeleteSolicitud(id:number){}
 
 }

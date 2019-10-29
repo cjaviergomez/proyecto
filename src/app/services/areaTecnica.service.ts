@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -8,8 +8,9 @@ import { AreaTecnica } from '../models/areaTecnica';
 @Injectable()
 export class AreaTecnicaService {
 	private areasTecnicasCollection: AngularFirestoreCollection<AreaTecnica>;
-	private areasTecnicas: Observable<AreaTecnica[]>
-
+  private areasTecnicas: Observable<AreaTecnica[]>
+  private areasTecnicasDoc: AngularFirestoreDocument<AreaTecnica>;
+  private areaTecnica: Observable<AreaTecnica>;
 
 	constructor(private afs: AngularFirestore) {
 		this.areasTecnicasCollection = this.afs.collection<AreaTecnica>('areasTecnicas');
@@ -25,6 +26,20 @@ export class AreaTecnicaService {
 				data.id = action.payload.doc.id;
 				return data;
 			})
+		}));
+  }
+
+   	// Metodo para obtener un area tecnica especifica de Firebase.
+	getAreaTecnica(id: string) {
+		this.areasTecnicasDoc = this.afs.doc<AreaTecnica>(`areasTecnicas/${id}`); // Ruta del area en particular.
+		return this.areaTecnica = this.areasTecnicasDoc.snapshotChanges().pipe(map( action =>{
+			if(action.payload.exists == false){
+				return null;
+			} else {
+				const data = action.payload.data() as AreaTecnica;
+				data.id = action.payload.id;
+				return data;
+			}
 		}));
 	}
 

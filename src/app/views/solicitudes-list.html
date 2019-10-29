@@ -1,42 +1,35 @@
-<div *ngIf="!solicitudes">
-	Cargando listado de solicitudes...
+<!-- Div para mostrar mensaje cuando no hay solicitudes-->
+<div *ngIf="!cargando && solicitudes.length === 0"
+     class="alert alert-primary text-center mt-3 animated fadeIn faster">
+    <h4 class="alert-heading">No hay solicitudes</h4>
+    <p>
+      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+    </p>
 </div>
-<div *ngIf="solicitudes">
 
-	<div *ngIf="cont == 0">
-		<div class="col">
-			<div class="jumbotron">
-				<img src="../assets/img/error.png" id="img">
-				<div id="centrado">
-					<p>¡No tienes solicitudes realizadas!</p>
-				</div>
-			</div>
-		</div>
+<!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
+<div *ngIf="cargando"
+     class="alert alert-info text-center mt-3 animated fadeIn faster">
+  <h4 class="alert-heading">Cargando</h4>
+  <p>
+    <i class="fa fa-sync-alt fa-spin fa-2x"></i>
+  </p>
+  <p class="mb-0">
+    Espere por favor
+  </p>
+</div>
 
-	</div>
+<!--Div para mostrar las solicitudes que se obtuvieron de la base de datos-->
+<div *ngIf="!cargando && solicitudes.length > 0">
+	<h3 id="centrado">{{titulo}}</h3>
+	<hr/>
 
-	<div *ngIf = "cont > 0">
-		<h3 id="centrado">{{titulo}}</h3>
-		<hr/>
-
-		<div *ngFor="let solicitud of solicitudes">
-			<div class="card" style="width: 18rem;">
-				<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title">{{solicitud.nombre_edificio}}</h5>
-					<p class="card-text">{{solicitud.estado}}</p>
-					<div *ngIf="confirmado != solicitud.solicitud_id">
-						<a [routerLink]="['/solicitud', solicitud.solicitud_id]" class="btn btn-primary">Ver</a>
-						<a [routerLink]="['/editar-solicitud', solicitud.solicitud_id]" class="btn btn-primary">Editar</a>
-						<a (click)="borrarConfirm(solicitud.solicitud_id)" class="btn btn-primary">Borrar</a>
-					</div>
-					<div class="seguro" *ngIf="confirmado == solicitud.solicitud_id">
-						<a (click)="onDeleteSolicitud(solicitud.solicitud_id)" class="btn btn-md btn-danger">
-							Quiero eliminarlo
-						</a>
-						<a (click)="cancelarConfirm()" class="btn btn-md btn-warning">Cancelar</a>
-					</div>
-				</div>
+	<div *ngFor="let solicitud of solicitudes">
+		<div class="card" style="width: 18rem;">
+			<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="card-img-top" alt="...">
+			<div class="card-body">
+				<h5 class="card-title">{{solicitud.nombre_edificio}}</h5>
+				<p class="card-text">{{solicitud.estado}}</p>
 			</div>
 		</div>
 	</div>
