@@ -27,7 +27,7 @@ export class RegistroComponent implements OnInit, OnDestroy {
 	public perfiles: Perfil[] = [];
 	public unidades: Unidad[];
 	public areasTecnicas: AreaTecnica[];
-	public usuario: Usuario;
+	public usuario: Usuario = new Usuario();
 	private subcripcion: Subscription;
 	
 	constructor(private unidadService: UnidadService,
@@ -42,7 +42,9 @@ export class RegistroComponent implements OnInit, OnDestroy {
 			},
 			unidad_id: null,
 			area_id: null,
-			estado: 'Pendiente'
+			estado: 'Pendiente',
+			// Se crea al usuario con una foto por defecto, esta foto esta previamente almacenada en firebase Storage. 
+			photoUrl: 'https://firebasestorage.googleapis.com/v0/b/campusgis-f9154.appspot.com/o/img%2Fperfil.png?alt=media&token=fbb69c8f-c256-4851-9749-d93269cf6596'
 			};
 		this.getPerfiles();
 		this.getUnidades();

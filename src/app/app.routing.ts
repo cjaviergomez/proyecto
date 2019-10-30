@@ -35,7 +35,7 @@ const appRoutes: Routes = [
 	{path: 'login', component: LoginComponent},
 	{path: 'registro', component: RegistroComponent},
 	{path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ]},
-	{path: 'perfil', component: PerfilComponent, canActivate: [ AuthGuard ]},
+	{path: 'perfil/:id', component: PerfilComponent, canActivate: [ AuthGuard ]},
 	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la última que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];
 

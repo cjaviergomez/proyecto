@@ -1,6 +1,6 @@
 import { Perfil } from './perfil';
 
-export interface Usuario {
+export class Usuario {
 	id?: string;
 	nombres?: string;
 	perfil?: Perfil;
@@ -10,4 +10,6 @@ export interface Usuario {
 	password?: string;
 	estado?: string;
 	photoUrl?:string;
+
+	constructor(){}
 }

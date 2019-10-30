@@ -17,15 +17,9 @@ export class AppComponent implements OnInit {
 
   public title = 'CampusGIS';
   public islogged = false;
+  cargando = false;
   public isVerificador: any = null;
-  usuario: Usuario = {
-    nombres: '',
-    correo: '',
-    photoUrl: '',
-    perfil: {
-      nombre: ''
-    }
-  };
+  usuario: Usuario = new Usuario();
 
   constructor(private auth: AuthService,
               private usuarioService: UsuarioService,
@@ -33,6 +27,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getCurrentUser();
+    this.cargando = true;
   }
 
   //Metodo para cerrar la sesiòn de un usuario haciendo uso del servicio
@@ -46,20 +41,17 @@ export class AppComponent implements OnInit {
     this.auth.estaAutenticado().subscribe( user => {
       if(user){
         this.islogged = true;
-        // Se obtienen los valores de la sesion de firebase.
-        this.usuario.nombres = user.displayName;
-        this.usuario.correo = user.email;
-        this.usuario.photoUrl = user.photoURL;
+        this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
+          // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
+          this.usuario = usuario;
+          this.cargando = false;
 
+        });
+        
         this.auth.isUserAdmin(user.uid).subscribe(userRole => {
           if(userRole){
             this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
           }
-        });
-
-        this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
-          // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
-          this.usuario.perfil.nombre = usuario.perfil.nombre;
         });
 
       } else {

@@ -1,4 +1,5 @@
 export interface Roles {
+
 	verificador?: boolean;
 	observador_general?: boolean;
 	solucionador?: boolean;
@@ -7,6 +8,6 @@ export interface Roles {
 	creador?: boolean;
 	observador?: boolean;
 	interventor?: boolean;
-	gestor?: boolean;
+	gestor?: boolean; 
 
-  }
+}

@@ -30,7 +30,7 @@
       <td>
 
         <button class="btn btn-primary"
-                (click)="borrarUsuario( usuario, i )">
+                [routerLink]="['/perfil', usuario.id]">  <!--Mandamos por Url el id del usuario-->
           <fa-icon [icon]="faSearchPlus" title="Ver usuario"></fa-icon>
         </button>
 
@@ -51,7 +51,7 @@
 </table>
 
 <div *ngIf="!cargando && usuarios.length === 0"
-     class="alert alert-warning text-center mt-3 animated fadeIn faster">
+     class="alert alert-primary text-center mt-3 animated fadeIn faster">
     <h4 class="alert-heading">No hay registros</h4>
     <p>
       <fa-icon [icon]="faExclamation" size="3x"></fa-icon>

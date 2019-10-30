@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+
+// Iconos
+import { faExclamation, faUserCheck, faUserSecret, faUserTie, faUserNinja, faUsersCog, faDatabase, faUserTag, faFolderPlus, faTasks } from '@fortawesome/free-solid-svg-icons';
 
 //Servicios
-import { AuthService } from '../services/auth.service';
 import { UsuarioService } from '../services/usuario.service';
 import { UnidadService } from '../services/unidad.service';
 import { AreaTecnicaService } from '../services/areaTecnica.service';
@@ -18,58 +20,48 @@ import { Unidad } from 'app/models/unidad';
   styleUrls: ['../../assets/css/perfil.css'],
   providers: [AreaTecnicaService, UsuarioService, UnidadService]
 })
-export class PerfilComponent implements OnInit, OnDestroy {
+export class PerfilComponent implements OnInit {
 
-  private subcripcion: Subscription;
   public unidad: Unidad;
   public areatecnica: AreaTecnica;
-  usuario: Usuario = {
-    nombres: '',
-    perfil: {
-      nombre: '',
-      descripcion: ''
-    },
-    correo: '',
-    estado: '',
-    photoUrl: '',
-  };
+  usuario: Usuario = new Usuario();
+  cargando = false;
 
-  constructor(private authService: AuthService,
+  // Iconos
+  faExclamation = faExclamation; // Icono de exclamación.
+  faUserCheck = faUserCheck; // Icono de un usuario chequeado para agregarlo al rol "Verificador"
+  faUserSecret = faUserSecret; // Icono para el rol observador general
+  faUserTie = faUserTie; // Icono para el rol observador.
+  faUserNinja = faUserNinja; // Icono para el rol solucionador
+  faUsersCog = faUsersCog; // Icono para el rol modificador.
+  faDatabase = faDatabase; // Icono para el rol agregador.
+  faUserTag = faUserTag; // Icono para el rol interventor.
+  faFolderPlus = faFolderPlus; // Icono para el rol creador
+  faTasks = faTasks; // Icono para el rol gestor.
+
+  constructor(private route: ActivatedRoute,
               private usuarioService: UsuarioService,
               private unidadService: UnidadService,
               private areaService: AreaTecnicaService){}
 
   ngOnInit() {
-    this.subcripcion = this.authService.estaAutenticado().subscribe( user => {
-      if (user) {
-        this.usuario.nombres = user.displayName;
-        this.usuario.correo = user.email;
-        this.usuario.photoUrl = user.photoURL;
-
-        this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
-          // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
-          this.usuario.perfil.nombre = usuario.perfil.nombre;
-          this.usuario.perfil.descripcion = usuario.perfil.descripcion;
-          this.usuario.estado = usuario.estado;
-          if(usuario.unidad_id){
-            this.unidadService.getUnidad(usuario.unidad_id).subscribe( unidad => {
-              this.unidad = unidad;
-            });
-          }
-          if(usuario.area_id){
-            this.areaService.getAreaTecnica(usuario.area_id).subscribe( areatecnica => {
-              this.areatecnica = areatecnica;
-            });
-          }
+    const id = this.route.snapshot.paramMap.get('id');
+    
+    this.cargando = true;
+    this.usuarioService.getUsuario(id).subscribe((usuario: Usuario) => {
+      // Obtenemos la informacion del usuario de la base de datos de firebase.
+      this.usuario = usuario;
+      this.cargando = false;
+      if(usuario && usuario.unidad_id) {
+        this.unidadService.getUnidad(usuario.unidad_id).subscribe( unidad => {
+        this.unidad = unidad;
+        });
+      }
+      if(usuario && usuario.area_id){
+        this.areaService.getAreaTecnica(usuario.area_id).subscribe( areatecnica => {
+        this.areatecnica = areatecnica;
         });
       }
     });
   }
-
-   // Called once, before the instance is destroyed.
-	ngOnDestroy(): void {
-		if(this.subcripcion) {
-			this.subcripcion.unsubscribe();
-		}
-	}
 }
