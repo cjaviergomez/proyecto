@@ -49,23 +49,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }).then(resp => {
       if (resp.value) {
         usuario.estado = estado;
-        this.usuarioService.actualizarUsuario(usuario);
-      }
-    });
-  }
-
-  // Borra un usuario de la base de datos y del arreglo de usuarios.
-  borrarUsuario(usuario: Usuario, i: number) {
-    Swal.fire({
-      title: '¿Está seguro?',
-      text: `Está seguro que desea eliminar a ${ usuario.nombres }`,
-      type: 'question',
-      showConfirmButton: true,
-      showCancelButton: true
-    }).then(resp => {
-      if (resp.value) {
-        this.usuarios.splice(i, 1); // Borra al usuario del arreglo de usuarios
-        this.usuarioService.borrarUsuario(usuario.id); // usa el servicio para borrar al usuario de Firebase
+        this.usuarioService.updateUsuario(usuario);
       }
     });
   }

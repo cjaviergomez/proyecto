@@ -23,15 +23,15 @@
           <p>{{ usuario.perfil.nombre }}</p>
           <p>Roles</p>
           <ul class="horizontal">
-            <li *ngIf="usuario.perfil.roles.verificador" class="mr-2"> <fa-icon [icon]="faUserCheck"></fa-icon> Verificador</li>
-            <li *ngIf="usuario.perfil.roles.observador_general" class="mr-2"><fa-icon [icon]="faUserSecret"></fa-icon> Observador General</li>
-            <li *ngIf="usuario.perfil.roles.solucionador" class="mr-2"><fa-icon [icon]="faUserNinja"></fa-icon>Solucionador</li>
-            <li *ngIf="usuario.perfil.roles.modificador" class="mr-2"><fa-icon [icon]="faUsersCog"></fa-icon> Modificador</li>
-            <li *ngIf="usuario.perfil.roles.agregador" class="mr-2"><fa-icon [icon]="faDatabase"></fa-icon>  Agregador</li>
-            <li *ngIf="usuario.perfil.roles.creador" class="mr-2"><fa-icon [icon]="faFolderPlus"></fa-icon>Creador</li>
-            <li *ngIf="usuario.perfil.roles.observador" class="mr-2"><fa-icon [icon]="faUserTie"></fa-icon> Observador</li>
-            <li *ngIf="usuario.perfil.roles.interventor" class="mr-2"><fa-icon [icon]="faUserTag"></fa-icon> Interventor</li>
-            <li *ngIf="usuario.perfil.roles.gestor" class="mr-2"><fa-icon [icon]="faTasks"></fa-icon>Gestor</li>
+            <li *ngIf="usuario.perfil.roles.verificador" class="col mr-2"> <fa-icon [icon]="faUserCheck"></fa-icon> Verificador</li>
+            <li *ngIf="usuario.perfil.roles.observador_general" class=" col mr-2"><fa-icon [icon]="faUserSecret"></fa-icon> Observador General</li>
+            <li *ngIf="usuario.perfil.roles.solucionador" class="col mr-2"><fa-icon [icon]="faUserNinja"></fa-icon>Solucionador</li>
+            <li *ngIf="usuario.perfil.roles.modificador" class="col mr-2"><fa-icon [icon]="faUsersCog"></fa-icon> Modificador</li>
+            <li *ngIf="usuario.perfil.roles.agregador" class="col mr-2"><fa-icon [icon]="faDatabase"></fa-icon>  Agregador</li>
+            <li *ngIf="usuario.perfil.roles.creador" class="col mr-2"><fa-icon [icon]="faFolderPlus"></fa-icon>Creador</li>
+            <li *ngIf="usuario.perfil.roles.observador" class="col mr-2"><fa-icon [icon]="faUserTie"></fa-icon> Observador</li>
+            <li *ngIf="usuario.perfil.roles.interventor" class="col mr-2"><fa-icon [icon]="faUserTag"></fa-icon> Interventor</li>
+            <li *ngIf="usuario.perfil.roles.gestor" class="col mr-2"><fa-icon [icon]="faTasks"></fa-icon>Gestor</li>
           </ul>
           <hr>
           <div *ngIf="unidad">

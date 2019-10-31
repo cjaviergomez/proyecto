@@ -14,12 +14,10 @@ export class PerfilService{
 	private perfilDoc: AngularFirestoreDocument<Perfil>;
 	private perfil: Observable<Perfil>;
 
-	constructor(private afs: AngularFirestore) {
-		this.perfilesCollection = this.afs.collection<Perfil>('perfiles', ref => ref.where('nombre', '>', 'Administrador'));
-		this.perfiles = this.perfilesCollection.valueChanges();
-	}
+	constructor(private afs: AngularFirestore) {}
 
 	getPerfiles() {
+    this.perfilesCollection = this.afs.collection<Perfil>('perfiles', ref => ref.where('nombre', '>', 'Administrador'));
 		return this.perfiles = this.perfilesCollection.snapshotChanges()
 				.pipe(map( changes => {
 					return changes.map( action => {
@@ -29,6 +27,9 @@ export class PerfilService{
 			})
 		}));
 	}
+
+  // TODO: Falta implementar metodo.
+  addPerfil(perfil: Perfil) {}
 
 	// Metodo para obtener un Perfil especifico de Firebase.
 	getPerfil(id: string) {
@@ -42,5 +43,9 @@ export class PerfilService{
 				return data;
 			}
 		}));
-	}
+  }
+
+  // Por lógica de negocio no es necesario implementar los demás metodos del CRUD.
+  // No se crean los metodos Update y Delete.
+
 }

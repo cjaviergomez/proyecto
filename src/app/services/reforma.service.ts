@@ -10,12 +10,10 @@ export class ReformaService{
 	private reformasCollection: AngularFirestoreCollection<Reforma>;
 	private reformas: Observable<Reforma[]>
 
-	constructor(private afs: AngularFirestore) {
-		this.reformasCollection = this.afs.collection<Reforma>('reformas');
-		this.reformas = this.reformasCollection.valueChanges();	
-	}
+	constructor(private afs: AngularFirestore) {}
 
-	getReformas(){
+	getReformas() {
+    this.reformasCollection = this.afs.collection<Reforma>('reformas');
 		return this.reformas = this.reformasCollection.snapshotChanges()
 		.pipe(map( changes => {
 			return changes.map( action => {
@@ -24,6 +22,18 @@ export class ReformaService{
 				return data;
 			})
 		}));
-	}
+  }
+
+  // TODO: Falta implementar metodo.
+  addReforma( reforma: Reforma) {}
+
+  // TODO: Falta implementar metodo.
+  getReforma ( id: string) {}
+
+  // TODO: Falta implementar metodo.
+  updateReforma(reforma: Reforma): void {}
+
+  // TODO: Falta implementar metodo.
+  deleteReforma( id: string): void {}
 
 }

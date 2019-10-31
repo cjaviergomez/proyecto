@@ -10,13 +10,11 @@ export class SolicitudService {
 	private solicitudesCollection: AngularFirestoreCollection<Solicitud>;
 	private solicitudes: Observable<Solicitud[]>
 
-	constructor(private afs: AngularFirestore){
-		this.solicitudesCollection = this.afs.collection<Solicitud>('solicitudes');
-		this.solicitudes = this.solicitudesCollection.valueChanges();
-	}
+	constructor(private afs: AngularFirestore) {}
 
 	// Metodo para obtener todas las solicitudes almacenadas en la base de datos de firebase.
 	getSolicitudes(){
+    this.solicitudesCollection = this.afs.collection<Solicitud>('solicitudes');
 		return this.solicitudes = this.solicitudesCollection.snapshotChanges()
 		.pipe(map( changes => {
 			return changes.map( action => {
@@ -27,12 +25,15 @@ export class SolicitudService {
 		}));
 	}
 
+  // TODO: Falta implementar metodo.
+  addSolicitud(solicitud: Solicitud){}
+
+  // TODO: Falta implementar metodo.
 	getSolicitud(id:string){}
 
-	addSolicitud(solicitud: Solicitud){}
+  // TODO: Falta implementar metodo.
+	updateSolicitud(solicitud: Solicitud){}
 
-	editSolicitud(id:number, solicitud: Solicitud){}
-
-	deleteSolicitud(id:number){}
-
+  // TODO: Falta implementar metodo.
+	deleteSolicitud(id:string){}
 }

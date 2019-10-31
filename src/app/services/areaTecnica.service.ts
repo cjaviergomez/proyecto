@@ -12,13 +12,11 @@ export class AreaTecnicaService {
   private areasTecnicasDoc: AngularFirestoreDocument<AreaTecnica>;
   private areaTecnica: Observable<AreaTecnica>;
 
-	constructor(private afs: AngularFirestore) {
-		this.areasTecnicasCollection = this.afs.collection<AreaTecnica>('areasTecnicas');
-		this.areasTecnicas = this.areasTecnicasCollection.valueChanges();
-	}
+	constructor(private afs: AngularFirestore) {}
 
 	// Metodo para obtener todas las areas tecnicas almacenadas en la base de datos de firebase incluido su id.
 	getAreasTecnicas() {
+    this.areasTecnicasCollection = this.afs.collection<AreaTecnica>('areasTecnicas');
 		return this.areasTecnicas = this.areasTecnicasCollection.snapshotChanges()
 		.pipe(map( changes => {
 			return changes.map( action => {
@@ -29,7 +27,10 @@ export class AreaTecnicaService {
 		}));
   }
 
-   	// Metodo para obtener un area tecnica especifica de Firebase.
+  // TODO: Falta implementar metodo.
+  addAreaTecnica(areaTecica: AreaTecnica) {}
+
+  // Metodo para obtener un area tecnica especifica de Firebase.
 	getAreaTecnica(id: string) {
 		this.areasTecnicasDoc = this.afs.doc<AreaTecnica>(`areasTecnicas/${id}`); // Ruta del area en particular.
 		return this.areaTecnica = this.areasTecnicasDoc.snapshotChanges().pipe(map( action =>{
@@ -41,6 +42,12 @@ export class AreaTecnicaService {
 				return data;
 			}
 		}));
-	}
+  }
+
+  // TODO: Falta implementar metodo.
+  updateAreaTecnica(areaTecnica: AreaTecnica): void {}
+
+  // TODO: Falta implementar metodo.
+  deleteAreaTecnica(id: string): void {}
 
 }

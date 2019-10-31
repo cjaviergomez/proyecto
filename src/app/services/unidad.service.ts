@@ -15,13 +15,11 @@ export class UnidadService {
   private unidad: Observable<Unidad>;
 
 
-	constructor(private afs: AngularFirestore) {
-		this.unidadesCollection = this.afs.collection<Unidad>('unidades');
-		this.unidades = this.unidadesCollection.valueChanges();
-	}
+	constructor(private afs: AngularFirestore) {}
 
 	// Metodo para obtener de la base de datos de firebase las unidades incluido su id.
 	getUnidades() {
+    this.unidadesCollection = this.afs.collection<Unidad>('unidades');
 		return this.unidades = this.unidadesCollection.snapshotChanges()
 		.pipe(map( changes => {
 			return changes.map( action => {
@@ -32,7 +30,10 @@ export class UnidadService {
 		}));
   }
 
-  	// Metodo para obtener una unidad especifica de Firebase.
+  // TODO: Falta implementar metodo.
+  addUnidad( unidad: Unidad){}
+
+  // Metodo para obtener una unidad especifica de Firebase.
 	getUnidad(id: string) {
 		this.unidadDoc = this.afs.doc<Unidad>(`unidades/${id}`); // Ruta de la unidad en particular.
 		return this.unidad = this.unidadDoc.snapshotChanges().pipe(map( action =>{
@@ -44,6 +45,11 @@ export class UnidadService {
 				return data;
 			}
 		}));
-	}
+  }
 
+  // TODO: Falta implementar metodo.
+  updateUnidad(unidad: Unidad):void {}
+
+  // TODO: Falta implementar metodo.
+  deleteUnidad( id: string):void {}
 }
