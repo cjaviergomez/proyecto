@@ -125,3 +125,13 @@
   margin: 0 6px;
 	color:gray;
 }
+
+/* Lo siguiente se usa para posicionar el footer al final de cada página*/
+html {
+  min-height: 100%;
+  position: relative;
+}
+body {
+  margin: 0;
+  margin-bottom: 40px;
+}

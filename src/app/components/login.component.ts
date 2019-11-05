@@ -15,10 +15,11 @@ import { UsuarioService } from '../services/usuario.service';
 @Component({
   selector: 'app-login',
   templateUrl: '../views/login.component.html',
-  styleUrls: ['../../assets/css/login.css']
+  styleUrls: ['../../assets/css/login.css'],
+  providers:[AuthService, UsuarioService]
 })
 export class LoginComponent implements OnInit {
-  
+
   public usuario: Usuario;
   private isActive: boolean;
 
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (form.invalid) { return; }
-   
+
     Swal.fire({
       allowOutsideClick: false,
       type: 'info',
@@ -60,8 +61,6 @@ export class LoginComponent implements OnInit {
               this.authService.logout();
               this.errorLogin('noActive');
             }
-            
-            console.log(resp); //TODO: Esta respuesta contiene la informacion del usuario, se puede utilizar para mostrar esa informacion.
           }).catch( err => {
             this.errorLogin(err.code);
           });
@@ -88,5 +87,4 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-
 }

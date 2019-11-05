@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+// Services
 import { SolicitudService } from '../services/solicitud.service';
+
+// Models
 import { Solicitud } from '../models/solicitud';
 
 @Component({

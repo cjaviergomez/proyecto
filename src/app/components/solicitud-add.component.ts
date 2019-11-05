@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+// Services
 import { SolicitudService } from '../services/solicitud.service';
 import { UnidadService } from '../services/unidad.service';
+
+// Models
 import { Solicitud } from '../models/solicitud';
 import { Unidad } from '../models/unidad';
-import { GLOBAL } from '../services/global';
 
 @Component({
 	selector: 'solicitud-add',

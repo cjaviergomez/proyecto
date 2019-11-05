@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Iconos
@@ -46,7 +46,7 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    
+
     this.cargando = true;
     this.usuarioService.getUsuario(id).subscribe((usuario: Usuario) => {
       // Obtenemos la informacion del usuario de la base de datos de firebase.

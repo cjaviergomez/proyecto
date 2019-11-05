@@ -1,0 +1,7 @@
+/* Lo siguiente se usa para posicionar el footer al final de cada página*/
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+}

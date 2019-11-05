@@ -33,7 +33,6 @@ export class AppComponent implements OnInit {
   //Metodo para cerrar la sesiòn de un usuario haciendo uso del servicio
   salir(){
     this.auth.logout();
-    this.router.navigate(['/login']);
     }
 
   // Metodo para saber si hay un usuario logeado actualmente.
@@ -47,7 +46,7 @@ export class AppComponent implements OnInit {
           this.cargando = false;
 
         });
-        
+
         this.auth.isUserAdmin(user.uid).subscribe(userRole => {
           if(userRole){
             this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');

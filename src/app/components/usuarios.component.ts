@@ -14,7 +14,7 @@ import { UsuarioService } from '../services/usuario.service';
 @Component({
   selector: 'app-usuarios',
   templateUrl: '../views/usuarios.html',
-  providers: []
+  providers: [UsuarioService]
 })
 export class UsuariosComponent implements OnInit, OnDestroy {
 

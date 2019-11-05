@@ -6,7 +6,16 @@
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" *ngIf="!islogged">
-        <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Home </a>
+        <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Home</a>
+      </li>
+      <li class="nav-item" *ngIf="!islogged">
+        <a class="nav-link" [routerLink]="['/proceso']" [routerLinkActive]="['activado']">Proceso</a>
+      </li>
+      <li class="nav-item" *ngIf="!islogged">
+        <a class="nav-link" [routerLink]="['/questions']" [routerLinkActive]="['activado']">Preguntas Frecuentes</a>
+      </li>
+      <li class="nav-item" *ngIf="!islogged">
+        <a class="nav-link" [routerLink]="['/contacto']" [routerLinkActive]="['activado']">Contáctenos</a>
       </li>
       <li class="nav-item" *ngIf="islogged">
         <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
@@ -22,6 +31,7 @@
       </li>
 
     </ul>
+
     <span class="navbar-text m-0 p-0">
 
       <button *ngIf="!islogged"
@@ -48,22 +58,20 @@
 
             <div class="dropdown-menu dropdown-menu-right">
               <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/perfil', usuario.id]">Perfil</a>
-              <a class="dropdown-item alCentro" style="color: #000000;" href="#">Configuración</a>
+              <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/config']">Configuración</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item alCentro" (click)="salir()" style="color: #000000;" >Cerrar Sesión</a>
+              <a class="dropdown-item alCentro" [routerLink]="['/home']" (click)="salir()" style="color: #000000;" >Cerrar Sesión</a>
 
             </div>
           </li>
         </ul>
       </div>
-
-
     </span>
   </div>
 </nav>
 
-<section id="main" class="col-12">
-<!-- Componente actual -->
+<section id="main">
+  <!-- Componente actual -->
 	<router-outlet></router-outlet>
 </section>
 

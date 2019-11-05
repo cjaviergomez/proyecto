@@ -8,7 +8,7 @@ export class ErrorComponent {
 	public titulo:string;
 
 	constructor(){
-		this.titulo = "¡Error! Página no encontrada.";
-		
+		this.titulo = '¡Error! Página no encontrada.';
+
 	}
 }

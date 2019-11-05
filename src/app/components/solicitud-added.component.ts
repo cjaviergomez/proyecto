@@ -9,6 +9,6 @@ export class SolicitudAddedComponent{
   public titulo: string;
 
   constructor(){
-    this.titulo = "¡Solicitud creada con éxito!";
+    this.titulo = '¡Solicitud creada con éxito!';
   }
 }

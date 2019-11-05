@@ -1,0 +1,47 @@
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" *ngIf="seccion == 1">Foto</a>
+				<a class="nav-link" *ngIf="seccion != 1" [routerLink]="" (click)="cambiarSeccion(1)">Foto</a>
+      </li>
+      <li class="nav-item">
+				<a class="nav-link active" *ngIf="seccion == 2">Contraseña</a>
+				<a class="nav-link" *ngIf="seccion != 2" [routerLink]="" (click)="cambiarSeccion(2)">Contraseña</a>
+      </li>
+			<li class="nav-item">
+				<a class="nav-link active" *ngIf="seccion == 3">Cuenta</a>
+				<a class="nav-link" *ngIf="seccion != 3" [routerLink]="" (click)="cambiarSeccion(3)">Cuenta</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card-body" *ngIf="seccion == 1">
+    <h5 class="card-title">Cambiar foto de perfil</h5>
+    <img src="{{ usuario.photoUrl }}" class="rounded-circle img-thumbnail" alt="profile">
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+
+  <div class="card-body" *ngIf="seccion == 2">
+    <h5 class="card-title">Cambiar Contraseña</h5>
+    <div class="form-group">
+      <label for="nombre_solicitante">Contraseña actual</label>
+      <input type="text" #nombre_solicitante="ngModel" name="nombre_solicitante"
+            [(ngModel)]="usuario.password"
+            class="form-control"
+            [ngClass]="{'is-invalid': !nombre_solicitante.valid && nombre_solicitante.touched}"
+            required />
+      <div class="invalid-feedback" *ngIf="!nombre_solicitante.valid && nombre_solicitante.touched">
+        Este campo es requerido
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card-body" *ngIf="seccion == 3">
+    <h5 class="card-title">Desactivar cuenta</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>

@@ -9,6 +9,6 @@ export class SolicitudAddErrorComponent{
   public titulo: string;
 
   constructor(){
-    this.titulo = "¡Error al crear la solicitud!";
+    this.titulo = '¡Error al crear la solicitud!';
   }
 }

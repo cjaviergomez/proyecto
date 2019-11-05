@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+
+// Services
 import { SolicitudService } from '../services/solicitud.service';
+
+// Models
 import { Solicitud } from '../models/solicitud';
-import { GLOBAL } from '../services/global';
 
 @Component({
 	selector: 'solicitud-edit',
@@ -80,6 +83,6 @@ export class SolicitudEditComponent implements OnInit{
 					console.log(<any>error);
 				}
 			); */
-		}); 
+		});
 	}
 }

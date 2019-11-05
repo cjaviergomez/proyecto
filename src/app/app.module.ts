@@ -35,6 +35,7 @@ import { LoginComponent } from './components/login.component';
 import { RegistroComponent } from './components/registro.component';
 import { UsuariosComponent } from './components/usuarios.component';
 import { PerfilComponent } from './components/perfil.component';
+import { ConfigComponent } from './components/config.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { PerfilComponent } from './components/perfil.component';
     LoginComponent,
     RegistroComponent,
     UsuariosComponent,
-    PerfilComponent 
+    PerfilComponent,
+    ConfigComponent
   ],
   imports: [
     BrowserModule,
