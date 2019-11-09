@@ -17,26 +17,39 @@
   </div>
 
   <div class="card-body" *ngIf="seccion == 1">
-    <h5 class="card-title">Cambiar foto de perfil</h5>
-    <img src="{{ usuario.photoUrl }}" class="rounded-circle img-thumbnail" alt="profile">
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <div class="form-group">
+      <h5>Cambiar Imagen</h5>
+      <img *ngIf="urlImage | async; else imgUsuario" src="{{ urlImage | async }}" class="rounded-circle img-thumbnail" alt="profile" style="max-width: 40%; max-height: 300px;">
+      <ng-template #imgUsuario>
+          <img src="{{ usuario.photoUrl }}" class="rounded-circle img-thumbnail" alt="profile" style="max-width: 40%; max-height: 300px;">
+      </ng-template>
+
+      <div class="container">
+        <div class="input-group mt-3">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile04" accept=".png, .jpg" (change)="onUpload($event)" aria-describedby="inputGroupFileAddon04">
+            <label *ngIf="nameImageUp" class="custom-file-label" for="inputGroupFile04" data-browse="Elegir">{{ nameImageUp }}</label>
+            <label *ngIf="!nameImageUp" class="custom-file-label" for="inputGroupFile04" data-browse="Elegir">Elija una imagen</label>
+          </div>
+          <div class="input-group-append">
+            <button *ngIf="urlImage | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04" (click)="cambiarImagen()">Guardar</button>
+            <ng-template #btnDisabled>
+              <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon04" disabled=true>Guardar</button>
+            </ng-template>
+          </div>
+        </div>
+
+        <div *ngIf="nameImageUp" class="progress">
+          <div class="progress-bar progress-bar-striped bg-primary"
+                role="progressbar" [style.width]="(uploadPercent | async) +'%'">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="card-body" *ngIf="seccion == 2">
     <h5 class="card-title">Cambiar Contraseña</h5>
-    <div class="form-group">
-      <label for="nombre_solicitante">Contraseña actual</label>
-      <input type="text" #nombre_solicitante="ngModel" name="nombre_solicitante"
-            [(ngModel)]="usuario.password"
-            class="form-control"
-            [ngClass]="{'is-invalid': !nombre_solicitante.valid && nombre_solicitante.touched}"
-            required />
-      <div class="invalid-feedback" *ngIf="!nombre_solicitante.valid && nombre_solicitante.touched">
-        Este campo es requerido
-      </div>
-    </div>
-
   </div>
 
   <div class="card-body" *ngIf="seccion == 3">
