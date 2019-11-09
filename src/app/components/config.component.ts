@@ -1,7 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 //Servicios
 import { UsuarioService } from '../services/usuario.service';
@@ -9,8 +12,6 @@ import { AuthService } from '../services/auth.service';
 
 // Models
 import { Usuario } from '../models/usuario';
-import { url } from 'inspector';
-import { userInfo } from 'os';
 
 @Component({
   selector: 'app-config',
@@ -18,11 +19,12 @@ import { userInfo } from 'os';
   styleUrls: ['../../assets/css/config.css'],
   providers: [UsuarioService, AuthService]
 })
-export class ConfigComponent implements OnInit {
+export class ConfigComponent implements OnInit, OnDestroy {
 
   usuario: Usuario = new Usuario();
   cargando = false;
   seccion: number;
+  subcripcionUsuario: Subscription;
 
   uploadPercent: Observable<number>;
   urlImage: Observable<string>;
@@ -31,8 +33,9 @@ export class ConfigComponent implements OnInit {
   @ViewChild('imageUser', {static: true}) inputImageUser: ElementRef;
 
   constructor(private usuarioService: UsuarioService,
-    private authService: AuthService,
-    private storage: AngularFireStorage){}
+              private authService: AuthService,
+              private storage: AngularFireStorage,
+              private router: Router){}
 
   ngOnInit() {
     this.seccion = 1;
@@ -46,13 +49,12 @@ export class ConfigComponent implements OnInit {
   }
 
   cargarUsuario(){
-    this.authService.estaAutenticado().subscribe( user => {
+    this.subcripcionUsuario = this.authService.estaAutenticado().subscribe( user => {
       if(user){
         this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
           // Obtenemos la información del usuario de la base de datos de firebase.
           this.usuario = usuario;
           this.cargando = false;
-
         });
 
       }
@@ -74,7 +76,7 @@ export class ConfigComponent implements OnInit {
   }
 
   cambiarImagen() {
-    this.authService.estaAutenticado().subscribe( user => {
+    this.subcripcionUsuario = this.authService.estaAutenticado().subscribe( user => {
       if(user){
         this.urlImage.subscribe( url => {
           // Actualizamos la foto del perfil a autenticación
@@ -92,6 +94,30 @@ export class ConfigComponent implements OnInit {
         });
       }
     });
+  }
+
+  desactivarCuenta(usuario: Usuario) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Estás seguro que deseas desactivar tu cuenta?`,
+      type: 'question',
+      showConfirmButton: true,
+      showCancelButton: true
+    }).then(resp => {
+      if (resp.value) {
+
+        usuario.estado = 'Desactivado';
+        this.usuarioService.updateUsuario(usuario);
+        this.router.navigate(['/home']);
+
+      }
+    });
+  }
+
+  ngOnDestroy() {
+
+      this.subcripcionUsuario.unsubscribe();
+
   }
 
 }

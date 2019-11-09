@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
   //Metodo para cerrar la sesiòn de un usuario haciendo uso del servicio
   salir(){
     this.auth.logout();
-    }
+  }
 
   // Metodo para saber si hay un usuario logeado actualmente.
   getCurrentUser(){

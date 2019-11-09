@@ -26,7 +26,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/tether/tether.js"
+            ]
           },
           "configurations": {
             "production": {
