@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+
+import { AngularFireStorage } from '@angular/fire/storage';
 
 //Servicios
 import { UsuarioService } from '../services/usuario.service';
@@ -12,6 +13,7 @@ import { AuthService } from '../services/auth.service';
 
 // Models
 import { Usuario } from '../models/usuario';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-config',
@@ -24,11 +26,17 @@ export class ConfigComponent implements OnInit, OnDestroy {
   usuario: Usuario = new Usuario();
   cargando = false;
   seccion: number;
-  subcripcionUsuario: Subscription;
+  private ngUnsubscribe = new Subject();
 
   uploadPercent: Observable<number>;
   urlImage: Observable<string>;
   nameImageUp: string;
+
+  passSave = {
+    actual: '',
+    new: '',
+    new2: ''
+  };
 
   @ViewChild('imageUser', {static: true}) inputImageUser: ElementRef;
 
@@ -49,16 +57,19 @@ export class ConfigComponent implements OnInit, OnDestroy {
   }
 
   cargarUsuario(){
-    this.subcripcionUsuario = this.authService.estaAutenticado().subscribe( user => {
-      if(user){
-        this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
-          // Obtenemos la información del usuario de la base de datos de firebase.
-          this.usuario = usuario;
-          this.cargando = false;
-        });
-
-      }
-    });
+    this.authService.estaAutenticado().pipe(
+      takeUntil(this.ngUnsubscribe))
+      .subscribe( user => {
+        if(user){
+          this.usuarioService.getUsuario(user.uid).pipe(
+            takeUntil(this.ngUnsubscribe))
+            .subscribe((usuario: Usuario) => {
+              // Obtenemos la información del usuario de la base de datos de firebase.
+              this.usuario = usuario;
+              this.cargando = false;
+            });
+        }
+      });
   }
 
   onUpload(e) {
@@ -76,23 +87,25 @@ export class ConfigComponent implements OnInit, OnDestroy {
   }
 
   cambiarImagen() {
-    this.subcripcionUsuario = this.authService.estaAutenticado().subscribe( user => {
-      if(user){
-        this.urlImage.subscribe( url => {
-          // Actualizamos la foto del perfil a autenticación
-          user.updateProfile({
-            photoURL: url
+    this.authService.estaAutenticado().pipe(
+      takeUntil(this.ngUnsubscribe))
+      .subscribe( user => {
+        if(user) {
+          this.urlImage.subscribe( url => {
+            // Actualizamos la foto del perfil a autenticación
+            user.updateProfile({
+              photoURL: url
+            });
+
+            // Actualizamos la foto en la base de datos.
+            this.usuario.photoUrl = url;
+            this.usuarioService.updateUsuario(this.usuario);
+
+            // Reiniciamos las variables.
+            this.urlImage = null;
+            this.nameImageUp = null;
           });
-
-          // Actualizamos la foto en la base de datos.
-          this.usuario.photoUrl = url;
-          this.usuarioService.updateUsuario(this.usuario);
-
-          // Reiniciamos las variables.
-          this.urlImage = null;
-          this.nameImageUp = null;
-        });
-      }
+        }
     });
   }
 
@@ -105,19 +118,80 @@ export class ConfigComponent implements OnInit, OnDestroy {
       showCancelButton: true
     }).then(resp => {
       if (resp.value) {
-
         usuario.estado = 'Desactivado';
-        this.usuarioService.updateUsuario(usuario);
-        this.router.navigate(['/home']);
-
+        this.usuarioService.updateUsuario(usuario).then( ()=> {
+          this.router.navigate(['/home']);
+          this.authService.logout();
+        }).catch((error) => {
+          Swal.fire({
+            title: 'Error',
+            text: error,
+            type: 'error',
+            showConfirmButton: true
+          });
+        });
       }
     });
   }
 
-  ngOnDestroy() {
+  cambiarContrasena(form: NgForm) {
+    if (form.invalid) { return; }
 
-      this.subcripcionUsuario.unsubscribe();
+    Swal.fire({
+      allowOutsideClick: false,
+      type: 'info',
+      text: 'Espere por favor...'
+    });
+    Swal.showLoading();
 
+    if(form.value['password'] != this.usuario.password) {
+      Swal.close();
+      Swal.fire({
+        type: 'error',
+        title: 'Contraseña actual incorrecta',
+        text: 'Por favor verifica que la contraseña actual sea correcta.'
+      });
+      return;
+    } else if(form.value['password2'] != form.value['password3']) {
+      Swal.close();
+      Swal.fire({
+        type: 'error',
+        title: 'Las contraseñas con coinciden',
+        text: 'Por favor verifica que las nuevas contraseñas coincidan.'
+      });
+      return;
+    } else {
+      this.authService.estaAutenticado().subscribe( user => {
+        if(user) {
+          this.usuario.password = form.value['password2'];
+
+          user.updatePassword(this.usuario.password)
+          .then(() => {
+            Swal.close();
+            this.usuarioService.updateUsuario(this.usuario);
+            Swal.fire({
+              type: 'success',
+              title: 'Contraseña actualizada',
+              text: 'Se actualizó la contraseña correctamente.'
+            });
+
+          }).catch( () => {
+            Swal.fire({
+              type: 'error',
+              title: 'Error al actualizar',
+              text: 'Ha ocurrido un error inesperado. Intentalo de nuevo'
+            });
+          });
+        }
+      });
+
+    }
   }
+
+   // Called once, before the instance is destroyed.
+	ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 
 }

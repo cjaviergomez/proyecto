@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 //Servicios
 import { AuthService } from './services/auth.service';
@@ -13,13 +15,14 @@ import { Usuario } from './models/usuario';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   public title = 'CampusGIS';
   public islogged = false;
   cargando = false;
   public isVerificador: any = null;
   usuario: Usuario = new Usuario();
+  private ngUnsubscribe = new Subject();
 
   constructor(private auth: AuthService,
               private usuarioService: UsuarioService,
@@ -32,31 +35,40 @@ export class AppComponent implements OnInit {
 
   //Metodo para cerrar la sesiòn de un usuario haciendo uso del servicio
   salir(){
+    this.router.navigate(['/login']);
     this.auth.logout();
   }
 
   // Metodo para saber si hay un usuario logeado actualmente.
   getCurrentUser(){
-    this.auth.estaAutenticado().subscribe( user => {
-      if(user){
-        this.islogged = true;
-        this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
-          // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
-          this.usuario = usuario;
-          this.cargando = false;
+    this.auth.estaAutenticado().pipe(
+      takeUntil(this.ngUnsubscribe))
+      .subscribe( user => {
+        if(user){
+          this.islogged = true;
+          this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
+            // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
+            this.usuario = usuario;
+            this.cargando = false;
 
-        });
+          });
 
-        this.auth.isUserAdmin(user.uid).subscribe(userRole => {
-          if(userRole){
-            this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
-          }
-        });
+          this.auth.isUserAdmin(user.uid).subscribe(userRole => {
+            if(userRole){
+              this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
+            }
+          });
 
       } else {
         this.islogged = false;
       }
     });
   }
+
+    // Called once, before the instance is destroyed.
+	ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 
 }

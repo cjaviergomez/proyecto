@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 // Servicios
 import { SolicitudService } from '../services/solicitud.service';
@@ -14,11 +16,12 @@ import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 	templateUrl: '../views/solicitudes-list.html',
 	providers: [SolicitudService]
 })
-export class SolicitudesListComponent implements OnInit {
+export class SolicitudesListComponent implements OnInit, OnDestroy {
 
 	public titulo = 'Solicitudes';
 	public solicitudes: Solicitud[];
   cargando = false;
+  private ngUnsubscribe = new Subject();
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
@@ -32,12 +35,19 @@ export class SolicitudesListComponent implements OnInit {
 	//Metodo para obtener todas las solicitudes usando el metodo getSolicitudes del servicio.
 	getSolicitudes(){
     this.cargando = true;
-		this.solicitudService.getSolicitudes().subscribe( solicitudes => {
-      this.solicitudes = solicitudes;
-      this.cargando = false;
+		this.solicitudService.getSolicitudes().pipe(
+      takeUntil(this.ngUnsubscribe)
+      ).subscribe( solicitudes => {
+        this.solicitudes = solicitudes;
+        this.cargando = false;
     });
 	}
 
-	onDeleteSolicitud(id:number){}
+  onDeleteSolicitud(id:number){}
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 
 }

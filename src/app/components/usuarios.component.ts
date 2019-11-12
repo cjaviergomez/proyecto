@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import Swal from 'sweetalert2';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 // Iconos
 import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +21,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   usuarios: Usuario[] = [];
   cargando = false;
-  private subscripcion: Subscription;
+  private ngUnsubscribe = new Subject();
 
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
@@ -49,7 +50,14 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }).then(resp => {
       if (resp.value) {
         usuario.estado = estado;
-        this.usuarioService.updateUsuario(usuario);
+        this.usuarioService.updateUsuario(usuario).catch((error) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Ha ocurrido un error inesperado. Intentalo de nuevo.',
+            type: 'error',
+            showConfirmButton: true
+          });
+        });;
       }
     });
   }
@@ -57,8 +65,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   // Metodo para cargar los usuarios de firebase haciendo uso del servicio.
   cargarUsuarios() {
     this.cargando = true;
-    this.subscripcion = this.usuarioService.getUsuarios()
-      .subscribe((usuarios: Usuario[]) => {
+    this.usuarioService.getUsuarios().pipe(
+      takeUntil(this.ngUnsubscribe)
+      ).subscribe((usuarios: Usuario[]) => {
         this.usuarios = usuarios;
         this.cargando = false;
       });
@@ -66,9 +75,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   // Called once, before the instance is destroyed.
 	ngOnDestroy(): void {
-		if(this.subscripcion){
-			this.subscripcion.unsubscribe();
-		}
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
 	}
 
 }

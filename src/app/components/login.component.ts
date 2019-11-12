@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 //Para trabajar con los modals
 import Swal from 'sweetalert2';
@@ -18,10 +20,11 @@ import { UsuarioService } from '../services/usuario.service';
   styleUrls: ['../../assets/css/login.css'],
   providers:[AuthService, UsuarioService]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   public usuario: Usuario;
   private isActive: boolean;
+  private ngUnsubscribe = new Subject();
 
   constructor(private authService: AuthService,
               private usuarioService: UsuarioService,
@@ -46,16 +49,17 @@ export class LoginComponent implements OnInit {
     });
     Swal.showLoading();
 
-    this.usuarioService.getUserEstado(this.usuario.correo).subscribe( user => {
-      if (user.length > 0 && user[0].estado == 'Activado'){
-        this.isActive = true;
-      }
-    });
+    this.usuarioService.getUserEstado(this.usuario.correo).pipe(
+      takeUntil(this.ngUnsubscribe)).subscribe( user => {
+        if (user && user.length > 0 && user[0].estado == 'Activado'){
+          this.isActive = true;
+        }
+      });
 
     this.authService.login( this.usuario )
           .then( resp => {
             Swal.close();
-            if(this.isActive == true){
+            if(this.isActive === true){
               this.router.navigateByUrl('/map');
             } else {
               this.authService.logout();
@@ -66,7 +70,7 @@ export class LoginComponent implements OnInit {
           });
   }
 
-  errorLogin(code: string): void{
+  errorLogin(code: string): void {
     if(code == 'auth/user-not-found'){
       Swal.fire({
         type: 'error',
@@ -87,4 +91,9 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 }

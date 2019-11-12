@@ -49,11 +49,11 @@ export class UsuarioService {
   }
 
 	// Metodo para actualizar la informaciòn de un usuario en Firebase.
-	updateUsuario(usuario: Usuario): void {
+	updateUsuario(usuario: Usuario) {
 		let idUsuario = usuario.id;
 		delete usuario.id; // Le borramos el id al usuario para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
 		this.usuarioDoc = this.afs.doc<Usuario>(`usuarios/${idUsuario}`);
-		this.usuarioDoc.update(usuario);
+		return this.usuarioDoc.update(usuario);
 	 }
 
 	// Metodo para borrar a un usuario de la base de datos de firebase.
