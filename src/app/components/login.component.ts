@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
+
 //Para trabajar con los modals
 import Swal from 'sweetalert2';
 
@@ -24,7 +26,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public usuario: Usuario;
   private isActive: boolean;
+  public mostrar = false;
   private ngUnsubscribe = new Subject();
+
+  // Iconos
+  faEyeSlash = faEyeSlash;
+  faEye = faEye;
 
   constructor(private authService: AuthService,
               private usuarioService: UsuarioService,
@@ -90,6 +97,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         text: 'Por favor espere a que su cuenta sea activada por un administrador'
       });
     }
+  }
+
+  mostrarPass(valor: boolean) {
+    this.mostrar = valor;
   }
 
   ngOnDestroy(): void {

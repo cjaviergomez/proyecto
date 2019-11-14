@@ -36,6 +36,8 @@ import { RegistroComponent } from './components/registro.component';
 import { UsuariosComponent } from './components/usuarios.component';
 import { PerfilComponent } from './components/perfil.component';
 import { ConfigComponent } from './components/config.component';
+import { UserManagerComponent } from './components/user-manager/user-manager.component';
+import { ResetPassComponent } from './components/reset-pass/reset-pass.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { ConfigComponent } from './components/config.component';
     RegistroComponent,
     UsuariosComponent,
     PerfilComponent,
-    ConfigComponent
+    ConfigComponent,
+    UserManagerComponent,
+    ResetPassComponent
   ],
   imports: [
     BrowserModule,

@@ -17,7 +17,8 @@ import { RegistroComponent } from './components/registro.component';
 import { UsuariosComponent } from './components/usuarios.component';
 import { PerfilComponent } from './components/perfil.component';
 import { ConfigComponent } from './components/config.component';
-
+import { UserManagerComponent } from './components/user-manager/user-manager.component';
+import { ResetPassComponent } from './components/reset-pass/reset-pass.component';
 
 // Guards
 import { AuthGuard } from './guards/auth.guard';
@@ -39,6 +40,8 @@ const appRoutes: Routes = [
 	{path: 'usuarios', component: UsuariosComponent, canActivate: [ AuthGuard ]},
   {path: 'perfil/:id', component: PerfilComponent, canActivate: [ AuthGuard ]},
   {path: 'config', component: ConfigComponent, canActivate: [AuthGuard]},
+  {path: 'userMg', component: UserManagerComponent},
+  {path: 'resetPass', component: ResetPassComponent},
 	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la última que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];
 

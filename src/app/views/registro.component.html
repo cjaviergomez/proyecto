@@ -34,7 +34,7 @@
     </div>
 
     <!-- Perfil solicitante -->
-    <div *ngIf="usuario.perfil.id == 'qOTNuQsTZ2plZ0ehw63f'" class="mt-2">  
+    <div *ngIf="usuario.perfil.id == 'qOTNuQsTZ2plZ0ehw63f'" class="mt-2">
       <select class="form-control"
               #selectUnidad="ngModel"
               name="selectUnidad"
@@ -73,9 +73,9 @@
           [(ngModel)]="usuario.correo"
           [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['correo'].errors }"
           class="form-control mt-2"
-          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@uis.edu.co"
+          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@correo.uis.edu.co"
           maxlength="50"
-          placeholder="ejemplo@uis.edu.co" required>
+          placeholder="ejemplo@correo.uis.edu.co" required>
     <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['correo'].errors">
                     Introduce un correo válido.
     </div>

@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="text-center mt-5">
+    <h5>Reestablecer Contraseña</h5>
+    <span>Por favor intoduce tu correo</span>
+  </div>
+  <div class="mt-4">
+    <form #formReset="ngForm" (ngSubmit)="onReset(formReset)" novalidate="">
+      <div class="form-group row justify-content-center">
+        <div class="col-4">
+          <input type="email"
+                id="correo"
+                #correo="ngModel"
+                name="correo"
+                [(ngModel)]="usuario.correo"
+                [ngClass]="{'is-invalid': formReset.submitted && formReset.controls['correo'].errors }"
+                class="form-control"
+                pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@correo.uis.edu.co"
+                placeholder="ejemplo@correo.uis.edu.co" required autofocus>
+
+          <div class="invalid-feedback animated fadeIn" *ngIf="formReset.submitted && formReset.controls['correo'].errors">
+              Introduce un correo válido.
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row justify-content-center">
+          <button type="submit" class="btn btn-primary">Reestablecer</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

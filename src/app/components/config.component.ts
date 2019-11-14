@@ -136,7 +136,6 @@ export class ConfigComponent implements OnInit, OnDestroy {
 
   cambiarContrasena(form: NgForm) {
     if (form.invalid) { return; }
-
     Swal.fire({
       allowOutsideClick: false,
       type: 'info',
@@ -146,46 +145,67 @@ export class ConfigComponent implements OnInit, OnDestroy {
 
     if(form.value['password'] != this.usuario.password) {
       Swal.close();
-      Swal.fire({
-        type: 'error',
-        title: 'Contraseña actual incorrecta',
-        text: 'Por favor verifica que la contraseña actual sea correcta.'
-      });
+      this.mensajeInfo('errorPassActual');
       return;
     } else if(form.value['password2'] != form.value['password3']) {
       Swal.close();
-      Swal.fire({
-        type: 'error',
-        title: 'Las contraseñas con coinciden',
-        text: 'Por favor verifica que las nuevas contraseñas coincidan.'
-      });
+      this.mensajeInfo('passNoSame');
       return;
     } else {
       this.authService.estaAutenticado().subscribe( user => {
+        Swal.close();
         if(user) {
           this.usuario.password = form.value['password2'];
-
           user.updatePassword(this.usuario.password)
           .then(() => {
-            Swal.close();
-            this.usuarioService.updateUsuario(this.usuario);
-            Swal.fire({
-              type: 'success',
-              title: 'Contraseña actualizada',
-              text: 'Se actualizó la contraseña correctamente.'
+            this.usuarioService.updateUsuario(this.usuario).then(() => {
+              this.mensajeInfo('updateSuccess');
             });
 
           }).catch( () => {
-            Swal.fire({
-              type: 'error',
-              title: 'Error al actualizar',
-              text: 'Ha ocurrido un error inesperado. Intentalo de nuevo'
-            });
+            this.mensajeInfo('errorInesperado');
           });
         }
       });
 
     }
+  }
+
+  mensajeInfo(mensaje: string) {
+    switch(mensaje) {
+      case 'errorPassActual': {
+        Swal.fire({
+          type: 'error',
+          title: 'Contraseña actual incorrecta',
+          text: 'Por favor verifica que la contraseña actual sea correcta.'
+        });
+         break;
+      }
+      case 'passNoSame': {
+        Swal.fire({
+          type: 'error',
+          title: 'Las contraseñas con coinciden',
+          text: 'Por favor verifica que las nuevas contraseñas coincidan.'
+        });
+         break;
+      }
+      case 'updateSuccess': {
+        Swal.fire({
+          type: 'success',
+          title: 'Contraseña actualizada',
+          text: 'Se actualizó la contraseña correctamente.'
+        });
+        break;
+      }
+      default: {
+        Swal.fire({
+          type: 'error',
+          title: 'Error al actualizar',
+          text: 'Ha ocurrido un error inesperado. Intentalo de nuevo'
+        });
+         break;
+      }
+   }
   }
 
    // Called once, before the instance is destroyed.

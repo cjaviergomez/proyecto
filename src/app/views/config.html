@@ -51,7 +51,7 @@
   <div class="card-body mt-3 br-15" *ngIf="seccion == 2" style="max-width: 30rem;margin: 0 auto;">
     <h5 class="card-title">Cambiar Contraseña</h5>
 
-    <form #formPass="ngForm" (ngSubmit)="cambiarContrasena(formPass)" novalidate="" class="form-signin">
+    <form #formPass="ngForm" (ngSubmit)="cambiarContrasena(formPass)" novalidate="">
       <div class="form-group">
         <input type="password"
               class="form-control"

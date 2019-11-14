@@ -35,9 +35,23 @@ export class AuthService {
                 });
   }
 
+  /**
+   * Iniciar el proceso de restablecimiento de contraseña para este usuario
+   * @param email correo del usuario
+   */
+  resetPasswordInit(email: string) {
+    return this.afsAuth.auth.sendPasswordResetEmail(
+      email,
+      { url: 'http://localhost:4200/auth' });
+  }
+
   // Metodo para 'cerrar la sessión' de un usuario
   logout() {
     this.afsAuth.auth.signOut();
+  }
+
+  getAuth() {
+    return this.afsAuth.auth;
   }
 
   // Metodo para comprobar si un usuario esta logueado.

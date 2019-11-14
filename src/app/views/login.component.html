@@ -9,33 +9,58 @@
           [(ngModel)]="usuario.correo"
           [ngClass]="{'is-invalid': formIngreso.submitted && formIngreso.controls['correo'].errors }"
           class="form-control"
-          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@uis.edu.co"
+          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@correo.uis.edu.co"
           placeholder="Correo" required autofocus>
     <div class="invalid-feedback animated fadeIn" *ngIf="formIngreso.submitted && formIngreso.controls['correo'].errors">
                 Introduce un correo válido.
     </div>
 
-    <label for="inputPassword" class="sr-only">Contraseña</label>
-    <input type="password"
-          id="inputPassword"
-          #inputPassword="ngModel"
-          name="password"
-          [(ngModel)]="usuario.password"
-          [ngClass]="{'is-invalid': formIngreso.submitted && formIngreso.controls['password'].errors}"
-          class="form-control mt-2"
-          minlength="6"
-          maxlength="40"
-          placeholder="Contraseña" required>
-    <div class="invalid-feedback animated fadeIn" *ngIf="formIngreso.submitted && formIngreso.controls['password'].errors">
-              Introduce al menos 6 caracteres.
+    <div *ngIf="!mostrar" class="input-group mt-2">
+      <input type="password"
+            id="inputPassword"
+            #inputPassword="ngModel"
+            name="password"
+            [(ngModel)]="usuario.password"
+            [ngClass]="{'is-invalid': formIngreso.submitted && ((formIngreso.controls['password'] && formIngreso.controls['password'].errors) || (formIngreso.controls['password2'] && formIngreso.controls['password2'].errors))}"
+            minlength="6"
+            maxlength="40"
+            class="form-control"
+            placeholder="Contraseña"
+            required>
+      <div class="input-group-append">
+        <a [routerLink]="" (click)="mostrarPass(true)" class="input-group-text"><fa-icon [icon]="faEye"></fa-icon></a>
+      </div>
+      <div class="invalid-feedback animated fadeIn" *ngIf="formIngreso.submitted && ((formIngreso.controls['password'] && formIngreso.controls['password'].errors) || (formIngreso.controls['password2'] && formIngreso.controls['password2'].errors))">
+        Introduce al menos 6 caracteres.
+      </div>
+    </div>
+
+    <div *ngIf="mostrar" class="input-group mt-2">
+      <input type="text"
+            id="inputPassword2"
+            #inputPassword2="ngModel"
+            name="password2"
+            [(ngModel)]="usuario.password"
+            [ngClass]="{'is-invalid': formIngreso.submitted && ((formIngreso.controls['password'] && formIngreso.controls['password'].errors) || (formIngreso.controls['password2'] && formIngreso.controls['password2'].errors))}"
+            minlength="6"
+            maxlength="40"
+            class="form-control"
+            placeholder="Contraseña"
+            required>
+      <div class="input-group-append">
+        <a [routerLink]="" (click)="mostrarPass(false)" class="input-group-text"><fa-icon [icon]="faEyeSlash"></fa-icon></a>
+      </div>
+      <div class="invalid-feedback animated fadeIn" *ngIf="formIngreso.submitted && ((formIngreso.controls['password'] && formIngreso.controls['password'].errors) || (formIngreso.controls['password2'] && formIngreso.controls['password2'].errors))">
+        Introduce al menos 6 caracteres.
+      </div>
     </div>
 
     <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Ingresar</button>
 
-    <div class="flex-sb-m w-full mt-2 p-b-2">
-      <div class="checkbox mb-3">
-        <a routerLink="/registro">¿Olvidó la contraseña?</a>
-        <a routerLink="/registro" class="ml-1">¿No tienes cuenta?</a>
+    <div class="container">
+      <div class="mt-2">
+        <a routerLink="/resetPass" class="row justify-content-md-center">¿Olvidó la contraseña?</a>
+        <a routerLink="/registro" class="row justify-content-md-center">¿No tienes cuenta?</a>
       </div>
     </div>
   </form>
