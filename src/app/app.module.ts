@@ -20,22 +20,22 @@ import { routing, appRoutingProviders } from './app.routing';
 
 // Componentes
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home.component';
-import { ErrorComponent } from './components/error.component';
-import { SolicitudesListComponent } from './components/solicitudes-list.component';
-import { SolicitudAddComponent } from './components/solicitud-add.component';
-import { SolicitudAddErrorComponent } from './components/solicitud-addError.component';
-import { SolicitudAddedComponent } from './components/solicitud-added.component';
-import { SolicitudDetailComponent } from './components/solicitud-detail.component';
-import { SolicitudEditComponent } from './components/solicitud-edit.component';
-import { EsriMapComponent } from './components/map.component';
-import { FooterComponent} from './components/footer.component';
-import { ReformasListComponent } from './components/reformas-list.component';
-import { LoginComponent } from './components/login.component';
-import { RegistroComponent } from './components/registro.component';
-import { UsuariosComponent } from './components/usuarios.component';
-import { PerfilComponent } from './components/perfil.component';
-import { ConfigComponent } from './components/config.component';
+import { HomeComponent } from './components/home/home.component';
+import { ErrorComponent } from './components/error/error.component';
+import { SolicitudesListComponent } from './components/solicitudes-list/solicitudes-list.component';
+import { SolicitudAddComponent } from './components/solicitud-add/solicitud-add.component';
+import { SolicitudAddErrorComponent } from './components/solicitud-addError/solicitud-addError.component';
+import { SolicitudAddedComponent } from './components/solicitud-added/solicitud-added.component';
+import { SolicitudDetailComponent } from './components/solicitud-detail/solicitud-detail.component';
+import { SolicitudEditComponent } from './components/solicitud-edit/solicitud-edit.component';
+import { EsriMapComponent } from './components/map/map.component';
+import { FooterComponent} from './components/footer/footer.component';
+import { ReformasListComponent } from './components/reformas-list/reformas-list.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegistroComponent } from './components/registro/registro.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { ConfigComponent } from './components/config/config.component';
 import { UserManagerComponent } from './components/user-manager/user-manager.component';
 import { ResetPassComponent } from './components/reset-pass/reset-pass.component';
 

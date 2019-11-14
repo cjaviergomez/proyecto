@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 // Services
-import { SolicitudService } from '../services/solicitud.service';
+import { SolicitudService } from '../../services/solicitud.service';
 
 // Models
-import { Solicitud } from '../models/solicitud';
+import { Solicitud } from '../../models/solicitud';
 
 @Component({
 	selector: 'solicitud-edit',
-	templateUrl: '../views/solicitud-add.html',
+	templateUrl: '../solicitud-add/solicitud-add.component.html',
 	providers: [SolicitudService]
 })
-export class SolicitudEditComponent implements OnInit{
+export class SolicitudEditComponent implements OnInit {
 	public titulo: string;
 	public solicitud: Solicitud;
 	public fecha_actual:Date;

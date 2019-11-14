@@ -16,8 +16,8 @@ import esri = __esri; // Esri TypeScript Types
 
 @Component({
   selector: 'app-esri-map',
-  templateUrl: '../views/map.html',
-  styleUrls: ['../../assets/css/esri-map.component.css']
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.css']
 })
 export class EsriMapComponent implements OnInit {
   //Esta variable tendra los datos que se le pasarán al formulario de la solicitud(Edificio, capa, objecto)
@@ -30,25 +30,25 @@ export class EsriMapComponent implements OnInit {
   @ViewChild('mapViewNode', {static:true}) private mapViewEl: ElementRef;
 
   constructor() {
-    this.edificio = "";
-    this.capa = "";
-    this.objecto = "";
+    this.edificio = '';
+    this.capa = '';
+    this.objecto = '';
   }
 
   async initializeMap() {
     try {
       const [WebScene, FeatureLayer, SceneView, LayerList] = await loadModules([
-        "esri/WebScene",
-        "esri/layers/FeatureLayer",
-        "esri/views/SceneView",
-        "esri/widgets/LayerList"
+        'esri/WebScene',
+        'esri/layers/FeatureLayer',
+        'esri/views/SceneView',
+        'esri/widgets/LayerList'
       ]);
 
       //Set the webscene
       const websceneProperties: esri.WebSceneProperties = {
         portalItem: {
             // autocasts as new PortalItem()
-            id: "8505c0c388a64116813728e94530dfce"   //Web Scene con edificio de mecanica ArcGIS Pro 2.3
+            id: '8505c0c388a64116813728e94530dfce'   //Web Scene con edificio de mecanica ArcGIS Pro 2.3
           }
       };
 
@@ -79,20 +79,20 @@ export class EsriMapComponent implements OnInit {
             // Defines an action to zoom out from the selected feature
             var solicitudAction = {
               // This text is displayed as a tooltip
-              title: "Solicitar",
+              title: 'Solicitar',
               // The ID by which to reference the action in the event handler
-              id: "hacer-solicitud",
+              id: 'hacer-solicitud',
               // Sets the icon font used to style the action button
-              className: "esri-icon-add-attachment"
+              className: 'esri-icon-add-attachment'
             };
 
             var verSolicitudesAction = {
               // This text is displayed as a tooltip
-              title: "Ver Solicitudes",
+              title: 'Ver Solicitudes',
               // The ID by which to reference the action in the event handler
-              id: "ver-solicitudes",
+              id: 'ver-solicitudes',
               // Sets the icon font used to style the action button
-              className: "esri-icon-review"
+              className: 'esri-icon-review'
             }
 
             var verReformasAction = {
@@ -230,7 +230,7 @@ export class EsriMapComponent implements OnInit {
                       {
                         type: "text", // autocasts as new TextSymbol3DLayer()
                         material: {
-                          color: "black"
+                          color: 'black'
                         },
                         halo: {
                           color: [255, 255, 255, 0.7],
@@ -268,7 +268,7 @@ export class EsriMapComponent implements OnInit {
             view: view
           });
           view.ui.add(layerList, {
-            position: "top-right"
+            position: 'top-right'
           });
 
     } catch (error) {

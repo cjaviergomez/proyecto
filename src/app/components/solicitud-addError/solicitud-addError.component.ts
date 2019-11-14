@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
 	selector: 'solicitud-addError',
-	templateUrl: '../views/solicitud-addError.html',
+	templateUrl: './solicitud-addError.component.html',
 })
 
-export class SolicitudAddErrorComponent{
+export class SolicitudAddErrorComponent {
   public titulo: string;
 
   constructor(){

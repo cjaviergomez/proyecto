@@ -4,21 +4,21 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 import { AngularFireStorage } from '@angular/fire/storage';
 
 //Servicios
-import { UsuarioService } from '../services/usuario.service';
-import { AuthService } from '../services/auth.service';
+import { UsuarioService } from '../../services/usuario.service';
+import { AuthService } from '../../services/auth.service';
 
 // Models
-import { Usuario } from '../models/usuario';
-import { NgForm } from '@angular/forms';
+import { Usuario } from '../../models/usuario';
 
 @Component({
   selector: 'app-config',
-  templateUrl: '../views/config.html',
-  styleUrls: ['../../assets/css/config.css'],
+  templateUrl: './config.component.html',
+  styleUrls: ['./config.component.css'],
   providers: [UsuarioService, AuthService]
 })
 export class ConfigComponent implements OnInit, OnDestroy {

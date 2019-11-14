@@ -3,17 +3,17 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 // Servicios
-import { SolicitudService } from '../services/solicitud.service';
+import { SolicitudService } from '../../services/solicitud.service';
 
 // Modelos
-import { Solicitud } from '../models/solicitud';
+import { Solicitud } from '../../models/solicitud';
 
 // Iconos
 import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'solicitudes-list',
-	templateUrl: '../views/solicitudes-list.html',
+	templateUrl: './solicitudes-list.component.html',
 	providers: [SolicitudService]
 })
 export class SolicitudesListComponent implements OnInit, OnDestroy {

@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 // Services
-import { SolicitudService } from '../services/solicitud.service';
+import { SolicitudService } from '../../services/solicitud.service';
 
 // Models
-import { Solicitud } from '../models/solicitud';
+import { Solicitud } from '../../models/solicitud';
 
 @Component({
 	selector: 'solicitud-detail',
-	templateUrl: '../views/solicitud-detail.html',
+	templateUrl: './solicitud-detail.component.html',
 	providers: [SolicitudService]
 })
-export class SolicitudDetailComponent{
+export class SolicitudDetailComponent implements OnInit {
 	public solicitud: Solicitud;
 
 	constructor(
@@ -23,7 +23,6 @@ export class SolicitudDetailComponent{
 
 	ngOnInit(){
 		console.log('solicitud-detail.Component.ts cargado...');
-
 		this.getSolicitud();
 	}
 

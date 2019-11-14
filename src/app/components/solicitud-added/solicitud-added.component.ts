@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
 	selector: 'solicitud-added',
-	templateUrl: '../views/solicitud-added.html',
+	templateUrl: './solicitud-added.component.html',
 })
 
 export class SolicitudAddedComponent{

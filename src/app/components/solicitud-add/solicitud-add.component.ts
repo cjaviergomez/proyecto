@@ -3,17 +3,17 @@ import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 // Services
-import { SolicitudService } from '../services/solicitud.service';
-import { UnidadService } from '../services/unidad.service';
+import { SolicitudService } from '../../services/solicitud.service';
+import { UnidadService } from '../../services/unidad.service';
 
 // Models
-import { Solicitud } from '../models/solicitud';
-import { Unidad } from '../models/unidad';
+import { Solicitud } from '../../models/solicitud';
+import { Unidad } from '../../models/unidad';
 
 @Component({
 	selector: 'solicitud-add',
-	templateUrl: '../views/solicitud-add.html',
-	styleUrls: ['../app.component.css'],
+	templateUrl: './solicitud-add.component.html',
+	styleUrls: ['../../app.component.css'],
 	providers: [SolicitudService, DatePipe, UnidadService]
 })
 export class SolicitudAddComponent implements OnInit{
@@ -39,11 +39,11 @@ export class SolicitudAddComponent implements OnInit{
 		this.fecha_actual = this.datePipe.transform(this.fecha_actual, 'dd/MM/yyyy');
 
 		this.formulario = {
-			'fecha': this.fecha_actual,
-			'entidad_solicitante': "",
-			'hora': this.hora,
-			'elementos': {},
-			'especiales': {}
+			fecha: this.fecha_actual,
+			entidad_solicitante: '',
+			hora: this.hora,
+			elementos: {},
+			especiales: {}
 		};
 		this.solicitud = {
 			estado: 'Pendiente'

@@ -7,14 +7,14 @@ import { takeUntil } from 'rxjs/operators';
 import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 // Models
-import { Usuario } from '../models/usuario';
+import { Usuario } from '../../models/usuario';
 
 // services
-import { UsuarioService } from '../services/usuario.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-usuarios',
-  templateUrl: '../views/usuarios.html',
+  templateUrl: './usuarios.component.html',
   providers: [UsuarioService]
 })
 export class UsuariosComponent implements OnInit, OnDestroy {

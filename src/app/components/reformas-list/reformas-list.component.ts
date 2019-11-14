@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 // Servicios
-import { ReformaService } from '../services/reforma.service';
+import { ReformaService } from '../../services/reforma.service';
 // Modelos
-import { Reforma } from '../models/reforma';
+import { Reforma } from '../../models/reforma';
 // Iconos
 import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'reformas-list',
-	templateUrl: '../views/reformas-list.html',
+	templateUrl: './reformas-list.component.html',
 	providers: [ReformaService]
 })
 

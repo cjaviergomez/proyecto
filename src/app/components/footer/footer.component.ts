@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
 	selector: 'app-footer',
-  templateUrl: '../views/footer.html',
-  styleUrls: ['../../assets/css/footer.css']
+  templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.css']
 })
 export class FooterComponent {
   public anio:number;

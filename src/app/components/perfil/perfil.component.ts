@@ -5,19 +5,19 @@ import { ActivatedRoute } from '@angular/router';
 import { faExclamation, faUserCheck, faUserSecret, faUserTie, faUserNinja, faUsersCog, faDatabase, faUserTag, faFolderPlus, faTasks } from '@fortawesome/free-solid-svg-icons';
 
 //Servicios
-import { UsuarioService } from '../services/usuario.service';
-import { UnidadService } from '../services/unidad.service';
-import { AreaTecnicaService } from '../services/areaTecnica.service';
+import { UsuarioService } from '../../services/usuario.service';
+import { UnidadService } from '../../services/unidad.service';
+import { AreaTecnicaService } from '../../services/areaTecnica.service';
 
 // Models
-import { Usuario } from '../models/usuario';
-import { AreaTecnica } from '../models/areaTecnica';
+import { Usuario } from '../../models/usuario';
+import { AreaTecnica } from '../../models/areaTecnica';
 import { Unidad } from 'app/models/unidad';
 
 @Component({
   selector: 'app-perfil',
-  templateUrl: '../views/perfil.html',
-  styleUrls: ['../../assets/css/perfil.css'],
+  templateUrl: './perfil.component.html',
+  styleUrls: ['./perfil.component.css'],
   providers: [AreaTecnicaService, UsuarioService, UnidadService]
 })
 export class PerfilComponent implements OnInit {

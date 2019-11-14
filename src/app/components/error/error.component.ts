@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
 	selector: 'error',
-	templateUrl: '../views/error.html'
+	templateUrl: './error.component.html'
 })
 export class ErrorComponent {
 	public titulo:string;

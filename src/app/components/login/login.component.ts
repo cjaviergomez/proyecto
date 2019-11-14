@@ -10,16 +10,16 @@ import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 
 //Modelos
-import { Usuario } from '../models/usuario';
+import { Usuario } from '../../models/usuario';
 
 //Servicios
-import { AuthService } from '../services/auth.service';
-import { UsuarioService } from '../services/usuario.service';
+import { AuthService } from '../../services/auth.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: '../views/login.component.html',
-  styleUrls: ['../../assets/css/login.css'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
   providers:[AuthService, UsuarioService]
 })
 export class LoginComponent implements OnInit, OnDestroy {

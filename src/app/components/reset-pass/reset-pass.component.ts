@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 // Services
 import { AuthService } from '../../services/auth.service';
 
-
 @Component({
   selector: 'app-reset-pass',
   templateUrl: './reset-pass.component.html',
