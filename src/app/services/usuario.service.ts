@@ -37,8 +37,8 @@ export class UsuarioService {
   // Metodo para obtener un usuario especifico de Firebase.
   getUsuario(id: string) {
     this.usuarioDoc = this.afs.doc<Usuario>(`usuarios/${id}`); // Ruta del usuario en particular.
-    return this.usuario = this.usuarioDoc.snapshotChanges().pipe(map( action =>{
-      if(action.payload.exists == false){
+    return this.usuario = this.usuarioDoc.snapshotChanges().pipe(map( action => {
+      if(action.payload.exists == false) {
         return null;
       } else {
         const data = action.payload.data() as Usuario;
@@ -62,13 +62,23 @@ export class UsuarioService {
 		this.usuarioDoc.delete();
 	}
 
-
-	// Este metodo se usa en el login para saber las propiedades del usuario que se está logueando.
+	// Este metodo se usa en el login y en usermanager para saber las propiedades del usuario que se está logueando.
 	// Busca entre los usuario almacenados en firebase el que tenga el correo indicado.
-	// Devuelve el observable que contiene la informaciòn del usuario.
+  // Devuelve el observable que contiene la informaciòn del usuario.
+  /**
+   *
+   * @param correo correo del usuario a identificar
+   */
 	getUserEstado(correo: string){
 		this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('correo', '==', correo));
-		return this.usuariosCollection.valueChanges();
+		return this.usuarios = this.usuariosCollection.snapshotChanges()
+				.pipe(map( changes => {
+          return changes.map( action => {
+            const data = action.payload.doc.data() as Usuario;
+						data.id = action.payload.doc.id;
+						return data;
+					})
+				}));
 	}
 
 }

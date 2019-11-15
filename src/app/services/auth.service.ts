@@ -20,8 +20,9 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.afsAuth.auth.createUserWithEmailAndPassword(usuario.correo, usuario.password)
         .then(userData => {
-          resolve(userData),
-          this.updateUserData(userData.user, usuario)
+          resolve(userData);
+          this.SendVerificationMail();
+          this.updateUserData(userData.user, usuario);
         }).catch(err => console.log(reject(err)))
     });
   }
@@ -33,6 +34,11 @@ export class AuthService {
            .then(userData => resolve(userData),
                   err => reject(err));
                 });
+  }
+
+  // Send email verfificaiton when new user sign up
+  SendVerificationMail() {
+    return this.afsAuth.auth.currentUser.sendEmailVerification();
   }
 
   /**

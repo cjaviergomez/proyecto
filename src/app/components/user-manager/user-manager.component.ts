@@ -10,6 +10,10 @@ import { AuthService } from '../../services/auth.service';
 import { ShowMessagesService } from '../../services/show-messages.service';
 import { UsuarioService } from '../../services/usuario.service';
 
+// Modelos
+import { Usuario } from '../../models/usuario';
+import { NgForm } from '@angular/forms';
+
 @Component({
   selector: 'app-user-managert',
   templateUrl: './user-manager.component.html',
@@ -27,10 +31,11 @@ export class UserManagerComponent implements OnInit, OnDestroy {
   // this is a real password reset.
   actionCode: string;
 
-  oldPassword: string;
   newPassword: string;
   confirmPassword: string;
   mail: string;
+
+  usuario: Usuario;
 
   actionCodeChecked: boolean;
 
@@ -75,6 +80,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
           } break
           case UserManagementActions.verifyEmail: {
 
+
           } break
           default: {
             this.swal.showErrorMessage('paramsNoFoundError');
@@ -95,21 +101,35 @@ export class UserManagerComponent implements OnInit, OnDestroy {
    * Attempt to confirm the password reset with firebase and
    * navigate user back to home.
    */
-  handleResetPassword() {
+  handleResetPassword(form: NgForm) {
+    if(form.invalid){return;}
     if (this.newPassword != this.confirmPassword) {
       this.swal.showErrorMessage('passNoSameError');
       return;
     }
+    this.swal.showLoading();
     // Save the new password.
     this.authService.getAuth().confirmPasswordReset(this.actionCode, this.newPassword)
     .then(resp => {
-
-      // Password reset has been confirmed and new password updated.
-      this.swal.showSuccessMessage('updatePassSuccess');
-      this.router.navigate(['/login']);
+      this.usuarioService.getUserEstado(this.mail).subscribe((user) => {
+        if(user && user.length > 0) {
+          this.usuario = {
+            ...user[0]
+          };
+          this.usuario.password = this.newPassword;
+          this.usuarioService.updateUsuario(this.usuario)
+          .then(() => {
+            this.swal.stopLoading();
+            // Password reset has been confirmed and new password updated.
+            this.swal.showSuccessMessage('updatePassSuccess');
+            this.router.navigate(['/login']);
+          });
+        }
+      });
     }).catch(e => {
       // Error occurred during confirmation. The code might have
       // expired or the password is too weak.
+      this.swal.stopLoading();
       this.swal.showErrorMessage(e.code);
     });
   }

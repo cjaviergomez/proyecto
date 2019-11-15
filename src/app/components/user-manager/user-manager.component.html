@@ -1,15 +1,68 @@
 <ng-container *ngIf="actionCodeChecked" [ngSwitch]="mode" class="container">
+
   <!-- Reset Password -->
     <ng-container *ngSwitchCase="'resetPassword'">
-      <input [(ngModel)]="oldPassword" type="text" id="oldPassword"
-      name="oldPassword" placeholder="Old Password"> <br>
-      <input [(ngModel)]="newPassword" type="text" id="newPassword"
-      name="newPassword" placeholder="New Password"> <br>
-      <input [(ngModel)]="confirmPassword" type="text"
-      id="confirmPassword" name="confirmPassword" placeholder="Confirm
-      Password">
-      <button (click)="handleResetPassword()">Confirm</button>
+      <div class="container">
+        <div class="text-center mt-5">
+          <h5>Reestablecer Contraseña</h5>
+          <span>Por favor intoduce tu nueva contraseña</span>
+        </div>
+        <div class="mt-4">
+          <form #formResetPass="ngForm" (ngSubmit)="handleResetPassword(formResetPass)" novalidate="">
+            <div class="form-group row justify-content-center">
+              <div class="col-3">
+                <input type="password"
+                       id="newPass"
+                       #newPass="ngModel"
+                       name="newPass"
+                       [(ngModel)]="newPassword"
+                       [ngClass]="{'is-invalid': formResetPass.submitted && formResetPass.controls['newPass'].errors }"
+                       class="form-control"
+                       minlength="6"
+                       maxlength="40"
+                       placeholder="Nueva contraseña" required autofocus>
+
+                <div class="invalid-feedback animated fadeIn" *ngIf="formResetPass.submitted && formResetPass.controls['newPass'].errors">
+                        Introduce al menos 6 carácteres.
+                </div>
+              </div>
+
+            </div>
+            <div class="form-group row justify-content-center">
+              <div class="col-3">
+                <input type="password"
+                       id="confirmPass"
+                       #confirmPass="ngModel"
+                       name="confirmPass"
+                       [(ngModel)]="confirmPassword"
+                       [ngClass]="{'is-invalid': formResetPass.submitted && formResetPass.controls['confirmPass'].errors }"
+                       class="form-control"
+                       minlength="6"
+                       maxlength="40"
+                       placeholder="Confirmar contraseña" required>
+
+                <div class="invalid-feedback animated fadeIn" *ngIf="formResetPass.submitted && formResetPass.controls['confirmPass'].errors">
+                            Introduce al menos 6 carácteres.
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row justify-content-center">
+                <button type="submit" class="btn btn-primary mt-3">Reestablecer</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
     </ng-container>
+
+
+
+
+
+
+
 
     <!-- Recover Email -->
     <ng-container *ngSwitchCase="'recoverEmail'">

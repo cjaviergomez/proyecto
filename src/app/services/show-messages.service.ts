@@ -116,7 +116,7 @@ export class ShowMessagesService {
         Swal.fire({
           type: 'success',
           title: 'Contraseña actualizada',
-          text: 'Se actualizó la contraseña correctamente.'
+          text: 'La contraseña se actualizó correctamente.'
         });
         break;
       }
