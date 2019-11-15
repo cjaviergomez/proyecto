@@ -4,10 +4,8 @@ import { NgForm } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+// Iconos de Fontawesome
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
-
-//Para trabajar con los modals
-import Swal from 'sweetalert2';
 
 //Modelos
 import { Usuario } from '../../models/usuario';
@@ -15,12 +13,13 @@ import { Usuario } from '../../models/usuario';
 //Servicios
 import { AuthService } from '../../services/auth.service';
 import { UsuarioService } from '../../services/usuario.service';
+import { ShowMessagesService } from '../../services/show-messages.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers:[AuthService, UsuarioService]
+  providers:[AuthService, UsuarioService, ShowMessagesService]
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
@@ -35,6 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private usuarioService: UsuarioService,
+              private swal: ShowMessagesService,
               private router: Router) {
                 this.isActive = false;
               }
@@ -48,13 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onSubmit(form: NgForm) {
     if (form.invalid) { return; }
-
-    Swal.fire({
-      allowOutsideClick: false,
-      type: 'info',
-      text: 'Espere por favor...'
-    });
-    Swal.showLoading();
+    this.swal.showLoading();
 
     this.usuarioService.getUserEstado(this.usuario.correo).pipe(
       takeUntil(this.ngUnsubscribe)).subscribe( user => {
@@ -65,38 +59,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.authService.login( this.usuario )
           .then( resp => {
-            Swal.close();
+            this.swal.stopLoading();
             if(this.isActive === true){
               this.router.navigateByUrl('/map');
             } else {
               this.authService.logout();
-              this.errorLogin('noActive');
+              this.swal.showErrorMessage('noActiveError');
             }
           }).catch( err => {
-            this.errorLogin(err.code);
+            this.swal.showErrorMessage(err.code);
           });
-  }
-
-  errorLogin(code: string): void {
-    if(code == 'auth/user-not-found'){
-      Swal.fire({
-        type: 'error',
-        title: 'Error al autenticar',
-        text: 'Correo no registrado. Por favor verifique que el correo sea el correcto o registrese.'
-      });
-    } else if(code == 'auth/wrong-password'){
-      Swal.fire({
-        type: 'error',
-        title: 'Error al autenticar',
-        text: 'Contraseña incorrecta. Intentelo de nuevo.'
-      });
-    } else if(code == 'noActive'){
-      Swal.fire({
-        type: 'error',
-        title: 'Cuenta no activa',
-        text: 'Por favor espere a que su cuenta sea activada por un administrador'
-      });
-    }
   }
 
   mostrarPass(valor: boolean) {

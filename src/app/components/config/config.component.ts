@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { Observable } from 'rxjs/internal/Observable';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
@@ -11,6 +10,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 //Servicios
 import { UsuarioService } from '../../services/usuario.service';
 import { AuthService } from '../../services/auth.service';
+import { ShowMessagesService } from '../../services/show-messages.service';
 
 // Models
 import { Usuario } from '../../models/usuario';
@@ -19,13 +19,13 @@ import { Usuario } from '../../models/usuario';
   selector: 'app-config',
   templateUrl: './config.component.html',
   styleUrls: ['./config.component.css'],
-  providers: [UsuarioService, AuthService]
+  providers: [UsuarioService, AuthService, ShowMessagesService]
 })
 export class ConfigComponent implements OnInit, OnDestroy {
 
   usuario: Usuario = new Usuario();
   cargando = false;
-  seccion: number;
+  seccion: number; // para mostrar las diferentes secciones (foto, contraseña, cuenta)
   private ngUnsubscribe = new Subject();
 
   uploadPercent: Observable<number>;
@@ -42,6 +42,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
 
   constructor(private usuarioService: UsuarioService,
               private authService: AuthService,
+              private swal: ShowMessagesService,
               private storage: AngularFireStorage,
               private router: Router){}
 
@@ -92,7 +93,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
       .subscribe( user => {
         if(user) {
           this.urlImage.subscribe( url => {
-            // Actualizamos la foto del perfil a autenticación
+            // Actualizamos la foto del perfil en fireAuth
             user.updateProfile({
               photoURL: url
             });
@@ -109,61 +110,55 @@ export class ConfigComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Método para desactivar la cuenta del usuario.
+   * Este método actualiza al usuario en firebase Database.
+   * @param usuario usuario que se va a desactivar
+   */
   desactivarCuenta(usuario: Usuario) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: `¿Estás seguro que deseas desactivar tu cuenta?`,
-      type: 'question',
-      showConfirmButton: true,
-      showCancelButton: true
-    }).then(resp => {
+    this.swal.showQuestionMessage('disableAccount').then(resp => {
       if (resp.value) {
         usuario.estado = 'Desactivado';
         this.usuarioService.updateUsuario(usuario).then( ()=> {
           this.router.navigate(['/home']);
           this.authService.logout();
         }).catch((error) => {
-          Swal.fire({
-            title: 'Error',
-            text: error,
-            type: 'error',
-            showConfirmButton: true
-          });
+          this.swal.showErrorMessage('');
         });
       }
     });
   }
 
+  /**
+   * Metodo para cambiar la contraseña del usuario.
+   * La contraseña se actualiza tanto en fireAuth como en firebase Database.
+   * @param form formulario con las contraseñas (antigua, nueva y repetición de la nueva)
+   */
   cambiarContrasena(form: NgForm) {
     if (form.invalid) { return; }
-    Swal.fire({
-      allowOutsideClick: false,
-      type: 'info',
-      text: 'Espere por favor...'
-    });
-    Swal.showLoading();
+    this.swal.showLoading();
 
     if(form.value['password'] != this.usuario.password) {
-      Swal.close();
-      this.mensajeInfo('errorPassActual');
+      this.swal.stopLoading();
+      this.swal.showErrorMessage('passActualError');
       return;
     } else if(form.value['password2'] != form.value['password3']) {
-      Swal.close();
-      this.mensajeInfo('passNoSame');
+      this.swal.stopLoading();
+      this.swal.showErrorMessage('passNoSameError');
       return;
     } else {
       this.authService.estaAutenticado().subscribe( user => {
-        Swal.close();
         if(user) {
           this.usuario.password = form.value['password2'];
           user.updatePassword(this.usuario.password)
           .then(() => {
             this.usuarioService.updateUsuario(this.usuario).then(() => {
-              this.mensajeInfo('updateSuccess');
+              this.swal.stopLoading();
+              this.swal.showSuccessMessage('updatePassSuccess');
             });
 
           }).catch( () => {
-            this.mensajeInfo('errorInesperado');
+            this.swal.showErrorMessage('');
           });
         }
       });
@@ -171,44 +166,10 @@ export class ConfigComponent implements OnInit, OnDestroy {
     }
   }
 
-  mensajeInfo(mensaje: string) {
-    switch(mensaje) {
-      case 'errorPassActual': {
-        Swal.fire({
-          type: 'error',
-          title: 'Contraseña actual incorrecta',
-          text: 'Por favor verifica que la contraseña actual sea correcta.'
-        });
-         break;
-      }
-      case 'passNoSame': {
-        Swal.fire({
-          type: 'error',
-          title: 'Las contraseñas con coinciden',
-          text: 'Por favor verifica que las nuevas contraseñas coincidan.'
-        });
-         break;
-      }
-      case 'updateSuccess': {
-        Swal.fire({
-          type: 'success',
-          title: 'Contraseña actualizada',
-          text: 'Se actualizó la contraseña correctamente.'
-        });
-        break;
-      }
-      default: {
-        Swal.fire({
-          type: 'error',
-          title: 'Error al actualizar',
-          text: 'Ha ocurrido un error inesperado. Intentalo de nuevo'
-        });
-         break;
-      }
-   }
-  }
-
-   // Called once, before the instance is destroyed.
+  /**
+   * Este metodo se llama una vez se destruye el componente.
+   * Lo usamos para finalizar todos los observables
+   */
 	ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

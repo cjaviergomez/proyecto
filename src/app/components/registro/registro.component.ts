@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import Swal from 'sweetalert2';
 
 // Models
 import { Unidad } from '../../models/unidad';
@@ -14,12 +13,13 @@ import { PerfilService } from '../../services/perfil.service';
 import { UnidadService } from '../../services/unidad.service';
 import { AreaTecnicaService } from '../../services/areaTecnica.service';
 import { AuthService } from '../../services/auth.service';
+import { ShowMessagesService } from '../../services/show-messages.service';
 
 @Component({
 	selector: 'app-registro',
 	templateUrl: './registro.component.html',
 	styleUrls: ['../login/login.component.css'],
-	providers: [UnidadService, PerfilService, AreaTecnicaService, AuthService]
+	providers: [UnidadService, PerfilService, AreaTecnicaService, AuthService, ShowMessagesService]
 })
 
 export class RegistroComponent implements OnInit, OnDestroy {
@@ -31,9 +31,10 @@ export class RegistroComponent implements OnInit, OnDestroy {
 	private subcripcion: Subscription;
 
 	constructor(private unidadService: UnidadService,
-			  	private perfilService: PerfilService,
-			  	private areaTecnicaService: AreaTecnicaService,
-			    private authService: AuthService) { }
+              private perfilService: PerfilService,
+              private areaTecnicaService: AreaTecnicaService,
+              private swal: ShowMessagesService,
+              private authService: AuthService) { }
 
   	ngOnInit() {
 		this.usuario = {
@@ -54,13 +55,7 @@ export class RegistroComponent implements OnInit, OnDestroy {
 	onSubmit(form: NgForm) {
 		if (form.invalid) { return; }
 
-		Swal.fire({
-			allowOutsideClick: false,
-			type: 'info',
-			text: 'Espere por favor...'
-		});
-
-		Swal.showLoading(); // Iniciamos el loading.
+		this.swal.showLoading();
 		this.perfilService.getPerfil(this.usuario.perfil.id).subscribe( resp => {
 			this.usuario.perfil = resp;
 			this.validarUsuario();
@@ -69,39 +64,13 @@ export class RegistroComponent implements OnInit, OnDestroy {
 		this.authService.nuevoUsuario(this.usuario) // Metodo para guardar en firebase auth al usuario.
 			.then( resp => {
 				this.modificarUsuario(); // Le modificamos el nombre y la foto al usuario recien creado.
-				Swal.close(); // Cerramos el loading
-				this.registroMensaje('sucess'); // Mostramos un mensaje de exito para indicarle al usuario que se creó el usuario correctamente.
+        this.swal.stopLoading(); // Cerramos el loading
+        this.swal.showSuccessMessage('createAccountSuccess'); // Mostramos un mensaje de exito para indicarle al usuario que se creó el usuario correctamente.
 			}).catch(err => {
-				this.registroMensaje(err.code);
+        this.swal.showErrorMessage(err.code);
 			});
 
 	} // end onSubmit
-
-  	// Metodo para mostrar un mensaje si el usuario se registro correctamente o no.
-	registroMensaje(code: string) {
-		if (code == 'sucess') {
-			Swal.fire({
-				allowOutsideClick: false,
-				type: 'success',
-				title: 'Registro Exitoso',
-				text: 'Su cuenta se ha registrado con éxito. Por favor Inicie Sesión'
-			});
-		} else if (code == 'auth/email-already-in-use') {
-			Swal.fire({
-				allowOutsideClick: false,
-				type: 'error',
-				title: 'Error al registrar',
-				text: 'El correo ya esta en uso. Por favor intente con un correo diferente o inicie sesión.'
-			});
-		} else {
-			Swal.fire({
-				allowOutsideClick: false,
-				type: 'error',
-				title: 'Error al registrar',
-				text: 'Ha ocurrido un error inesperado. Por favor intentelo de nuevo'
-			});
-		}
-	}
 
 	// Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.
 	getUnidades() {
@@ -149,7 +118,7 @@ export class RegistroComponent implements OnInit, OnDestroy {
 					photoURL: 'https://firebasestorage.googleapis.com/v0/b/campusgis-f9154.appspot.com/o/img%2Fperfil.png?alt=media&token=fbb69c8f-c256-4851-9749-d93269cf6596'
 				}).then( () => {
 					this.authService.logout();
-				}).catch( (error) => console.log('error', error));
+				}).catch( (error) => this.swal.showErrorMessage(error.code));
 			}
 		});
 

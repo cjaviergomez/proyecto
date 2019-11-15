@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 	templateUrl: './solicitud-added.component.html',
 })
 
-export class SolicitudAddedComponent{
+export class SolicitudAddedComponent {
   public titulo: string;
 
   constructor(){

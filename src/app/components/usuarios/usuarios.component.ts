@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import Swal from 'sweetalert2';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -11,11 +10,12 @@ import { Usuario } from '../../models/usuario';
 
 // services
 import { UsuarioService } from '../../services/usuario.service';
+import { ShowMessagesService } from '../../services/show-messages.service';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
-  providers: [UsuarioService]
+  providers: [UsuarioService, ShowMessagesService]
 })
 export class UsuariosComponent implements OnInit, OnDestroy {
 
@@ -27,7 +27,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private usuarioService: UsuarioService,
+              private swal: ShowMessagesService) { }
 
   ngOnInit() {
     this.cargarUsuarios();
@@ -35,28 +36,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   // Metodo para cambiar el estado de los usuarios
   cambiarEstado(usuario: Usuario, estado: string) {
-    let estadoInfinitivo: string;
-    if ( estado == 'Desactivado'){
-      estadoInfinitivo = 'desactivar';
-    } else {
-      estadoInfinitivo = 'activar';
-    }
-    Swal.fire({
-      title: '¿Está seguro?',
-      text: `Está seguro que desea ${estadoInfinitivo} a ${ usuario.nombres }`,
-      type: 'question',
-      showConfirmButton: true,
-      showCancelButton: true
-    }).then(resp => {
+    this.swal.showQuestionMessage('disableUserAccount', usuario, estado).then(resp => {
       if (resp.value) {
         usuario.estado = estado;
-        this.usuarioService.updateUsuario(usuario).catch((error) => {
-          Swal.fire({
-            title: 'Error',
-            text: 'Ha ocurrido un error inesperado. Intentalo de nuevo.',
-            type: 'error',
-            showConfirmButton: true
-          });
+        this.usuarioService.updateUsuario(usuario)
+        .catch((error) => {
+          this.swal.showErrorMessage('');
         });;
       }
     });
