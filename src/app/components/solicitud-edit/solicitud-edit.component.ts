@@ -9,8 +9,7 @@ import { Solicitud } from '../../models/solicitud';
 
 @Component({
 	selector: 'solicitud-edit',
-	templateUrl: '../solicitud-add/solicitud-add.component.html',
-	providers: [SolicitudService]
+	templateUrl: '../solicitud-add/solicitud-add.component.html'
 })
 export class SolicitudEditComponent implements OnInit {
 	public titulo: string;

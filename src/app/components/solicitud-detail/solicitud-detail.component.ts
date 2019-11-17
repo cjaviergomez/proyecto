@@ -9,8 +9,7 @@ import { Solicitud } from '../../models/solicitud';
 
 @Component({
 	selector: 'solicitud-detail',
-	templateUrl: './solicitud-detail.component.html',
-	providers: [SolicitudService]
+	templateUrl: './solicitud-detail.component.html'
 })
 export class SolicitudDetailComponent implements OnInit {
 	public solicitud: Solicitud;

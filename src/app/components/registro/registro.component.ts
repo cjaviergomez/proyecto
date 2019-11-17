@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 // Models
 import { Unidad } from '../../models/unidad';
@@ -18,8 +19,7 @@ import { ShowMessagesService } from '../../services/show-messages.service';
 @Component({
 	selector: 'app-registro',
 	templateUrl: './registro.component.html',
-	styleUrls: ['../login/login.component.css'],
-	providers: [UnidadService, PerfilService, AreaTecnicaService, AuthService, ShowMessagesService]
+  styleUrls: ['../login/login.component.css']
 })
 
 export class RegistroComponent implements OnInit, OnDestroy {
@@ -28,7 +28,7 @@ export class RegistroComponent implements OnInit, OnDestroy {
 	public unidades: Unidad[];
 	public areasTecnicas: AreaTecnica[];
 	public usuario: Usuario = new Usuario();
-	private subcripcion: Subscription;
+	private ngUnsubscribe: Subject<any> = new Subject<any>();
 
 	constructor(private unidadService: UnidadService,
               private perfilService: PerfilService,
@@ -36,7 +36,7 @@ export class RegistroComponent implements OnInit, OnDestroy {
               private swal: ShowMessagesService,
               private authService: AuthService) { }
 
-  	ngOnInit() {
+  ngOnInit() {
 		this.usuario = {
 			perfil: {
 				id: null
@@ -46,17 +46,23 @@ export class RegistroComponent implements OnInit, OnDestroy {
 			estado: 'Pendiente',
 			// Se crea al usuario con una foto por defecto, esta foto esta previamente almacenada en firebase Storage.
 			photoUrl: 'https://firebasestorage.googleapis.com/v0/b/campusgis-f9154.appspot.com/o/img%2Fperfil.png?alt=media&token=fbb69c8f-c256-4851-9749-d93269cf6596'
-			};
-		this.getPerfiles();
-		this.getUnidades();
-		this.getAreasTecnicas();
-	}
+    };
+    this.getPerfiles();
+    this.getUnidades();
+    this.getAreasTecnicas();
+  }
 
+  /**
+   * Método para registrar el usuario.
+   * @param form formulario con la información del usuario
+   */
 	onSubmit(form: NgForm) {
 		if (form.invalid) { return; }
 
 		this.swal.showLoading();
-		this.perfilService.getPerfil(this.usuario.perfil.id).subscribe( resp => {
+    this.perfilService.getPerfil(this.usuario.perfil.id)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( resp => {
 			this.usuario.perfil = resp;
 			this.validarUsuario();
 		});
@@ -74,27 +80,33 @@ export class RegistroComponent implements OnInit, OnDestroy {
 
 	// Metodo para obtener todas las Unidades academica administrativas usando el metodo getUnidades del servicio.
 	getUnidades() {
-    this.unidadService.getUnidades().subscribe(
-		resp => {
-			this.unidades = resp;
-		});
+    this.unidadService.getUnidades()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(
+      resp => {
+        this.unidades = resp;
+      });
 	}
 
 	// Metodo para obtener de la base de datos todos los perfiles haciendo uso del servicio
 	getPerfiles() {
-		this.perfilService.getPerfiles().subscribe(
+    this.perfilService.getPerfiles()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(
 			resp => {
 				this.perfiles = resp;
 			});
-		}
+	}
 
 	// Metodo para obtener de la base de datos todas las areas tecnicas haciendo uso del servicio
 	getAreasTecnicas() {
-		this.areaTecnicaService.getAreasTecnicas().subscribe(
+    this.areaTecnicaService.getAreasTecnicas()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(
 			resp => {
 				this.areasTecnicas = resp;
-			});
-		}
+      });
+  }
 
 	// Metodo para verificar que cada usuario tenga la informaciòn adecuada.
     // EJ: Si se registra un usuario con el perfil solicitante, que no vaya a tener
@@ -111,7 +123,9 @@ export class RegistroComponent implements OnInit, OnDestroy {
 	// Metodo para modificarle al usuario registrado las propiedades de nombre y foto.
 	// El usuario tendrá una foto por defecto que se encuentra almacenada en Firebase.
 	modificarUsuario(){
-		this.subcripcion = this.authService.estaAutenticado().subscribe( user => {
+    this.authService.estaAutenticado()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( user => {
 			if (user) {
 				user.updateProfile({
 					displayName: this.usuario.nombres,
@@ -124,10 +138,14 @@ export class RegistroComponent implements OnInit, OnDestroy {
 
 	}
 
-	// Called once, before the instance is destroyed.
-	ngOnDestroy(): void {
-		if(this.subcripcion){
-			this.subcripcion.unsubscribe();
-		}
+ /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
 	}
 }

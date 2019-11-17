@@ -5,7 +5,9 @@ import { map } from 'rxjs/operators';
 
 import { Reforma } from '../models/reforma';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ReformaService{
 	private reformasCollection: AngularFirestoreCollection<Reforma>;
 	private reformas: Observable<Reforma[]>

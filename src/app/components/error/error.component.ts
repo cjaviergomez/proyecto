@@ -9,6 +9,5 @@ export class ErrorComponent {
 
 	constructor(){
 		this.titulo = '¡Error! Página no encontrada.';
-
 	}
 }

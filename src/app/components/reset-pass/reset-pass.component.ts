@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+
+// Models
 import { Usuario } from '../../models/usuario';
 
 // Services
 import { AuthService } from '../../services/auth.service';
 import { ShowMessagesService } from '../../services/show-messages.service';
+
 @Component({
   selector: 'app-reset-pass',
   templateUrl: './reset-pass.component.html',
-  styleUrls: ['./reset-pass.component.css'],
-  providers: [AuthService, ShowMessagesService]
+  styleUrls: ['./reset-pass.component.css']
 })
 export class ResetPassComponent implements OnInit {
 
@@ -21,6 +23,10 @@ export class ResetPassComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Este método se usa para enviar el correo para reestablecer la contraseña.
+   * @param form formulario con el correo a enviar la información para reiniciar la contraseña
+   */
   onReset(form: NgForm) {
     if(!form.valid){return;}
     this.swal.showLoading();

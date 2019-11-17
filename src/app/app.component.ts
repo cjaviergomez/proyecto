@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   cargando = false;
   public isVerificador: any = null;
   usuario: Usuario = new Usuario();
-  private ngUnsubscribe = new Subject();
+  private ngUnsubscribe: Subject<any> = new Subject<any>();
 
   constructor(private auth: AuthService,
               private usuarioService: UsuarioService,
@@ -41,32 +41,39 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // Metodo para saber si hay un usuario logeado actualmente.
   getCurrentUser(){
-    this.auth.estaAutenticado().pipe(
-      takeUntil(this.ngUnsubscribe))
-      .subscribe( user => {
-        if(user){
-          this.islogged = true;
-          this.usuarioService.getUsuario(user.uid).subscribe((usuario: Usuario) => {
-            // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
-            this.usuario = usuario;
-            this.cargando = false;
+    this.auth.estaAutenticado()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( user => {
+      if(user){
+        this.islogged = true;
+        this.usuarioService.getUsuario(user.uid)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((usuario: Usuario) => {
+          // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
+          this.usuario = usuario;
+          this.cargando = false;
+        });
 
-          });
-
-          this.auth.isUserAdmin(user.uid).subscribe(userRole => {
-            if(userRole){
-              this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
-            }
-          });
-
+        this.auth.isUserAdmin(user.uid)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(userRole => {
+          if(userRole){
+            this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
+          }
+        });
       } else {
         this.islogged = false;
       }
     });
   }
 
-    // Called once, before the instance is destroyed.
-	ngOnDestroy(): void {
+  /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
 	}

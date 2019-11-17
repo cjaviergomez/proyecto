@@ -13,8 +13,7 @@ import { Unidad } from '../../models/unidad';
 @Component({
 	selector: 'solicitud-add',
 	templateUrl: './solicitud-add.component.html',
-	styleUrls: ['../../app.component.css'],
-	providers: [SolicitudService, DatePipe, UnidadService]
+	styleUrls: ['../../app.component.css']
 })
 export class SolicitudAddComponent implements OnInit{
 	public solicitud: Solicitud;

@@ -22,9 +22,9 @@ import esri = __esri; // Esri TypeScript Types
 export class EsriMapComponent implements OnInit {
   //Esta variable tendra los datos que se le pasarán al formulario de la solicitud(Edificio, capa, objecto)
   @Output() datos_formulario = new EventEmitter();
-  private edificio;
-  private capa;
-  private objecto;
+  private edificio: string;
+  private capa: string;
+  private objecto: string;
 
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('mapViewNode', {static:true}) private mapViewEl: ElementRef;
@@ -97,11 +97,11 @@ export class EsriMapComponent implements OnInit {
 
             var verReformasAction = {
               // This text is displayed as a tooltip
-              title: "Ver Reformas",
+              title: 'Ver Reformas',
               // The ID by which to reference the action in the event handler
-              id: "ver-reformas",
+              id: 'ver-reformas',
               // Sets the icon font used to style the action button
-              className: "esri-icon-duplicate"
+              className: 'esri-icon-duplicate'
             }
             //Remove the firt action
             view.popup.actions.splice(0, 1);
@@ -113,35 +113,35 @@ export class EsriMapComponent implements OnInit {
 
             // The function to execute when the solicitud action is clicked
             function irAlformulario() {
-              window.open("http://localhost:4200/crear-solicitud");
+              window.open('http://localhost:4200/crear-solicitud');
               //Emición de datos
               //this.datos_formulario.emit({ "edificio": this.edificio, "capa": this.capa, "objecto": this.objecto});
             }
 
             // The function to execute when the solicitud action is clicked
             function irASolicitudes() {
-              window.open("http://localhost:4200/solicitudes");
+              window.open('http://localhost:4200/solicitudes');
               //Emición de datos
               //this.datos_formulario.emit({ "edificio": this.edificio, "capa": this.capa, "objecto": this.objecto});
             }
 
             function irAReformas(){
-              window.open("http://localhost:4200/reformas");
+              window.open('http://localhost:4200/reformas');
             }
 
             // This event fires for each click on any action
-            view.popup.on("trigger-action", function(event){
+            view.popup.on('trigger-action', function(event){
               // If the zoom-out action is clicked, fire the zoomOut() function
-              if(event.action.id === "hacer-solicitud"){
+              if(event.action.id === 'hacer-solicitud'){
                 irAlformulario();
-              }else if(event.action.id === "ver-solicitudes"){
+              }else if(event.action.id === 'ver-solicitudes'){
                 irASolicitudes();
-              }else if(event.action.id === "ver-reformas"){
+              }else if(event.action.id === 'ver-reformas'){
                 irAReformas();
               }
             });
 
-            view.popup.watch("selectedFeature", function(graphic:any) {
+            view.popup.watch('selectedFeature', function(graphic:any) {
               if (graphic) {
                 graphic.layer.allSublayers.forEach(function(layer:esri.Layer) {
                   if(layer.title == graphic.attributes.BaseCategory){
@@ -166,7 +166,7 @@ export class EsriMapComponent implements OnInit {
             console.log(edificio);
             //this.capa = layer;
             //this.objecto = elemento;
-            console.log("Edicicación: " + edificio.title + " Capa: " + layer.title + " ElementoID: " + elemento.OBJECTID_1);
+            console.log('Edicicación: ' + edificio.title + ' Capa: ' + layer.title + ' ElementoID: ' + elemento.OBJECTID_1);
           }
 
           //Función para crear el label al edificio.
@@ -177,7 +177,7 @@ export class EsriMapComponent implements OnInit {
                   ObjectID: layer.id,
                 },
                 geometry: {
-                  type: "point",
+                  type: 'point',
                   x: long,
                   y: lat
                 }
@@ -185,50 +185,50 @@ export class EsriMapComponent implements OnInit {
             ];
             var label = new FeatureLayer({
               source: features,  // autocast as a Collection of new Graphic()
-              objectIdField: "ObjectID",
+              objectIdField: 'ObjectID',
               elevationInfo: {
-                mode: "relative-to-scene"
+                mode: 'relative-to-scene'
               },
               featureReduction: {
-                type: "selection"
+                type: 'selection'
               },
               returnZ: false,
               // Select peaks higher than 3000m
-              definitionExpression: " ObjectID > 0",
-              title: "",
+              definitionExpression: 'ObjectID > 0',
+              title: '',
               // Set a renderer that will show the points with icon symbols
               renderer: {
-                type: "simple", // autocasts as new SimpleRenderer()
+                type: 'simple', // autocasts as new SimpleRenderer()
                 symbol: {
-                  type: "point-3d", // autocasts as new PointSymbol3D()
+                  type: 'point-3d', // autocasts as new PointSymbol3D()
                   symbolLayers: [
                     {
-                      type: "icon", // autocasts as new IconSymbol3DLayer()
+                      type: 'icon', // autocasts as new IconSymbol3DLayer()
                       resource: {
-                        primitive: "circle"
+                        primitive: 'circle'
                       },
                       material: {
-                        color: "black"
+                        color: 'black'
                       },
                       size: 5
                     }
                   ]
                 }
               },
-              outFields: ["*"],
+              outFields: ['*'],
               // Add labels with callouts of type line to the icons
               labelingInfo: [
                 {
                   // When using callouts on labels, "above-center" is the only allowed position
-                  labelPlacement: "above-center",
+                  labelPlacement: 'above-center',
                   labelExpressionInfo: {
                     value: layer.title  //Titulo del label
                   },
                   symbol: {
-                    type: "label-3d", // autocasts as new LabelSymbol3D()
+                    type: 'label-3d', // autocasts as new LabelSymbol3D()
                     symbolLayers: [
                       {
-                        type: "text", // autocasts as new TextSymbol3DLayer()
+                        type: 'text', // autocasts as new TextSymbol3DLayer()
                         material: {
                           color: 'black'
                         },
@@ -248,7 +248,7 @@ export class EsriMapComponent implements OnInit {
                     // The callout has to have a defined type (currently only line is possible)
                     // The size, the color and the border color can be customized
                     callout: {
-                      type: "line", // autocasts as new LineCallout3D()
+                      type: 'line', // autocasts as new LineCallout3D()
                       size: 0.5,
                       color: [0, 0, 0],
                       border: {
@@ -259,7 +259,7 @@ export class EsriMapComponent implements OnInit {
                 }
               ]
             });
-            label.listMode = "hide";
+            label.listMode = 'hide';
             webScene.add(label);
           } //Close function createLabel
 

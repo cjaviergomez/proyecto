@@ -13,15 +13,14 @@ import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'solicitudes-list',
-	templateUrl: './solicitudes-list.component.html',
-	providers: [SolicitudService]
+	templateUrl: './solicitudes-list.component.html'
 })
 export class SolicitudesListComponent implements OnInit, OnDestroy {
 
 	public titulo = 'Solicitudes';
 	public solicitudes: Solicitud[];
   cargando = false;
-  private ngUnsubscribe = new Subject();
+  private ngUnsubscribe: Subject<any> = new Subject<any>();
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
@@ -35,17 +34,23 @@ export class SolicitudesListComponent implements OnInit, OnDestroy {
 	//Metodo para obtener todas las solicitudes usando el metodo getSolicitudes del servicio.
 	getSolicitudes(){
     this.cargando = true;
-		this.solicitudService.getSolicitudes().pipe(
-      takeUntil(this.ngUnsubscribe)
-      ).subscribe( solicitudes => {
-        this.solicitudes = solicitudes;
-        this.cargando = false;
+    this.solicitudService.getSolicitudes()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( solicitudes => {
+      this.solicitudes = solicitudes;
+      this.cargando = false;
     });
 	}
 
   onDeleteSolicitud(id:number){}
 
+   /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
   ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
 	}

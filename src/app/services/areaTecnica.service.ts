@@ -5,7 +5,9 @@ import { map } from 'rxjs/operators';
 
 import { AreaTecnica } from '../models/areaTecnica';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AreaTecnicaService {
 	private areasTecnicasCollection: AngularFirestoreCollection<AreaTecnica>;
   private areasTecnicas: Observable<AreaTecnica[]>

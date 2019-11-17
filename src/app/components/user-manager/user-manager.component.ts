@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { NgForm } from '@angular/forms';
 
 // Services
 import { UserManagementActions } from '../../services/enums.service';
@@ -12,20 +12,18 @@ import { UsuarioService } from '../../services/usuario.service';
 
 // Modelos
 import { Usuario } from '../../models/usuario';
-import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-user-managert',
+  selector: 'app-user-manager',
   templateUrl: './user-manager.component.html',
-  styleUrls: ['./user-manager.component.css'],
-  providers: [UserManagementActions, AuthService, ShowMessagesService, UsuarioService]
+  styleUrls: ['./user-manager.component.css']
 })
 export class UserManagerComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe: Subject<any> = new Subject<any>();
   actions = UserManagementActions;
 
-  // The user management actoin to be completed
+  // The user management action to be completed
   mode: string;
   // Just a code Firebase uses to prove that
   // this is a real password reset.
@@ -90,12 +88,16 @@ export class UserManagerComponent implements OnInit, OnDestroy {
       })
   }
 
-  ngOnDestroy() {
+  /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
     // End all subscriptions listening to ngUnsubscribe
     // to avoid memory leaks.
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
+	}
 
   /**
    * Attempt to confirm the password reset with firebase and
@@ -111,7 +113,9 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     // Save the new password.
     this.authService.getAuth().confirmPasswordReset(this.actionCode, this.newPassword)
     .then(resp => {
-      this.usuarioService.getUserEstado(this.mail).subscribe((user) => {
+      this.usuarioService.getUserEstado(this.mail)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((user) => {
         if(user && user.length > 0) {
           this.usuario = {
             ...user[0]

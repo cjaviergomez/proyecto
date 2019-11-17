@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 // Servicios
 import { ReformaService } from '../../services/reforma.service';
 // Modelos
@@ -8,14 +10,16 @@ import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'reformas-list',
-	templateUrl: './reformas-list.component.html',
-	providers: [ReformaService]
+	templateUrl: './reformas-list.component.html'
 })
 
-export class ReformasListComponent implements OnInit {
+export class ReformasListComponent implements OnInit, OnDestroy {
+
 	public titulo = 'Reformas';
   public reformas: Reforma[];
   cargando = false;
+  private ngUnsubscribe: Subject<any> = new Subject<any>();
+
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
@@ -29,9 +33,22 @@ export class ReformasListComponent implements OnInit {
 	//Metodo para obtener todas las Reformas usando el metodo getReformas del servicio.
 	getReformas(){
     this.cargando = true;
-		this.reformaService.getReformas().subscribe((reformas: Reforma[]) => {
+    this.reformaService.getReformas()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe((reformas: Reforma[]) => {
       this.reformas = reformas;
       this.cargando = false;
     });
+  }
+
+   /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
 	}
 }
