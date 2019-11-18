@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 //Servicios
 import { AuthService } from './services/auth.service';
 import { UsuarioService } from './services/usuario.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 // Models
 import { Usuario } from './models/usuario';
@@ -26,9 +27,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private auth: AuthService,
               private usuarioService: UsuarioService,
+              private spinnerService: NgxSpinnerService,
               private router: Router){}
 
   ngOnInit() {
+    this.spinner();
     this.getCurrentUser();
     this.cargando = true;
   }
@@ -65,6 +68,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.islogged = false;
       }
     });
+  }
+
+  spinner(): void {
+    this.spinnerService.show();
+        setTimeout(() => {
+            this.spinnerService.hide();
+        }, 2000);
   }
 
   /**

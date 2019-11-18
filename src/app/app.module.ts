@@ -18,6 +18,9 @@ import { environment } from '../environments/environment';
 // Rutas
 import { routing, appRoutingProviders } from './app.routing';
 
+// Spinner
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 // Componentes
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -72,7 +75,8 @@ import { ResetPassComponent } from './components/reset-pass/reset-pass.component
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    NgxSpinnerModule // Spinner
   ],
   providers: [
     appRoutingProviders

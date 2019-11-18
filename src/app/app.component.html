@@ -71,6 +71,16 @@
 </nav>
 
 <section id="main">
+    <ngx-spinner
+      bdOpacity = 0.9
+      bdColor = "#333"
+      size = "large"
+      color = "#385dfa"
+      type = "square-jelly-box"
+      [fullScreen] = "true"
+      >
+<p style="color: white" class="mt-4"> Cargando... </p>
+</ngx-spinner>
   <!-- Componente actual -->
 	<router-outlet></router-outlet>
 </section>
