@@ -19,6 +19,9 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { ConfigComponent } from './components/config/config.component';
 import { UserManagerComponent } from './components/user-manager/user-manager.component';
 import { ResetPassComponent } from './components/reset-pass/reset-pass.component';
+import { ProcesoComponent } from './components/proceso/proceso.component';
+import { PreguntasFrecuentesComponent } from './components/preguntas-frecuentes/preguntas-frecuentes.component';
+import { ContactoComponent } from './components/contacto/contacto.component';
 
 // Guards
 import { AuthGuard } from './guards/auth.guard';
@@ -42,6 +45,9 @@ const appRoutes: Routes = [
   {path: 'config', component: ConfigComponent, canActivate: [AuthGuard]},
   {path: 'userMg', component: UserManagerComponent},
   {path: 'resetPass', component: ResetPassComponent},
+  {path: 'proceso', component: ProcesoComponent},
+  {path: 'questions', component: PreguntasFrecuentesComponent},
+  {path: 'contacto', component: ContactoComponent},
 	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la última que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];
 

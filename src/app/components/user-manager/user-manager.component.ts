@@ -78,6 +78,28 @@ export class UserManagerComponent implements OnInit, OnDestroy {
           } break
           case UserManagementActions.verifyEmail: {
 
+            // Recibe el actionCode y lo verifica.
+            this.authService.getAuth()
+            .checkActionCode(this.actionCode)
+            .then((user) => {
+              this.authService.getAuth()
+              .applyActionCode(this.actionCode) // Aplica el código. Cambia el emailVerified a true.
+              .then(() => {
+
+                // Si el actionCode es correcto entra aquí.
+                this.actionCodeChecked = true;
+                this.swal.showEmailVerifiedMessage(); // Muestra mensaje de verificación
+                this.router.navigate(['/login']); // Va al login
+
+              }).catch((error) => {
+                this.swal.showErrorMessage(error.code);
+                this.router.navigate(['/login']);
+              });
+            }).catch((er)=>{
+              this.swal.showErrorMessage(er.code);
+              this.router.navigate(['/login']);
+
+            });
 
           } break
           default: {
@@ -113,7 +135,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     // Save the new password.
     this.authService.getAuth().confirmPasswordReset(this.actionCode, this.newPassword)
     .then(resp => {
-      this.usuarioService.getUserEstado(this.mail)
+      this.obtenerUsuario(this.mail)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((user) => {
         if(user && user.length > 0) {
@@ -121,8 +143,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
             ...user[0]
           };
           this.usuario.password = this.newPassword;
-          this.usuarioService.updateUsuario(this.usuario)
-          .then(() => {
+          this.actualizarUsuario(this.usuario).then(() => {
             this.swal.stopLoading();
             // Password reset has been confirmed and new password updated.
             this.swal.showSuccessMessage('updatePassSuccess');
@@ -130,12 +151,29 @@ export class UserManagerComponent implements OnInit, OnDestroy {
           });
         }
       });
+
     }).catch(e => {
       // Error occurred during confirmation. The code might have
       // expired or the password is too weak.
       this.swal.stopLoading();
       this.swal.showErrorMessage(e.code);
     });
+  }
+
+  /**
+   * Metodo para buscar en la base de datos al usuario con el correo mencionado
+   * @param email correo del usuario a obtener
+   */
+  obtenerUsuario(email: string) {
+    return this.usuarioService.getUserEstado(email);
+  }
+
+  /**
+   * Método para actualizar un usuario en la base de datos
+   * @param usuario usuario a actualizar
+   */
+  actualizarUsuario(usuario: Usuario) {
+    return this.usuarioService.updateUsuario(usuario);
   }
 
 }

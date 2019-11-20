@@ -61,15 +61,18 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
 
-    // Inicia sessión. Si es todo del usuario no es Activo, cierra la sesión.
+    // Inicia sessión. Si el estado del usuario no es Activo, cierra la sesión.
     this.authService.login( this.usuario )
-          .then( resp => {
+          .then( (resp: any) => {
             this.swal.stopLoading();
-            if(this.isActive === true){
-              this.router.navigateByUrl('/map');
-            } else {
+            if(!resp.user.emailVerified){
+              this.authService.logout();
+              this.swal.showErrorMessage('noEmailVerifiedError');
+            } else if (!this.isActive){
               this.authService.logout();
               this.swal.showErrorMessage('noActiveError');
+            } else {
+              this.router.navigateByUrl('/map');
             }
           }).catch( err => {
             this.swal.showErrorMessage(err.code);

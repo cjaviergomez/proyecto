@@ -9,7 +9,7 @@ export class Usuario {
 	correo?: string;
 	password?: string;
 	estado?: string;
-	photoUrl?:string;
+  photoUrl?:string;
 
 	constructor(){}
 }

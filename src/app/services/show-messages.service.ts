@@ -74,6 +74,14 @@ export class ShowMessagesService {
         });
          break;
       }
+      case 'noEmailVerifiedError': {
+        Swal.fire({
+          type: 'error',
+          title: 'Cuenta no verificada',
+          text: 'Por favor ingresa a tu correo para verificar tu cuenta.'
+        });
+         break;
+      }
       case 'passNoSameError': {
         Swal.fire({
           type: 'error',
@@ -125,7 +133,7 @@ export class ShowMessagesService {
           allowOutsideClick: false,
           type: 'success',
           title: 'Registro Exitoso',
-          text: 'Su cuenta se ha registrado con éxito. Por favor Inicie Sesión'
+          text: 'Te hemos enviado un correo. Por favor verifica tu correo y espera a que tu cuenta sea activada por un admin.'
         });
         break;
       }
@@ -167,6 +175,46 @@ export class ShowMessagesService {
         });
       }
     }
+  }
+
+  showEmailVerifiedMessage() {
+    Swal.mixin({
+      confirmButtonText: 'Siguiente &rarr;',
+      showCancelButton: false,
+      allowOutsideClick: false,
+      progressSteps: ['1', '2', '3', '4']
+    }).queue([
+      {
+        title: 'Correo verificado',
+        type: 'success',
+        text: '¡Excelente! Has verificado tu correo.'
+      },
+      {
+        title: 'Toma nota',
+        type: 'info',
+        text: 'Las siguientes credenciales las necesitarás para acceder al mapa del campus'
+      },
+      {
+        title: 'Toma nota',
+        type: 'info',
+        html: `
+        <pre><code>Usuario: carlos.gomez0</code></pre>
+        <pre><code>Contraseña: carlos</code></pre>`
+      },
+      {
+        title: 'Credenciales',
+        type: 'info',
+        text: 'Podrás consultar estás credenciales en cualquier momento desde tu perfil'
+      }
+    ]).then((result) => {
+      if (result.value) {
+        Swal.fire({
+          title: '¡Bien hecho!',
+          type: 'success',
+          text: 'Tu correo ha sido verificado'
+        });
+      };
+    });
   }
 
   showLoading() {
