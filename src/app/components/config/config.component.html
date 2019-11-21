@@ -10,8 +10,12 @@
 				<a class="nav-link" *ngIf="seccion != 2" [routerLink]="" (click)="cambiarSeccion(2)">Contraseña</a>
       </li>
 			<li class="nav-item">
-				<a class="nav-link active" *ngIf="seccion == 3">Cuenta</a>
-				<a class="nav-link" *ngIf="seccion != 3" [routerLink]="" (click)="cambiarSeccion(3)">Cuenta</a>
+				<a class="nav-link active" *ngIf="seccion == 3">Credenciales</a>
+				<a class="nav-link" *ngIf="seccion != 3" [routerLink]="" (click)="cambiarSeccion(3)">Credenciales</a>
+      </li>
+      <li class="nav-item">
+				<a class="nav-link active" *ngIf="seccion == 4">Cuenta</a>
+				<a class="nav-link" *ngIf="seccion != 4" [routerLink]="" (click)="cambiarSeccion(4)">Cuenta</a>
       </li>
     </ul>
   </div>
@@ -104,6 +108,19 @@
   </div>
 
   <div class="card-body" *ngIf="seccion == 3">
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Credenciales para ingreso al mapa</h5>
+        <p class="card-text">Puedes usar las siguientes credenciales para ingresar al mapa</p>
+        <pre>Usuario: <span>carlos.gomez0</span></pre>
+        <pre>Contraseña: <span>carlos</span></pre>
+        <a [routerLink]="['/map']" class="btn btn-primary">Ir al mapa</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body" *ngIf="seccion == 4">
     <h5 class="card-title">Desactivar cuenta</h5>
     <p class="card-text">Al desactivar tu cuenta no podrás acceder de nuevo hasta comunicarte con un administrador.</p>
     <button (click)="desactivarCuenta(usuario)" type="button" class="btn btn-danger">Desactivar</button>

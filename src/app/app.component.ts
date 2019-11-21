@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { UsuarioService } from './services/usuario.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ShowMessagesService } from './services/show-messages.service';
 
 // Models
 import { Usuario } from './models/usuario';
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private auth: AuthService,
               private usuarioService: UsuarioService,
+              private swal: ShowMessagesService,
               private spinnerService: NgxSpinnerService,
               private router: Router){}
 
@@ -52,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.usuarioService.getUsuario(user.uid)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((usuario: Usuario) => {
-          // Obtenemos el nombre del perfil del usuario de la base de datos de firebase.
+          // Obtenemos la información del usuario de la base de datos de firebase.
           this.usuario = usuario;
           this.cargando = false;
         });

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
-import { type } from 'os';
 
 @Component({
   selector: 'app-proceso',

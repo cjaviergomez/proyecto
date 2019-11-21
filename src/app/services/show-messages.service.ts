@@ -204,7 +204,7 @@ export class ShowMessagesService {
       {
         title: 'Credenciales',
         type: 'info',
-        text: 'Podrás consultar estás credenciales en cualquier momento desde tu perfil'
+        text: 'Podrás consultar estás credenciales en cualquier momento desde la configuración de tu cuenta'
       }
     ]).then((result) => {
       if (result.value) {

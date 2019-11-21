@@ -10,26 +10,39 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { loadModules } from 'esri-loader';
 import esri = __esri; // Esri TypeScript Types
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { Usuario } from 'app/models/usuario';
+import Swal from 'sweetalert2';
+
+// Servicios
+import { UsuarioService } from '../../services/usuario.service';
+import { AuthService } from '../../services/auth.service';
+import { ShowMessagesService } from '../../services/show-messages.service';
 
 @Component({
   selector: 'app-esri-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class EsriMapComponent implements OnInit {
+export class EsriMapComponent implements OnInit, OnDestroy {
   //Esta variable tendra los datos que se le pasarán al formulario de la solicitud(Edificio, capa, objecto)
-  @Output() datos_formulario = new EventEmitter();
   private edificio: string;
   private capa: string;
   private objecto: string;
+  private ngUnsubscribe: Subject<any> = new Subject<any>();
+  usuario = new Usuario();
 
+  @Output() datos_formulario = new EventEmitter();
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('mapViewNode', {static:true}) private mapViewEl: ElementRef;
 
-  constructor() {
+  constructor(private usuarioService: UsuarioService,
+              private authService: AuthService,
+              private swal: ShowMessagesService) {
     this.edificio = '';
     this.capa = '';
     this.objecto = '';
@@ -278,7 +291,86 @@ export class EsriMapComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initializeMap();
+    this.getCurrentUser();
   }
+
+  // Metodo para saber si hay un usuario logeado actualmente.
+  getCurrentUser(){
+    this.authService.estaAutenticado()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( user => {
+      if(user) {
+        this.usuarioService.getUsuario(user.uid)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((usuario: Usuario) => {
+          // Obtenemos la información del usuario de la base de datos de firebase.
+          this.usuario = usuario;
+          if(this.usuario.primerIngreso) {
+            this.showPrimerIngresoMessage();
+          } else {
+            this.initializeMap();
+          }
+        });
+      }
+    });
+  }
+
+  showPrimerIngresoMessage() {
+    Swal.mixin({
+      confirmButtonText: 'Siguiente &rarr;',
+      showCancelButton: false,
+      allowOutsideClick: false,
+      progressSteps: ['1', '2', '3', '4']
+    }).queue([
+      {
+        title: 'Correo verificado',
+        type: 'success',
+        text: '¡Excelente! Has verificado tu correo.'
+      },
+      {
+        title: 'Toma nota',
+        type: 'info',
+        text: 'Las siguientes credenciales las necesitarás para acceder al mapa del campus'
+      },
+      {
+        title: 'Toma nota',
+        type: 'info',
+        html: `
+        <pre><code>Usuario: carlos.gomez0</code></pre>
+        <pre><code>Contraseña: carlos</code></pre>`
+      },
+      {
+        title: 'Credenciales',
+        type: 'info',
+        text: 'Podrás consultar estás credenciales en cualquier momento desde tu perfil'
+      }
+    ]).then((result) => {
+      if (result.value) {
+        Swal.fire({
+          title: '¡Bien hecho!',
+          type: 'success',
+          text: 'Tu correo ha sido verificado'
+        });
+        this.usuario.primerIngreso = false; // Actualizamos la variable de primer ingreso del usuario.
+        this.usuarioService.updateUsuario(this.usuario) // Actualizamos el usuario en firebase
+        .then(() => {
+          this.initializeMap();
+        }).catch((err) => {
+          this.swal.showErrorMessage(err);
+        })
+      };
+    });
+  }
+
+  /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 
 }
