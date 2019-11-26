@@ -323,9 +323,8 @@ export class EsriMapComponent implements OnInit, OnDestroy {
       progressSteps: ['1', '2', '3', '4']
     }).queue([
       {
-        title: 'Correo verificado',
-        type: 'success',
-        text: '¡Excelente! Has verificado tu correo.'
+        title: 'Bienvenido a CampusGIS',
+        type: 'success'
       },
       {
         title: 'Toma nota',
@@ -342,14 +341,14 @@ export class EsriMapComponent implements OnInit, OnDestroy {
       {
         title: 'Credenciales',
         type: 'info',
-        text: 'Podrás consultar estás credenciales en cualquier momento desde tu perfil'
+        text: 'Podrás consultar estás credenciales en cualquier momento desde la configuración de tu cuenta.'
       }
     ]).then((result) => {
       if (result.value) {
         Swal.fire({
           title: '¡Bien hecho!',
           type: 'success',
-          text: 'Tu correo ha sido verificado'
+          text: 'Ya puedes disfrutar de tu cuenta de CampusGIS'
         });
         this.usuario.primerIngreso = false; // Actualizamos la variable de primer ingreso del usuario.
         this.usuarioService.updateUsuario(this.usuario) // Actualizamos el usuario en firebase
