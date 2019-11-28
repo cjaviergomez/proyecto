@@ -47,6 +47,22 @@
       <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectUnidad'] && formRegistro.controls['selectUnidad'].errors">
               Elige la unidad a la que pertenece.
       </div>
+
+      <label for="inputCargo" class="sr-only">Nombre</label>
+      <input type="text"
+          #inputCargo="ngModel"
+          name="inputCargo"
+          [(ngModel)]="usuario.cargo"
+          [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['inputCargo'].errors }"
+          id="inputCargo"
+          class="form-control mt-2"
+          minlength="4"
+          maxlength="40"
+          pattern="[A-Z a-z]+"
+          placeholder="Introduce un cargo" required>
+      <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['inputCargo'].errors">
+            Introduce un cargo válido.
+      </div>
     </div>
 
     <!-- Perfil UAA Asesora -->

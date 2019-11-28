@@ -3,7 +3,7 @@
 <hr>
 
 <table *ngIf="!cargando && usuarios.length > 0"
-       class="table mt-3 animated fadeIn faster animated fadeIn faster">
+       class="table mt-3 animated fadeIn faster animated fadeIn faster container">
   <thead class="thead-light">
     <tr>
       <th scope="col">#</th>
@@ -16,7 +16,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let usuario of usuarios; let i = index">
-      <th scope="row">{{ i + 1 }}</th>
+      <th scope="row"> {{ i + 1 }} </th>
       <td>{{ usuario.nombres}}</td>
       <td>{{ usuario.correo }}</td>
       <td>{{ usuario.perfil.nombre }}</td>
@@ -51,7 +51,7 @@
 </table>
 
 <div *ngIf="!cargando && usuarios.length === 0"
-     class="alert alert-primary text-center mt-3 animated fadeIn faster">
+     class="alert alert-primary text-center mt-3 animated fadeIn faster container">
     <h4 class="alert-heading">No hay registros</h4>
     <p>
       <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
@@ -59,7 +59,7 @@
 </div>
 
 <div *ngIf="cargando"
-     class="alert alert-info text-center mt-3 animated fadeIn faster">
+     class="alert alert-info text-center mt-3 animated fadeIn faster container">
   <h4 class="alert-heading">Cargando</h4>
   <p>
     <i class="fa fa-sync-alt fa-spin fa-2x"></i>

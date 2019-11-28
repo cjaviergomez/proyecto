@@ -1,6 +1,6 @@
 <!-- Div para mostrar mensaje cuando no hay solicitudes-->
 <div *ngIf="!cargando && solicitudes.length === 0"
-     class="alert alert-primary text-center mt-3 animated fadeIn faster">
+     class="alert alert-primary text-center mt-3 animated fadeIn faster container">
     <h4 class="alert-heading">No hay solicitudes</h4>
     <p>
       <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
@@ -9,7 +9,7 @@
 
 <!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
 <div *ngIf="cargando"
-     class="alert alert-info text-center mt-3 animated fadeIn faster">
+     class="alert alert-info text-center mt-3 animated fadeIn faster container">
   <h4 class="alert-heading">Cargando</h4>
   <p>
     <i class="fa fa-sync-alt fa-spin fa-2x"></i>

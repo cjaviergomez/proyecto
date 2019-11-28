@@ -1,9 +1,9 @@
 <div class="container">
 
   <div class="jumbotron p-4 p-md-5 text-white rounded bg-secondary">
-    <div class="col-md-6 px-0">
+    <div class="col-md-10 px-0">
       <h1 class="display-4">Adecuación y/0 remodelación de espacios físicos</h1>
-      <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+      <p class="lead my-3">Proceso de la Universidad Industrial de Santander a cargo de la División de Planta Física que tiene como objeto mantener la Planta Física de la Universidad en condiciones ambientales y de seguridad que permitan el correcto desarrollo de las actividades académicas, de investigación, de extensión y administrativas.</p>
     </div>
   </div>
 
@@ -12,68 +12,80 @@
 <main role="main" class="container">
   <div class="row">
     <div class="col-md-8 blog-main">
-      <h3 class="pb-4 mb-4 font-italic border-bottom">
-        From the Firehose
-      </h3>
 
       <div class="blog-post">
-        <h2 class="blog-post-title">Sample blog post</h2>
-        <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+        <h3 class="blog-post-title">Flujo</h3>
 
-        <p>This blog post shows a few different types of content that’s supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
+
+        <p>El siguiente diagrama muestra el flujo que sigue el proceso de adecuación y/o remodelación de espacios físicos, los actores que intervienen y sus distintas acciones.</p>
+        <a [routerLink]= "" data-toggle="modal" data-target=".bd-example-modal-lg">
+          <img src="../../../assets/img/process.png" alt="Diagrama de flujo" width="100%">
+        </a>
         <hr>
-        <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-        <blockquote>
-          <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-        </blockquote>
-        <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-        <h2>Heading</h2>
-        <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-        <h3>Sub-heading</h3>
-        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-        <pre><code>Example code block</code></pre>
-        <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-        <h3>Sub-heading</h3>
-        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+
+        <!--Modal de la imagen-->
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <img src="../../../assets/img/process.png" width="100%">
+            </div>
+          </div>
+        </div>
+
+
+        <h2>Actores</h2>
+        <p>A continuación se describen cada uno de los actores que intervienen en el proceso y cada uno de sus roles.</p>
+
+        <h4>Solicitante</h4>
+        <p>El solicitante es aquella persona perteneciente a una unidad académico y/o administrativa de la comunidad universitaria y la cual es destinataria del servicio de remodelación y/o adecuación de espacios físicos. Dentro de sus roles o funciones se encuentran:</p>
         <ul>
-          <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
-          <li>Donec id elit non mi porta gravida at eget metus.</li>
-          <li>Nulla vitae elit libero, a pharetra augue.</li>
+          <li>Solicitar reformas de las UAA.</li>
+          <li>Brindar la documentación necesaria para que el proceso se realice.</li>
+          <li>Ver el contenido de las reformas que se hayan realizado en el campus y las solicitudes de remodelación y/o adecuación que él haya realizado.</li>
+          <li>Intervenir en el proceso de remodelación y/o adecuación según le corresponda.</li>
         </ul>
-        <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
-        <ol>
-          <li>Vestibulum id ligula porta felis euismod semper.</li>
-          <li>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</li>
-          <li>Maecenas sed diam eget risus varius blandit sit amet non magna.</li>
-        </ol>
-        <p>Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.</p>
-      </div><!-- /.blog-post -->
 
-      <div class="blog-post">
-        <h2 class="blog-post-title">Another blog post</h2>
-        <p class="blog-post-meta">December 23, 2013 by <a href="#">Jacob</a></p>
-
-        <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-        <blockquote>
-          <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-        </blockquote>
-        <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-        <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-      </div><!-- /.blog-post -->
-
-      <div class="blog-post">
-        <h2 class="blog-post-title">New feature</h2>
-        <p class="blog-post-meta">December 14, 2013 by <a href="#">Chris</a></p>
-
-        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+        <h4>Planta Física</h4>
+        <p>Personal administrativo de la División de Planta Física el cual está a cargo del proceso de remodelación y/o adecuación de espacios físicos. Dentro de sus roles o funciones se encuentran:</p>
         <ul>
-          <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
-          <li>Donec id elit non mi porta gravida at eget metus.</li>
-          <li>Nulla vitae elit libero, a pharetra augue.</li>
+          <li>Intervenir en el proceso de remodelación y/o adecuación según le corresponda.</li>
+          <li>Puede ver el contenido de las reformas que hayan hecho en el campus y las solicitudes de remodelación y/o adecuación que él haya realizado o le hayan sido asignadas.</li>
+          <li>Solicitar reformas de las UAA.</li>
         </ul>
-        <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-        <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
+
+        <h4>Planeación</h4>
+        <p>Personal administrativo de la oficina de planeación el cual recibe y gestiona el ingreso de las solicitudes de remodelación y/o adecuación de espacios físicos, así como la asignación de un técnico y revisión del informe final. Dentro de sus roles o funciones se encuentran:</p>
+        <ul>
+          <li>Recibe y gestiona las solicitudes de remodelación y/o adecuación.</li>
+          <li>Puede ver contenido de las reformas y de todas las solicitudes de remodelación y/o adecuación. </li>
+          <li>Interviene en el proceso de remodelación y/o adecuación según le corresponda.</li>
+        </ul>
+
+        <h4>Oficina de Contratación</h4>
+        <p>Personal administrativo de la oficina de contratación el cual se encarga del proceso de contratación del personal para la remodelación y/o adecuación de espacios físicos. Dentro de sus roles o funciones se encuentran:</p>
+        <ul>
+          <li>Puede ver el contenido de las reformas que hayan hecho en el campus y las solicitudes de remodelación y/o adecuación que le hayan sido asignadas.</li>
+          <li>Intervenir en el proceso de remodelación y/o adecuación según le corresponda.</li>
+        </ul>
+
+        <h4>UAA Asesora</h4>
+        <p>Unidad Académico y/o Administrativa que asesora a Planeación y/o Planta Física cuando se requiere de un concepto técnico en las áreas de adquisición de equipos eléctricos, electrónicos y de telecomunicaciones: División de Mantenimiento Tecnológico, cuando se trata de adquisición de software y hardware la División de Servicios de Información.
+          . Dentro de sus roles o funciones se encuentran:</p>
+        <ul>
+          <li>Puede ver el contenido de las reformas que hayan hecho en el campus y las solicitudes de remodelación y/o adecuación.</li>
+          <li>Intervenir en el proceso de remodelación y/o adecuación según le corresponda.</li>
+        </ul>
+
+        <h4>Interventor</h4>
+        <p>Personal encargado de prestar servicios de interventoría entre el contratista y la universidad, así como iniciar la obra, hacer informe final, entre otras. Dentro de sus roles o funciones se encuentran:</p>
+        <ul>
+          <li>Puede ver el contenido de las reformas que hayan hecho en el campus y las solicitudes de remodelación y/o adecuación que le hayan sido asignadas.</li>
+          <li>Intervenir en el proceso de remodelación y/o adecuación según le corresponda.</li>
+        </ul>
+
       </div><!-- /.blog-post -->
+
+
 
     </div><!-- /.blog-main -->
 
@@ -86,30 +98,33 @@
       <div class="p-4">
         <h4 class="font-italic">Documentación</h4>
         <p>Los siguientes documentos son los más importantes durante el proceso:</p>
-        <ol class="list-unstyled mb-0">
-          <li><a href="#">March 2014</a></li>
-          <li><a href="#">February 2014</a></li>
-          <li><a href="#">January 2014</a></li>
-          <li><a href="#">December 2013</a></li>
-          <li><a href="#">November 2013</a></li>
-          <li><a href="#">October 2013</a></li>
-          <li><a href="#">September 2013</a></li>
-          <li><a href="#">August 2013</a></li>
-          <li><a href="#">July 2013</a></li>
-          <li><a href="#">June 2013</a></li>
-          <li><a href="#">May 2013</a></li>
-          <li><a href="#">April 2013</a></li>
-        </ol>
+        <ul>
+          <li>Precontractuales:</li>
+          <ol class="list-unstyled mb-0">
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.57.doc">Solicitud de Cotizaciones del bien o servicio</a></li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.59.doc">Cotizaciones del bien a adquirir</a></li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.59.doc">Evaluación de cotizacioón</a></li>
+            <li>Pantallazo Certificado de Disponibilidad Presupuestal (CDP)</li>
+            <li>Concepto técnico de las unidades asesoras</li>
+          </ol>
+          <li>Contractuales:</li>
+          <ol class="list-unstyled mb-0">
+            <li>Minuta o diario de obra</li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.60.doc">Acta de inicio del contrato</a></li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.62.doc">Informe de Supervisión</a></li>
+            <li>Informe de Actividades</li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.61.doc">Acta de Adición o Prorroga</a></li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.63.doc">Acta de Suspensión </a></li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.64.doc">Acta de Reinicio</a></li>
+          </ol>
+          <li>Poscontractuales:</li>
+          <ol class="list-unstyled mb-0">
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.66.doc">Acta de finalización o recibo de satisfacción</a></li>
+            <li><a href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.67.doc">Acta de Liquidación del Contrato</a></li>
+          </ol>
+        </ul>
       </div>
 
-      <div class="p-4">
-        <h4 class="font-italic">Elsewhere</h4>
-        <ol class="list-unstyled">
-          <li><a href="#">GitHub</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Facebook</a></li>
-        </ol>
-      </div>
     </aside><!-- /.blog-sidebar -->
 
   </div><!-- /.row -->
