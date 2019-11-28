@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 // Iconos
-import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
+import { faSearchPlus, faExclamation, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 // Models
 import { Usuario } from '../../models/usuario';
@@ -25,6 +25,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
+  faSyncAlt = faSyncAlt; // Icono que da vueltas al cargar.
 
   constructor(private usuarioService: UsuarioService,
               private swal: ShowMessagesService) { }

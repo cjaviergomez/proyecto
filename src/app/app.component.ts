@@ -23,6 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public islogged = false;
   cargando = false;
   public isVerificador: any = null;
+  public isAgregador: any = null;
   usuario: Usuario = new Usuario();
   private ngUnsubscribe: Subject<any> = new Subject<any>();
 
@@ -64,6 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
         .subscribe(userRole => {
           if(userRole){
             this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
+            this.isAgregador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('agregador');
           }
         });
       } else {

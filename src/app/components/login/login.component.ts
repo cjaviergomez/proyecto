@@ -65,10 +65,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login( this.usuario )
           .then( (resp: any) => {
             this.swal.stopLoading();
-            if(!resp.user.emailVerified){
+            /*if(!resp.user.emailVerified){
               this.authService.logout();
               this.swal.showErrorMessage('noEmailVerifiedError');
-            } else if (!this.isActive){
+            } else */ if (!this.isActive){
               this.authService.logout();
               this.swal.showErrorMessage('noActiveError');
             } else {

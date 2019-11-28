@@ -23,7 +23,7 @@ export class UsuarioService {
 
 	// Metodo para obtener todos los usuarios registrados en la base de datos incluido su id.
 	getUsuarios() {
-    this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('perfil', '>', 'Administrador'));
+    this.usuariosCollection = this.afs.collection<Usuario>('usuarios');
 		return this.usuarios = this.usuariosCollection.snapshotChanges()
 				.pipe(map( changes => {
           return changes.map( action => {

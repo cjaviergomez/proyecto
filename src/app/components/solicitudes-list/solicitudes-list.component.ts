@@ -9,7 +9,7 @@ import { SolicitudService } from '../../services/solicitud.service';
 import { Solicitud } from '../../models/solicitud';
 
 // Iconos
-import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
+import { faSearchPlus, faExclamation, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'solicitudes-list',
@@ -24,6 +24,7 @@ export class SolicitudesListComponent implements OnInit, OnDestroy {
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
+  faSyncAlt = faSyncAlt; // Icono que da vueltas al cargar.
 
 	constructor(private solicitudService: SolicitudService){}
 

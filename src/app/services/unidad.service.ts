@@ -31,8 +31,11 @@ export class UnidadService {
 		}));
   }
 
-  // TODO: Falta implementar metodo.
-  addUnidad( unidad: Unidad){}
+  // Método para agregar una unidad a la base de datos
+  addUnidad( unidad: Unidad){
+    this.unidadesCollection = this.afs.collection<Unidad>('unidades');
+    return this.unidadesCollection.add({nombre: unidad.nombre, descripcion: unidad.descripcion});
+  }
 
   // Metodo para obtener una unidad especifica de Firebase.
 	getUnidad(id: string) {

@@ -6,7 +6,7 @@ import { ReformaService } from '../../services/reforma.service';
 // Modelos
 import { Reforma } from '../../models/reforma';
 // Iconos
-import { faSearchPlus, faExclamation} from '@fortawesome/free-solid-svg-icons';
+import { faSearchPlus, faExclamation, faSyncAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'reformas-list',
@@ -23,6 +23,7 @@ export class ReformasListComponent implements OnInit, OnDestroy {
   // Icons
   faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
   faExclamation = faExclamation; // Icono de exclamación.
+  faSyncAlt = faSyncAlt; // Icono que da vueltas al cargar.
 
 	constructor(private reformaService: ReformaService) {}
 

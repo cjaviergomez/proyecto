@@ -10,7 +10,7 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard implements  CanActivate {
+export class VerificadorGuard implements  CanActivate {
 
   public isAdmin: any = null;
 
@@ -19,7 +19,6 @@ export class AdminGuard implements  CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-
       this.auth.estaAutenticado().subscribe( user => {
         if(user){
           this.auth.isUserAdmin(user.uid).subscribe(userRole => {
@@ -28,16 +27,16 @@ export class AdminGuard implements  CanActivate {
             }
           });
         }
-      });
 
-    return this.afsAuth.authState
-      .pipe(take(1))
-      .pipe(map(authState => !!authState))
-      .pipe(tap(auth => {
-        if (!auth || !this.isAdmin) {
-          this.router.navigate(['/login']);
-        }
-      }));
-  }
+      });
+      return this.afsAuth.authState
+        .pipe(take(1))
+        .pipe(map(authState => !!authState))
+        .pipe(tap(auth => {
+          if (!auth || this.isAdmin === null) {
+            this.router.navigate(['/login']);
+          }
+        }));
+    }
 
 }

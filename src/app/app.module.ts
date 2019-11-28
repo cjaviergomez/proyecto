@@ -44,6 +44,7 @@ import { ResetPassComponent } from './components/reset-pass/reset-pass.component
 import { ProcesoComponent } from './components/proceso/proceso.component';
 import { PreguntasFrecuentesComponent } from './components/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './components/contacto/contacto.component';
+import { InfoAdminComponent } from './components/info-admin/info-admin.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { ContactoComponent } from './components/contacto/contacto.component';
     ResetPassComponent,
     ProcesoComponent,
     PreguntasFrecuentesComponent,
-    ContactoComponent
+    ContactoComponent,
+    InfoAdminComponent
   ],
   imports: [
     BrowserModule,
