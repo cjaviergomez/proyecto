@@ -23,7 +23,9 @@ import { ProcesoComponent } from './components/proceso/proceso.component';
 import { PreguntasFrecuentesComponent } from './components/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './components/contacto/contacto.component';
 import { InfoAdminComponent } from './components/info-admin/info-admin.component';
-
+import { ProcesslistComponent } from './components/processlist/processlist.component';
+import { StartProcessComponent } from './components/start-process/start-process.component';
+import { TasklistComponent } from './components/tasklist/tasklist.component';
 
 // Guards
 import { AuthGuard } from './guards/auth.guard';
@@ -43,7 +45,7 @@ const appRoutes: Routes = [
 	{path: 'reformas', component: ReformasListComponent, canActivate: [ AuthGuard ]},
 	{path: 'login', component: LoginComponent},
 	{path: 'registro', component: RegistroComponent},
-	{path: 'usuarios', component: UsuariosComponent, canActivate: [ VerificadorGuard ]},
+	{path: 'usuarios', component: UsuariosComponent, canActivate: [ AuthGuard ]},
   {path: 'perfil/:id', component: PerfilComponent, canActivate: [ AuthGuard ]},
   {path: 'config', component: ConfigComponent, canActivate: [AuthGuard]},
   {path: 'userMg', component: UserManagerComponent},
@@ -51,7 +53,11 @@ const appRoutes: Routes = [
   {path: 'proceso', component: ProcesoComponent},
   {path: 'questions', component: PreguntasFrecuentesComponent},
   {path: 'contacto', component: ContactoComponent},
+  {path: 'processlist', component: ProcesslistComponent, canActivate: [ AuthGuard ] },
   {path: 'infoAdmin', component: InfoAdminComponent, canActivate: [AuthGuard]},
+  {path: 'startprocess/:processdefinitionkey', component: StartProcessComponent, canActivate: [AuthGuard] },
+  {path: 'tasklist', component: TasklistComponent },
+  {path: 'tasklist/:id', component: TasklistComponent },
 	{path: '**', component: ErrorComponent}  //IMPORTANTE: Esta ruta debe ser la última que se declare, si se declara una ruta despues de esta, siempre va a tomar esta.
 ];
 

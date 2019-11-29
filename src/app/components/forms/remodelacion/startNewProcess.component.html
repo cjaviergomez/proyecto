@@ -1,0 +1,27 @@
+<div class="container jumbotron">
+  <div [hidden]="submitted">
+    <h2>Iniciar nuevo proceso</h2>
+    <form (ngSubmit)="onSubmit()" #startNewProcess="ngForm" class="ui form">
+      <div class="field">
+        <label for="firstName">Nombres</label>
+        <input type="text" id="firstName" class="ml-2"
+               required
+               [(ngModel)]="model.firstName" name="firstName"
+               #name="ngModel">
+      </div>
+
+      <div class="field">
+        <label for="lastName">Apellidos</label>
+        <input type="text" id="lastName" class="ml-2"
+               [(ngModel)]="model.lastName" name="lastName" #name="ngModel">
+      </div>
+
+      <div class="field">
+        <button type="submit" class="btn btn-primary" [disabled]="!startNewProcess.form.valid">Iniciar</button>
+      </div>
+    </form>
+  </div>
+  <div [hidden]="!submitted">
+    <p>Solicitud creada con éxito.</p>
+  </div>
+</div>

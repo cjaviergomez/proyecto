@@ -1,9 +1,11 @@
+import { Usuario } from './usuario';
 export interface Solicitud {
 	id?: string,
 	nombre_edificio?: string,
 	piso_edificio?: number,
 	objectID?: number,
-	estado:string,
+  estado:string,
+  usuario?: Usuario;
 	formulario?:JSON
 
 
@@ -19,5 +21,5 @@ export interface Solicitud {
 		public hora_visita: string,
 		public funcionario_asignado:string,
 		public funcionario_visita:string */
-	
+
 }

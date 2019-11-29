@@ -29,7 +29,15 @@ export class SolicitudService {
 	}
 
   // TODO: Falta implementar metodo.
-  addSolicitud(solicitud: Solicitud){}
+  addSolicitud(solicitud: Solicitud){
+    this.solicitudesCollection = this.afs.collection<Solicitud>('solicitudes');
+    this.solicitudesCollection.add({
+      estado: solicitud.estado,
+      nombre_edificio: solicitud.nombre_edificio,
+      piso_edificio: solicitud.piso_edificio,
+      usuario: solicitud.usuario
+    });
+  }
 
   // TODO: Falta implementar metodo.
 	getSolicitud(id:string){}

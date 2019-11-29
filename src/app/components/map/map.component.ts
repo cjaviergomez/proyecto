@@ -17,6 +17,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Usuario } from 'app/models/usuario';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+
 
 // Servicios
 import { UsuarioService } from '../../services/usuario.service';
@@ -42,6 +44,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 
   constructor(private usuarioService: UsuarioService,
               private authService: AuthService,
+              private router: Router,
               private swal: ShowMessagesService) {
     this.edificio = '';
     this.capa = '';
@@ -126,7 +129,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 
             // The function to execute when the solicitud action is clicked
             function irAlformulario() {
-              window.open('http://localhost:4200/crear-solicitud');
+              window.open('http://localhost:4200/processlist');
               //Emición de datos
               //this.datos_formulario.emit({ "edificio": this.edificio, "capa": this.capa, "objecto": this.objecto});
             }

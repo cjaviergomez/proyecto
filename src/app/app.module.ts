@@ -45,6 +45,11 @@ import { ProcesoComponent } from './components/proceso/proceso.component';
 import { PreguntasFrecuentesComponent } from './components/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './components/contacto/contacto.component';
 import { InfoAdminComponent } from './components/info-admin/info-admin.component';
+import { ProcesslistComponent } from './components/processlist/processlist.component';
+import { GenericForm } from './generic-form.component';
+import { StartProcessComponent } from './components/start-process/start-process.component';
+import { TasklistComponent } from './components/tasklist/tasklist.component';
+import { MyAddonModule } from './components/forms/remodelacion/myAddon.module';
 
 @NgModule({
   declarations: [
@@ -70,7 +75,11 @@ import { InfoAdminComponent } from './components/info-admin/info-admin.component
     ProcesoComponent,
     PreguntasFrecuentesComponent,
     ContactoComponent,
-    InfoAdminComponent
+    InfoAdminComponent,
+    ProcesslistComponent,
+    GenericForm,
+    StartProcessComponent,
+    TasklistComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +93,7 @@ import { InfoAdminComponent } from './components/info-admin/info-admin.component
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     AngularFireDatabaseModule,
+    MyAddonModule,
     NgxSpinnerModule // Spinner
   ],
   providers: [
