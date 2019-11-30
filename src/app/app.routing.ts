@@ -36,7 +36,7 @@ const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
 	{path: 'home', component: HomeComponent},
 	{path: 'solicitudes', component: SolicitudesListComponent, canActivate: [ AuthGuard ]},
-	{path: 'crear-solicitud', component: SolicitudAddComponent, canActivate: [ AuthGuard ] },
+	{path: 'crear-solicitud', component: SolicitudAddComponent },
 	{path: 'solicitud-creada', component: SolicitudAddedComponent, canActivate: [ AuthGuard ]},
 	{path: 'solicitud-error', component: SolicitudAddErrorComponent, canActivate: [ AuthGuard ]},
 	{path: 'solicitud/:id', component: SolicitudDetailComponent },

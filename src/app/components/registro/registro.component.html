@@ -89,7 +89,7 @@
           [(ngModel)]="usuario.correo"
           [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['correo'].errors }"
           class="form-control mt-2"
-          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@correo.uis.edu.co"
+          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+[.]uis.edu.co|[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@uis.edu.co"
           maxlength="50"
           placeholder="ejemplo@correo.uis.edu.co" required>
     <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['correo'].errors">

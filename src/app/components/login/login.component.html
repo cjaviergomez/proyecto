@@ -9,7 +9,7 @@
           [(ngModel)]="usuario.correo"
           [ngClass]="{'is-invalid': formIngreso.submitted && formIngreso.controls['correo'].errors }"
           class="form-control"
-          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@correo.uis.edu.co"
+          pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+[.]uis.edu.co|[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@uis.edu.co"
           placeholder="Correo" required autofocus>
     <div class="invalid-feedback animated fadeIn" *ngIf="formIngreso.submitted && formIngreso.controls['correo'].errors">
                 Introduce un correo válido.

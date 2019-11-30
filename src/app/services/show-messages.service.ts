@@ -137,6 +137,15 @@ export class ShowMessagesService {
         });
         break;
       }
+      case 'sendMessage': {
+        Swal.fire({
+          allowOutsideClick: false,
+          type: 'success',
+          title: 'Mensaje enviado con éxito',
+          text: 'Un administrador atenderá tu mensaje. Muchas gracias por usar este medio.'
+        });
+        break;
+      }
       default: {
         Swal.fire({
           type: 'success',
