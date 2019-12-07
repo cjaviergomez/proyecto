@@ -90,6 +90,14 @@ export class ShowMessagesService {
         });
          break;
       }
+      case 'noMoreMessages': {
+        Swal.fire({
+          type: 'error',
+          title: 'Un mensaje por día',
+          text: 'Sólo puedes enviár un mensaje por día.'
+        });
+         break;
+      }
       case 'paramsNoFoundError': {
         Swal.fire({
           type: 'error',
@@ -163,6 +171,24 @@ export class ShowMessagesService {
         return Swal.fire({
           title: '¿Estás seguro?',
           text: `¿Estás seguro que deseas desactivar tu cuenta?`,
+          type: 'question',
+          showConfirmButton: true,
+          showCancelButton: true
+        });
+      }
+      case 'deleteComment': {
+        return Swal.fire({
+          title: 'Eliminar',
+          text: `¿Estás seguro?`,
+          type: 'question',
+          showConfirmButton: true,
+          showCancelButton: true
+        });
+      }
+      case 'sendMessage': {
+        return Swal.fire({
+          title: '¿Estás seguro?',
+          text: 'Asegurate de enviar el mensaje correcto. Sólo puedes enviar uno por día.',
           type: 'question',
           showConfirmButton: true,
           showCancelButton: true

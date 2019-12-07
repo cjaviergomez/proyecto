@@ -7,7 +7,6 @@ import { Subject } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { UsuarioService } from './services/usuario.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ShowMessagesService } from './services/show-messages.service';
 
 // Models
 import { Usuario } from './models/usuario';
@@ -21,22 +20,19 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public title = 'CampusGIS';
   public islogged = false;
-  cargando = false;
   public isVerificador: any = null;
   public isAgregador: any = null;
-  usuario: Usuario = new Usuario();
+  usuario: Usuario;
   private ngUnsubscribe: Subject<any> = new Subject<any>();
 
   constructor(private auth: AuthService,
               private usuarioService: UsuarioService,
-              private swal: ShowMessagesService,
               private spinnerService: NgxSpinnerService,
               private router: Router){}
 
   ngOnInit() {
     this.spinner();
     this.getCurrentUser();
-    this.cargando = true;
   }
 
   //Metodo para cerrar la sesiòn de un usuario haciendo uso del servicio
@@ -57,7 +53,6 @@ export class AppComponent implements OnInit, OnDestroy {
         .subscribe((usuario: Usuario) => {
           // Obtenemos la información del usuario de la base de datos de firebase.
           this.usuario = usuario;
-          this.cargando = false;
         });
 
         this.auth.isUserAdmin(user.uid)

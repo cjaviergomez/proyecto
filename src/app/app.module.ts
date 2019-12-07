@@ -44,12 +44,15 @@ import { ResetPassComponent } from './components/reset-pass/reset-pass.component
 import { ProcesoComponent } from './components/proceso/proceso.component';
 import { PreguntasFrecuentesComponent } from './components/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './components/contacto/contacto.component';
-import { InfoAdminComponent } from './components/info-admin/info-admin.component';
 import { ProcesslistComponent } from './components/processlist/processlist.component';
 import { GenericForm } from './generic-form.component';
 import { StartProcessComponent } from './components/start-process/start-process.component';
 import { TasklistComponent } from './components/tasklist/tasklist.component';
 import { MyAddonModule } from './components/forms/remodelacion/myAddon.module';
+import { ComentariosComponent } from './components/comentarios/comentarios.component';
+import { UnidadesComponent } from './components/unidades/unidades.component';
+import { PerfilesComponent } from './components/perfiles/perfiles.component';
+import { ComentarioComponent } from './components/comentario/comentario.component';
 
 @NgModule({
   declarations: [
@@ -75,11 +78,14 @@ import { MyAddonModule } from './components/forms/remodelacion/myAddon.module';
     ProcesoComponent,
     PreguntasFrecuentesComponent,
     ContactoComponent,
-    InfoAdminComponent,
     ProcesslistComponent,
     GenericForm,
     StartProcessComponent,
-    TasklistComponent
+    TasklistComponent,
+    ComentariosComponent,
+    UnidadesComponent,
+    PerfilesComponent,
+    ComentarioComponent
   ],
   imports: [
     BrowserModule,

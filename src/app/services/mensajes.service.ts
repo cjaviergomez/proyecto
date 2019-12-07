@@ -67,8 +67,27 @@ export class MensajesService {
 	 }
 
 	// Metodo para borrar a un usuario de la base de datos de firebase.
-	deleteMensaje(id: string): void {
+	deleteMensaje(id: string) {
 		this.mensajeDoc = this.afs.doc<Mensaje>(`mensajes/${id}`);
-		this.mensajeDoc.delete();
+		return this.mensajeDoc.delete();
+  }
+
+
+	// Busca entre los mensajes almacenados en firebase los que tengan el correo indicado.
+  // Devuelve el observable que contiene los mensajes que ha enviado un usuario.
+  /**
+   *
+   * @param correo correo del usuario a identificar
+   */
+	getUserMessages(correo: string){
+		this.mensajesCollection = this.afs.collection<Mensaje>('mensajes', ref => ref.where('correo', '==', correo));
+		return this.mensajes = this.mensajesCollection.snapshotChanges()
+				.pipe(map( changes => {
+          return changes.map( action => {
+            const data = action.payload.doc.data() as Mensaje;
+						data.id = action.payload.doc.id;
+						return data;
+					})
+				}));
 	}
 }

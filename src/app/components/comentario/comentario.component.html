@@ -1,0 +1,51 @@
+<section id="profile" class="container">
+
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0"> Espere por favor </p>
+  </div>
+
+
+  <div *ngIf="!cargando" class="mt-5">
+    <div *ngIf="comentario" class="row justify-content-center">
+
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">
+            Mensaje
+          </div>
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>{{ comentario.mensaje }}</p>
+              <p class="text-muted"><small>{{ comentario.fecha }}</small></p>
+              <footer class="blockquote-footer"><cite title="Remite">{{ comentario.nombres }} {{comentario.apellidos}} - {{comentario.correo}}</cite></footer>
+            </blockquote>
+          </div>
+          <div class="row justify-content-center mb-2">
+            <button class="btn btn-danger ml-1" (click)="eliminarMensaje(comentario.id)">
+              <fa-icon [icon]="faTrash" title="Eliminar"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="row justify-content-center">
+      <button class="col-2 btn btn-primary btn-block mt-3" [routerLink]="['/comentarios']">Ver mensajes</button>
+    </div>
+
+    <div *ngIf="!comentario"
+          class="alert alert-info text-center mt-3 animated fadeIn faster">
+      <h4 class="alert-heading">Comentario no encontrado</h4>
+      <p>
+        <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+      </p>
+    </div>
+  </div>
+</section>

@@ -22,10 +22,13 @@ import { ResetPassComponent } from './components/reset-pass/reset-pass.component
 import { ProcesoComponent } from './components/proceso/proceso.component';
 import { PreguntasFrecuentesComponent } from './components/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './components/contacto/contacto.component';
-import { InfoAdminComponent } from './components/info-admin/info-admin.component';
 import { ProcesslistComponent } from './components/processlist/processlist.component';
 import { StartProcessComponent } from './components/start-process/start-process.component';
 import { TasklistComponent } from './components/tasklist/tasklist.component';
+import { ComentariosComponent } from './components/comentarios/comentarios.component';
+import { UnidadesComponent } from './components/unidades/unidades.component';
+import { PerfilesComponent } from './components/perfiles/perfiles.component';
+import { ComentarioComponent } from './components/comentario/comentario.component';
 
 // Guards
 import { AuthGuard } from './guards/auth.guard';
@@ -50,11 +53,14 @@ const appRoutes: Routes = [
   {path: 'config', component: ConfigComponent, canActivate: [AuthGuard]},
   {path: 'userMg', component: UserManagerComponent},
   {path: 'resetPass', component: ResetPassComponent},
-  {path: 'proceso', component: ProcesoComponent},
   {path: 'questions', component: PreguntasFrecuentesComponent},
   {path: 'contacto', component: ContactoComponent},
+  {path: 'comentarios', component: ComentariosComponent, canActivate: [AuthGuard]},
+  {path: 'comentario/:id', component: ComentarioComponent, canActivate: [AuthGuard]},
+  {path: 'unidades', component: UnidadesComponent, canActivate: [AuthGuard]},
+  {path: 'perfiles', component: PerfilesComponent, canActivate: [AuthGuard]},
+  {path: 'proceso', component: ProcesoComponent},
   {path: 'processlist', component: ProcesslistComponent, canActivate: [ AuthGuard ] },
-  {path: 'infoAdmin', component: InfoAdminComponent, canActivate: [AuthGuard]},
   {path: 'startprocess/:processdefinitionkey', component: StartProcessComponent, canActivate: [AuthGuard] },
   {path: 'tasklist', component: TasklistComponent },
   {path: 'tasklist/:id', component: TasklistComponent },

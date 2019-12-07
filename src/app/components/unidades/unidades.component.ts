@@ -4,22 +4,20 @@ import { takeUntil } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 
 // Servicios
-import { PerfilService } from '../../services/perfil.service';
 import { UnidadService } from '../../services/unidad.service';
 
 // Modelos
-import { Perfil } from 'app/models/perfil';
 import { Unidad } from 'app/models/unidad';
 
 // Iconos
 import { faPlus, faPen, faSyncAlt, faExclamation } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-info-admin',
-  templateUrl: './info-admin.component.html',
-  styleUrls: ['./info-admin.component.css']
+  selector: 'app-unidades',
+  templateUrl: './unidades.component.html',
+  styleUrls: ['./unidades.component.css']
 })
-export class InfoAdminComponent implements OnInit, OnDestroy {
+export class UnidadesComponent implements OnInit, OnDestroy {
 
   //Iconos
   faPlus = faPlus;
@@ -27,28 +25,15 @@ export class InfoAdminComponent implements OnInit, OnDestroy {
   faSyncAlt = faSyncAlt;
   faExclamation = faExclamation;
 
-  cargarPerfiles = true;
   unidad = new Unidad();
   cargarUnidades = true;
-  public perfiles: Perfil[] = [];
 	public unidades: Unidad[];
   private ngUnsubscribe: Subject<any> = new Subject<any>();
 
-  constructor(private perfilService: PerfilService,
-              private unidadService: UnidadService) { }
+  constructor(private unidadService: UnidadService) { }
 
   ngOnInit() {
-    this.getPerfiles();
     this.getUnidades();
-  }
-
-  getPerfiles() {
-    this.perfilService.getPerfiles()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe((perfiles)=>{
-      this.cargarPerfiles = false;
-      this.perfiles = perfiles;
-    });
   }
 
   getUnidades() {
@@ -79,4 +64,5 @@ export class InfoAdminComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
 	}
+
 }

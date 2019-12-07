@@ -1,77 +1,96 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="">CampusGIS</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item" *ngIf="!islogged">
-        <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Inicio</a>
-      </li>
-      <li class="nav-item" *ngIf="!islogged">
-        <a class="nav-link" [routerLink]="['/proceso']" [routerLinkActive]="['activado']">Proceso</a>
-      </li>
-      <li class="nav-item" *ngIf="!islogged">
-        <a class="nav-link" [routerLink]="['/questions']" [routerLinkActive]="['activado']">Preguntas Frecuentes</a>
-      </li>
-      <li class="nav-item" *ngIf="!islogged">
-        <a class="nav-link" [routerLink]="['/contacto']" [routerLinkActive]="['activado']">Contáctanos</a>
-      </li>
-      <li class="nav-item" *ngIf="islogged">
-        <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
-      </li>
-      <li class="nav-item" *ngIf="islogged && isVerificador">
-        <a class="nav-link" [routerLink]="['/usuarios']" [routerLinkActive]="['activado']">Usuarios</a>
-      </li>
-      <li class="nav-item" *ngIf="islogged">
-        <a class="nav-link" [routerLink]="['/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
-      </li>
-      <li class="nav-item" *ngIf="islogged">
-        <a class="nav-link" [routerLink]="['/reformas']" [routerLinkActive]="['activado']">Reformas</a>
-      </li>
-      <li class="nav-item" *ngIf="islogged && isAgregador">
-        <a class="nav-link" [routerLink]="['/infoAdmin']" [routerLinkActive]="['activado']">UAAs/Perfiles</a>
-      </li>
+<!--Menú para usuarios no logueados-->
+<div *ngIf="!islogged; else logueado">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="">CampusGIS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    </ul>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/proceso']" [routerLinkActive]="['activado']">Proceso</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/questions']" [routerLinkActive]="['activado']">Preguntas Frecuentes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/contacto']" [routerLinkActive]="['activado']">Contáctanos</a>
+        </li>
+      </ul>
 
-    <span class="navbar-text m-0 p-0">
+      <span class="navbar-text m-0 p-0">
 
-      <button *ngIf="!islogged"
-              [routerLink]="['/login']"
-              [routerLinkActive]="['active']"
-							type="button"
-							class="btn btn-outline-primary btn-sm mr-2">Ingresar</button>
-      <button *ngIf="!islogged"
-              [routerLink]="['/registro']"
-              [routerLinkActive]="['active']"
-        			type="button"
-              class="btn btn-outline-primary btn-sm">Registrarse</button>
+        <button [routerLink]="['/login']"
+                [routerLinkActive]="['active']"
+                type="button"
+                class="btn btn-outline-primary btn-sm mr-2">Ingresar</button>
+        <button [routerLink]="['/registro']"
+                [routerLinkActive]="['active']"
+                type="button"
+                class="btn btn-outline-primary btn-sm">Registrarse</button>
+      </span>
+    </div>
+  </nav>
+</div>
 
-      <div *ngIf="islogged && !cargando" class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <p class="mt-2"> {{ usuario.nombres }} <span class="perfil">({{usuario.perfil.nombre}}) </span> </p>
+<!--Menú para usuarios logueados-->
+<ng-template #logueado>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="">CampusGIS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText2" aria-controls="navbarText2" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText2">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
+        </li>
+        <li class="nav-item" *ngIf="isVerificador">
+          <a class="nav-link" [routerLink]="['/usuarios']" [routerLinkActive]="['activado']">Usuarios</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/reformas']" [routerLinkActive]="['activado']">Reformas</a>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isVerificador">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Otros
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" [routerLink]="['/perfiles']">Perfiles</a>
+            <a class="dropdown-item" [routerLink]="['/unidades']">UAAs</a>
+            <a class="dropdown-item" [routerLink]="['/comentarios']">Comentarios</a>
+          </div>
+        </li>
+      </ul>
 
-          <li class="nav-item dropdown">
-
-            <a class="nav-link dropdown-toggle alinear" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src="{{ usuario.photoUrl }}" class="rounded-circle dataPerfil" alt="profile">
-            </a>
-
-
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/perfil', usuario.id]">Perfil</a>
-              <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/config']">Configuración</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item alCentro" [routerLink]="['/home']" (click)="salir()" style="color: #000000;" >Cerrar Sesión</a>
-
-            </div>
-          </li>
-        </ul>
-      </div>
-    </span>
-  </div>
-</nav>
+      <span class="navbar-text m-0 p-0">
+        <div class="collapse navbar-collapse" *ngIf="usuario">
+          <ul class="navbar-nav mr-auto">
+            <p class="mt-2"> {{ usuario.nombres }} <span class="perfil">({{usuario.perfil.nombre}}) </span> </p>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle alinear" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="{{ usuario.photoUrl }}" class="rounded-circle dataPerfil" alt="profile">
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/perfil', usuario.id]">Perfil</a>
+                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/config']">Configuración</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item alCentro" [routerLink]="" (click)="salir()" style="color: #000000;" >Cerrar Sesión</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </span>
+    </div>
+  </nav>
+</ng-template>
 
 <section id="main">
     <ngx-spinner

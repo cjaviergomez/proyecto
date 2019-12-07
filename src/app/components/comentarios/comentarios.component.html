@@ -1,0 +1,65 @@
+<!--Mensajes-->
+<div *ngIf="!cargarMensajes" class="container mt-4">
+
+    <div class="row mt-2">
+      <div class="col">
+          <h3>Mensajes</h3>
+      </div>
+    </div>
+    <table *ngIf="!cargarMensajes && mensajes.length > 0"
+            class="table mt-3 animated fadeIn faster animated fadeIn faster">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombres</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let mensaje of mensajes; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ mensaje.nombres }}</td>
+          <td>{{ mensaje.apellidos }}</td>
+          <td> {{ mensaje.fecha }}</td>
+          <td>
+              <label *ngIf="mensaje.estado == 'Leido'" class="badge badge-success">Leido</label>
+              <label *ngIf="mensaje.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
+          </td>
+
+          <td>
+            <button [routerLink]="['/comentario', mensaje.id]"
+                    class="btn btn-primary">
+              <fa-icon [icon]="faEye" title="Ver mensaje"></fa-icon>
+            </button>
+
+            <button class="btn btn-danger ml-1" (click)="eliminarMensaje(mensaje.id)">
+              <fa-icon [icon]="faTrash" title="Eliminar"></fa-icon>
+            </button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!cargarMensajes && mensajes.length === 0"
+          class="alert alert-primary text-center mt-3 animated fadeIn faster">
+        <h4 class="alert-heading">No hay Mensajes</h4>
+        <p>
+            <fa-icon [icon]="faExclamation" size="2x"></fa-icon>
+        </p>
+    </div>
+  </div>
+
+
+  <div *ngIf="cargarMensajes"
+        class="alert alert-info text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Cargando mensajes</h4>
+    <p>
+        <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>

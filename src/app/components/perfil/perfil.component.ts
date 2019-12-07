@@ -25,7 +25,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   public unidad: Unidad;
   public areatecnica: AreaTecnica;
-  usuario: Usuario = new Usuario();
+  usuario: Usuario;
   cargando = false;
 
   private ngUnsubscribe: Subject<any> = new Subject<any>(); // Observable para desubscribir todos los observables
