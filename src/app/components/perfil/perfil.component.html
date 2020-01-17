@@ -34,8 +34,12 @@
 
           <div class="mb-2" *ngIf="unidad">
             <hr>
-            <span>UAA perteneciente: {{ unidad.nombre}}</span>
-            <span>Cargo: {{ usuario.cargo}}</span>
+            <div class="col">
+              <span>UAA perteneciente: {{ unidad.nombre}}</span>
+            </div>
+            <div class="col">
+              <span>Cargo: {{ usuario.cargo}}</span>
+            </div>
           </div>
           <div class="mb-2" *ngIf="areatecnica">
             <hr>

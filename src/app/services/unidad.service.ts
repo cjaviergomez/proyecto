@@ -51,9 +51,11 @@ export class UnidadService {
 		}));
   }
 
-  // TODO: Falta implementar metodo.
-  updateUnidad(unidad: Unidad):void {}
+  updateUnidad(unidad: Unidad) {
+    let idUnidad = unidad.id;
+		delete unidad.id; // Le borramos el id al usuario para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
+		this.unidadDoc = this.afs.doc<Unidad>(`unidades/${idUnidad}`);
+		return this.unidadDoc.update(unidad);
+  }
 
-  // TODO: Falta implementar metodo.
-  deleteUnidad( id: string):void {}
 }
