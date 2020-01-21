@@ -47,25 +47,25 @@
     <div class="collapse navbar-collapse" id="navbarText2">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/map']" [routerLinkActive]="['activado']">Mapa</a>
+          <a class="nav-link" [routerLink]="['/modIn/map']" [routerLinkActive]="['activado']">Mapa</a>
         </li>
         <li class="nav-item" *ngIf="isVerificador">
-          <a class="nav-link" [routerLink]="['/usuarios']" [routerLinkActive]="['activado']">Usuarios</a>
+          <a class="nav-link" [routerLink]="['/modAdmin/usuarios']" [routerLinkActive]="['activado']">Usuarios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
+          <a class="nav-link" [routerLink]="['/modSolicitudes/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/reformas']" [routerLinkActive]="['activado']">Reformas</a>
+          <a class="nav-link" [routerLink]="['/modReformas/reformas']" [routerLinkActive]="['activado']">Reformas</a>
         </li>
         <li class="nav-item dropdown" *ngIf="isVerificador">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Otros
+            Admin
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" [routerLink]="['/perfiles']">Perfiles</a>
-            <a class="dropdown-item" [routerLink]="['/unidades']">UAAs</a>
-            <a class="dropdown-item" [routerLink]="['/comentarios']">Comentarios</a>
+            <a class="dropdown-item" [routerLink]="['/modAdmin/perfiles']">Perfiles</a>
+            <a class="dropdown-item" [routerLink]="['/modAdmin/unidades']">UAAs</a>
+            <a class="dropdown-item" [routerLink]="['/modAdmin/comentarios']">Comentarios</a>
           </div>
         </li>
       </ul>
@@ -79,8 +79,8 @@
                 <img src="{{ usuario.photoUrl }}" class="rounded-circle dataPerfil" alt="profile">
               </a>
               <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/perfil', usuario.id]">Perfil</a>
-                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/config']">Configuración</a>
+                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/modIn/perfil', usuario.id]">Perfil</a>
+                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/modIn/config']">Configuración</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item alCentro" [routerLink]="" (click)="salir()" style="color: #000000;" >Cerrar Sesión</a>
               </div>

@@ -23,69 +23,16 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
 // Componentes
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
-import { ErrorComponent } from './components/error/error.component';
-import { SolicitudesListComponent } from './components/solicitudes-list/solicitudes-list.component';
-import { SolicitudAddComponent } from './components/solicitud-add/solicitud-add.component';
-import { SolicitudAddErrorComponent } from './components/solicitud-addError/solicitud-addError.component';
-import { SolicitudAddedComponent } from './components/solicitud-added/solicitud-added.component';
-import { SolicitudDetailComponent } from './components/solicitud-detail/solicitud-detail.component';
-import { SolicitudEditComponent } from './components/solicitud-edit/solicitud-edit.component';
-import { EsriMapComponent } from './components/map/map.component';
-import { FooterComponent} from './components/footer/footer.component';
-import { ReformasListComponent } from './components/reformas-list/reformas-list.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegistroComponent } from './components/registro/registro.component';
-import { UsuariosComponent } from './components/usuarios/usuarios.component';
-import { PerfilComponent } from './components/perfil/perfil.component';
-import { ConfigComponent } from './components/config/config.component';
-import { UserManagerComponent } from './components/user-manager/user-manager.component';
-import { ResetPassComponent } from './components/reset-pass/reset-pass.component';
-import { ProcesoComponent } from './components/proceso/proceso.component';
-import { PreguntasFrecuentesComponent } from './components/preguntas-frecuentes/preguntas-frecuentes.component';
-import { ContactoComponent } from './components/contacto/contacto.component';
-import { ProcesslistComponent } from './components/processlist/processlist.component';
-import { GenericForm } from './generic-form.component';
-import { StartProcessComponent } from './components/start-process/start-process.component';
-import { TasklistComponent } from './components/tasklist/tasklist.component';
-import { MyAddonModule } from './components/forms/remodelacion/myAddon.module';
-import { ComentariosComponent } from './components/comentarios/comentarios.component';
-import { UnidadesComponent } from './components/unidades/unidades.component';
-import { PerfilesComponent } from './components/perfiles/perfiles.component';
-import { ComentarioComponent } from './components/comentario/comentario.component';
+
+import { ErrorComponent } from './out/components/error/error.component';
+
+import { FooterComponent} from './out/components/footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     ErrorComponent,
-    SolicitudesListComponent,
-    SolicitudAddComponent,
-    SolicitudAddedComponent,
-    SolicitudAddErrorComponent,
-    SolicitudDetailComponent,
-    SolicitudEditComponent,
-    EsriMapComponent,
-    FooterComponent,
-    ReformasListComponent,
-    LoginComponent,
-    RegistroComponent,
-    UsuariosComponent,
-    PerfilComponent,
-    ConfigComponent,
-    UserManagerComponent,
-    ResetPassComponent,
-    ProcesoComponent,
-    PreguntasFrecuentesComponent,
-    ContactoComponent,
-    ProcesslistComponent,
-    GenericForm,
-    StartProcessComponent,
-    TasklistComponent,
-    ComentariosComponent,
-    UnidadesComponent,
-    PerfilesComponent,
-    ComentarioComponent
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +46,6 @@ import { ComentarioComponent } from './components/comentario/comentario.componen
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     AngularFireDatabaseModule,
-    MyAddonModule,
     NgxSpinnerModule // Spinner
   ],
   providers: [

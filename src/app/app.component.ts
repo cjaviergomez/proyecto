@@ -4,12 +4,12 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 //Servicios
-import { AuthService } from './services/auth.service';
-import { UsuarioService } from './services/usuario.service';
+import { AuthService } from './out/services/auth.service';
+import { UsuarioService } from './admin/services/usuario.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 // Models
-import { Usuario } from './models/usuario';
+import { Usuario } from './admin/models/usuario';
 
 @Component({
   selector: 'app-root',
