@@ -12,30 +12,34 @@ import { AuthService } from '../../out/services/auth.service';
 })
 export class VerificadorGuard implements  CanActivate {
 
-  public isAdmin: any = null;
+  public isVerificador: any = null;
 
   constructor(private auth: AuthService, private afsAuth: AngularFireAuth, private router: Router) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      this.auth.estaAutenticado().subscribe( user => {
-        if(user){
-          this.auth.isUserAdmin(user.uid).subscribe(userRole => {
-            if(userRole){
-              this.isAdmin = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
-            }
-          });
-        }
 
-      });
       return this.afsAuth.authState
         .pipe(take(1))
         .pipe(map(authState => !!authState))
         .pipe(tap(auth => {
-          if (!auth || this.isAdmin === null) {
-            this.router.navigate(['/login']);
-          }
+          this.auth.estaAutenticado().subscribe( user => {
+            if(user){
+              this.auth.isUserAdmin(user.uid).subscribe(userRole => {
+                if(userRole){
+                  this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
+                  if(!this.isVerificador){
+                    this.router.navigate(['/modIn/map']);
+                  }
+                }
+              });
+            } else if(!user) {
+              this.router.navigate(['/modOut/login']);
+            }
+          });
+
+
         }));
     }
 

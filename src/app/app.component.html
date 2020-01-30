@@ -9,26 +9,26 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['activado']">Inicio</a>
+          <a class="nav-link" [routerLink]="['/modOut/home']" [routerLinkActive]="['activado']">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/proceso']" [routerLinkActive]="['activado']">Proceso</a>
+          <a class="nav-link" [routerLink]="['/modOut/proceso']" [routerLinkActive]="['activado']">Proceso</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/questions']" [routerLinkActive]="['activado']">Preguntas Frecuentes</a>
+          <a class="nav-link" [routerLink]="['/modOut/questions']" [routerLinkActive]="['activado']">Preguntas Frecuentes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/contacto']" [routerLinkActive]="['activado']">Contáctanos</a>
+          <a class="nav-link" [routerLink]="['/modOut/contacto']" [routerLinkActive]="['activado']">Contáctanos</a>
         </li>
       </ul>
 
       <span class="navbar-text m-0 p-0">
 
-        <button [routerLink]="['/login']"
+        <button [routerLink]="['/modOut/login']"
                 [routerLinkActive]="['active']"
                 type="button"
                 class="btn btn-outline-primary btn-sm mr-2">Ingresar</button>
-        <button [routerLink]="['/registro']"
+        <button [routerLink]="['/modOut/registro']"
                 [routerLinkActive]="['active']"
                 type="button"
                 class="btn btn-outline-primary btn-sm">Registrarse</button>
@@ -58,14 +58,14 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/modReformas/reformas']" [routerLinkActive]="['activado']">Reformas</a>
         </li>
-        <li class="nav-item dropdown" *ngIf="isVerificador">
+        <li class="nav-item dropdown" *ngIf="isSolucionador || isAgregador">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Admin
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" [routerLink]="['/modAdmin/perfiles']">Perfiles</a>
-            <a class="dropdown-item" [routerLink]="['/modAdmin/unidades']">UAAs</a>
-            <a class="dropdown-item" [routerLink]="['/modAdmin/comentarios']">Comentarios</a>
+            <a class="dropdown-item" [routerLink]="['/modAdmin/perfiles']" *ngIf="isAgregador">Perfiles</a>
+            <a class="dropdown-item" [routerLink]="['/modAdmin/unidades']" *ngIf="isAgregador">UAAs</a>
+            <a class="dropdown-item" [routerLink]="['/modAdmin/comentarios']" *ngIf="isSolucionador">Comentarios</a>
           </div>
         </li>
       </ul>

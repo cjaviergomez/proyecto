@@ -30,12 +30,12 @@
           </td>
 
           <td>
-            <button [routerLink]="['/comentario', mensaje.id]"
+            <button [routerLink]="['/modAdmin/comentario', mensaje.id]"
                     class="btn btn-primary">
               <fa-icon [icon]="faEye" title="Ver mensaje"></fa-icon>
             </button>
 
-            <button class="btn btn-danger ml-1" (click)="eliminarMensaje(mensaje.id)">
+            <button class="btn btn-secondary ml-1" (click)="eliminarMensaje(mensaje.id)">
               <fa-icon [icon]="faTrash" title="Eliminar"></fa-icon>
             </button>
 

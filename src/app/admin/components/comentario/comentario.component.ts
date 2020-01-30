@@ -11,7 +11,7 @@ import { MensajesService } from '../../services/mensajes.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
 
 // Iconos
-import { faExclamation, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faExclamation, faSyncAlt, faTrash, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-comentario',
@@ -28,6 +28,7 @@ export class ComentarioComponent implements OnInit, OnDestroy {
   faExclamation = faExclamation; // Icono de exclamación.
   faSyncAlt = faSyncAlt; // Icono que gira al cargar los datos.
   faTrash = faTrash; // Icono de eliminar.
+  faArrowLeft = faArrowLeft; // Icono de regresar
 
   constructor(private route: ActivatedRoute,
               private router: Router,

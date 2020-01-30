@@ -13,6 +13,8 @@ import { ComentariosComponent } from './components/comentarios/comentarios.compo
 import { ComentarioComponent } from './components/comentario/comentario.component';
 import { UnidadesComponent } from './components/unidades/unidades.component';
 import { PerfilesComponent } from './components/perfiles/perfiles.component';
+import { PerfilAdminComponent } from './components/perfil-admin/perfil-admin.component';
+import { PerfilEditComponent } from './components/perfil-edit/perfil-edit.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { PerfilesComponent } from './components/perfiles/perfiles.component';
     ComentariosComponent,
     ComentarioComponent,
     UnidadesComponent,
-    PerfilesComponent
+    PerfilesComponent,
+    PerfilAdminComponent,
+    PerfilEditComponent
   ],
   imports: [
     CommonModule,

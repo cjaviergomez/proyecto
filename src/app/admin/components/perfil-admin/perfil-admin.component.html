@@ -1,0 +1,137 @@
+
+<div class="container mt-3">
+  <div *ngIf="id === 'nuevo'">
+    <h1><small>Crear Perfil</small> </h1>
+  </div>
+  <div *ngIf="id !== 'nuevo'">
+    <h1><small>Actualizar Perfil</small> </h1>
+  </div>
+  <hr>
+
+
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-secondary"
+              routerLink="/modAdmin/perfiles">
+        <fa-icon [icon]="faArrowLeft" title="Regresar"></fa-icon>
+        Regresar
+      </button>
+    </div>
+  </div>
+
+  <div class="row animated fadeIn faster">
+    <div class="col">
+
+      <form (ngSubmit)="guardar( f )"
+            #f="ngForm">
+
+        <div class="form-group">
+            <label>Nombre</label>
+            <input type="text"
+                  class="form-control"
+                  placeholder="Nombre del perfil"
+                  [(ngModel)]="perfil.nombre"
+                  name="nombre"
+                  required>
+        </div>
+
+        <div class="form-group">
+            <label>Descripción</label>
+            <input type="text"
+                  class="form-control"
+                  [(ngModel)]="perfil.descripcion"
+                  name="descripción"
+                  placeholder="Descripción">
+        </div>
+
+        <div class="form-group">
+          <label>Roles</label>
+          <div class="col">
+            <div class="form-check form-check-inline" *ngIf="roles.agregador !== null">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="inlineCheckbox1"
+                     [checked]="roles.agregador"
+                     (change)="roles.agregador = !roles.agregador">
+              <label class="form-check-label" for="inlineCheckbox1">Agregador</label>
+            </div>
+            <div class="form-check form-check-inline" *ngIf="roles.modificador !== null">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="inlineCheckbox2"
+                     [checked]="roles.modificador"
+                     (change)="roles.modificador = !roles.modificador">
+              <label class="form-check-label" for="inlineCheckbox2">Modificador</label>
+            </div>
+            <div class="form-check form-check-inline" *ngIf="roles.observador_general !== null">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="inlineCheckbox3"
+                     [checked]="roles.observador_general"
+                     (change)="roles.observador_general = !roles.observador_general">
+              <label class="form-check-label" for="inlineCheckbox3">Observador General</label>
+            </div>
+            <div class="form-check form-check-inline" *ngIf="roles.solucionador !== null">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="inlineCheckbox4"
+                     [checked]="roles.solucionador"
+                     (change)="roles.solucionador = !roles.solucionador">
+              <label class="form-check-label" for="inlineCheckbox4">Solucionador</label>
+            </div>
+            <div class="form-check form-check-inline" *ngIf="roles.gestor !== null">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="inlineCheckbox5"
+                     [checked]="roles.gestor"
+                     (change)="roles.gestor = !roles.gestor">
+              <label class="form-check-label" for="inlineCheckbox5">Gestor</label>
+            </div>
+            <div class="form-check form-check-inline" *ngIf="roles.interventor !== null">
+              <input class="form-check-input"
+                      type="checkbox"
+                      id="inlineCheckbox6"
+                      [checked]="roles.interventor"
+                      (change)="roles.interventor = !roles.interventor">
+              <label class="form-check-label" for="inlineCheckbox6">Interventor</label>
+            </div>
+            <div class="form-check form-check-inline" *ngIf="roles.creador !== null">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="inlineCheckbox7"
+                     [checked]="roles.creador"
+                     (change)="roles.creador = !roles.creador">
+              <label class="form-check-label" for="inlineCheckbox7">Creador</label>
+            </div>
+            <div class="form-check form-check-inline" *ngIf="roles.observador !== null">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="inlineCheckbox8"
+                     [checked]="roles.observador"
+                     (change)="roles.observador = !roles.observador">
+              <label class="form-check-label" for="inlineCheckbox8">Observador</label>
+            </div>
+
+          </div>
+        </div>
+
+
+        <hr>
+        <div class="form-group text-center">
+          <button type="submit"
+                  class="btn btn-primary w-25">
+            <fa-icon [icon]="faSave" title="Guardar"></fa-icon>
+            Guardar
+          </button>
+        </div>
+
+
+      </form>
+
+
+    </div>
+  </div>
+</div>
+
+
+

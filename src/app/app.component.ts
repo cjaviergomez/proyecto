@@ -22,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public islogged = false;
   public isVerificador: any = null;
   public isAgregador: any = null;
+  public isSolucionador: any = null;
   usuario: Usuario;
   private ngUnsubscribe: Subject<any> = new Subject<any>();
 
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   //Metodo para cerrar la sesiòn de un usuario haciendo uso del servicio
   salir(){
-    this.router.navigate(['/login']);
+    this.router.navigate(['/modOut/login']);
     this.auth.logout();
   }
 
@@ -61,6 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
           if(userRole){
             this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
             this.isAgregador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('agregador');
+            this.isSolucionador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('solucionador');
           }
         });
       } else {

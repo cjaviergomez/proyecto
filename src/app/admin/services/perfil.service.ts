@@ -28,8 +28,11 @@ export class PerfilService{
 		}));
 	}
 
-  // TODO: Falta implementar metodo.
-  addPerfil(perfil: Perfil) {}
+  // Metodo para agregar un perfil a la base de datos
+  addPerfil(perfil: Perfil) {
+    this.perfilesCollection = this.afs.collection<Perfil>('perfiles');
+    return this.perfilesCollection.add({nombre: perfil.nombre, roles: perfil.roles, descripcion: perfil.descripcion});
+  }
 
 	// Metodo para obtener un Perfil especifico de Firebase.
 	getPerfil(id: string) {
@@ -45,7 +48,18 @@ export class PerfilService{
 		}));
   }
 
-  // Por lógica de negocio no es necesario implementar los demás metodos del CRUD.
-  // No se crean los metodos Update y Delete.
+  //Metodo para actualizar un perfil de usuario.
+  updatePerfil(perfil: Perfil) {
+    let idPerfil = perfil.id;
+		delete perfil.id; // Le borramos el id para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
+		this.perfilDoc = this.afs.doc<Perfil>(`perfiles/${idPerfil}`);
+		return this.perfilDoc.update(perfil);
+  }
+
+  // Metodo para borrar un perfil de la base de datos de firebase.
+	deletePerfil(id: string) {
+		this.perfilDoc = this.afs.doc<Perfil>(`perfiles/${id}`);
+		return this.perfilDoc.delete();
+  }
 
 }

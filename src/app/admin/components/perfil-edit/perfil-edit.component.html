@@ -1,0 +1,224 @@
+<section id="profile" class="container">
+
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <i class="fa fa-sync-alt fa-spin fa-2x"></i>
+    </p>
+    <p class="mb-0"> Espere por favor </p>
+  </div>
+
+
+  <div *ngIf="!cargando" class="row mb-5 mt-5">
+    <div *ngIf="usuario" class="offset-lg-4 col-lg-4 col-sm-6 col-12 main-section text-center card">
+      <div class="row user-details">
+        <form #formRegistro="ngForm" (ngSubmit)="onSubmit(formRegistro)" novalidate="" class="form-signin">
+          <div class="col-12 mt-2">
+            <img src="{{ usuario.photoUrl }}" class="rounded-circle img-thumbnail" alt="profile">
+            <input type="text"
+                  #inputNombres="ngModel"
+                  name="inputNombres"
+                  [(ngModel)]="usuario.nombres"
+                  [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['inputNombres'].errors }"
+                  id="inputNombres"
+                  class="form-control mt-3 text-center"
+                  minlength="10"
+                  maxlength="40"
+                  pattern="[A-Z a-z]+"
+                  required>
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['inputNombres'].errors">
+                    Introduce un nombre válido.
+            </div>
+            <p class="mt-2">{{ usuario.correo }}</p>
+
+            <hr>
+            <div class="mt-2">
+              <select class="form-control text-center"
+                      #selectPerfil="ngModel"
+                      (change)="onChange($event.target.value)"
+                      name="selectPerfil"
+                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectPerfil'].errors }"
+                      [(ngModel)]="usuario.perfil.id" required>
+                    <option value="usuario.perfil.id" disabled>Seleccione un perfil</option>
+                    <option *ngFor="let perfil of perfiles"
+                      [value]="perfil.id"> {{ perfil.nombre }} </option>
+              </select>
+              <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectPerfil'].errors">
+                      Elige un perfil.
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <label>Roles</label>
+              <div class="col">
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.agregador !== null">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="inlineCheckbox1"
+                         [checked]="usuario.perfil.roles.agregador"
+                         (change)="usuario.perfil.roles.agregador = !usuario.perfil.roles.agregador">
+                  <label class="form-check-label" for="inlineCheckbox1">Agregador</label>
+                </div>
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.modificador !== null">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="inlineCheckbox2"
+                         [checked]="usuario.perfil.roles.modificador"
+                         (change)="usuario.perfil.roles.modificador = !usuario.perfil.roles.modificador">
+                  <label class="form-check-label" for="inlineCheckbox2">Modificador</label>
+                </div>
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.observador_general !== null">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="inlineCheckbox3"
+                         [checked]="usuario.perfil.roles.observador_general"
+                         (change)="usuario.perfil.roles.observador_general = !usuario.perfil.roles.observador_general">
+                  <label class="form-check-label" for="inlineCheckbox3">Observador General</label>
+                </div>
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.solucionador !== null">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="inlineCheckbox4"
+                         [checked]="usuario.perfil.roles.solucionador"
+                         (change)="usuario.perfil.roles.solucionador = !usuario.perfil.roles.solucionador">
+                  <label class="form-check-label" for="inlineCheckbox4">Solucionador</label>
+                </div>
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.gestor !== null">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="inlineCheckbox5"
+                         [checked]="usuario.perfil.roles.gestor"
+                         (change)="usuario.perfil.roles.gestor = !usuario.perfil.roles.gestor">
+                  <label class="form-check-label" for="inlineCheckbox5">Gestor</label>
+                </div>
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.interventor !== null">
+                  <input class="form-check-input"
+                          type="checkbox"
+                          id="inlineCheckbox6"
+                          [checked]="usuario.perfil.roles.interventor"
+                          (change)="usuario.perfil.roles.interventor = !usuario.perfil.roles.interventor">
+                  <label class="form-check-label" for="inlineCheckbox6">Interventor</label>
+                </div>
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.creador !== null">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="inlineCheckbox7"
+                         [checked]="usuario.perfil.roles.creador"
+                         (change)="usuario.perfil.roles.creador = !usuario.perfil.roles.creador">
+                  <label class="form-check-label" for="inlineCheckbox7">Creador</label>
+                </div>
+                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.observador !== null">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         id="inlineCheckbox8"
+                         [checked]="usuario.perfil.roles.observador"
+                         (change)="usuario.perfil.roles.observador = !usuario.perfil.roles.observador">
+                  <label class="form-check-label" for="inlineCheckbox8">Observador</label>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="mb-2" *ngIf="usuario.perfil.nombre === 'Solicitante'">
+              <hr>
+              <div class="col">
+                <label>UAA</label>
+                <br>
+                <select class="form-control"
+                        #selectUnidad="ngModel"
+                        name="selectUnidad"
+                        [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectUnidad'] && formRegistro.controls['selectUnidad'].errors }"
+                        [(ngModel)]="usuario.unidad_id" required>
+                      <option value="null" disabled>Seleccione una UAA</option>
+                      <option *ngFor="let unidad of unidades"
+                        [value]="unidad.id"> {{ unidad.nombre }} </option>
+                </select>
+                <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectUnidad'] && formRegistro.controls['selectUnidad'].errors">
+                        Elige la unidad a la que pertenece.
+                </div>
+              </div>
+              <div class="col">
+                <input type="text"
+                        #inputCargo="ngModel"
+                        name="inputCargo"
+                        [(ngModel)]="usuario.cargo"
+                        [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['inputCargo'] && formRegistro.controls['inputCargo'].errors }"
+                        id="inputCargo"
+                        class="form-control mt-2"
+                        minlength="4"
+                        maxlength="40"
+                        pattern="[A-Z a-z]+"
+                        placeholder="Introduce un cargo" required>
+                    <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['inputCargo'] && formRegistro.controls['inputCargo'].errors">
+                          Introduce un cargo válido.
+                    </div>
+              </div>
+            </div>
+
+            <div class="mb-2" *ngIf="usuario.perfil.nombre === 'UAA Asesora'">
+              <hr>
+              <label>Área Técnica</label>
+              <br>
+              <select class="form-control"
+                      #selectArea="ngModel"
+                      name="selectArea"
+                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['selectArea'] && formRegistro.controls['selectArea'].errors }"
+                      [(ngModel)]="usuario.area_id" required>
+                    <option value=" " disabled>Seleccione area técnica</option>
+                    <option *ngFor="let area of areasTecnicas"
+                      [value]="area.id"> {{ area.nombre }} </option>
+              </select>
+              <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['selectArea'] && formRegistro.controls['selectArea'].errors">
+                      Elige el área a la que pertenece.
+              </div>
+            </div>
+            <hr>
+            <div class="form-group">
+              <label>Estado</label>
+              <br>
+
+              <button *ngIf="usuario.estado === 'Activado'"
+                      (click)="usuario.estado = 'Desactivado'"
+                      class="btn btn-outline-success w-50" type="button">
+                <fa-icon [icon]="faSmileWink" title="Activo"></fa-icon>
+                Activado
+              </button>
+
+              <button *ngIf="usuario.estado === 'Desactivado'"
+                      (click)="usuario.estado = 'Activado'"
+                      class="btn btn-outline-danger w-50" type="button">
+                  <fa-icon [icon]="faDizzy" title="Desactivado"></fa-icon>
+                  Desactivado
+              </button>
+
+              <button *ngIf="usuario.estado === 'Pendiente'"
+                      (click)="usuario.estado = 'Activado'"
+                      class="btn btn-outline-warning w-50" type="button">
+                <fa-icon [icon]="faGrinBeamSweat" title="Pendiente"></fa-icon>
+                Pendiente
+              </button>
+
+            </div>
+
+            <div class="col" *ngIf="isVerificador && usuario">
+              <button type="submit"
+                      class="btn btn-secondary mt-2 mb-2">
+                      <fa-icon [icon]="faSave" title="Guardar"></fa-icon>
+                      Guardar
+              </button>
+            </div>
+          </div>
+        </form>
+       </div>
+    </div>
+
+    <div *ngIf="!usuario"
+          class="alert alert-primary text-center animated fadeIn faster offset-lg-4 col-lg-4 col-sm-6 col-12 main-section card mt-5">
+      <h4 class="alert-heading">Usuario no encontrado</h4>
+      <p>
+        <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+      </p>
+    </div>
+
+  </div>
+</section>

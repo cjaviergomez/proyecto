@@ -4,12 +4,13 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 // Iconos
-import { faExclamation, faUserCheck, faUserSecret, faUserTie, faUserNinja, faUsersCog, faDatabase, faUserTag, faFolderPlus, faTasks } from '@fortawesome/free-solid-svg-icons';
+import { faExclamation, faUserCheck, faUserSecret, faUserTie, faUserNinja, faUsersCog, faDatabase, faUserTag, faFolderPlus, faTasks, faPen } from '@fortawesome/free-solid-svg-icons';
 
 //Servicios
 import { UsuarioService } from '../../../admin/services/usuario.service';
 import { UnidadService } from '../../../admin/services/unidad.service';
 import { AreaTecnicaService } from '../../../admin/services/areaTecnica.service';
+import { AuthService } from '../../../out/services/auth.service';
 
 // Models
 import { Usuario } from '../../../admin/models/usuario';
@@ -26,6 +27,8 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public unidad: Unidad;
   public areatecnica: AreaTecnica;
   usuario: Usuario;
+  usuarioLogin: Usuario;
+  public isVerificador: any = null;
   cargando = false;
 
   private ngUnsubscribe: Subject<any> = new Subject<any>(); // Observable para desubscribir todos los observables
@@ -41,13 +44,16 @@ export class PerfilComponent implements OnInit, OnDestroy {
   faUserTag = faUserTag; // Icono para el rol interventor.
   faFolderPlus = faFolderPlus; // Icono para el rol creador
   faTasks = faTasks; // Icono para el rol gestor.
+  faPen = faPen;  // Icono para el botón de editar.
 
   constructor(private route: ActivatedRoute,
               private usuarioService: UsuarioService,
               private unidadService: UnidadService,
-              private areaService: AreaTecnicaService){}
+              private areaService: AreaTecnicaService,
+              private auth: AuthService){}
 
   ngOnInit() {
+    this.getCurrentUser();
     const id = this.route.snapshot.paramMap.get('id'); // Se obtiene el id por la url
 
     this.cargando = true;
@@ -71,6 +77,23 @@ export class PerfilComponent implements OnInit, OnDestroy {
         .subscribe( areatecnica => {
           // Se obtiene la información del area técnica desde la base de datos de firebase.
           this.areatecnica = areatecnica;
+        });
+      }
+    });
+  }
+
+  // Metodo para saber si el usuario logeado tiene el rol verificador y pueda editar la información.
+  getCurrentUser(){
+    this.auth.estaAutenticado()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( user => {
+      if(user){
+        this.auth.isUserAdmin(user.uid)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(userRole => {
+          if(userRole){
+            this.isVerificador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('verificador');
+          }
         });
       }
     });

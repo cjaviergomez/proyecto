@@ -10,9 +10,9 @@ import { AuthService } from '../../out/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AgregadorGuard implements CanActivate {
+export class SolucionadorGuard implements CanActivate {
 
-  public isAgregador: any = null;
+  public isSolucionador: any = null;
 
   constructor(private auth: AuthService, private afsAuth: AngularFireAuth, private router: Router) { }
 
@@ -28,8 +28,8 @@ export class AgregadorGuard implements CanActivate {
             if(user){
               this.auth.isUserAdmin(user.uid).subscribe(userRole => {
                 if(userRole){
-                  this.isAgregador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('agregador');
-                  if(!this.isAgregador){
+                  this.isSolucionador = Object.assign({}, userRole.perfil.roles).hasOwnProperty('solucionador');
+                  if(!this.isSolucionador){
                     this.router.navigate(['/modIn/map']);
                   }
                 }

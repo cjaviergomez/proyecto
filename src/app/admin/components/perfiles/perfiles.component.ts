@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 // Servicios
 import { PerfilService } from '../../services/perfil.service';
@@ -9,7 +10,7 @@ import { PerfilService } from '../../services/perfil.service';
 import { Perfil } from 'app/admin/models/perfil';
 
 // Iconos
-import { faPlus, faPen, faSyncAlt, faExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPen, faSyncAlt, faExclamation, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-perfiles',
@@ -23,6 +24,7 @@ export class PerfilesComponent implements OnInit, OnDestroy {
   faPen =  faPen;
   faSyncAlt = faSyncAlt;
   faExclamation = faExclamation;
+  faTrash = faTrash;
 
   cargarPerfiles = true;
   public perfiles: Perfil[] = [];
@@ -41,6 +43,26 @@ export class PerfilesComponent implements OnInit, OnDestroy {
       this.cargarPerfiles = false;
       this.perfiles = perfiles;
     });
+  }
+
+  borrarPerfil( perfil: Perfil, i: number ) {
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `Está seguro que desea borrar a ${ perfil.nombre }`,
+      type: 'question',
+      showConfirmButton: true,
+      showCancelButton: true
+    }).then( resp => {
+      if ( resp.value ) {
+        this.perfilService.deletePerfil( perfil.id ).then(()=>{
+          this.perfiles.splice(i, 1);
+        });
+      }
+
+    });
+
+
+
   }
 
    /**
