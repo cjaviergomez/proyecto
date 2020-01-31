@@ -59,14 +59,7 @@
                          (change)="usuario.perfil.roles.agregador = !usuario.perfil.roles.agregador">
                   <label class="form-check-label" for="inlineCheckbox1">Agregador</label>
                 </div>
-                <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.modificador !== null">
-                  <input class="form-check-input"
-                         type="checkbox"
-                         id="inlineCheckbox2"
-                         [checked]="usuario.perfil.roles.modificador"
-                         (change)="usuario.perfil.roles.modificador = !usuario.perfil.roles.modificador">
-                  <label class="form-check-label" for="inlineCheckbox2">Modificador</label>
-                </div>
+
                 <div class="form-check form-check-inline" *ngIf="usuario.perfil.roles.observador_general !== null">
                   <input class="form-check-input"
                          type="checkbox"

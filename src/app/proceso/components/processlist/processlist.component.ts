@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 // Services
 import { CamundaRestService } from '../../services/camunda-rest.service';
@@ -18,9 +19,16 @@ export class ProcesslistComponent implements OnInit, OnDestroy {
   public isCreador: any = null;
 
   constructor(private camundaRestService: CamundaRestService,
+              private route: ActivatedRoute,
               private auth: AuthService) { }
 
   ngOnInit() {
+    const idCapa = this.route.snapshot.paramMap.get('idCapa'); // Se obtiene el id por la url
+    const edif = this.route.snapshot.paramMap.get('edif'); // Se obtiene el id por la url
+    const subCapa = this.route.snapshot.paramMap.get('subCapa');
+    const elem = this.route.snapshot.paramMap.get('elem');
+    const piso = this.route.snapshot.paramMap.get('piso');
+    console.log(idCapa, edif, subCapa, elem, piso);
     this.getCurrentUser();
     this.getProcessDefinitions();
   }

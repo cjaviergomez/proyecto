@@ -12,7 +12,6 @@ import { SolicitudEditComponent } from './components/solicitud-edit/solicitud-ed
 // Guards
 import { AuthGuard } from '../in/guards/auth.guard';
 
-
 const routes: Routes = [
   {path: 'solicitudes', component: SolicitudesListComponent, canActivate: [ AuthGuard ]},
   {path: 'crear-solicitud', component: SolicitudAddComponent },

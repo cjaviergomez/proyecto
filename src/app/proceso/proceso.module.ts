@@ -13,8 +13,6 @@ import { StartProcessComponent } from './components/start-process/start-process.
 import { TasklistComponent } from './components/tasklist/tasklist.component';
 import { MyAddonModule } from './forms/remodelacion/myAddon.module';
 
-
-
 @NgModule({
   declarations: [
     ProcesslistComponent,

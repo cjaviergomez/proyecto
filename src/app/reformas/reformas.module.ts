@@ -9,7 +9,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // Components
 import { ReformasListComponent } from './components/reformas-list/reformas-list.component';
 
-
 @NgModule({
   declarations: [
     ReformasListComponent
