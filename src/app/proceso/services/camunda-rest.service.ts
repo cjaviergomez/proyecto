@@ -17,12 +17,18 @@ const httpOptions = {
 export class CamundaRestService {
   private engineRestUrl = '/engine-rest/'
 
-  constructor(private http: HttpClient) {
-
-  }
+  constructor(private http: HttpClient) {}
 
   getTasks(): Observable<Task[]> {
     const endpoint = `${this.engineRestUrl}task?sortBy=created&sortOrder=desc&maxResults=10`;
+    return this.http.get<any>(endpoint).pipe(
+      tap(form => this.log(`fetched tasks`)),
+      catchError(this.handleError('getTasks', []))
+    );
+  }
+
+  getTasksProcess(idProcess: string): Observable<Task[]> {
+    const endpoint = `${this.engineRestUrl}task?processInstanceId=${idProcess}`;
     return this.http.get<any>(endpoint).pipe(
       tap(form => this.log(`fetched tasks`)),
       catchError(this.handleError('getTasks', []))

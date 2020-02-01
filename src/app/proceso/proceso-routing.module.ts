@@ -13,9 +13,9 @@ import { CreadorGuard } from './guards/creador.guard';
 
 const routes: Routes = [
   {path: 'processlist/:idCapa/:edif/:subCapa/:elem/:piso', component: ProcesslistComponent, canActivate: [ CreadorGuard ] },
-  {path: 'startprocess/:processdefinitionkey', component: StartProcessComponent, canActivate: [AuthGuard] },
+  {path: 'startprocess/:processdefinitionkey/:idCapa/:edif/:subCapa/:elem/:piso', component: StartProcessComponent, canActivate: [AuthGuard] },
   {path: 'tasklist', component: TasklistComponent },
-  {path: 'tasklist/:id', component: TasklistComponent },
+  {path: 'tasklist/:id', component: TasklistComponent }
 ];
 
 @NgModule({

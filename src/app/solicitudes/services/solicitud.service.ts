@@ -28,14 +28,19 @@ export class SolicitudService {
 		}));
 	}
 
-  // TODO: Falta implementar metodo.
+  //Metodo para agregar solicitudes a la base de datos.
   addSolicitud(solicitud: Solicitud){
     this.solicitudesCollection = this.afs.collection<Solicitud>('solicitudes');
-    this.solicitudesCollection.add({
+    return this.solicitudesCollection.add({
       estado: solicitud.estado,
       nombre_edificio: solicitud.nombre_edificio,
       piso_edificio: solicitud.piso_edificio,
-      usuario: solicitud.usuario
+      usuario: {
+        ...solicitud.usuario
+      },
+      objectID: solicitud.objectID,
+      nombre_subcapa: solicitud.nombre_subcapa,
+      idProcess: solicitud.idProcess
     });
   }
 

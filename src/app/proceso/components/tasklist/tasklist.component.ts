@@ -42,7 +42,7 @@ export class TasklistComponent implements OnInit {
 
   getTasks(): void {
     this.camundaRestService
-      .getTasks()
+      .getTasksProcess('244e51b6-447b-11ea-8ea4-9cb654491430')
       .subscribe(tasks => this.tasks = tasks);
   }
 

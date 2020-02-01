@@ -1,12 +1,14 @@
 import { Usuario } from '../../admin/models/usuario';
 export interface Solicitud {
-	id?: string,
-	nombre_edificio?: string,
-	piso_edificio?: number,
-	objectID?: number,
-  estado:string,
+	id?: string;
+	nombre_edificio?: string;
+  piso_edificio?: number;
+  fecha?: string;
+	objectID?: number;
+  estado:string;
   usuario?: Usuario;
-	formulario?:JSON
+  idProcess?: string;
+  nombre_subcapa?: string;
 
 
 		//seccion 1
