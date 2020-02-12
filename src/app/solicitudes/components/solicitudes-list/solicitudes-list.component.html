@@ -20,16 +20,19 @@
 </div>
 
 <!--Div para mostrar las solicitudes que se obtuvieron de la base de datos-->
-<div *ngIf="!cargando && solicitudes.length > 0">
+<div *ngIf="!cargando && solicitudes.length > 0" class="container mt-3">
 	<h3 id="centrado">{{titulo}}</h3>
-	<hr/>
+	<hr>
 
 	<div *ngFor="let solicitud of solicitudes">
 		<div class="card" style="width: 18rem;">
-			<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="card-img-top" alt="...">
+			<img src="../../../../assets/img/mecanica.png" class="card-img-top" alt="...">
 			<div class="card-body">
-				<h5 class="card-title">{{solicitud.nombre_edificio}}</h5>
-				<p class="card-text">{{solicitud.estado}}</p>
+        <h5 class="card-title">{{solicitud.nombre_edificio}}</h5>
+        <p class="card-text"> {{ solicitud.usuario.nombres }}</p>
+        <p class="card-text"> {{ solicitud.fecha }}</p>
+        <span class="badge badge-primary">{{ solicitud.estado }}</span>
+        <button type="button" class="btn btn-outline-primary btn-block mt-2"> Ver más...</button>
 			</div>
 		</div>
 	</div>

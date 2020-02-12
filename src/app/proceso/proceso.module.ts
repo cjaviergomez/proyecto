@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProcesoRoutingModule } from './proceso-routing.module';
-
 // FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -27,6 +26,7 @@ import { MyAddonModule } from './forms/remodelacion/myAddon.module';
     MyAddonModule,
     FormsModule,
     ReactiveFormsModule
-  ]
+  ],
+  providers:[DatePipe]
 })
 export class ProcesoModule { }

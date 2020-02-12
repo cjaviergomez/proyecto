@@ -1,30 +1,224 @@
-<div class="container jumbotron">
+<div class="m-3">
   <div [hidden]="submitted">
-    <h2>Iniciar nuevo proceso</h2>
-    <form (ngSubmit)="onSubmit()" #startNewProcess="ngForm" class="ui form">
-      <div class="field">
-        <label for="firstName">Nombres</label>
-        <input type="text" id="firstName" class="ml-2"
-               required
-               [(ngModel)]="model.firstName" name="firstName"
-               #name="ngModel">
+    <div class="card text-left">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" *ngIf="seccion == 1">Solicitante</a>
+            <a class="nav-link" *ngIf="seccion != 1">Solicitante</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" *ngIf="seccion == 2">Requerimientos</a>
+            <a class="nav-link" *ngIf="seccion != 2">Requerimientos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
+            <a class="nav-link" *ngIf="seccion != 3">Observaciones</a>
+          </li>
+        </ul>
       </div>
 
-      <div class="field">
-        <label for="lastName">Apellidos</label>
-        <input type="text" id="lastName" class="ml-2"
-               [(ngModel)]="model.lastName" name="lastName" #name="ngModel">
-      </div>
+      <form #formSolicitud="ngForm" (ngSubmit)="onSubmit()" novalidate="" >
+        <!-- Seccion 1-->
+        <div class="card-body" *ngIf="seccion == 1">
+          <div class="form-group" *ngIf="unidad">
+            <label for="unidad">UAA o entidad solicitante</label>
+            <input type="text" name="unidad" [(ngModel)]="unidad.nombre" class="form-control" disabled/>
+          </div>
 
-      <div class="field">
-        <button type="submit" class="btn btn-primary" [disabled]="!startNewProcess.form.valid">Iniciar</button>
-      </div>
-    </form>
+          <div class="form-row" *ngIf="solicitud">
+            <div class="form-group col-md-6">
+              <label for="fecha">Fecha de solicitud (dd/mm/aa)</label>
+              <input type="text" name="fecha" [(ngModel)]="solicitud.fecha" class="form-control" disabled/>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="hora">Hora:</label>
+              <input type="text" name="hora" [(ngModel)]="solicitud.hora" class="form-control" disabled />
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="usuario">
+            <label for="nombre">Nombre del solicitante</label>
+            <input type="text" name="nombre" [(ngModel)]="usuario.nombres" class="form-control" disabled />
+
+          </div>
+
+          <div class="form-row" *ngIf="solicitud">
+            <div class="form-group col">
+              <label for="descripcionServicio">Descripción del servicio solicitado</label>
+              <textarea #descripcion="ngModel" name="descripcion"
+                        [(ngModel)]="solicitud.descripcion"
+                        class="form-control"
+                        [ngClass]="{'is-invalid': !descripcion.valid && descripcion.touched }"
+                        required></textarea>
+              <div class="invalid-feedback" *ngIf="!descripcion.valid && descripcion.touched">
+                Este campo es requerido
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary col align-self-end" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid"> Siguiente</button>
+        </div>
+
+        <!-- Seccion 2-->
+        <div class="card-body" *ngIf="seccion == 2">
+          <div class="form-group">
+            <label for="materiales">Listado de materiales</label>
+            <div class="row">
+              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar..." [(ngModel)]="filterPost">
+              <button type="button" class="btn btn-primary col-1 ml-2" (click)="buscarMateriales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+            </div>
+          </div>
+
+          <label for="">Elementos de protección</label>
+          <div class="form-row">
+            <div class="form-group col-md-10">
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="respirador"
+                      name="respirador"
+                      [(ngModel)]="model.elementosProteccion">
+                  <label class="custom-control-label" for="respirador">Respirador</label>
+                </div>
+              </div>
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      name="guantes"
+                       [(ngModel)]="model.elementosProteccion"
+                      id="guantes">
+                  <label class="custom-control-label" for="guantes">Guantes</label>
+                </div>
+              </div>
+
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      name="trabajo"
+                       [(ngModel)]="model.elementosProteccion"
+                      id="trabajo">
+                  <label class="custom-control-label" for="trabajo">Trabajo en alturas</label>
+                </div>
+              </div>
+
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      name="gafas"
+                      [(ngModel)]="model.elementosProteccion"
+                      id="gafas">
+                  <label class="custom-control-label" for="gafas">Gafas</label>
+                </div>
+              </div>
+
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      name="otros"
+                      [(ngModel)]="model.elementosProteccion"
+                      class="custom-control-input"
+                      id="otros">
+                  <label class="custom-control-label" for="otros">Otros</label>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
+          <label for="">Especiales</label>
+          <div class="form-row">
+            <div class="form-group col-md-10">
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="energia"
+                      name="energia"
+                      [(ngModel)]="model.especiales">
+                  <label class="custom-control-label" for="energia">Corte de Energia</label>
+                </div>
+              </div>
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      name="agua"
+                       [(ngModel)]="model.especiales"
+                      id="agua">
+                  <label class="custom-control-label" for="agua">Corte de Agua</label>
+                </div>
+              </div>
+
+              <div class="form-group form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input
+                      type="checkbox"
+                      name="especialesOtros"
+                      [(ngModel)]="model.especiales"
+                      class="custom-control-input"
+                      id="especialesOtros">
+                  <label class="custom-control-label" for="especialesOtros">Otros</label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Botones-->
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <button class="btn btn-primary col align-self-end" (click) = "seccionAnterior()"> Atrás</button>
+            </div>
+            <div class="form-group col-md-6">
+              <button class="btn btn-primary col align-self-end" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid"> Siguiente</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Seccion 3-->
+        <div class="card-body" *ngIf="seccion == 3">
+          <div class="form-row">
+            <div class="form-group col">
+              <label for="observaciones">Observaciones (Opcional)</label>
+              <textarea name="observaciones" [(ngModel)]="model.observaciones" class="form-control" id="observaciones" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Botones-->
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <button class="btn btn-primary col align-self-end" (click) = "seccionAnterior()"> Atrás</button>
+            </div>
+            <div class="form-group col-md-6">
+              <button type="submit" class="btn btn-primary col align-self-end" [disabled]="!formSolicitud.form.valid"> Enviar</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+
   </div>
-  <div [hidden]="!submitted">
+  <div [hidden]="!submitted" class="container jumbotron">
     <p>Solicitud creada con éxito.</p>
     <button type="button" class="btn btn-primary" [routerLink]="['/modSolicitudes/solicitudes']" routerLinkActive="router-link-active" >
       Ver solicitudes
     </button>
   </div>
 </div>
+

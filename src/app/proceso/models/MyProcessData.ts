@@ -1,9 +1,15 @@
 export class MyProcessData {
 
-  constructor(
-    public firstName: string,
-    public lastName: string,
-    public approved: boolean
-  ) {  }
+  //seccion 2
+  public materiales?: [];
+  public elementosProteccion?: [];
+  public especiales?: [];
+  public observaciones?: string;
+
+  public approved: boolean;
+
+  constructor() {
+    this.approved = false;
+   }
 
 }
