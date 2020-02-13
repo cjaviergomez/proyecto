@@ -6,7 +6,7 @@ export interface Solicitud {
   fecha?: Date,
 	hora?: Date,
 	objectID?: number;
-  estado:string;
+  estado?:string;
   usuario?: Usuario;
   idProcess?: string;
   nombre_subcapa?: string;

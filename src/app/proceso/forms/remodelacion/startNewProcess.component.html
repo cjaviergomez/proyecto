@@ -1,155 +1,180 @@
 <div class="m-3">
   <div [hidden]="submitted">
-    <div class="card text-left">
-      <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
-          <li class="nav-item">
-            <a class="nav-link active" *ngIf="seccion == 1">Solicitante</a>
-            <a class="nav-link" *ngIf="seccion != 1">Solicitante</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" *ngIf="seccion == 2">Requerimientos</a>
-            <a class="nav-link" *ngIf="seccion != 2">Requerimientos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
-            <a class="nav-link" *ngIf="seccion != 3">Observaciones</a>
-          </li>
-        </ul>
+    <div *ngIf="!cargando">
+      <h4 class="text-center mb-2">Formulario de Solicitud</h4>
+      <div class="card text-left">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" *ngIf="seccion == 1">Solicitante</a>
+              <a class="nav-link" *ngIf="seccion != 1">Solicitante</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" *ngIf="seccion == 2">Requerimientos</a>
+              <a class="nav-link" *ngIf="seccion != 2">Requerimientos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
+              <a class="nav-link" *ngIf="seccion != 3">Observaciones</a>
+            </li>
+          </ul>
+        </div>
+
+        <form #formSolicitud="ngForm" (ngSubmit)="onSubmit()" novalidate="">
+          <!-- Seccion 1-->
+          <div class="card-body" *ngIf="seccion == 1">
+            <div class="form-group" *ngIf="unidad">
+              <label for="unidad">UAA o entidad solicitante</label>
+              <input type="text" name="unidad" [(ngModel)]="unidad.nombre" class="form-control" disabled/>
+            </div>
+
+            <div class="form-row" *ngIf="solicitud">
+              <div class="form-group col-md-6">
+                <label for="fecha">Fecha de solicitud (dd/mm/aa)</label>
+                <input type="text" name="fecha" [(ngModel)]="solicitud.fecha" class="form-control" disabled/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="hora">Hora:</label>
+                <input type="text" name="hora" [(ngModel)]="solicitud.hora" class="form-control" disabled />
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="usuario">
+              <label for="nombre">Nombre del solicitante</label>
+              <input type="text" name="nombre" [(ngModel)]="usuario.nombres" class="form-control" disabled />
+
+            </div>
+
+            <div class="form-row" *ngIf="solicitud">
+              <div class="form-group col">
+                <label for="descripcionServicio">Descripción del servicio solicitado</label>
+                <textarea #descripcion="ngModel" name="descripcion"
+                          [(ngModel)]="descripcionS"
+                          class="form-control"
+                          [ngClass]="{'is-invalid': !descripcion.valid && descripcion.touched }"
+                          required></textarea>
+                <div class="invalid-feedback" *ngIf="!descripcion.valid && descripcion.touched">
+                  Este campo es requerido
+                </div>
+              </div>
+            </div>
+
+            <div class="col text-right">
+              <button type="button" class="btn btn-primary" (click)="seccionSiguiente()" [disabled]="!formSolicitud.form.valid">
+                Siguiente
+                <fa-icon [icon]="faArrowCircleRight" title="Siguiente"></fa-icon>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Seccion 2-->
+          <div class="card-body" *ngIf="seccion == 2">
+            <div class="form-group">
+              <label for="materiales">Listado de materiales</label>
+              <div class="row">
+                <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar material..." [(ngModel)]="filterPost">
+                <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarMateriales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+                <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('material')">
+                  <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
+                    Nuevo
+                </button>
+              </div>
+
+              <div class="row">
+                <div *ngFor="let material of materialesUsuario; let i = index">
+                  <span class="badge badge-secondary mr-2 ml-2">{{ material.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i, 'material')"></fa-icon></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="materiales">Elementos de protección</label>
+              <div class="row">
+                <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar elemento de protección..." [(ngModel)]="filterElements">
+                <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarElementos()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+                <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('elemento')">
+                  <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
+                    Nuevo
+                </button>
+              </div>
+
+              <div class="row">
+                <div *ngFor="let elemento of elementosUsuario; let i = index">
+                  <span class="badge badge-secondary mr-2 ml-2">{{ elemento.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i, 'elemento')"></fa-icon></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="materiales">Especiales</label>
+              <div class="row">
+                <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar acción especial..." [(ngModel)]="filterEspecials">
+                <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarEspeciales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+                <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('especial')">
+                  <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
+                    Nuevo
+                </button>
+              </div>
+
+              <div class="row">
+                <div *ngFor="let especial of especialesUsuario; let i = index">
+                  <span class="badge badge-secondary mr-2 ml-2">{{ especial.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i, 'especial')"></fa-icon></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botones-->
+            <div class="col text-right">
+              <button type="button" class="btn btn-primary mr-1" (click)="seccionAnterior()">
+                <fa-icon [icon]="faArrowCircleLeft" title="Siguiente"></fa-icon>
+                Atrás
+              </button>
+
+              <button type="button" class="btn btn-primary" (click)="seccionSiguiente()" [disabled]="materialesUsuario.length === 0 || elementosUsuario.length === 0 || especialesUsuario.length === 0">
+                Siguiente
+                <fa-icon [icon]="faArrowCircleRight" title="Siguiente"></fa-icon>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Seccion 3-->
+          <div class="card-body" *ngIf="seccion == 3">
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="observaciones">Observaciones (Opcional)</label>
+                <textarea name="observaciones" [(ngModel)]="model.observaciones" class="form-control" id="observaciones" rows="3"></textarea>
+              </div>
+            </div>
+
+             <!-- Botones-->
+             <div class="col text-right">
+              <button type="button" class="btn btn-primary mr-1" (click)="seccionAnterior()">
+                <fa-icon [icon]="faArrowCircleLeft" title="Siguiente"></fa-icon>
+                Atrás
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="!formSolicitud.form.valid">
+                Enviar
+                <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
+              </button>
+            </div>
+
+          </div>
+        </form>
       </div>
+    </div>
 
-      <form #formSolicitud="ngForm" (ngSubmit)="onSubmit()" novalidate="" >
-        <!-- Seccion 1-->
-        <div class="card-body" *ngIf="seccion == 1">
-          <div class="form-group" *ngIf="unidad">
-            <label for="unidad">UAA o entidad solicitante</label>
-            <input type="text" name="unidad" [(ngModel)]="unidad.nombre" class="form-control" disabled/>
-          </div>
-
-          <div class="form-row" *ngIf="solicitud">
-            <div class="form-group col-md-6">
-              <label for="fecha">Fecha de solicitud (dd/mm/aa)</label>
-              <input type="text" name="fecha" [(ngModel)]="solicitud.fecha" class="form-control" disabled/>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="hora">Hora:</label>
-              <input type="text" name="hora" [(ngModel)]="solicitud.hora" class="form-control" disabled />
-            </div>
-          </div>
-
-          <div class="form-group" *ngIf="usuario">
-            <label for="nombre">Nombre del solicitante</label>
-            <input type="text" name="nombre" [(ngModel)]="usuario.nombres" class="form-control" disabled />
-
-          </div>
-
-          <div class="form-row" *ngIf="solicitud">
-            <div class="form-group col">
-              <label for="descripcionServicio">Descripción del servicio solicitado</label>
-              <textarea #descripcion="ngModel" name="descripcion"
-                        [(ngModel)]="solicitud.descripcion"
-                        class="form-control"
-                        [ngClass]="{'is-invalid': !descripcion.valid && descripcion.touched }"
-                        required></textarea>
-              <div class="invalid-feedback" *ngIf="!descripcion.valid && descripcion.touched">
-                Este campo es requerido
-              </div>
-            </div>
-          </div>
-
-          <button class="btn btn-primary col align-self-end" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid"> Siguiente</button>
-        </div>
-
-        <!-- Seccion 2-->
-        <div class="card-body" *ngIf="seccion == 2">
-          <div class="form-group">
-            <label for="materiales">Listado de materiales</label>
-            <div class="row">
-              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar material..." [(ngModel)]="filterPost">
-              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarMateriales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
-              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('material')">
-                <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
-                  Nuevo
-              </button>
-            </div>
-
-            <div class="row">
-              <div *ngFor="let material of materialesUsuario; let i = index">
-                <span class="badge badge-secondary mr-2 ml-2">{{ material.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i)"></fa-icon></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="materiales">Elementos de protección</label>
-            <div class="row">
-              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar elemento de protección..." [(ngModel)]="filterElements">
-              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarElementos()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
-              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('elemento')">
-                <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
-                  Nuevo
-              </button>
-            </div>
-
-            <div class="row">
-              <div *ngFor="let elemento of elementosUsuario; let i = index">
-                <span class="badge badge-secondary mr-2 ml-2">{{ elemento.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i)"></fa-icon></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="materiales">Especiales</label>
-            <div class="row">
-              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar acción especial..." [(ngModel)]="filterEspecials">
-              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarMateriales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
-              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('especial')">
-                <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
-                  Nuevo
-              </button>
-            </div>
-
-            <div class="row">
-              <div *ngFor="let especial of especialesUsuario; let i = index">
-                <span class="badge badge-secondary mr-2 ml-2">{{ especial.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i)"></fa-icon></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Botones-->
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <button class="btn btn-primary col align-self-end" (click) = "seccionAnterior()"> Atrás</button>
-            </div>
-            <div class="form-group col-md-6">
-              <button class="btn btn-primary col align-self-end" (click) = "seccionSiguiente()" [disabled]="!formSolicitud.form.valid"> Siguiente</button>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Seccion 3-->
-        <div class="card-body" *ngIf="seccion == 3">
-          <div class="form-row">
-            <div class="form-group col">
-              <label for="observaciones">Observaciones (Opcional)</label>
-              <textarea name="observaciones" [(ngModel)]="model.observaciones" class="form-control" id="observaciones" rows="3"></textarea>
-            </div>
-          </div>
-
-          <!-- Botones-->
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <button class="btn btn-primary col align-self-end" (click) = "seccionAnterior()"> Atrás</button>
-            </div>
-            <div class="form-group col-md-6">
-              <button type="submit" class="btn btn-primary col align-self-end" [disabled]="!formSolicitud.form.valid"> Enviar</button>
-            </div>
-          </div>
-        </div>
-
-      </form>
-
+    <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+    <div *ngIf="cargando"
+          class="alert alert-info text-center mt-3 animated fadeIn faster container">
+      <h4 class="alert-heading">Cargando</h4>
+      <p>
+        <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+      </p>
+      <p class="mb-0">
+        Espere por favor
+      </p>
     </div>
 
   </div>
@@ -164,7 +189,7 @@
 
 <!--Modal nuevo material-->
 <div class="modal fade" id="addMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel1">Nuevo material</h5>
@@ -173,42 +198,42 @@
         </button>
       </div>
       <div class="modal-body">
-        <form #formRegistro="ngForm" (ngSubmit)="guardarMaterial(formRegistro, 'material')" novalidate="" class="form-signin">
+        <form #formRegistroMaterial="ngForm" (ngSubmit)="guardarMaterial(formRegistroMaterial, 'material')" novalidate="" class="form-signin">
           <div class="form-group">
-            <label for="nombre" class="col-form-label">Nombre:</label>
+            <label for="nombreM" class="col-form-label">Nombre:</label>
             <input type="text"
                    class="form-control"
                    #nombreM="ngModel"
                    [(ngModel)]="material.nombre"
-                   id="nombreU"
+                   id="nombreM"
                    minlength="10"
                    maxlength="40"
                    required
-                   name="nombreU"
-                   [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['nombreM'] && formRegistro.controls['nombreM'].errors}">
-            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['nombreM'] && formRegistro.controls['nombreM'].errors">
+                   name="nombreM"
+                   [ngClass]="{'is-invalid': formRegistroMaterial.submitted && formRegistroMaterial.controls['nombreM'] && formRegistroMaterial.controls['nombreM'].errors}">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistroMaterial.submitted && formRegistroMaterial.controls['nombreM'] && formRegistroMaterial.controls['nombreM'].errors">
                       Introduce un nombre válido.
             </div>
           </div>
           <div class="form-group">
-            <label for="descripcion" class="col-form-label">Descripción:</label>
+            <label for="descripcionM" class="col-form-label">Descripción:</label>
             <input class="form-control"
-                      id="descripcionU"
+                      id="descripcionM"
                       minlength="10"
                       type="text"
                       #descripcionM="ngModel"
                       [(ngModel)]="material.descripcion"
                       maxlength="500"
                       required
-                      name="descripcionU"
-                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['descripcionM'] && formRegistro.controls['descripcionM'].errors}"
+                      name="descripcionM"
+                      [ngClass]="{'is-invalid': formRegistroMaterial.submitted && formRegistroMaterial.controls['descripcionM'] && formRegistroMaterial.controls['descripcionM'].errors}"
                       >
-            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['descripcionM'] && formRegistro.controls['descripcionM'].errors">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistroMaterial.submitted && formRegistroMaterial.controls['descripcionM'] && formRegistroMaterial.controls['descripcionM'].errors">
                           Introduce un nombre válido.
             </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistro, 'material')">Cerrar</button>
+              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistroMaterial, 'material')">Cerrar</button>
               <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>
@@ -220,7 +245,7 @@
 
 <!--Modal buscar material-->
 <div class="modal fade" id="buscarMaterial" tabindex="-1" role="dialog" aria-labelledby="buscarModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="buscarModalLabel1">Materiales</h5>
@@ -262,9 +287,9 @@
             <fa-icon [icon]="faExclamation" class="fa-3x"></fa-icon>
          </p>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
       </div>
     </div>
   </div>
@@ -272,7 +297,7 @@
 
 <!--Modal nuevo elemento de protección-->
 <div class="modal fade" id="addElemento" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="ModalLabel1">Nuevo Elemento de Protección</h5>
@@ -281,42 +306,42 @@
         </button>
       </div>
       <div class="modal-body">
-        <form #formRegistro="ngForm" (ngSubmit)="guardarMaterial(formRegistro, 'elemento')" novalidate="" class="form-signin">
+        <form #formRegistroElemento="ngForm" (ngSubmit)="guardarMaterial(formRegistroElemento, 'elemento')" novalidate="" class="form-signin">
           <div class="form-group">
-            <label for="nombre" class="col-form-label">Nombre:</label>
+            <label for="nombreE" class="col-form-label">Nombre:</label>
             <input type="text"
                    class="form-control"
                    #nombreE="ngModel"
-                   [(ngModel)]="material.nombre"
+                   [(ngModel)]="elementoPro.nombre"
                    id="nombreE"
-                   minlength="10"
+                   minlength="5"
                    maxlength="40"
                    required
-                   name="nombreU"
-                   [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['nombreE'] && formRegistro.controls['nombreE'].errors}">
-            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['nombreE'] && formRegistro.controls['nombreE'].errors">
+                   name="nombreE"
+                   [ngClass]="{'is-invalid': formRegistroElemento.submitted && formRegistroElemento.controls['nombreE'] && formRegistroElemento.controls['nombreE'].errors}">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistroElemento.submitted && formRegistroElemento.controls['nombreE'] && formRegistroElemento.controls['nombreE'].errors">
                       Introduce un nombre válido.
             </div>
           </div>
           <div class="form-group">
-            <label for="descripcion" class="col-form-label">Descripción:</label>
+            <label for="descripcionE" class="col-form-label">Descripción:</label>
             <input class="form-control"
                       id="descripcionE"
                       minlength="10"
                       type="text"
                       #descripcionE="ngModel"
-                      [(ngModel)]="material.descripcion"
+                      [(ngModel)]="elementoPro.descripcion"
                       maxlength="500"
                       required
-                      name="descripcionU"
-                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors}"
+                      name="descripcionE"
+                      [ngClass]="{'is-invalid': formRegistroElemento.submitted && formRegistroElemento.controls['descripcionE'] && formRegistroElemento.controls['descripcionE'].errors}"
                       >
-            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistroElemento.submitted && formRegistroElemento.controls['descripcionE'] && formRegistroElemento.controls['descripcionE'].errors">
                           Introduce un nombre válido.
             </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistro, 'elemento')">Cerrar</button>
+              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistroElemento, 'elemento')">Cerrar</button>
               <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>
@@ -328,7 +353,7 @@
 
 <!--Modal buscar elementos de protección-->
 <div class="modal fade" id="buscarElementos" tabindex="-1" role="dialog" aria-labelledby="buscarEModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="buscarEModalLabel1">Elementos de Protección</h5>
@@ -370,9 +395,9 @@
             <fa-icon [icon]="faExclamation" class="fa-3x"></fa-icon>
          </p>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
       </div>
     </div>
   </div>
@@ -381,7 +406,7 @@
 
 <!--Modal nueva acción especial-->
 <div class="modal fade" id="addEspecial" tabindex="-1" role="dialog" aria-labelledby="Modal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="Modal">Nueva acción especial</h5>
@@ -390,42 +415,42 @@
         </button>
       </div>
       <div class="modal-body">
-        <form #formRegistro="ngForm" (ngSubmit)="guardarMaterial(formRegistro, 'especial')" novalidate="" class="form-signin">
+        <form #formRegistroEspecial="ngForm" (ngSubmit)="guardarMaterial(formRegistroEspecial, 'especial')" novalidate="" class="form-signin">
           <div class="form-group">
             <label for="nombre" class="col-form-label">Nombre:</label>
             <input type="text"
                    class="form-control"
                    #nombreEs="ngModel"
-                   [(ngModel)]="material.nombre"
+                   [(ngModel)]="especial.nombre"
                    id="nombreEs"
                    minlength="10"
                    maxlength="40"
                    required
                    name="nombreEs"
-                   [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['nombreEs'] && formRegistro.controls['nombreEs'].errors}">
-            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['nombreEs'] && formRegistro.controls['nombreEs'].errors">
+                   [ngClass]="{'is-invalid': formRegistroEspecial.submitted && formRegistroEspecial.controls['nombreEs'] && formRegistroEspecial.controls['nombreEs'].errors}">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistroEspecial.submitted && formRegistroEspecial.controls['nombreEs'] && formRegistroEspecial.controls['nombreEs'].errors">
                       Introduce un nombre válido.
             </div>
           </div>
           <div class="form-group">
-            <label for="descripcion" class="col-form-label">Descripción:</label>
+            <label for="descripcionEs" class="col-form-label">Descripción:</label>
             <input class="form-control"
                       id="descripcionEs"
                       minlength="10"
                       type="text"
-                      #descripcionE="ngModel"
-                      [(ngModel)]="material.descripcion"
+                      #descripcionEs="ngModel"
+                      [(ngModel)]="especial.descripcion"
                       maxlength="500"
                       required
                       name="descripcionEs"
-                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors}"
+                      [ngClass]="{'is-invalid': formRegistroEspecial.submitted && formRegistroEspecial.controls['descripcionEs'] && formRegistroEspecial.controls['descripcionEs'].errors}"
                       >
-            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistroEspecial.submitted && formRegistroEspecial.controls['descripcionEs'] && formRegistroEspecial.controls['descripcionEs'].errors">
                           Introduce un nombre válido.
             </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistro, 'especial')">Cerrar</button>
+              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistroEspecial, 'especial')">Cerrar</button>
               <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>
@@ -437,7 +462,7 @@
 
 <!--Modal buscar acciones especiales-->
 <div class="modal fade" id="buscarEspeciales" tabindex="-1" role="dialog" aria-labelledby="buscarAModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="buscarAModalLabel1">Acciones Especiales</h5>
@@ -479,9 +504,9 @@
             <fa-icon [icon]="faExclamation" class="fa-3x"></fa-icon>
          </p>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
       </div>
     </div>
   </div>

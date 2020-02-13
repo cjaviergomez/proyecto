@@ -35,12 +35,15 @@ export class SolicitudService {
       estado: solicitud.estado,
       nombre_edificio: solicitud.nombre_edificio,
       piso_edificio: solicitud.piso_edificio,
+      fecha: solicitud.fecha,
+      hora: solicitud.hora,
       usuario: {
         ...solicitud.usuario
       },
       objectID: solicitud.objectID,
       nombre_subcapa: solicitud.nombre_subcapa,
-      idProcess: solicitud.idProcess
+      idProcess: solicitud.idProcess,
+      descripcion: solicitud.descripcion
     });
   }
 

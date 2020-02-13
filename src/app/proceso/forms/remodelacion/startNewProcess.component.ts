@@ -21,7 +21,7 @@ import { UnidadService } from '../../../admin/services/unidad.service';
 import { MaterialesService } from 'app/proceso/services/materiales.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 
-import { faWindowClose, faSearch, faPlus, faExclamation } from '@fortawesome/free-solid-svg-icons'; // Iconos
+import { faWindowClose, faSearch, faPlus, faExclamation, faArrowCircleRight, faArrowCircleLeft, faSave, faSyncAlt } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
 @Component({
   selector: 'startNewProcess',
@@ -32,11 +32,19 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
   submitted:boolean = false;
   model = new MyProcessData();
   material = new Material(); //Modelo del material a agregar a la base de datos.
+  elementoPro = new Material(); //Modelo del elemento de protección a agregar a la base de datos.
+  especial = new Material(); //Modelo de la accion especial a agregar a la base de datos.
   solicitud: Solicitud;
+
+  descripcionS: string = '';
   faWindowClose = faWindowClose;
   faSearch = faSearch;
   faPlus = faPlus;
   faExclamation = faExclamation;
+  faArrowCircleRight = faArrowCircleRight; // Flecha del botón siguiente.
+  faArrowCircleLeft = faArrowCircleLeft; // Flecha del botón atrás
+  faSave = faSave;
+  faSyncAlt = faSyncAlt;
 
   constructor(route: ActivatedRoute, camundaRestService: CamundaRestService,
               authService: AuthService, usuarioService:UsuarioService,
@@ -72,14 +80,14 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
     });
   }
 
-  buscarEspecial() {
+  buscarEspeciales() {
     if (this.filterEspecials.length === 0) {
       return;
     }
     this.swal.showLoading();
-    this.materialService.getEspecial(this.filterEspecials).subscribe( elementos => {
+    this.materialService.getEspecial(this.filterEspecials).subscribe( especiales => {
       this.swal.stopLoading();
-      this.especiales = elementos;
+      this.especiales = especiales;
       $('#buscarEspeciales').modal('show');
     });
   }
@@ -100,7 +108,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
       });
     } else if(flat === 'elemento'){
       $('#addElemento').modal('hide');
-      this.materialService.addElemento(this.material).then(()=>{
+      this.materialService.addElemento(this.elementoPro).then(()=>{
         form.resetForm();
         this.swal.stopLoading();
       }).catch(()=>{
@@ -109,7 +117,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
       });
     } else if(flat === 'especial'){
       $('#addEspecial').modal('hide');
-      this.materialService.addEspecial(this.material).then(()=>{
+      this.materialService.addEspecial(this.especial).then(()=>{
         form.resetForm();
         this.swal.stopLoading();
       }).catch(()=>{
@@ -150,8 +158,14 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
     }
   }
 
-  eliminarMaterial(index: number){
-    this.materialesUsuario.splice(index, 1);
+  eliminarMaterial(index: number, flat: string){
+    if(flat === 'material'){
+      this.materialesUsuario.splice(index, 1);
+    } else if(flat === 'elemento'){
+      this.elementosUsuario.splice(index, 1);
+    } else if(flat === 'especial'){
+      this.especialesUsuario.splice(index, 1);
+    }
   }
 
 }

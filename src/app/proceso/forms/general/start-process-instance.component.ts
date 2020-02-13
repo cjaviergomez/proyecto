@@ -50,9 +50,11 @@ export class StartProcessInstanceComponent implements OnInit {
   idProcess;
   fecha_actual
   hora
+  descripcionS
 
   model
   submitted
+  cargando
   route: ActivatedRoute
   camundaRestService: CamundaRestService
 
@@ -66,6 +68,7 @@ export class StartProcessInstanceComponent implements OnInit {
     materialService: MaterialesService,
     swal: ShowMessagesService
     ) {
+      this.cargando = true; //Indicador para saber cuando la información necesario para el formulario a cargado.
       this.route = route;
       this.camundaRestService = camundaRestService;
       this.authService = authService;
@@ -75,11 +78,13 @@ export class StartProcessInstanceComponent implements OnInit {
       this.datePipe = datePipe;
       this.materialService = materialService;
       this.swal = swal;
+
   }
 
   ngOnInit() {
     this.materialesUsuario = [];
     this.elementosUsuario = [];
+    this.especialesUsuario = [];
     this.seccion = 1;
 
     this.fecha_actual = new Date();
@@ -106,6 +111,21 @@ export class StartProcessInstanceComponent implements OnInit {
       this.piso = params['piso'];
 
       this.solicitud = {
+        fecha: this.fecha_actual,
+        hora: this.hora,
+        usuario: {
+          ...this.usuario
+        }
+      };
+    });
+  }
+  onSubmit() {
+    console.log('Entró al onSubmit');
+    const variables = this.generateVariablesFromFormFields();
+    this.camundaRestService.postProcessInstance(this.processDefinitionKey, variables).subscribe( data =>{
+      this.idProcess = data.id;
+      console.log('Recogió el id de la instancia del proceso');
+      this.solicitud = {
         estado: 'Pendiente',
         nombre_edificio: this.edif,
         piso_edificio: this.piso,
@@ -116,18 +136,10 @@ export class StartProcessInstanceComponent implements OnInit {
         },
         nombre_subcapa: this.subCapa,
         objectID: this.elem,
-        idProcess: this.idProcess
-      }
-    });
-  }
-  onSubmit() {
+        idProcess: this.idProcess,
+        descripcion: this.descripcionS
+      };
 
-    const variables = this.generateVariablesFromFormFields();
-    this.camundaRestService.postProcessInstance(this.processDefinitionKey, variables).subscribe( data =>{
-      this.idProcess = data.id;
-      this.solicitud = {
-        idProcess: this.idProcess
-      }
       this.solicitudService.addSolicitud(this.solicitud).then(()=>{
         this.submitted = true;
         console.log('Solicitud creada');
@@ -138,10 +150,12 @@ export class StartProcessInstanceComponent implements OnInit {
 
   }
   generateVariablesFromFormFields() {
+    console.log('Entró al generador de variables');
     const variables = {
       variables: { }
     };
     Object.keys(this.model).forEach((field) => {
+      console.log(field);
       variables.variables[field] = {
         value: this.model[field]
       };
@@ -166,6 +180,7 @@ export class StartProcessInstanceComponent implements OnInit {
 	getUnidad( id: string){
 		this.unidadService.getUnidad(id).subscribe( unidad => {
       this.unidad = unidad;
+      this.cargando = false;
     });
   }
 

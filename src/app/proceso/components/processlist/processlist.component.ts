@@ -28,14 +28,13 @@ export class ProcesslistComponent implements OnInit, OnDestroy {
               private auth: AuthService) { }
 
   ngOnInit() {
+    this.getCurrentUser();
+    this.getProcessDefinitions();
     this.idCapa = this.route.snapshot.paramMap.get('idCapa'); // Se obtiene el id por la url
     this.edif = this.route.snapshot.paramMap.get('edif'); // Se obtiene el id por la url
     this.subCapa = this.route.snapshot.paramMap.get('subCapa');
     this.elem = this.route.snapshot.paramMap.get('elem');
     this.piso = this.route.snapshot.paramMap.get('piso');
-
-    this.getCurrentUser();
-    this.getProcessDefinitions();
   }
 
   getProcessDefinitions(): void {
@@ -43,7 +42,6 @@ export class ProcesslistComponent implements OnInit, OnDestroy {
       .getProcessDefinitions()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((processDefinitions) => {
-        processDefinitions.shift();
         this.processDefinitions = processDefinitions;
       });
   }
