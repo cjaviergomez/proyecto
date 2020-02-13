@@ -15,12 +15,18 @@ import { AuthService } from '../../../out/services/auth.service';
 import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
 import { UnidadService } from '../../../admin/services/unidad.service';
 import { MaterialesService } from '../../services/materiales.service';
+import { ShowMessagesService } from '../../../out/services/show-messages.service';
 
 export class StartProcessInstanceComponent implements OnInit {
   solicitud;
   usuario: Usuario;
-  unidad:Unidad;
-  materiales: Material[];
+  unidad:Unidad; // Unidad academica a la cual pertenece el usuario
+  materiales: Material[]; //Materiales encontrados en la base de datos.
+  materialesUsuario: Material[]; //Materiales que agrega el usuario.
+  elementosPro: Material[]; // Elementos de protección encontrados en la base de datos.
+  elementosUsuario: Material[]; // Elementos de protección que agrega el usuario.
+  especiales: Material[]; // Acciones especiales encontradas en la base de datos.
+  especialesUsuario: Material[]; // Acciones especiales
 
   authService: AuthService
   usuarioService: UsuarioService
@@ -28,8 +34,11 @@ export class StartProcessInstanceComponent implements OnInit {
   unidadService: UnidadService
   datePipe: DatePipe
   materialService: MaterialesService
+  swal: ShowMessagesService
 
-  filterPost = '';
+  filterPost = ''; // Texto a buscar en los materiales.
+  filterElements = ''; // Texto a buscar en los elementos de protección.
+  filterEspecials = ''; // Texto a buscar en los especiales.
 
   seccion;
   processDefinitionKey;
@@ -54,7 +63,8 @@ export class StartProcessInstanceComponent implements OnInit {
     solicitudService: SolicitudService,
     unidadService: UnidadService,
     datePipe: DatePipe,
-    materialService: MaterialesService
+    materialService: MaterialesService,
+    swal: ShowMessagesService
     ) {
       this.route = route;
       this.camundaRestService = camundaRestService;
@@ -64,9 +74,12 @@ export class StartProcessInstanceComponent implements OnInit {
       this.unidadService = unidadService;
       this.datePipe = datePipe;
       this.materialService = materialService;
+      this.swal = swal;
   }
 
   ngOnInit() {
+    this.materialesUsuario = [];
+    this.elementosUsuario = [];
     this.seccion = 1;
 
     this.fecha_actual = new Date();
@@ -156,7 +169,4 @@ export class StartProcessInstanceComponent implements OnInit {
     });
   }
 
-  eliminarMaterial(){
-    console.log('Eliminado');
-  }
 }

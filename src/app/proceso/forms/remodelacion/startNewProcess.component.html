@@ -65,115 +65,54 @@
           <div class="form-group">
             <label for="materiales">Listado de materiales</label>
             <div class="row">
-              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar..." [(ngModel)]="filterPost">
-              <button type="button" class="btn btn-primary col-1 ml-2" (click)="buscarMateriales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar material..." [(ngModel)]="filterPost">
+              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarMateriales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('material')">
+                <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
+                  Nuevo
+              </button>
+            </div>
+
+            <div class="row">
+              <div *ngFor="let material of materialesUsuario; let i = index">
+                <span class="badge badge-secondary mr-2 ml-2">{{ material.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i)"></fa-icon></span>
+              </div>
             </div>
           </div>
 
-          <label for="">Elementos de protección</label>
-          <div class="form-row">
-            <div class="form-group col-md-10">
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="respirador"
-                      name="respirador"
-                      [(ngModel)]="model.elementosProteccion">
-                  <label class="custom-control-label" for="respirador">Respirador</label>
-                </div>
-              </div>
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      name="guantes"
-                       [(ngModel)]="model.elementosProteccion"
-                      id="guantes">
-                  <label class="custom-control-label" for="guantes">Guantes</label>
-                </div>
-              </div>
+          <div class="form-group">
+            <label for="materiales">Elementos de protección</label>
+            <div class="row">
+              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar elemento de protección..." [(ngModel)]="filterElements">
+              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarElementos()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('elemento')">
+                <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
+                  Nuevo
+              </button>
+            </div>
 
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      name="trabajo"
-                       [(ngModel)]="model.elementosProteccion"
-                      id="trabajo">
-                  <label class="custom-control-label" for="trabajo">Trabajo en alturas</label>
-                </div>
+            <div class="row">
+              <div *ngFor="let elemento of elementosUsuario; let i = index">
+                <span class="badge badge-secondary mr-2 ml-2">{{ elemento.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i)"></fa-icon></span>
               </div>
-
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      name="gafas"
-                      [(ngModel)]="model.elementosProteccion"
-                      id="gafas">
-                  <label class="custom-control-label" for="gafas">Gafas</label>
-                </div>
-              </div>
-
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      name="otros"
-                      [(ngModel)]="model.elementosProteccion"
-                      class="custom-control-input"
-                      id="otros">
-                  <label class="custom-control-label" for="otros">Otros</label>
-                </div>
-              </div>
-
-
             </div>
           </div>
 
-          <label for="">Especiales</label>
-          <div class="form-row">
-            <div class="form-group col-md-10">
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="energia"
-                      name="energia"
-                      [(ngModel)]="model.especiales">
-                  <label class="custom-control-label" for="energia">Corte de Energia</label>
-                </div>
-              </div>
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      name="agua"
-                       [(ngModel)]="model.especiales"
-                      id="agua">
-                  <label class="custom-control-label" for="agua">Corte de Agua</label>
-                </div>
-              </div>
+          <div class="form-group">
+            <label for="materiales">Especiales</label>
+            <div class="row">
+              <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar acción especial..." [(ngModel)]="filterEspecials">
+              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarMateriales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
+              <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-1" (click)="nuevoMaterial('especial')">
+                <fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
+                  Nuevo
+              </button>
+            </div>
 
-              <div class="form-group form-check form-check-inline">
-                <div class="custom-control custom-checkbox">
-                  <input
-                      type="checkbox"
-                      name="especialesOtros"
-                      [(ngModel)]="model.especiales"
-                      class="custom-control-input"
-                      id="especialesOtros">
-                  <label class="custom-control-label" for="especialesOtros">Otros</label>
-                </div>
+            <div class="row">
+              <div *ngFor="let especial of especialesUsuario; let i = index">
+                <span class="badge badge-secondary mr-2 ml-2">{{ especial.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar" (click)="eliminarMaterial(i)"></fa-icon></span>
               </div>
-
             </div>
           </div>
 
@@ -222,3 +161,328 @@
   </div>
 </div>
 
+
+<!--Modal nuevo material-->
+<div class="modal fade" id="addMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Nuevo material</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #formRegistro="ngForm" (ngSubmit)="guardarMaterial(formRegistro, 'material')" novalidate="" class="form-signin">
+          <div class="form-group">
+            <label for="nombre" class="col-form-label">Nombre:</label>
+            <input type="text"
+                   class="form-control"
+                   #nombreM="ngModel"
+                   [(ngModel)]="material.nombre"
+                   id="nombreU"
+                   minlength="10"
+                   maxlength="40"
+                   required
+                   name="nombreU"
+                   [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['nombreM'] && formRegistro.controls['nombreM'].errors}">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['nombreM'] && formRegistro.controls['nombreM'].errors">
+                      Introduce un nombre válido.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="descripcion" class="col-form-label">Descripción:</label>
+            <input class="form-control"
+                      id="descripcionU"
+                      minlength="10"
+                      type="text"
+                      #descripcionM="ngModel"
+                      [(ngModel)]="material.descripcion"
+                      maxlength="500"
+                      required
+                      name="descripcionU"
+                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['descripcionM'] && formRegistro.controls['descripcionM'].errors}"
+                      >
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['descripcionM'] && formRegistro.controls['descripcionM'].errors">
+                          Introduce un nombre válido.
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistro, 'material')">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal buscar material-->
+<div class="modal fade" id="buscarMaterial" tabindex="-1" role="dialog" aria-labelledby="buscarModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="buscarModalLabel1">Materiales</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table *ngIf="materiales && materiales.length > 0"
+          class="table mt-3 mb-5 animated fadeIn faster animated fadeIn faster">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Descripción</th>
+
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let material of materiales; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ material.nombre }}</td>
+              <td>{{ material.descripcion }}</td>
+
+              <td>
+                <button (click)="addMaterial(material, 'materiales')"
+                        class="btn btn-primary btn-sm">
+                  <fa-icon [icon]="faPlus" title="Agregar"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="materiales && materiales.length === 0"
+              class="alert alert-primary text-center mt-3 animated fadeIn faster">
+          <h4 class="alert-heading">No se encontraron materiales por '{{ filterPost }}'</h4>
+          <p>
+            <fa-icon [icon]="faExclamation" class="fa-3x"></fa-icon>
+         </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal nuevo elemento de protección-->
+<div class="modal fade" id="addElemento" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel1">Nuevo Elemento de Protección</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #formRegistro="ngForm" (ngSubmit)="guardarMaterial(formRegistro, 'elemento')" novalidate="" class="form-signin">
+          <div class="form-group">
+            <label for="nombre" class="col-form-label">Nombre:</label>
+            <input type="text"
+                   class="form-control"
+                   #nombreE="ngModel"
+                   [(ngModel)]="material.nombre"
+                   id="nombreE"
+                   minlength="10"
+                   maxlength="40"
+                   required
+                   name="nombreU"
+                   [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['nombreE'] && formRegistro.controls['nombreE'].errors}">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['nombreE'] && formRegistro.controls['nombreE'].errors">
+                      Introduce un nombre válido.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="descripcion" class="col-form-label">Descripción:</label>
+            <input class="form-control"
+                      id="descripcionE"
+                      minlength="10"
+                      type="text"
+                      #descripcionE="ngModel"
+                      [(ngModel)]="material.descripcion"
+                      maxlength="500"
+                      required
+                      name="descripcionU"
+                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors}"
+                      >
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors">
+                          Introduce un nombre válido.
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistro, 'elemento')">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal buscar elementos de protección-->
+<div class="modal fade" id="buscarElementos" tabindex="-1" role="dialog" aria-labelledby="buscarEModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="buscarEModalLabel1">Elementos de Protección</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table *ngIf="elementosPro && elementosPro.length > 0"
+          class="table mt-3 mb-5 animated fadeIn faster animated fadeIn faster">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Descripción</th>
+
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let elemento of elementosPro; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ elemento.nombre }}</td>
+              <td>{{ elemento.descripcion }}</td>
+
+              <td>
+                <button (click)="addMaterial(elemento, 'elementos')"
+                        class="btn btn-primary btn-sm">
+                  <fa-icon [icon]="faPlus" title="Agregar"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="elementosPro && elementosPro.length === 0"
+              class="alert alert-primary text-center mt-3 animated fadeIn faster">
+          <h4 class="alert-heading">No se encontraron elementos de protección por '{{ filterElements }}'</h4>
+          <p>
+            <fa-icon [icon]="faExclamation" class="fa-3x"></fa-icon>
+         </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal nueva acción especial-->
+<div class="modal fade" id="addEspecial" tabindex="-1" role="dialog" aria-labelledby="Modal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Modal">Nueva acción especial</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #formRegistro="ngForm" (ngSubmit)="guardarMaterial(formRegistro, 'especial')" novalidate="" class="form-signin">
+          <div class="form-group">
+            <label for="nombre" class="col-form-label">Nombre:</label>
+            <input type="text"
+                   class="form-control"
+                   #nombreEs="ngModel"
+                   [(ngModel)]="material.nombre"
+                   id="nombreEs"
+                   minlength="10"
+                   maxlength="40"
+                   required
+                   name="nombreEs"
+                   [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['nombreEs'] && formRegistro.controls['nombreEs'].errors}">
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['nombreEs'] && formRegistro.controls['nombreEs'].errors">
+                      Introduce un nombre válido.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="descripcion" class="col-form-label">Descripción:</label>
+            <input class="form-control"
+                      id="descripcionEs"
+                      minlength="10"
+                      type="text"
+                      #descripcionE="ngModel"
+                      [(ngModel)]="material.descripcion"
+                      maxlength="500"
+                      required
+                      name="descripcionEs"
+                      [ngClass]="{'is-invalid': formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors}"
+                      >
+            <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['descripcionE'] && formRegistro.controls['descripcionE'].errors">
+                          Introduce un nombre válido.
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="cerrarModalMaterial(formRegistro, 'especial')">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal buscar acciones especiales-->
+<div class="modal fade" id="buscarEspeciales" tabindex="-1" role="dialog" aria-labelledby="buscarAModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="buscarAModalLabel1">Acciones Especiales</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table *ngIf="especiales && especiales.length > 0"
+          class="table mt-3 mb-5 animated fadeIn faster animated fadeIn faster">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Descripción</th>
+
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let especial of especiales; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ especial.nombre }}</td>
+              <td>{{ especial.descripcion }}</td>
+
+              <td>
+                <button (click)="addMaterial(especial, 'especiales')"
+                        class="btn btn-primary btn-sm">
+                  <fa-icon [icon]="faPlus" title="Agregar"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="elementosPro && elementosPro.length === 0"
+              class="alert alert-primary text-center mt-3 animated fadeIn faster">
+          <h4 class="alert-heading">No se encontraron elementos de protección por '{{ filterElements }}'</h4>
+          <p>
+            <fa-icon [icon]="faExclamation" class="fa-3x"></fa-icon>
+         </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

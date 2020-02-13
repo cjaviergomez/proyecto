@@ -1,7 +1,9 @@
-export interface Material {
+export class Material {
 
-  id?: string;
-  nombre?: string;
-  descripcion?: string;
+  public id?: string;
+  public nombre?: string;
+  public descripcion?: string;
+
+  constructor() {}
 
 }
