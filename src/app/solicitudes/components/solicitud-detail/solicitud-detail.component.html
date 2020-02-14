@@ -1,14 +1,57 @@
-<div *ngIf="!solicitud">
-	<p>Cargando solicitud...</p>
+<!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
+<div *ngIf="cargando"
+     class="alert alert-info text-center mt-3 animated fadeIn faster container">
+  <h4 class="alert-heading">Cargando</h4>
+  <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+  </p>
+  <p class="mb-0">
+    Espere por favor
+  </p>
 </div>
-<div class="row" *ngIf="solicitud">
-	<div class="col-lg-4">
-		<br>
-		<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="solicitud_imagen"/>
-	</div>
-	<div class="col-lg-8">
-		<h3>{{solicitud.nombre_edificio}}</h3>
-		<p>{{solicitud.piso}} </p>
-		<p><strong>{{solicitud.estado}}</strong></p>
-	</div>
+
+<div *ngIf="!cargando" class="row mb-5 mt-5">
+  <div *ngIf="solicitud" class="offset-lg-4 col-lg-4 col-sm-6 col-12 main-section text-center card">
+    <div class="row user-details">
+
+      <div class="col-12 mt-2">
+        <img src="../../../../assets/img/mecanica.png" class="img-fluid img-thumbnail" alt="profile">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr>
+        <p>{{ solicitud.usuario.nombres }}</p>
+
+        <div>
+          <hr>
+          <h6>Estado</h6>
+          <label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
+          <label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
+          <label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!solicitud"
+        class="alert alert-primary text-center animated fadeIn faster offset-lg-4 col-lg-4 col-sm-6 col-12 main-section card mt-5">
+    <h4 class="alert-heading">Solicitud no encontrada</h4>
+    <p>
+      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+    </p>
+  </div>
 </div>

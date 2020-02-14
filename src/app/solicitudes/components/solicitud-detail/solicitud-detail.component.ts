@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { faSyncAlt, faExclamation } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 // Services
 import { SolicitudService } from '../../services/solicitud.service';
@@ -11,37 +14,47 @@ import { Solicitud } from '../../models/solicitud';
 	selector: 'solicitud-detail',
 	templateUrl: './solicitud-detail.component.html'
 })
-export class SolicitudDetailComponent implements OnInit {
-	public solicitud: Solicitud;
+export class SolicitudDetailComponent implements OnInit, OnDestroy {
+
+  public solicitud: Solicitud;
+  cargando: boolean;
+  private ngUnsubscribe: Subject<any> = new Subject<any>(); // Observable para desubscribir todos los observables
+  faSyncAlt = faSyncAlt;
+  faExclamation = faExclamation;
 
 	constructor(
-		private _solicitudService: SolicitudService,
-		private _route: ActivatedRoute,
-		private _router: Router
+		private solicitudService: SolicitudService,
+		private route: ActivatedRoute,
+		private router: Router
 	){}
 
 	ngOnInit(){
-		console.log('solicitud-detail.Component.ts cargado...');
+    this.cargando = true;
 		this.getSolicitud();
 	}
 
 	getSolicitud(){
-		this._route.params.forEach((params: Params) => {
+		this.route.params.forEach((params: Params) => {
 			let id = params['id'];
-
-			/* this._solicitudService.getSolicitud(id).subscribe(
-				response => {
-					if(response['code'] == 202){
-						this.solicitud = response['data'];
-					}else{
-						this._router.navigate(['/solicitudes']);
-					}
-				},
-				error => {
-					console.log(<any>error);
-				}
-			); */
+      this.solicitudService.getSolicitud(id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe( solicitud =>{
+        console.log(solicitud);
+        this.solicitud = solicitud;
+        this.cargando = false;
+      });
 		});
+  }
+
+  /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
 	}
 
 }

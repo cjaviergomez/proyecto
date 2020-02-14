@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,8 +10,10 @@ import { Solicitud } from '../models/solicitud';
   providedIn: 'root'
 })
 export class SolicitudService {
-	private solicitudesCollection: AngularFirestoreCollection<Solicitud>;
-	private solicitudes: Observable<Solicitud[]>
+  private solicitudesCollection: AngularFirestoreCollection<Solicitud>;
+  private solicitudDoc: AngularFirestoreDocument<Solicitud>;
+  private solicitudes: Observable<Solicitud[]>;
+  private solicitud: Observable<Solicitud>;
 
 	constructor(private afs: AngularFirestore) {}
 
@@ -47,12 +49,31 @@ export class SolicitudService {
     });
   }
 
-  // TODO: Falta implementar metodo.
-	getSolicitud(id:string){}
+  // Metodo para obtener una solicitud especifica de Firebase.
+  getSolicitud(id: string) {
+    this.solicitudDoc = this.afs.doc<Solicitud>(`solicitudes/${id}`); // Ruta de la solicitud en particular en firebase.
+    return this.solicitud = this.solicitudDoc.snapshotChanges().pipe(map( action => {
+      if(action.payload.exists == false) {
+        return null;
+      } else {
+        const data = action.payload.data() as Solicitud;
+        data.id = action.payload.id;
+        return data;
+      }
+    }));
+  }
 
-  // TODO: Falta implementar metodo.
-	updateSolicitud(solicitud: Solicitud){}
+  	// Metodo para actualizar la informaciòn de una solicitud en Firebase.
+	updateUsuario(solicitud: Solicitud) {
+		let idSolicitud = solicitud.id;
+		delete solicitud.id; // Le borramos el id al usuario para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
+		this.solicitudDoc = this.afs.doc<Solicitud>(`solicitudes/${idSolicitud}`);
+		return this.solicitudDoc.update(solicitud);
+	 }
 
-  // TODO: Falta implementar metodo.
-	deleteSolicitud(id:string){}
+  // Metodo para borrar a una solicitud de la base de datos de firebase.
+	deleteSolicitud(id: string): void {
+		this.solicitudDoc = this.afs.doc<Solicitud>(`solicitudes/${id}`);
+		this.solicitudDoc.delete();
+	}
 }

@@ -22,27 +22,29 @@
 <!--Mostrar las solicitudes encontradas-->
 <div *ngIf="!cargando && solicitudes.length > 0">
   <h3 class="mt-3 text-center">Solicitudes</h3>
-  <table class="m-3 animated fadeIn faster animated container float-right">
-    <tbody>
+  <div class="m-3 animated fadeIn faster animated container">
+
       <!--Se recorre el arreglo de las solicitudes encontradas y se muestra su información-->
-      <tr *ngFor="let solicitud of solicitudes; let i = index">
-        <th class="images"> <img src="../../../../assets/img/mecanica.png" class="card-img-top" [alt]="solicitud.nombre_edificio"> </th>
-        <td>
-          <div class="ml-4">
-            <h4>
-              {{ solicitud.nombre_edificio }} <br>
-            </h4>
-            <p> {{ solicitud.usuario.nombres }} </p>
-            <p> {{ solicitud.fecha }}</p>
-            <span class="badge badge-danger"> {{ solicitud.estado }} </span>
-            <br>
-            <button type="button" class="btn btn-outline-danger btn-sm mt-3">
-              <fa-icon [icon]="faSearchPlus"></fa-icon>
-                Ver más...
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <div *ngFor="let solicitud of solicitudes; let i = index" class="row mb-4 mx-auto" style="width: 600px;">
+        <img src="../../../../assets/img/mecanica.png" class="col img-fluid img-thumbnail images" [alt]="solicitud.nombre_edificio">
+
+        <div class="col">
+          <h4>
+            {{ solicitud.nombre_edificio }}
+          </h4>
+          <p> {{ solicitud.usuario.nombres }} </p>
+          <p> {{ solicitud.fecha }} </p>
+          <label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
+          <label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
+          <label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
+          <br>
+          <button type="button" class="btn btn-outline-primary btn-sm mt-3" [routerLink]="['/modSolicitudes/solicitud', solicitud.id]">
+            <fa-icon [icon]="faSearchPlus"></fa-icon>
+              Ver más...
+          </button>
+        </div>
+
+      </div>
+
+    </div>
 </div>
