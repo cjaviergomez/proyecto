@@ -19,21 +19,30 @@
   </p>
 </div>
 
-<!--Div para mostrar las solicitudes que se obtuvieron de la base de datos-->
-<div *ngIf="!cargando && solicitudes.length > 0" class="container mt-3">
-	<h3 id="centrado">{{titulo}}</h3>
-	<hr>
-
-	<div *ngFor="let solicitud of solicitudes">
-		<div class="card" style="width: 18rem;">
-			<img src="../../../../assets/img/mecanica.png" class="card-img-top" alt="...">
-			<div class="card-body">
-        <h5 class="card-title">{{solicitud.nombre_edificio}}</h5>
-        <p class="card-text"> {{ solicitud.usuario.nombres }}</p>
-        <p class="card-text"> {{ solicitud.fecha }}</p>
-        <span class="badge badge-primary">{{ solicitud.estado }}</span>
-        <button type="button" class="btn btn-outline-primary btn-block mt-2"> Ver más...</button>
-			</div>
-		</div>
-	</div>
+<!--Mostrar las solicitudes encontradas-->
+<div *ngIf="!cargando && solicitudes.length > 0">
+  <h3 class="mt-3 text-center">Solicitudes</h3>
+  <table class="m-3 animated fadeIn faster animated container float-right">
+    <tbody>
+      <!--Se recorre el arreglo de las solicitudes encontradas y se muestra su información-->
+      <tr *ngFor="let solicitud of solicitudes; let i = index">
+        <th class="images"> <img src="../../../../assets/img/mecanica.png" class="card-img-top" [alt]="solicitud.nombre_edificio"> </th>
+        <td>
+          <div class="ml-4">
+            <h4>
+              {{ solicitud.nombre_edificio }} <br>
+            </h4>
+            <p> {{ solicitud.usuario.nombres }} </p>
+            <p> {{ solicitud.fecha }}</p>
+            <span class="badge badge-danger"> {{ solicitud.estado }} </span>
+            <br>
+            <button type="button" class="btn btn-outline-danger btn-sm mt-3">
+              <fa-icon [icon]="faSearchPlus"></fa-icon>
+                Ver más...
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

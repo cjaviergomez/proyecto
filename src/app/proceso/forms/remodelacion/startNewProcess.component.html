@@ -89,7 +89,7 @@
             </div>
 
             <div class="form-group">
-              <label for="materiales">Elementos de protección</label>
+              <label for="materiales">Elementos de protección ( Gafas, guantes, respirador, etc..)</label>
               <div class="row">
                 <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar elemento de protección..." [(ngModel)]="filterElements">
                 <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarElementos()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
@@ -107,7 +107,7 @@
             </div>
 
             <div class="form-group">
-              <label for="materiales">Especiales</label>
+              <label for="materiales">Especiales ( Corte de energía, corte de agua, etc...)</label>
               <div class="row">
                 <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar acción especial..." [(ngModel)]="filterEspecials">
                 <button type="button" class="btn btn-outline-primary btn-sm col-1 ml-2" (click)="buscarEspeciales()"><fa-icon [icon]="faSearch" title="Buscar"></fa-icon></button>
@@ -178,9 +178,15 @@
     </div>
 
   </div>
-  <div [hidden]="!submitted" class="container jumbotron">
-    <p>Solicitud creada con éxito.</p>
-    <button type="button" class="btn btn-primary" [routerLink]="['/modSolicitudes/solicitudes']" routerLinkActive="router-link-active" >
+
+  <!-- Div para mostrar mensaje cuando se crea la solicitud-->
+  <div [hidden]="!submitted"
+        class="alert alert-primary text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Solicitud creada con éxito.</h4>
+    <p>
+      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+    </p>
+    <button type="button" class="btn btn-outline-primary" [routerLink]="['/modSolicitudes/solicitudes']">
       Ver solicitudes
     </button>
   </div>

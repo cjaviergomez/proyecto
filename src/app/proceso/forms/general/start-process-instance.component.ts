@@ -8,6 +8,7 @@ import { Solicitud } from '../../../solicitudes/models/solicitud';
 import { Usuario } from '../../../admin/models/usuario';
 import { Unidad } from 'app/admin/models/unidad';
 import { Material } from '../../models/material';
+import { MyProcessData } from '../../models/MyProcessData';
 
 //Servicios
 import { UsuarioService } from '../../../admin/services/usuario.service';
@@ -52,7 +53,7 @@ export class StartProcessInstanceComponent implements OnInit {
   hora
   descripcionS
 
-  model
+  model: MyProcessData;
   submitted
   cargando
   route: ActivatedRoute
@@ -120,11 +121,10 @@ export class StartProcessInstanceComponent implements OnInit {
     });
   }
   onSubmit() {
-    console.log('Entró al onSubmit');
+    this.swal.showLoading();
     const variables = this.generateVariablesFromFormFields();
     this.camundaRestService.postProcessInstance(this.processDefinitionKey, variables).subscribe( data =>{
       this.idProcess = data.id;
-      console.log('Recogió el id de la instancia del proceso');
       this.solicitud = {
         estado: 'Pendiente',
         nombre_edificio: this.edif,
@@ -142,20 +142,21 @@ export class StartProcessInstanceComponent implements OnInit {
 
       this.solicitudService.addSolicitud(this.solicitud).then(()=>{
         this.submitted = true;
-        console.log('Solicitud creada');
+        this.swal.stopLoading();
       }).catch(error=>{
-        console.log(error);
+        this.swal.stopLoading();
       });
     });
 
   }
   generateVariablesFromFormFields() {
-    console.log('Entró al generador de variables');
+    this.model.materiales = this.materialesUsuario;
+    this.model.elementosProteccion = this.elementosUsuario;
+    this.model.especiales = this.especialesUsuario;
     const variables = {
       variables: { }
     };
     Object.keys(this.model).forEach((field) => {
-      console.log(field);
       variables.variables[field] = {
         value: this.model[field]
       };

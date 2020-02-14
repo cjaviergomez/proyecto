@@ -13,7 +13,8 @@ import { faSearchPlus, faExclamation, faSyncAlt } from '@fortawesome/free-solid-
 
 @Component({
 	selector: 'solicitudes-list',
-	templateUrl: './solicitudes-list.component.html'
+  templateUrl: './solicitudes-list.component.html',
+  styleUrls: ['./solicitudes-list.component.css']
 })
 export class SolicitudesListComponent implements OnInit, OnDestroy {
 
