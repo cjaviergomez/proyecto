@@ -10,39 +10,51 @@
   </p>
 </div>
 
-<div *ngIf="!cargando" class="row mb-5 mt-5">
-  <div *ngIf="solicitud" class="offset-lg-4 col-lg-4 col-sm-6 col-12 main-section text-center card">
-    <div class="row user-details">
+<div *ngIf="!cargando" class="mt-5">
+  <div *ngIf="solicitud" class="offset-lg-3 col-lg-6 main-section card">
+    <div class="user-details">
 
-      <div class="col-12 mt-2">
-        <img src="../../../../assets/img/mecanica.png" class="img-fluid img-thumbnail" alt="profile">
-        <table class="table">
+      <div class="row">
+        <img src="../../../../assets/img/mecanica.png" class="col img-fluid img-thumbnail m-2 images" alt="Edificio">
+
+        <div class="col m-2">
+          <p> <strong> Solicitante: </strong><br>
+            <a [routerLink]="['/modIn/perfil', solicitud.usuario.id]">{{ solicitud.usuario.nombres }}</a>
+          </p>
+          <p> <strong> Descripción: </strong><br>
+              {{ solicitud.descripcion }}
+          </p>
+        </div>
+
+        <table class="table table-responsive m-2 text-center">
           <thead>
             <tr>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Edificio</th>
+              <th scope="col">Piso</th>
+              <th scope="col">Capa</th>
+              <th scope="col">ObjetoID</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Hora</th>
+              <th scope="col">Estado</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
+              <td>{{ solicitud.nombre_edificio }}</td>
+              <td>{{ solicitud.piso_edificio }}</td>
+              <td> {{ solicitud.nombre_subcapa }}</td>
+              <td>{{ solicitud.objectID }}</td>
+              <td>{{ solicitud.fecha }}</td>
+              <td> {{ solicitud.hora }}</td>
+              <td>
+                <label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
+                <label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
+                <label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
+              </td>
             </tr>
           </tbody>
         </table>
-
-        <hr>
-        <p>{{ solicitud.usuario.nombres }}</p>
-
-        <div>
-          <hr>
-          <h6>Estado</h6>
-          <label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
-          <label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
-          <label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
-        </div>
+        <button class="m-1 btn btn-outline-primary btn-block" [routerLink]="['/modProceso/tasklist', solicitud.idProcess]">Ver proceso</button>
       </div>
     </div>
   </div>

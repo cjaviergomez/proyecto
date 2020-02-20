@@ -29,14 +29,14 @@ import { faWindowClose, faSearch, faPlus, faExclamation, faArrowCircleRight, faA
   styleUrls: []
 })
 export class startNewProcessComponent extends StartProcessInstanceComponent {
-  submitted:boolean = false;
-  model = new MyProcessData();
+  submitted = false;
+  model = new MyProcessData([], [], [], '', false);
   material = new Material(); //Modelo del material a agregar a la base de datos.
   elementoPro = new Material(); //Modelo del elemento de protección a agregar a la base de datos.
   especial = new Material(); //Modelo de la accion especial a agregar a la base de datos.
   solicitud: Solicitud;
 
-  descripcionS: string = '';
+  descripcionS = '';
   faWindowClose = faWindowClose;
   faSearch = faSearch;
   faPlus = faPlus;

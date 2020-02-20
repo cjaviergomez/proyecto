@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { faSyncAlt, faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -12,7 +12,8 @@ import { Solicitud } from '../../models/solicitud';
 
 @Component({
 	selector: 'solicitud-detail',
-	templateUrl: './solicitud-detail.component.html'
+  templateUrl: './solicitud-detail.component.html',
+  styleUrls: ['../solicitudes-list/solicitudes-list.component.css']
 })
 export class SolicitudDetailComponent implements OnInit, OnDestroy {
 
@@ -24,8 +25,7 @@ export class SolicitudDetailComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private solicitudService: SolicitudService,
-		private route: ActivatedRoute,
-		private router: Router
+		private route: ActivatedRoute
 	){}
 
 	ngOnInit(){
@@ -39,7 +39,6 @@ export class SolicitudDetailComponent implements OnInit, OnDestroy {
       this.solicitudService.getSolicitud(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe( solicitud =>{
-        console.log(solicitud);
         this.solicitud = solicitud;
         this.cargando = false;
       });

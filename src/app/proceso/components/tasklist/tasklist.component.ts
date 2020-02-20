@@ -4,6 +4,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CamundaRestService } from '../../services/camunda-rest.service';
 import { Task } from '../../models/Task';
 
+// Iconos
+import { faExclamation, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+
+
 @Component({
   selector: 'app-tasklist',
   templateUrl: './tasklist.component.html',
@@ -11,24 +15,27 @@ import { Task } from '../../models/Task';
 })
 export class TasklistComponent implements OnInit {
   tasks: Task[] = null;
-  taskId: String;
-  formKey: String;
+  processId: string;
+  taskId: string;
+  formKey: string;
+  cargando = false;
+
+  faExclamation = faExclamation; // Icono de exclamación.
+  faSyncAlt = faSyncAlt; // Icono que da vueltas al cargar.
 
   constructor(
     private camundaRestService: CamundaRestService,
-    private route: ActivatedRoute) {
-
-  }
+    private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.getTasks();
     if (this.route.params != null) {
       this.route.params.subscribe(params => {
-        if (params['id'] != null) {
-          this.taskId = params['id'];
-          this.getFormKey();
-        } else {
+        if (params['id'] != null && params['taskId'] == null) {
+          this.processId = params['id'];
           this.getTasks();
+        } else if(params['id'] != null && params['taskId'] != null){
+          this.taskId = params['taskId'];
+          this.getFormKey();
         }
       });
     }
@@ -42,8 +49,11 @@ export class TasklistComponent implements OnInit {
 
   getTasks(): void {
     this.camundaRestService
-      .getTasksProcess('244e51b6-447b-11ea-8ea4-9cb654491430')
-      .subscribe(tasks => this.tasks = tasks);
+      .getTasksProcess(this.processId)
+      .subscribe(tasks => {
+        this.tasks = tasks;
+        this.cargando = false;
+      });
   }
 
 }

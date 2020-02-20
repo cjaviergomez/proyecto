@@ -1,17 +1,27 @@
-<div class="ui grid">
-  <div class="six wide column">
-    <ul class="tasks">
-      <li *ngFor="let task of tasks">
-        <p><a routerLink="/modProceso/tasklist/{{task.id}}">{{task.name}}</a></p>
-      </li>
-    </ul>
+<div class="container mt-4">
+
+  <!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
+  <div *ngIf="cargando"
+        class="alert alert-info text-center animated fadeIn faster">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
   </div>
-  <div class="ten wide column">
-    <div *ngIf="taskId">
-      <generic-form [taskId]="taskId" [formKey]="formKey"></generic-form>
+
+  <div class="list-group" *ngIf="!cargando && !taskId">
+    <h4>Proceso</h4>
+    <p>El proceso esta dividido en tareas y cada una de ellas debe ser realizadas por un actor especifico. <br>
+      Por favor, selecione una tarea. </p>
+    <div *ngFor="let task of tasks">
+      <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}" class="list-group-item list-group-item-action list-group-item-primary mb-1">{{ task.name }}</a>
     </div>
-    <div *ngIf="!taskId">
-      <p>Please select task.</p>
-    </div>
+  </div>
+
+  <div *ngIf="!cargando && taskId">
+    <generic-form [taskId]="taskId" [formKey]="formKey"></generic-form>
   </div>
 </div>

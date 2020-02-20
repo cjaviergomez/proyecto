@@ -1,19 +1,19 @@
 <div class="container">
   <div [hidden]="submitted">
     <h1>Approve Task</h1>
-    <form (ngSubmit)="onSubmit()" (ngModelChange)="changedExtraHandler($event)" #approveDataTask="ngForm" class="ui form">
+    <form (ngSubmit)="onSubmit()" #approveDataTask="ngForm" class="ui form">
       <div class="field">
         <label for="firstName">First Name</label>
         <input type="text" id="firstName"
                required
-               [(ngModel)]="model.firstName" name="firstName"
+               [(ngModel)]="model.observaciones" name="firstName"
                #name="ngModel">
       </div>
 
       <div class="field">
         <label for="lastName">Last Name</label>
         <input type="text" id="lastName"
-               [(ngModel)]="model.lastName" name="lastName" #name="ngModel">
+               [(ngModel)]="model.observaciones" name="lastName" #name="ngModel">
       </div>
 
       <div class="field">
