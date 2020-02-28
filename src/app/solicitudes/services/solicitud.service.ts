@@ -63,6 +63,19 @@ export class SolicitudService {
     }));
   }
 
+  // Metodo para obtener una solicitud que esta asociada a un proceso en especifico.
+  getSolicitudProcess(idProcess: string) {
+    this.solicitudesCollection = this.afs.collection<Solicitud>('solicitudes', ref => ref.where('idProcess', '==', idProcess));
+		return this.solicitudes = this.solicitudesCollection.snapshotChanges()
+		.pipe(map( changes => {
+			return changes.map( action => {
+				const data = action.payload.doc.data() as Solicitud;
+				data.id = action.payload.doc.id;
+				return data;
+			})
+		}));
+  }
+
   	// Metodo para actualizar la informaciòn de una solicitud en Firebase.
 	updateUsuario(solicitud: Solicitud) {
 		let idSolicitud = solicitud.id;

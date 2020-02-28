@@ -1,5 +1,5 @@
 import { CamundaRestService } from '../../services/camunda-rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 
 export class CompleteTaskComponent {
   model
@@ -18,11 +18,12 @@ export class CompleteTaskComponent {
   }
   onSubmit() {
     this.route.params.subscribe(params => {
-      const taskId = params['id'];
+      const procesoId = params['id'];
+      const taskId = params['taskId'];
       const variables = this.generateVariablesFromFormFields();
       this.camundaRestService.postCompleteTask(taskId, variables).subscribe();
       this.submitted = true;
-      this.router.navigate(['/tasklist']);
+      this.router.navigate(['/modProceso/tasklist', procesoId]);
     });
   }
   loadExistingVariables(taskId: String, variableNames: String) {

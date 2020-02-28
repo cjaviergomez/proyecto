@@ -1,11 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { CamundaRestService } from '../../services/camunda-rest.service';
-import { Task } from '../../models/Task';
+declare var $: any; // Para trabajar con el modal
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 // Iconos
-import { faExclamation, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import { faWindowClose, faSearch, faPlus, faExclamation, faArrowCircleRight, faArrowCircleLeft, faSave, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+
+// Modelos
+import { Task } from '../../models/Task';
+import { Solicitud } from 'app/solicitudes/models/solicitud';
+import { Unidad } from 'app/admin/models/unidad';
+import { MyProcessData } from '../../models/MyProcessData';
+
+// Servicios
+import { CamundaRestService } from '../../services/camunda-rest.service';
+import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
+import { UnidadService } from '../../../admin/services/unidad.service';
 
 
 @Component({
@@ -13,26 +24,47 @@ import { faExclamation, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './tasklist.component.html',
   styleUrls: ['./tasklist.component.css']
 })
-export class TasklistComponent implements OnInit {
+export class TasklistComponent implements OnInit, OnDestroy {
   tasks: Task[] = null;
+  tasksComplete: Task[] = null;
+  historyVariables: [] = [];
   processId: string;
   taskId: string;
   formKey: string;
   cargando = false;
 
-  faExclamation = faExclamation; // Icono de exclamación.
-  faSyncAlt = faSyncAlt; // Icono que da vueltas al cargar.
+  //Varibales para el formulario de solicitud.
+  seccion: number;
+  solicitud: Solicitud[];
+  unidad: Unidad;
+  model = new MyProcessData([], [], [], '', false);
+
+  // Iconos
+  faWindowClose = faWindowClose;
+  faSearch = faSearch;
+  faPlus = faPlus;
+  faExclamation = faExclamation;
+  faArrowCircleRight = faArrowCircleRight; // Flecha del botón siguiente.
+  faArrowCircleLeft = faArrowCircleLeft; // Flecha del botón atrás
+  faSave = faSave;
+  faSyncAlt = faSyncAlt;
+
+  private ngUnsubscribe: Subject<any> = new Subject<any>();
 
   constructor(
     private camundaRestService: CamundaRestService,
-    private route: ActivatedRoute) {}
+    private route: ActivatedRoute,
+    private solictudService: SolicitudService,
+    private unidadService: UnidadService) {}
 
   ngOnInit() {
     if (this.route.params != null) {
-      this.route.params.subscribe(params => {
+      this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
         if (params['id'] != null && params['taskId'] == null) {
           this.processId = params['id'];
+          this.getSolicitudProcess();
           this.getTasks();
+          this.getHistoryVariables();
         } else if(params['id'] != null && params['taskId'] != null){
           this.taskId = params['taskId'];
           this.getFormKey();
@@ -44,16 +76,110 @@ export class TasklistComponent implements OnInit {
   getFormKey(): void {
     this.camundaRestService
       .getTaskFormKey(this.taskId)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(formKey => this.formKey = formKey.key);
   }
 
   getTasks(): void {
     this.camundaRestService
       .getTasksProcess(this.processId)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(tasks => {
         this.tasks = tasks;
+        console.log(tasks);
+        this.getTasksComplete();
+      });
+  }
+
+  getTasksComplete(): void {
+    this.camundaRestService
+      .getTasksProcessComplete(this.processId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(tasks => {
+        this.tasksComplete = tasks;
+        console.log(tasks);
         this.cargando = false;
       });
   }
+
+  getProcessVariables(): void {
+    this.camundaRestService
+      .getVariablesForProcess(this.processId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(variables => {
+        console.log('Variables Process', variables);
+      });
+  }
+
+  // Metodo para obtener todas las variables que han sido guardadas en el proceso.
+  getHistoryVariables(): void {
+    this.camundaRestService
+      .getHistoryVariables(this.processId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(variables => {
+        this.historyVariables = variables;
+        console.log('History Variables', variables);
+        this.generateModelFromVariables(variables);
+      });
+  }
+
+  getSolicitudProcess(){
+    this.solictudService
+        .getSolicitudProcess(this.processId)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(solicitud => {
+          if(solicitud.length > 0){
+            this.solicitud = solicitud;
+            this.getUnidad(this.solicitud[0].usuario.unidad_id);
+          }
+        });
+
+  }
+
+  // Metodo para agregar las variables historicas al modelo
+  generateModelFromVariables(variables) {
+   for(let variable of variables){
+     if(this.model[variable.name] != null){
+      this.model[variable.name] = variable.value;
+     }
+   }
+  }
+
+  //Metodo para obtener la Unidad academica administrativa del usuario usando el metodo getUnidad del servicio.
+	getUnidad( id: string){
+    this.unidadService.getUnidad(id)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe( unidad => {
+          this.unidad = unidad;
+        });
+  }
+
+  verFormulario(){
+    this.seccion = 1;
+    $('#verFormulario').modal('show');
+  }
+
+  seccionSiguiente(){
+		this.seccion = this.seccion + 1;
+	}
+
+	seccionAnterior(){
+		this.seccion = this.seccion - 1;
+	}
+
+	actualSeccion(sesion:number){
+		this.seccion = sesion;
+  }
+
+   /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 
 }

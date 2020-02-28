@@ -19,6 +19,7 @@ export class CamundaRestService {
 
   constructor(private http: HttpClient) {}
 
+  // Metodo para obtener todas las tareas
   getTasks(): Observable<Task[]> {
     const endpoint = `${this.engineRestUrl}task?sortBy=created&sortOrder=desc&maxResults=10`;
     return this.http.get<any>(endpoint).pipe(
@@ -27,11 +28,30 @@ export class CamundaRestService {
     );
   }
 
+  // Metodo para obtener las tareas de un proceso en especifico.
   getTasksProcess(idProcess: string): Observable<Task[]> {
     const endpoint = `${this.engineRestUrl}task?processInstanceId=${idProcess}`;
     return this.http.get<any>(endpoint).pipe(
       tap(form => this.log(`fetched tasks`)),
       catchError(this.handleError('getTasks', []))
+    );
+  }
+
+  // Metodo para obtener las tareas completadas de un proceso en especifico.
+  getTasksProcessComplete(idProcess: string): Observable<Task[]> {
+    const endpoint = `${this.engineRestUrl}/history/task?processInstanceId=${idProcess}&finished=true`;
+    return this.http.get<any>(endpoint).pipe(
+      tap(form => this.log(`fetched tasks`)),
+      catchError(this.handleError('getTasks', []))
+    );
+  }
+
+  // Metodo para obtener todas las variables de un proceso terminado en especifico.
+  getHistoryVariables(idProcess: string): Observable<[]> {
+    const endpoint = `${this.engineRestUrl}/history/variable-instance?processInstanceId=${idProcess}`;
+    return this.http.get<any>(endpoint).pipe(
+      tap(form => this.log(`fetched History Variables`)),
+      catchError(this.handleError('getHistoryVariables', []))
     );
   }
 
@@ -71,6 +91,15 @@ export class CamundaRestService {
     return this.http.get<ProcessDefinition[]>(this.engineRestUrl + 'process-definition?latestVersion=true').pipe(
       tap(processDefinitions => this.log(`fetched processDefinitions`)),
       catchError(this.handleError('getProcessDefinitions', []))
+    );
+  }
+
+  // Metodo para obtener todas las variables que han sido guardadas en las instancias de un proceso activo.
+  getVariablesForProcess(processId: String): Observable<any> {
+    const endpoint = `${this.engineRestUrl}process-instance/${processId}/variables?deserializeValues=false`;
+    return this.http.get<any>(endpoint).pipe(
+      tap(form => this.log(`fetched variables`)),
+      catchError(this.handleError('getVariablesForTask', []))
     );
   }
 
