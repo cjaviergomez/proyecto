@@ -71,6 +71,7 @@ export class CamundaRestService {
     );
   }
 
+  // Metodo para completar las tareas con variables.
   postCompleteTask(taskId: String, variables: Object): Observable<any> {
     const endpoint = `${this.engineRestUrl}task/${taskId}/complete`;
     return this.http.post<any>(endpoint, variables).pipe(

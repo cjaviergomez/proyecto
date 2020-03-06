@@ -26,6 +26,7 @@ export class CompleteTaskComponent {
       this.router.navigate(['/modProceso/tasklist', procesoId]);
     });
   }
+
   loadExistingVariables(taskId: String, variableNames: String) {
     this.camundaRestService.getVariablesForTask(taskId, variableNames).subscribe((result) => {
       this.generateModelFromVariables(result);

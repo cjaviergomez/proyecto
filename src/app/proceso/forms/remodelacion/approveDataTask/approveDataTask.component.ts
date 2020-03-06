@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CamundaRestService } from '../../services/camunda-rest.service';
-import { CompleteTaskComponent } from '../general/complete-task.component';
-import { MyProcessData } from '../../models/MyProcessData';
+
+// Componentes
+import { CompleteTaskComponent } from '../../general/complete-task.component';
+
+// Modelos
+import { MyProcessData } from '../../../models/MyProcessData';
+
+// Services
+import { CamundaRestService } from '../../../services/camunda-rest.service';
 
 @Component({
   selector: 'approveDataTask',

@@ -24,7 +24,7 @@
     <div *ngIf="tasks && tasks.length > 0">
       <h5>Tareas pendientes</h5>
       <div *ngFor="let task of tasks">
-        <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}" class="list-group-item list-group-item-action list-group-item-primary mb-1">{{ task.name }}</a>
+        <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}" class="list-group-item list-group-item-action list-group-item-primary mb-1">{{ task.name }} <span class="badge badge-pill badge-primary float-right">{{task.assignee}}</span></a>
       </div>
     </div>
 
