@@ -15,6 +15,7 @@ const httpOptions = {
 	providedIn: 'root'
 })
 export class CamundaRestService {
+
   private engineRestUrl = '/engine-rest/'
 
   constructor(private http: HttpClient) {}
@@ -41,7 +42,7 @@ export class CamundaRestService {
   getTasksProcessComplete(idProcess: string): Observable<Task[]> {
     const endpoint = `${this.engineRestUrl}/history/task?processInstanceId=${idProcess}&finished=true`;
     return this.http.get<any>(endpoint).pipe(
-      tap(form => this.log(`fetched tasks`)),
+      tap(form => this.log(`fetched tasks completed`)),
       catchError(this.handleError('getTasks', []))
     );
   }
@@ -55,6 +56,7 @@ export class CamundaRestService {
     );
   }
 
+  // Metodo para obtener el formKey de una tarea
   getTaskFormKey(taskId: String): Observable<any> {
     const endpoint = `${this.engineRestUrl}task/${taskId}/form`;
     return this.http.get<any>(endpoint).pipe(
@@ -88,6 +90,7 @@ export class CamundaRestService {
     );
   }
 
+  // Metodo para obtener todos los procesos almacenados en camunda.
   getProcessDefinitions(): Observable<ProcessDefinition[]> {
     return this.http.get<ProcessDefinition[]>(this.engineRestUrl + 'process-definition?latestVersion=true').pipe(
       tap(processDefinitions => this.log(`fetched processDefinitions`)),
@@ -104,21 +107,13 @@ export class CamundaRestService {
     );
   }
 
+  // Metodo para crear una nueva instancia de un proceso.
   postProcessInstance(processDefinitionKey, variables): Observable<any> {
     const endpoint = `${this.engineRestUrl}process-definition/key/${processDefinitionKey}/start`;
     return this.http.post<any>(endpoint, variables).pipe(
       tap(processDefinitions => this.log(`posted process instance`)),
       catchError(this.handleError('postProcessInstance', []))
     );
-  }
-
-  deployProcess(fileToUpload: File): Observable<any> {
-    const endpoint = `${this.engineRestUrl}deployment/create`;
-    const formData = new FormData();
-
-    formData.append('fileKey', fileToUpload, fileToUpload.name);
-
-    return this.http.post(endpoint, formData);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

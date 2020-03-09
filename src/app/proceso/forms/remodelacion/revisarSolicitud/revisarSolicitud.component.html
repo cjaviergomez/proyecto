@@ -4,5 +4,6 @@
      Es por esto que antes de seguir Planeación debe revisar el formulario de solicitud y después terminar esta tarea.</p>
   <hr class="my-4">
   <p>Para terminar esta tarea y seguir con el proceso, se debe revisar el formulario de solicitud y dar click en continuar</p>
-  <button type="button" class="btn btn-primary" (click)="completarTarea()">Continuar</button>
+  <button type="button" class="btn btn-outline-primary float-right" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != 'Planeación'" *ngIf="usuario">Continuar</button>
+  <button type="button" class="btn btn-outline-primary float-right mr-1" (click)="irATareas()">Atrás</button>
 </div>

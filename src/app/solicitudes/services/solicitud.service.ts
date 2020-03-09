@@ -77,9 +77,9 @@ export class SolicitudService {
   }
 
   	// Metodo para actualizar la informaciòn de una solicitud en Firebase.
-	updateUsuario(solicitud: Solicitud) {
+	updateSolicitud(solicitud: Solicitud) {
 		let idSolicitud = solicitud.id;
-		delete solicitud.id; // Le borramos el id al usuario para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
+		delete solicitud.id; // Le borramos el id a la solicitud para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
 		this.solicitudDoc = this.afs.doc<Solicitud>(`solicitudes/${idSolicitud}`);
 		return this.solicitudDoc.update(solicitud);
 	 }

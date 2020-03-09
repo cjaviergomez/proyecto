@@ -17,11 +17,11 @@
     <p>El proceso esta dividido en tareas y cada una de ellas debe ser realizadas por un actor especifico. <br>
       Por favor, selecione una tarea.
     </p>
-    <div *ngIf="historyVariables.length > 0">
-      <button class="list-group-item list-group-item-action list-group-item-success mb-3" (click)="verFormulario()">Formulario de solicitud</button>
+    <div *ngIf="historyVariables.length > 0" class="mb-3">
+      <button class="list-group-item list-group-item-action list-group-item-success" (click)="verFormulario()">Formulario de solicitud</button>
     </div>
 
-    <div *ngIf="tasks && tasks.length > 0">
+    <div *ngIf="tasks && tasks.length > 0" class="mb-3">
       <h5>Tareas pendientes</h5>
       <div *ngFor="let task of tasks">
         <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}" class="list-group-item list-group-item-action list-group-item-primary mb-1">{{ task.name }} <span class="badge badge-pill badge-primary float-right">{{task.assignee}}</span></a>
@@ -31,7 +31,7 @@
     <div *ngIf="tasksComplete && tasksComplete.length > 0">
       <h5>Tareas completadas</h5>
       <div *ngFor="let task of tasksComplete">
-        <a class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ task.name }}</a>
+        <a class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ task.name }} <span class="badge badge-secondary float-right">{{ task.assignee }}</span> </a>
       </div>
     </div>
 

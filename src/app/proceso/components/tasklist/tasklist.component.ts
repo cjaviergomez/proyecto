@@ -18,7 +18,6 @@ import { CamundaRestService } from '../../services/camunda-rest.service';
 import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
 import { UnidadService } from '../../../admin/services/unidad.service';
 
-
 @Component({
   selector: 'app-tasklist',
   templateUrl: './tasklist.component.html',
@@ -73,6 +72,7 @@ export class TasklistComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Metodo para obtener el formulario de la tarea.
   getFormKey(): void {
     this.camundaRestService
       .getTaskFormKey(this.taskId)
@@ -80,34 +80,25 @@ export class TasklistComponent implements OnInit, OnDestroy {
       .subscribe(formKey => this.formKey = formKey.key);
   }
 
+  // Metodo para obtener las tareas a completar del proceso
   getTasks(): void {
     this.camundaRestService
       .getTasksProcess(this.processId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(tasks => {
         this.tasks = tasks;
-        console.log(tasks);
         this.getTasksComplete();
       });
   }
 
+  // Metodo para obtener las tareas completadas del proceso.
   getTasksComplete(): void {
     this.camundaRestService
       .getTasksProcessComplete(this.processId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(tasks => {
         this.tasksComplete = tasks;
-        console.log(tasks);
         this.cargando = false;
-      });
-  }
-
-  getProcessVariables(): void {
-    this.camundaRestService
-      .getVariablesForProcess(this.processId)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(variables => {
-        console.log('Variables Process', variables);
       });
   }
 
@@ -118,11 +109,11 @@ export class TasklistComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(variables => {
         this.historyVariables = variables;
-        console.log('History Variables', variables);
         this.generateModelFromVariables(variables);
       });
   }
 
+  // Metodo para obtener la solicitud que esta asociada al proceso.
   getSolicitudProcess(){
     this.solictudService
         .getSolicitudProcess(this.processId)
@@ -154,6 +145,7 @@ export class TasklistComponent implements OnInit, OnDestroy {
         });
   }
 
+  // Metodo para ver el formulario de solicitud en un modal.
   verFormulario(){
     this.seccion = 1;
     $('#verFormulario').modal('show');
