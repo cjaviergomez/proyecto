@@ -1,9 +1,18 @@
-<div class="jumbotron">
-  <h5 class="display-4">Informar a Planeación</h5>
-  <p class="lead">Este apartado tiene como objetivo informar a planeación de la nueva reforma.
-     Es por esto que antes de seguir Planeación debe revisar el formulario de solicitud y después terminar esta tarea.</p>
+<div class="jumbotron" *ngIf="task">
+  <h5 class="display-4">{{ task.name }}</h5>
+  <p class="lead">
+    Este apartado tiene como objetivo informar a planeación de la nueva reforma.
+    Es por esto que antes de seguir Planeación debe revisar el formulario de solicitud y después terminar esta tarea.
+  </p>
+  <p>
+    <span class="badge badge-primary">Responsable:</span>
+    <em>
+      {{ task.assignee }}
+    </em>
+  </p>
+
   <hr class="my-4">
   <p>Para terminar esta tarea y seguir con el proceso, se debe revisar el formulario de solicitud y dar click en continuar</p>
-  <button type="button" class="btn btn-outline-primary float-right" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != 'Planeación'" *ngIf="usuario">Continuar</button>
+  <button type="button" class="btn btn-outline-primary float-right" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee" *ngIf="usuario">Continuar</button>
   <button type="button" class="btn btn-outline-primary float-right mr-1" (click)="irATareas()">Atrás</button>
 </div>

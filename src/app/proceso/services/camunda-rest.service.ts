@@ -29,6 +29,18 @@ export class CamundaRestService {
     );
   }
 
+  /**
+   * Metodo para obtener una tarea en especifico.
+   * @param id : id de la tarea a consultar.
+   */
+  getTask(id: string): Observable<Task> {
+    const endpoint = `${this.engineRestUrl}task/${id}`;
+    return this.http.get<any>(endpoint).pipe(
+      tap(form => this.log(`fetched task`)),
+      catchError(this.handleError('getTask', []))
+    );
+  }
+
   // Metodo para obtener las tareas de un proceso en especifico.
   getTasksProcess(idProcess: string): Observable<Task[]> {
     const endpoint = `${this.engineRestUrl}task?processInstanceId=${idProcess}`;

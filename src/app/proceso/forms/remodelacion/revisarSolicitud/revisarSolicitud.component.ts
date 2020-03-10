@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 // Modelos
 import { Usuario } from 'app/admin/models/usuario';
 import { Solicitud } from 'app/solicitudes/models/solicitud';
+import { Task } from 'app/proceso/models/Task';
 
 // Services
 import { CamundaRestService } from '../../../services/camunda-rest.service';
@@ -26,6 +27,7 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject<any>();
   public procesoId: string;
   public taskId: string;
+  public task: Task;
 
   constructor(private camundaRestService: CamundaRestService,
               private route: ActivatedRoute,
@@ -41,13 +43,15 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
       this.procesoId = params['id'];
       this.taskId = params['taskId'];
     });
-    this.solicitudService.getSolicitudProcess(this.procesoId)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe( solicitud => {
-          this.solicitud = solicitud;
-        });
+    this.getSolicitud();
+    this.getTask(this.taskId);
+
   }
 
+  /**
+   * Metodo para completar la tarea
+   * Esta tarea cambia el estado de la reforma a 'En trámite'.
+   */
   completarTarea() {
     this.swal.showLoading();
     this.solicitud[0].estado = 'En trámite';
@@ -55,9 +59,11 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
       this.solicitudService.updateSolicitud(this.solicitud[0]).then(()=>{
         this.swal.stopLoading();
         this.router.navigate(['/modProceso/tasklist', this.procesoId]);
+      }).catch((err) => {
+        this.swal.stopLoading();
+        this.swal.showErrorMessage('');
       });
     });
-
   }
 
   // Metodo para saber si hay un usuario logeado actualmente y obtener su información.
@@ -76,6 +82,30 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Metodo para buscar una tarea en especifico.
+   * @param id id de la tarea a consultar
+   */
+  getTask(id: string) {
+    this.camundaRestService.getTask(id).subscribe( task => {
+      this.task = task;
+    });
+  }
+
+  /**
+   * Metodo para obtener la solicitud asociada al proceso.
+   */
+  getSolicitud() {
+    this.solicitudService.getSolicitudProcess(this.procesoId)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe( solicitud => {
+          this.solicitud = solicitud;
+        });
+  }
+
+  /**
+   * Metodo para devolverse a ver las tareas del proceso.
+   */
   irATareas() {
     this.router.navigate(['/modProceso/tasklist', this.procesoId]);
   }

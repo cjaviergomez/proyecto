@@ -1,5 +1,6 @@
 import { CamundaRestService } from '../../services/camunda-rest.service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
 
 export class CompleteTaskComponent {
   model
@@ -7,14 +8,17 @@ export class CompleteTaskComponent {
   route: ActivatedRoute
   router: Router
   camundaRestService: CamundaRestService
+  solicitudService: SolicitudService
 
   constructor(route: ActivatedRoute,
     router: Router,
     camundaRestService: CamundaRestService,
+    solicitudService: SolicitudService
     ) {
       this.route = route;
       this.router = router;
       this.camundaRestService = camundaRestService;
+      this.solicitudService = solicitudService;
   }
   onSubmit() {
     this.route.params.subscribe(params => {
