@@ -69,7 +69,7 @@ export class StartProcessInstanceComponent implements OnInit {
     materialService: MaterialesService,
     swal: ShowMessagesService
     ) {
-      this.cargando = true; //Indicador para saber cuando la información necesario para el formulario a cargado.
+      this.cargando = true; //Indicador para saber cuando la información necesaria para el formulario a cargado.
       this.route = route;
       this.camundaRestService = camundaRestService;
       this.authService = authService;

@@ -1,0 +1,65 @@
+<div class="container">
+  <div *ngIf="!cargando && task">
+    <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+      <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+      Atrás
+    </button>
+    <h5 class="display-4">{{ task.name }}</h5>
+    <p class="lead">
+      Este tarea tiene como proposito dar a conocer las cotizaciones que conlleva la respectiva solicitud.
+    </p>
+
+    <p>
+      <span class="badge badge-primary">Responsable:</span>
+      <em>
+        {{ task.assignee }}
+      </em>
+    </p>
+
+    <div class="container mt-3" *ngIf="solicitud">
+      <label>Subir cotización</label>
+      <div class="input-group" *ngIf="!formKey">
+        <div class="custom-file" *ngIf="usuario">
+          <input type="file" class="custom-file-input" id="inputGroupFile01" accept=".pdf" (change)="onUpload($event)" aria-describedby="inputGroupFileAddon01" [disabled]="usuario.perfil.nombre != task.assignee">
+          <label *ngIf="solicitud.nombreCotizacion" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">{{ solicitud.nombreCotizacion }}</label>
+          <label *ngIf="!solicitud.nombreCotizacion" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">Elige un archivo</label>
+        </div>
+        <div class="input-group-append">
+          <button *ngIf="urlDoc | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon01" (click)="subirArchivo()">Guardar</button>
+          <ng-template #btnDisabled>
+            <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon01" disabled=true>Guardar</button>
+          </ng-template>
+        </div>
+      </div>
+
+      <div *ngIf="nameDocUp" class="progress">
+        <div class="progress-bar progress-bar-striped bg-primary"
+              role="progressbar" [style.width]="(uploadPercent | async) +'%'">
+        </div>
+      </div>
+      <div *ngIf="formKey">
+        <a [href]="solicitud.urlCotizacion" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud.nombreCotizacion }}</a>
+      </div>
+    </div>
+
+    <div class="text-right m-3" *ngIf="usuario">
+      <button type="button" class="btn btn-primary" (click)="completarTarea()" [disabled]="!solicitud.nombreCotizacion || formKey || usuario.perfil.nombre != task.assignee || nameDocUp != null" *ngIf="solicitud">
+        Enviar
+        <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
+      </button>
+  </div>
+
+  <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>
+</div>
+
+

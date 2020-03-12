@@ -12,7 +12,7 @@
           class="form-control mt-3"
           minlength="10"
           maxlength="40"
-          pattern="[A-Z a-z]+"
+          pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"
           placeholder="Nombre Completo" required autofocus>
     <div class="invalid-feedback animated fadeIn" *ngIf="formRegistro.submitted && formRegistro.controls['inputNombres'].errors">
             Introduce un nombre válido.

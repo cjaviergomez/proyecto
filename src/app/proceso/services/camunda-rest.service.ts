@@ -41,6 +41,18 @@ export class CamundaRestService {
     );
   }
 
+  /**
+   * Metodo para obtener una tarea que ya fue realizada.
+   * @param id : id de la tarea a consultar.
+   */
+  getTaskHistory(id: string): Observable<Task> {
+    const endpoint = `${this.engineRestUrl}history/task?taskId=${id}`;
+    return this.http.get<any>(endpoint).pipe(
+      tap(form => this.log(`fetched task`)),
+      catchError(this.handleError('getTask', []))
+    );
+  }
+
   // Metodo para obtener las tareas de un proceso en especifico.
   getTasksProcess(idProcess: string): Observable<Task[]> {
     const endpoint = `${this.engineRestUrl}task?processInstanceId=${idProcess}`;

@@ -28,10 +28,20 @@
       </div>
     </div>
 
+    <div *ngIf="tasks && tasks.length == 0" class="alert alert-info text-center animated fadeIn faster mb-3">
+      <h4 class="alert-heading">¡Proceso terminado!</h4>
+      <p class="mb-0">
+        No hay tareas pendientes
+      </p>
+      <p>
+        <fa-icon [icon]="faExclamation" size="2x"></fa-icon>
+      </p>
+    </div>
+
     <div *ngIf="tasksComplete && tasksComplete.length > 0">
       <h5>Tareas completadas</h5>
       <div *ngFor="let task of tasksComplete">
-        <a class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ task.name }} <span class="badge badge-pill badge-secondary float-right">{{ task.assignee }}</span> </a>
+        <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}/{{task.taskDefinitionKey}}" class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ task.name }} <span class="badge badge-pill badge-secondary float-right">{{ task.assignee }}</span> </a>
       </div>
     </div>
 

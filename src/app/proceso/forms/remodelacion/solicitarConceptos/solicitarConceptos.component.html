@@ -1,0 +1,90 @@
+<div class="container">
+  <div *ngIf="!cargando && task">
+    <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+      <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+      Atrás
+    </button>
+    <h5 class="display-4">{{ task.name }}</h5>
+    <p class="lead">
+      Este tarea tiene como objetivo solicitar a las diferentes Unidades Academica y/o Administrativas Asesoras
+      su respectivo concepto técnico. Para ello, se debe elegir a los responsables de emitir cada uno de los
+      conceptos técnicos.
+    </p>
+    <p>
+      <span class="badge badge-primary">Responsable:</span>
+      <em>
+        {{ task.assignee }}
+      </em>
+    </p>
+
+    <form #formObservaciones="ngForm">
+      <div class="form-group">
+        <label for="controlMT">Mantenimiento Tecnológico</label>
+        <select class="form-control" id="controlMT"
+                #selectM="ngModel"
+                name="selectM"
+                [ngClass]="{'is-invalid': formObservaciones.submitted && formObservaciones.controls['selectM'].errors }"
+                [(ngModel)]="mantenimientoId" required>
+            <option value="null" disabled>Elige un usuario</option>
+            <option *ngFor="let usuario of nombresMT"
+              [value]="usuario.id"> {{ usuario.nombres }} </option>
+        </select>
+        <div class="invalid-feedback animated fadeIn" *ngIf="formObservaciones.submitted && formObservaciones.controls['selectM'].errors">
+          Elige un usuario.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="controlDSI">División de Servicios de Información</label>
+        <select class="form-control" id="controlDSI"
+                #selectDSI="ngModel"
+                name="selectDSI"
+                [ngClass]="{'is-invalid': formObservaciones.submitted && formObservaciones.controls['selectDSI'].errors }"
+                [(ngModel)]="desiId" required>
+            <option value="null" disabled>Elige un usuario</option>
+            <option *ngFor="let usuario of nombresDSI"
+              [value]="usuario.id"> {{ usuario.nombres }} </option>
+        </select>
+        <div class="invalid-feedback animated fadeIn" *ngIf="formObservaciones.submitted && formObservaciones.controls['selectDSI'].errors">
+          Elige un usuario.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="controlPlaneacion">Planeación</label>
+        <select class="form-control"
+                #selectPlaneacion="ngModel"
+                name="selectPlaneacion"
+                [ngClass]="{'is-invalid': formObservaciones.submitted && formObservaciones.controls['selectPlaneacion'].errors }"
+                [(ngModel)]="planeacionId" required>
+            <option value="null" disabled>Elige un usuario</option>
+            <option *ngFor="let usuario of nombresPlaneacion"
+              [value]="usuario.id"> {{ usuario.nombres }} </option>
+        </select>
+        <div class="invalid-feedback animated fadeIn" *ngIf="formObservaciones.submitted && formObservaciones.controls['selectPlaneacion'].errors">
+          Elige un usuario.
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button type="button" class="btn btn-primary" (click)="completarTarea()" [disabled]="!formObservaciones.form.valid || usuario.perfil.nombre != task.assignee || formKey != null" *ngIf="usuario">
+          Enviar
+          <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
+        </button>
+
+      </div>
+    </form>
+  </div>
+
+  <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>
+</div>

@@ -12,4 +12,15 @@ export interface Solicitud {
   nombre_subcapa?: string;
   descripcion?: string;
 
+  urlCTDSI?: string;
+  nombreCTDSI?: string;
+
+  urlCTMT?: string;
+  nombreCTMT?: string;
+
+  urlCTPlaneacion?: string;
+  nombreCTPlaneacion?: string;
+
+  urlCotizacion?: string;
+  nombreCotizacion?: string;
 }

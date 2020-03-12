@@ -1,4 +1,8 @@
-<div class="jumbotron" *ngIf="task">
+<div class="container jumbotron" *ngIf="task">
+  <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+    <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+    Atrás
+  </button>
   <h5 class="display-4">{{ task.name }}</h5>
   <p class="lead">
     Este apartado tiene como objetivo informar a planeación de la nueva reforma.
@@ -13,6 +17,5 @@
 
   <hr class="my-4">
   <p>Para terminar esta tarea y seguir con el proceso, se debe revisar el formulario de solicitud y dar click en continuar</p>
-  <button type="button" class="btn btn-outline-primary float-right" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee" *ngIf="usuario">Continuar</button>
-  <button type="button" class="btn btn-outline-primary float-right mr-1" (click)="irATareas()">Atrás</button>
+  <button type="button" class="btn btn-outline-primary float-right" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Continuar</button>
 </div>

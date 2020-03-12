@@ -3,4 +3,5 @@ export class Task {
   name: string;
   assignee: string;
   key: string;
+  taskDefinitionKey: string;
 }

@@ -1,6 +1,11 @@
 import { CamundaRestService } from '../../services/camunda-rest.service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
+import { UnidadService } from '../../../admin/services/unidad.service';
+import { ShowMessagesService } from '../../../out/services/show-messages.service';
+import { MaterialesService } from '../../services/materiales.service';
+import { UsuarioService } from '../../../admin/services/usuario.service';
+import { AuthService } from '../../../out/services/auth.service';
 
 export class CompleteTaskComponent {
   model
@@ -9,25 +14,40 @@ export class CompleteTaskComponent {
   router: Router
   camundaRestService: CamundaRestService
   solicitudService: SolicitudService
+  unidadService: UnidadService
+  swal: ShowMessagesService
+  materialService: MaterialesService
+  usuarioService: UsuarioService
+  authService: AuthService
 
   constructor(route: ActivatedRoute,
     router: Router,
     camundaRestService: CamundaRestService,
-    solicitudService: SolicitudService
+    solicitudService: SolicitudService,
+    unidadService: UnidadService,
+    swal: ShowMessagesService,
+    materialService: MaterialesService,
+    usuarioService: UsuarioService,
+    authService: AuthService
     ) {
       this.route = route;
       this.router = router;
       this.camundaRestService = camundaRestService;
       this.solicitudService = solicitudService;
+      this.unidadService = unidadService;
+      this.swal = swal;
+      this.materialService = materialService;
+      this.usuarioService = usuarioService;
+      this.authService = authService;
   }
   onSubmit() {
     this.route.params.subscribe(params => {
       const procesoId = params['id'];
       const taskId = params['taskId'];
       const variables = this.generateVariablesFromFormFields();
-      this.camundaRestService.postCompleteTask(taskId, variables).subscribe();
-      this.submitted = true;
-      this.router.navigate(['/modProceso/tasklist', procesoId]);
+      this.camundaRestService.postCompleteTask(taskId, variables).subscribe(()=>{
+        this.router.navigate(['/modProceso/tasklist', procesoId]);
+      });
     });
   }
 
@@ -41,6 +61,7 @@ export class CompleteTaskComponent {
       this.model[variableName] = variables[variableName].value;
     });
   }
+
   generateVariablesFromFormFields() {
     const variables = {
       variables: { }

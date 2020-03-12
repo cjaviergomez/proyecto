@@ -503,9 +503,9 @@
             </tr>
           </tbody>
         </table>
-        <div *ngIf="elementosPro && elementosPro.length === 0"
+        <div *ngIf="especiales && especiales.length === 0"
               class="alert alert-primary text-center mt-3 animated fadeIn faster">
-          <h4 class="alert-heading">No se encontraron elementos de protección por '{{ filterElements }}'</h4>
+          <h4 class="alert-heading">No se encontraron acciones especiales por '{{ filterElements }}'</h4>
           <p>
             <fa-icon [icon]="faExclamation" class="fa-3x"></fa-icon>
          </p>

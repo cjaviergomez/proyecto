@@ -1,0 +1,110 @@
+<div class="container">
+  <div *ngIf="!cargando && task">
+    <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+      <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+      Atrás
+    </button>
+    <h5 class="display-4">{{ task.name }}</h5>
+    <p class="lead">
+      Este tarea tiene como objetivo que cada uno de los miembros seleccionados de las diferentes Unidades Academica y/o Administrativas Asesoras
+      presente su respectivo concepto técnico. Para ello, cada miembro debe subir su
+      archivo con el concepto técnico y guardarlo.
+    </p>
+
+    <div class="container mt-3" *ngIf="solicitud">
+      <label>Mantenimiento Tecnológico</label>
+      <div class="input-group" *ngIf="!formKey">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="inputGroupFile01" accept=".pdf" (change)="onUpload($event)" aria-describedby="inputGroupFileAddon01" [disabled]="usuario && usuario.id != mantenimientoId">
+          <label *ngIf="solicitud.nombreCTMT" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">{{ solicitud.nombreCTMT }}</label>
+          <label *ngIf="!solicitud.nombreCTMT" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">Elige un archivo</label>
+        </div>
+        <div class="input-group-append">
+          <button *ngIf="urlDoc | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon01" (click)="subirArchivo()">Guardar</button>
+          <ng-template #btnDisabled>
+            <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon01" disabled=true>Guardar</button>
+          </ng-template>
+        </div>
+      </div>
+
+      <div *ngIf="nameDocUp" class="progress">
+        <div class="progress-bar progress-bar-striped bg-primary"
+              role="progressbar" [style.width]="(uploadPercent | async) +'%'">
+        </div>
+      </div>
+      <div *ngIf="formKey">
+        <a [href]="solicitud.urlCTMT" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud.nombreCTMT }}</a>
+      </div>
+    </div>
+
+    <div class="container mt-3" *ngIf="solicitud">
+      <label>División de Servicios de Información</label>
+      <div class="input-group" *ngIf="!formKey">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="inputGroupFile02" accept=".pdf" (change)="onUpload2($event)" aria-describedby="inputGroupFileAddon02" [disabled]="usuario && usuario.id != desiId">
+          <label *ngIf="solicitud.nombreCTDSI" class="custom-file-label" for="inputGroupFile02" data-browse="Elegir">{{ solicitud.nombreCTDSI }}</label>
+          <label *ngIf="!solicitud.nombreCTDSI" class="custom-file-label" for="inputGroupFile02" data-browse="Elegir">Elige un archivo</label>
+        </div>
+        <div class="input-group-append">
+          <button *ngIf="urlDoc2 | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon02" (click)="subirArchivo2()">Guardar</button>
+          <ng-template #btnDisabled>
+            <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon02" disabled=true>Guardar</button>
+          </ng-template>
+        </div>
+      </div>
+
+      <div *ngIf="nameDocUp2" class="progress">
+        <div class="progress-bar progress-bar-striped bg-primary"
+              role="progressbar" [style.width]="(uploadPercent2 | async) +'%'">
+        </div>
+      </div>
+      <div *ngIf="formKey">
+        <a [href]="solicitud.urlCTDSI" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud.nombreCTDSI}}</a>
+      </div>
+    </div>
+
+    <div class="container mt-3" *ngIf="solicitud">
+      <label>Planeación</label>
+      <div class="input-group" *ngIf="!formKey">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="inputGroupFile03" accept=".pdf" (change)="onUpload3($event)" aria-describedby="inputGroupFileAddon03" [disabled]="usuario && usuario.id != planeacionId">
+          <label *ngIf="solicitud.nombreCTPlaneacion" class="custom-file-label" for="inputGroupFile03" data-browse="Elegir">{{ solicitud.nombreCTPlaneacion }}</label>
+          <label *ngIf="!solicitud.nombreCTPlaneacion" class="custom-file-label" for="inputGroupFile03" data-browse="Elegir">Elige un archivo</label>
+        </div>
+        <div class="input-group-append">
+          <button *ngIf="urlDoc3 | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon03" (click)="subirArchivo3()">Guardar</button>
+          <ng-template #btnDisabled>
+            <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon03" disabled=true>Guardar</button>
+          </ng-template>
+        </div>
+      </div>
+
+      <div *ngIf="nameDocUp3" class="progress">
+        <div class="progress-bar progress-bar-striped bg-primary"
+              role="progressbar" [style.width]="(uploadPercent3 | async) +'%'">
+        </div>
+      </div>
+      <div *ngIf="formKey">
+        <a [href]="solicitud.urlCTPlaneacion" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud.nombreCTPlaneacion }}</a>
+      </div>
+    </div>
+    <div class="text-right m-3">
+      <button type="button" class="btn btn-primary" (click)="completarTarea()" [disabled]="!solicitud.nombreCTDSI || !solicitud.nombreCTMT || !solicitud.nombreCTPlaneacion || formKey" *ngIf="solicitud">
+        Enviar
+        <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
+      </button>
+  </div>
+
+  <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>
+</div>
+

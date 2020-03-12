@@ -1,0 +1,47 @@
+<div class="container">
+  <div *ngIf="!cargando && task">
+    <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+      <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+      Atrás
+    </button>
+    <h5 class="display-4">{{ task.name }}</h5>
+    <p class="lead">
+      Este tarea tiene como objetivo enviar las observaciones por las cuales la solicitud no pudo seguir con el proceso.
+      Es necesario que el responsable de rechazar la solicitud envíe una retroalimentación para que el solicitante tenga claridad del motivo
+      del rechazo de su solicitud.
+    </p>
+    <p>
+      <span class="badge badge-primary">Responsable:</span>
+      <em>
+        {{ task.assignee }}
+      </em>
+    </p>
+
+    <form #formObservaciones="ngForm">
+      <div class="form-group">
+        <label for="controlTextarea1"><h5>Observaciones</h5></label>
+        <textarea class="form-control" id="controlTextarea1" rows="4" name="observaciones" [(ngModel)]="observacionesP" required [disabled]="formKey"></textarea>
+      </div>
+
+      <div class="text-right">
+        <button type="button" class="btn btn-primary" (click)="enviarComentarios()" [disabled]="!formObservaciones.form.valid || usuario.perfil.nombre != task.assignee || formKey != null" *ngIf="usuario">
+          Enviar
+          <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
+        </button>
+
+      </div>
+    </form>
+  </div>
+
+  <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>
+</div>

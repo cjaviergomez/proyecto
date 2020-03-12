@@ -34,6 +34,32 @@ export class UsuarioService {
 				}));
   }
 
+  // Metodo para obtener todos los usuarios de planeacion registrados en la base de datos incluido su id.
+	getUsuariosPlaneacion() {
+    this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('perfil.nombre', '==', 'Planeación'));
+		return this.usuarios = this.usuariosCollection.snapshotChanges()
+				.pipe(map( changes => {
+          return changes.map( action => {
+            const data = action.payload.doc.data() as Usuario;
+						data.id = action.payload.doc.id;
+						return data;
+					})
+				}));
+  }
+
+  // Metodo para obtener todos los usuarios de un area especifica registrados en la base de datos incluido su id.
+	getUsuariosAreas(id:string) {
+    this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('area_id', '==', id));
+		return this.usuarios = this.usuariosCollection.snapshotChanges()
+				.pipe(map( changes => {
+          return changes.map( action => {
+            const data = action.payload.doc.data() as Usuario;
+						data.id = action.payload.doc.id;
+						return data;
+					})
+				}));
+  }
+
   // Metodo para obtener un usuario especifico de Firebase.
   getUsuario(id: string) {
     this.usuarioDoc = this.afs.doc<Usuario>(`usuarios/${id}`); // Ruta del usuario en particular.

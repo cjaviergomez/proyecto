@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { faExclamation, faArrowCircleLeft, faSyncAlt } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
 // Modelos
 import { Usuario } from 'app/admin/models/usuario';
@@ -27,7 +28,14 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject<any>();
   public procesoId: string;
   public taskId: string;
+  public formKey: string;
   public task: Task;
+  cargando: boolean;
+
+  //Iconos
+  faExclamation = faExclamation;
+  faArrowCircleLeft = faArrowCircleLeft;
+  faSyncAlt = faSyncAlt;
 
   constructor(private camundaRestService: CamundaRestService,
               private route: ActivatedRoute,
@@ -38,13 +46,19 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
               private swal: ShowMessagesService) { }
 
   ngOnInit() {
+    this.cargando = true;
     this.getCurrentUser();
     this.route.params.subscribe(params => {
       this.procesoId = params['id'];
       this.taskId = params['taskId'];
+      this.formKey = params['formKey'];
     });
     this.getSolicitud();
-    this.getTask(this.taskId);
+    if(this.formKey == null){
+      this.getTask(this.taskId);
+    } else {
+      this.getTaskHistory(this.taskId);
+    }
 
   }
 
@@ -89,6 +103,18 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
   getTask(id: string) {
     this.camundaRestService.getTask(id).subscribe( task => {
       this.task = task;
+      this.cargando = false;
+    });
+  }
+
+  /**
+   * Metodo para buscar una tarea que ya fue realizada.
+   * @param id id de la tarea a consultar
+   */
+  getTaskHistory(id: string) {
+    this.camundaRestService.getTaskHistory(id).subscribe( task => {
+      this.task = task[0];
+      this.cargando = false;
     });
   }
 

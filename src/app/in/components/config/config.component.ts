@@ -27,6 +27,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
   seccion: number; // para mostrar las diferentes secciones (foto, contraseña, cuenta)
   private ngUnsubscribe: Subject<any> = new Subject<any>();
 
+  //Para trabajar con la imagen
   uploadPercent: Observable<number>;
   urlImage: Observable<string>;
   nameImageUp: string;

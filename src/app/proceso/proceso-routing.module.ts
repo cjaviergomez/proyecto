@@ -15,7 +15,8 @@ const routes: Routes = [
   {path: 'processlist/:idCapa/:edif/:subCapa/:elem/:piso', component: ProcesslistComponent, canActivate: [ CreadorGuard ] },
   {path: 'startprocess/:processdefinitionkey/:idCapa/:edif/:subCapa/:elem/:piso', component: StartProcessComponent, canActivate: [AuthGuard] },
   {path: 'tasklist/:id', component: TasklistComponent },
-  {path: 'tasklist/:id/:taskId', component: TasklistComponent }
+  {path: 'tasklist/:id/:taskId', component: TasklistComponent },
+  {path: 'tasklist/:id/:taskId/:formKey', component: TasklistComponent }
 ];
 
 @NgModule({

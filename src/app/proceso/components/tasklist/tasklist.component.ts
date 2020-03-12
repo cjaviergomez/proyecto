@@ -64,9 +64,12 @@ export class TasklistComponent implements OnInit, OnDestroy {
           this.getSolicitudProcess();
           this.getTasks();
           this.getHistoryVariables();
-        } else if(params['id'] != null && params['taskId'] != null){
+        } else if(params['id'] != null && params['taskId'] != null && params['formKey'] == null){
           this.taskId = params['taskId'];
           this.getFormKey();
+        } else if(params['id'] != null && params['taskId'] != null && params['formKey'] != null){
+          this.taskId = params['taskId'];
+          this.formKey = params['formKey'];
         }
       });
     }

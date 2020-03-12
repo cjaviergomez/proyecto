@@ -209,6 +209,26 @@ export class ShowMessagesService {
           showCancelButton: true
         });
       }
+
+      case 'responderSolicitud': {
+        return Swal.fire({
+          title: '¿Está seguro?',
+          text: `¿Está seguro que desea ${estado} la solicitud? `,
+          type: 'question',
+          showConfirmButton: true,
+          showCancelButton: true
+        });
+      }
+
+      default: {
+        return Swal.fire({
+          title: '¿Estás seguro?',
+          text: `¿Estás seguro que deseas continuar ? `,
+          type: 'question',
+          showConfirmButton: true,
+          showCancelButton: true
+        });
+      }
     }
   }
 
