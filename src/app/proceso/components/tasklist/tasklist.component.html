@@ -41,7 +41,7 @@
     <div *ngIf="tasksComplete && tasksComplete.length > 0">
       <h5>Tareas completadas</h5>
       <div *ngFor="let task of tasksComplete">
-        <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}/{{task.taskDefinitionKey}}" class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ task.name }} <span class="badge badge-pill badge-secondary float-right">{{ task.assignee }}</span> </a>
+        <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}/{{task.taskDefinitionKey}}" class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ task.name }} <span class="badge badge-pill badge-secondary float-right">{{ task.endTime | date:'short' }}</span> </a>
       </div>
     </div>
 

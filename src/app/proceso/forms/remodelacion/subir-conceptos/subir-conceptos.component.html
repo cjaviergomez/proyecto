@@ -10,6 +10,14 @@
       presente su respectivo concepto técnico. Para ello, cada miembro debe subir su
       archivo con el concepto técnico y guardarlo.
     </p>
+    <div class="row">
+      <p *ngIf="task && formKey" class="ml-3">
+        <span class="badge badge-secondary">Finalizada:</span>
+        <em>
+          {{ task.endTime | date:'short' }}
+        </em>
+      </p>
+    </div>
 
     <div class="container mt-3" *ngIf="solicitud">
       <label>Mantenimiento Tecnológico</label>

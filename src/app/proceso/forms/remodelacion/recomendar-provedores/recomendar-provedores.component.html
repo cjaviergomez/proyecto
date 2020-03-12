@@ -6,7 +6,7 @@
     </button>
     <h5 class="display-4">{{ task.name }}</h5>
     <p class="lead">
-      Este tarea tiene como proposito dar a conocer las cotizaciones que conlleva la respectiva solicitud.
+      Este tarea tiene como proposito recomendarle al solicitante los posibles proveedores que puede tener la solicitud.
     </p>
 
     <div class="row">
@@ -26,12 +26,12 @@
     </div>
 
     <div class="container mt-3" *ngIf="solicitud">
-      <label>Subir cotización</label>
+      <label>Subir proveedores</label>
       <div class="input-group" *ngIf="!formKey">
         <div class="custom-file" *ngIf="usuario">
           <input type="file" class="custom-file-input" id="inputGroupFile01" accept=".pdf" (change)="onUpload($event)" aria-describedby="inputGroupFileAddon01" [disabled]="usuario.perfil.nombre != task.assignee">
-          <label *ngIf="solicitud.nombreCotizacion" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">{{ solicitud.nombreCotizacion }}</label>
-          <label *ngIf="!solicitud.nombreCotizacion" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">Elige un archivo</label>
+          <label *ngIf="solicitud.nombreProveedores" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">{{ solicitud.nombreProveedores }}</label>
+          <label *ngIf="!solicitud.nombreProveedores" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">Elige un archivo</label>
         </div>
         <div class="input-group-append">
           <button *ngIf="urlDoc | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon01" (click)="subirArchivo()">Guardar</button>
@@ -47,12 +47,12 @@
         </div>
       </div>
       <div *ngIf="formKey">
-        <a [href]="solicitud.urlCotizacion" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud.nombreCotizacion }}</a>
+        <a [href]="solicitud.urlProveedores" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud.nombreProveedores }}</a>
       </div>
     </div>
 
     <div class="text-right m-3" *ngIf="usuario">
-      <button type="button" class="btn btn-primary" (click)="completarTarea()" [disabled]="!solicitud.nombreCotizacion || formKey || usuario.perfil.nombre != task.assignee || nameDocUp != null" *ngIf="solicitud">
+      <button type="button" class="btn btn-primary" (click)="completarTarea()" [disabled]="!solicitud.nombreProveedores || formKey || usuario.perfil.nombre != task.assignee || nameDocUp != null" *ngIf="solicitud">
         Enviar
         <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
       </button>
@@ -70,5 +70,6 @@
     </p>
   </div>
 </div>
+
 
 

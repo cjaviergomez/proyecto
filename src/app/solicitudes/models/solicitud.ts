@@ -23,4 +23,13 @@ export interface Solicitud {
 
   urlCotizacion?: string;
   nombreCotizacion?: string;
+
+  urlProveedores?: string;
+  nombreProveedores?: string;
+
+  urlInformeFinanciero?: string;
+  nombreInformeFinanciero?: string;
+
+  urlAval?: string;
+  nombreAval?: string;
 }

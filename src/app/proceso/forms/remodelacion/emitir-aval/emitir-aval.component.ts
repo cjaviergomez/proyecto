@@ -17,11 +17,11 @@ import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 
 @Component({
-  selector: 'app-subir-cotizacion',
-  templateUrl: './subir-cotizacion.component.html',
-  styleUrls: ['./subir-cotizacion.component.css']
+  selector: 'app-emitir-aval',
+  templateUrl: './emitir-aval.component.html',
+  styleUrls: ['./emitir-aval.component.css']
 })
-export class subirCotizacionComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class emitirAvalComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy{
 
   solicitud: Solicitud;
 
@@ -65,7 +65,7 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
       this.nameDocUp = file.name;
       this.solicitud.nombreCotizacion = this.nameDocUp;
     }
-    const filePath = `docs/${this.solicitud.id}/cotizacion_${id}`;
+    const filePath = `docs/${this.solicitud.id}/aval_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent = task.percentageChanges();
@@ -84,8 +84,8 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
         this.urlDoc
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(url => {
-              this.solicitud.urlCotizacion= url;
-              this.solicitud.nombreCotizacion = this.nameDocUp;
+              this.solicitud.urlAval= url;
+              this.solicitud.nombreAval = this.nameDocUp;
               this.solicitudService.updateSolicitud(this.solicitud);
 
               // Reiniciamos las variables.

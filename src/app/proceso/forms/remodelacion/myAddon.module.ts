@@ -14,6 +14,12 @@ import { enviarObservacionesComponent } from './enviarObservaciones/enviarObserv
 import { solicitarConceptosComponent } from './solicitarConceptos/solicitarConceptos.component';
 import { subirConceptosComponent } from './subir-conceptos/subir-conceptos.component';
 import { subirCotizacionComponent } from './subir-cotizacion/subir-cotizacion.component';
+import { recomendarProveedoresComponent } from './recomendar-provedores/recomendar-provedores.component';
+import { subirInformeFinancieroComponent } from './subir-informe-financiero/subir-informe-financiero.component';
+import { revisionInformeFinancieroComponent } from './revision-informe-financiero/revision-informe-financiero.component';
+import { revisarInformesComponent } from './revisar-informes/revisar-informes.component';
+import { agregarComentariosComponent } from './agregar-comentarios/agregar-comentarios.component';
+import { emitirAvalComponent } from './emitir-aval/emitir-aval.component';
 
 @NgModule({
   entryComponents: [
@@ -23,7 +29,13 @@ import { subirCotizacionComponent } from './subir-cotizacion/subir-cotizacion.co
     enviarObservacionesComponent,
     solicitarConceptosComponent,
     subirConceptosComponent,
-    subirCotizacionComponent
+    subirCotizacionComponent,
+    recomendarProveedoresComponent,
+    subirInformeFinancieroComponent,
+    revisionInformeFinancieroComponent,
+    revisarInformesComponent,
+    agregarComentariosComponent,
+    emitirAvalComponent
   ],
   declarations: [
     startNewProcessComponent,
@@ -32,7 +44,13 @@ import { subirCotizacionComponent } from './subir-cotizacion/subir-cotizacion.co
     enviarObservacionesComponent,
     solicitarConceptosComponent,
     subirConceptosComponent,
-    subirCotizacionComponent
+    subirCotizacionComponent,
+    recomendarProveedoresComponent,
+    subirInformeFinancieroComponent,
+    revisionInformeFinancieroComponent,
+    revisarInformesComponent,
+    agregarComentariosComponent,
+    emitirAvalComponent
   ],
   imports: [FormsModule, RouterModule, CommonModule, FontAwesomeModule],
   exports: [
@@ -42,7 +60,13 @@ import { subirCotizacionComponent } from './subir-cotizacion/subir-cotizacion.co
     enviarObservacionesComponent,
     solicitarConceptosComponent,
     subirConceptosComponent,
-    subirCotizacionComponent
+    subirCotizacionComponent,
+    recomendarProveedoresComponent,
+    subirInformeFinancieroComponent,
+    revisionInformeFinancieroComponent,
+    revisarInformesComponent,
+    agregarComentariosComponent,
+    emitirAvalComponent
   ]
 })
 export class MyAddonModule {}
@@ -54,3 +78,9 @@ export { enviarObservacionesComponent } from './enviarObservaciones/enviarObserv
 export { solicitarConceptosComponent } from './solicitarConceptos/solicitarConceptos.component';
 export { subirConceptosComponent } from './subir-conceptos/subir-conceptos.component';
 export { subirCotizacionComponent } from './subir-cotizacion/subir-cotizacion.component';
+export { recomendarProveedoresComponent } from './recomendar-provedores/recomendar-provedores.component';
+export { subirInformeFinancieroComponent } from './subir-informe-financiero/subir-informe-financiero.component';
+export { revisionInformeFinancieroComponent } from './revision-informe-financiero/revision-informe-financiero.component';
+export { revisarInformesComponent } from './revisar-informes/revisar-informes.component';
+export { agregarComentariosComponent } from './agregar-comentarios/agregar-comentarios.component';
+export { emitirAvalComponent } from './emitir-aval/emitir-aval.component';

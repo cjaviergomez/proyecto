@@ -9,7 +9,6 @@ import { AuthService } from '../../../out/services/auth.service';
 
 export class CompleteTaskComponent {
   model
-  submitted
   route: ActivatedRoute
   router: Router
   camundaRestService: CamundaRestService

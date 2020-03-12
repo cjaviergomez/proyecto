@@ -17,11 +17,11 @@ import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 
 @Component({
-  selector: 'app-subir-cotizacion',
-  templateUrl: './subir-cotizacion.component.html',
-  styleUrls: ['./subir-cotizacion.component.css']
+  selector: 'app-recomendar-provedores',
+  templateUrl: './recomendar-provedores.component.html',
+  styleUrls: ['./recomendar-provedores.component.css']
 })
-export class subirCotizacionComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class recomendarProveedoresComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
 
   solicitud: Solicitud;
 
@@ -63,9 +63,9 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
     const file = e.target.files[0];
     if(file){
       this.nameDocUp = file.name;
-      this.solicitud.nombreCotizacion = this.nameDocUp;
+      this.solicitud.nombreProveedores = this.nameDocUp;
     }
-    const filePath = `docs/${this.solicitud.id}/cotizacion_${id}`;
+    const filePath = `docs/${this.solicitud.id}/proveedores_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent = task.percentageChanges();
@@ -84,8 +84,8 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
         this.urlDoc
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(url => {
-              this.solicitud.urlCotizacion= url;
-              this.solicitud.nombreCotizacion = this.nameDocUp;
+              this.solicitud.urlProveedores = url;
+              this.solicitud.nombreProveedores = this.nameDocUp;
               this.solicitudService.updateSolicitud(this.solicitud);
 
               // Reiniciamos las variables.

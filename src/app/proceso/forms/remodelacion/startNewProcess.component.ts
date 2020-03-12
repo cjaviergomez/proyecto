@@ -93,7 +93,6 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
   }
 
   guardarMaterial(form: NgForm, flat: string) {
-    console.log(flat);
     if(form.invalid) {return;}
     this.swal.showLoading();
 

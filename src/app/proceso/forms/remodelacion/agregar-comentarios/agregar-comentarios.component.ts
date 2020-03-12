@@ -6,6 +6,8 @@ import { takeUntil, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Solicitud } from '../../../../solicitudes/models/solicitud';
 
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
+
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -17,18 +19,14 @@ import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 
 @Component({
-  selector: 'app-subir-cotizacion',
-  templateUrl: './subir-cotizacion.component.html',
-  styleUrls: ['./subir-cotizacion.component.css']
+  selector: 'app-agregar-comentarios',
+  templateUrl: './agregar-comentarios.component.html',
+  styleUrls: ['./agregar-comentarios.component.css']
 })
-export class subirCotizacionComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class agregarComentariosComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy  {
 
+  comentariosP: string;
   solicitud: Solicitud;
-
-  //Para trabajar con el documento1
-  uploadPercent: Observable<number>;
-  urlDoc: Observable<string>;
-  nameDocUp: string;
 
   constructor(route: ActivatedRoute,
               router: Router,
@@ -46,70 +44,31 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
     this.getSolicitud();
   }
 
-  getSolicitud(){
+  /**
+   * Metodo para obtener la solicitud asociada al proceso.
+   */
+  getSolicitud() {
     this.solicitudService.getSolicitudProcess(this.procesoId)
         .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(solicitud => {
+        .subscribe( solicitud => {
           this.solicitud = solicitud[0];
         });
   }
 
-  /**
-   * Método para obtener toda la información del documento a cargar a Firestore
-   * @param e evento que se activa al seleccion un documento
-   */
-  onUpload(e) {
-    const id = Math.random().toString(36).substring(2);
-    const file = e.target.files[0];
-    if(file){
-      this.nameDocUp = file.name;
-      this.solicitud.nombreCotizacion = this.nameDocUp;
-    }
-    const filePath = `docs/${this.solicitud.id}/cotizacion_${id}`;
-    const ref = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-    this.uploadPercent = task.percentageChanges();
-    task.snapshotChanges().pipe(finalize(() => this.urlDoc = ref.getDownloadURL()))
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe();
-  }
-
-  /**
-   * Metodo para actualizar la url del archivo de cotizacion
-   */
-  subirArchivo() {
-    this.swal.showQuestionMessage('').then( resp => {
-      if(resp.value){
-        this.swal.showLoading();
-        this.urlDoc
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(url => {
-              this.solicitud.urlCotizacion= url;
-              this.solicitud.nombreCotizacion = this.nameDocUp;
-              this.solicitudService.updateSolicitud(this.solicitud);
-
-              // Reiniciamos las variables.
-              this.urlDoc = null;
-              this.nameDocUp = null;
-
-              this.swal.stopLoading();
-            });
-      }
-    });
-  }
-
-   //Metodo para completar la tarea.
-   completarTarea(){
+  enviarComentarios(){
     Swal.fire({
       title: '¿Está seguro?',
-      text: `¿Está seguro que desea continuar?`,
+      text: `¿Está seguro que desea enviar las observaciones?`,
       type: 'question',
       showConfirmButton: true,
       showCancelButton: true
     }).then(resp =>{
       if(resp.value) {
-        const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-        this.completeTask(variables);
+        this.solicitud.estado = 'Rechazada';
+        this.solicitudService.updateSolicitud(this.solicitud).then(()=>{
+          const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+          this.completeTask(variables);
+        });
       }
     });
   }
@@ -118,18 +77,29 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
   generateVariablesFromFormFields() {
     const variables = {
       variables: {
+        comentariosP: null
       }
+    };
+    variables.variables.comentariosP = {
+      value: this.comentariosP
     };
     return variables;
   }
 
-  getVariables(){
+  // Metodo para obtener las variables historicas que se van a usar.
+  getVariables(variables) {
     this.cargando = false;
-  }
+   }
 
-  getVariables2(){
+  // Metodo para obtener las variables historicas que se van a usar.
+  getVariables2(variables) {
+    for(let variable of variables){
+      if(variable.name == 'comentariosP'){
+        this.comentariosP = variable.value;
+      }
+    }
     this.cargando = false;
-  }
+   }
 
   /**
    * Este metodo se ejecuta cuando el componente se destruye

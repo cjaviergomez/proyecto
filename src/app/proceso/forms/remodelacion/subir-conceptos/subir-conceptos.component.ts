@@ -123,7 +123,7 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
       this.nameDocUp = file.name;
       this.solicitud.nombreCTMT = this.nameDocUp;
     }
-    const filePath = `docs/profile_${id}`;
+    const filePath = `docs/${this.solicitud.id}/conceptoMT_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent = task.percentageChanges();
@@ -143,7 +143,7 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
       this.nameDocUp2 = file.name;
       this.solicitud.nombreCTDSI = this.nameDocUp2;
     }
-    const filePath = `doc/profile_${id}`;
+    const filePath = `docs/${this.solicitud.id}/conceptoDSI_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent2 = task.percentageChanges();
@@ -163,7 +163,7 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
       this.nameDocUp3 = file.name;
       this.solicitud.nombreCTPlaneacion;
     }
-    const filePath = `doc/profile_${id}`;
+    const filePath = `docs/${this.solicitud.id}/conceptoPlaneacion_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent3 = task.percentageChanges();

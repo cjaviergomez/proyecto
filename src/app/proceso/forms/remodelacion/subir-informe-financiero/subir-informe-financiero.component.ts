@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
+declare var $: any; // Para trabajar con el modal
 import Swal from 'sweetalert2';
 import { Solicitud } from '../../../../solicitudes/models/solicitud';
 
@@ -17,13 +18,14 @@ import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 
 @Component({
-  selector: 'app-subir-cotizacion',
-  templateUrl: './subir-cotizacion.component.html',
-  styleUrls: ['./subir-cotizacion.component.css']
+  selector: 'app-subir-informe-financiero',
+  templateUrl: './subir-informe-financiero.component.html',
+  styleUrls: ['./subir-informe-financiero.component.css']
 })
-export class subirCotizacionComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class subirInformeFinancieroComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
 
   solicitud: Solicitud;
+  comentarios: string[] = [];
 
   //Para trabajar con el documento1
   uploadPercent: Observable<number>;
@@ -63,9 +65,9 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
     const file = e.target.files[0];
     if(file){
       this.nameDocUp = file.name;
-      this.solicitud.nombreCotizacion = this.nameDocUp;
+      this.solicitud.nombreInformeFinanciero = this.nameDocUp;
     }
-    const filePath = `docs/${this.solicitud.id}/cotizacion_${id}`;
+    const filePath = `docs/${this.solicitud.id}/informeFinanciero_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent = task.percentageChanges();
@@ -84,8 +86,8 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
         this.urlDoc
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(url => {
-              this.solicitud.urlCotizacion= url;
-              this.solicitud.nombreCotizacion = this.nameDocUp;
+              this.solicitud.urlInformeFinanciero = url;
+              this.solicitud.nombreInformeFinanciero = this.nameDocUp;
               this.solicitudService.updateSolicitud(this.solicitud);
 
               // Reiniciamos las variables.
@@ -123,12 +125,26 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
     return variables;
   }
 
-  getVariables(){
+  getVariables(variables){
+    for(let variable of variables){
+      if(variable.name == 'comentarios'){
+        this.comentarios = variable.value;
+      }
+    }
     this.cargando = false;
   }
 
-  getVariables2(){
+  getVariables2(variables){
     this.cargando = false;
+  }
+
+  abrirModal(){
+    $('#verComentarios').modal('show');
+  }
+
+  //Metodo para cerrar el modal
+  cerrarModal(){
+    $('#verComentarios').modal('hide');
   }
 
   /**

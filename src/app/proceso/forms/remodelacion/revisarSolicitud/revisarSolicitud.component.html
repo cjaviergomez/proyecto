@@ -8,14 +8,23 @@
     Este apartado tiene como objetivo informar a planeación de la nueva reforma.
     Es por esto que antes de seguir Planeación debe revisar el formulario de solicitud y después terminar esta tarea.
   </p>
-  <p>
-    <span class="badge badge-primary">Responsable:</span>
-    <em>
-      {{ task.assignee }}
-    </em>
-  </p>
+  <div class="row">
+    <p *ngIf="task" class="col text-left">
+      <span class="badge badge-primary">Responsable:</span>
+      <em>
+        {{ task.assignee }}
+      </em>
+    </p>
+
+    <p *ngIf="task && formKey" class="mr-5">
+      <span class="badge badge-secondary">Finalizada:</span>
+      <em>
+        {{ task.endTime | date:'short' }}
+      </em>
+    </p>
+  </div>
 
   <hr class="my-4">
   <p>Para terminar esta tarea y seguir con el proceso, se debe revisar el formulario de solicitud y dar click en continuar</p>
-  <button type="button" class="btn btn-outline-primary float-right" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Continuar</button>
+  <button type="button" class="btn btn-outline-primary float-right mr-3" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Continuar</button>
 </div>

@@ -77,7 +77,7 @@ export class ComunTaskArchivosComponent {
   }
 
   completeTask(variables){
-    this.camundaRestService.postCompleteTask(this.taskId, variables).subscribe(()=>{
+    this.camundaRestService.postCompleteTask(this.taskId, variables).subscribe((data) => {
       this.router.navigate(['/modProceso/tasklist', this.procesoId]);
     });
   }
