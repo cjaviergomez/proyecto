@@ -17,13 +17,14 @@ import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 
 @Component({
-  selector: 'app-emitir-aval',
-  templateUrl: './emitir-aval.component.html',
-  styleUrls: ['./emitir-aval.component.css']
+  selector: 'app-realizar-minuta',
+  templateUrl: './realizar-minuta.component.html',
+  styleUrls: ['./realizar-minuta.component.css']
 })
-export class emitirAvalComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class realizarMinutaComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
 
   solicitud: Solicitud;
+  interventorId: string;
 
   //Para trabajar con el documento1
   uploadPercent: Observable<number>;
@@ -63,9 +64,9 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
     const file = e.target.files[0];
     if(file){
       this.nameDocUp = file.name;
-      this.solicitud.nombreCotizacion = this.nameDocUp;
+      this.solicitud.nombreMinuta = this.nameDocUp;
     }
-    const filePath = `docs/${this.solicitud.id}/aval_${id}`;
+    const filePath = `docs/${this.solicitud.id}/minuta_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent = task.percentageChanges();
@@ -84,8 +85,8 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
         this.urlDoc
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(url => {
-              this.solicitud.urlAval= url;
-              this.solicitud.nombreAval = this.nameDocUp;
+              this.solicitud.urlMinuta = url;
+              this.solicitud.nombreMinuta = this.nameDocUp;
               this.solicitudService.updateSolicitud(this.solicitud);
 
               // Reiniciamos las variables.
@@ -101,8 +102,8 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
    //Metodo para completar la tarea.
    completarTarea(){
     Swal.fire({
-      title: '¿Está seguro?',
-      text: `¿Está seguro que desea continuar?`,
+      title: '¿Está seguro que quiere terminar la tarea?',
+      text: `Después de continuar no podrá volver actualizar la minuta`,
       type: 'question',
       showConfirmButton: true,
       showCancelButton: true
@@ -123,7 +124,12 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
     return variables;
   }
 
-  getVariables(){
+  getVariables(variables){
+    for(let variable of variables){
+      if(variable.name == 'interventorId'){
+        this.interventorId = variable.value;
+      }
+    }
     this.cargando = false;
   }
 

@@ -15,19 +15,14 @@ import { SolicitudService } from '../../../../solicitudes/services/solicitud.ser
 import { ShowMessagesService } from '../../../../out/services/show-messages.service';
 
 @Component({
-  selector: 'app-solicitar-conceptos',
-  templateUrl: './solicitarConceptos.component.html',
-  styleUrls: ['./solicitarConceptos.component.css']
+  selector: 'app-elegir-interventor',
+  templateUrl: './elegir-interventor.component.html',
+  styleUrls: ['./elegir-interventor.component.css']
 })
-export class solicitarConceptosComponent extends ComunTaskComponent implements OnInit, OnDestroy {
+export class elegirInterventorComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 
-  nombresDSI: Usuario[] = [];
-  nombresMT: Usuario[] = [];
-  nombresPlaneacion: Usuario[] = [];
-
-  planeacionId: string = null;
-  desiId: string = null;
-  mantenimientoId: string = null;
+  nombresInterventor: Usuario[] = [];
+  interventorId: string = null;
 
   constructor(route: ActivatedRoute,
               router: Router,
@@ -37,7 +32,7 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
               usuarioService: UsuarioService,
               authService: AuthService) {
     super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService);
-    }
+  }
 
   ngOnInit() {
     this.metodoInicial();
@@ -46,23 +41,11 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
 
   //Metodo para obtener los usuario con los distintos perfiles de la base de datos.
   getUsuarios(){
-    this.usuarioService.getUsuariosPlaneacion()
+    this.usuarioService.getUsuariosInterventor()
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(usuariosP => {
-          this.nombresPlaneacion = usuariosP;
+          this.nombresInterventor = usuariosP;
     });
-
-    this.usuarioService.getUsuariosAreas('JQj5yQY4Zj6rlDniQpZC')
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(usuariosD => {
-          this.nombresDSI = usuariosD;
-        });
-    this.usuarioService.getUsuariosAreas('KBWyuAsDaUY66w49yXy9')
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(usuariosM => {
-          this.nombresMT = usuariosM;
-        });
-
   }
 
   //Metodo para completar la tarea.
@@ -85,19 +68,11 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
   generateVariablesFromFormFields() {
     const variables = {
       variables: {
-        planeacionId: null,
-        desiId: null,
-        mantenimientoId: null
+        interventorId: null
       }
     };
-    variables.variables.planeacionId = {
-      value: this.planeacionId
-    };
-    variables.variables.desiId = {
-      value: this.desiId
-    };
-    variables.variables.mantenimientoId = {
-      value: this.mantenimientoId
+    variables.variables.interventorId = {
+      value: this.interventorId
     };
     return variables;
   }
@@ -109,18 +84,14 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
   // Metodo para obtener las variables historicas que se van a usar.
   getVariables2(variables) {
     for(let variable of variables){
-      if(variable.name == 'planeacionId'){
-        this.planeacionId = variable.value;
-      } else if(variable.name == 'mantenimientoId'){
-        this.mantenimientoId = variable.value;
-      } else if(variable.name == 'desiId'){
-        this.desiId = variable.value;
+      if(variable.name == 'interventorId'){
+        this.interventorId = variable.value;
       }
     }
     this.cargando = false;
   }
 
-   /**
+  /**
    * Este metodo se ejecuta cuando el componente se destruye
    * Usamos este método para cancelar todos los observables.
    */
@@ -129,6 +100,6 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
     // to avoid memory leaks.
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-	}
+  }
 
 }

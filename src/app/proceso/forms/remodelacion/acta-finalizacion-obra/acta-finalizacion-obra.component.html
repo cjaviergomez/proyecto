@@ -1,0 +1,102 @@
+<div class="container">
+  <div *ngIf="!cargando && task">
+    <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+      <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+      Atrás
+    </button>
+    <h5 class="display-4">{{ task.name }}</h5>
+    <p class="lead">
+      Este tarea tiene como proposito subir el acta de finalización de obra. Posteriormente,
+      Planta Física verificará el cumplimiento de esta acta.
+    </p>
+
+    <div class="row">
+      <p *ngIf="task" class="col text-left">
+        <span class="badge badge-primary">Responsable:</span>
+        <em>
+          {{ task.assignee }}
+        </em>
+      </p>
+      <button type="button" class="btn btn-outline-secondary btn-sm mr-4" (click)="abrirModal()" *ngIf="comentariosActaFinObra.length > 0">
+        Comentarios
+      </button>
+      <p *ngIf="task && formKey" class="mr-5">
+        <span class="badge badge-secondary">Finalizada:</span>
+        <em>
+          {{ task.endTime | date:'short' }}
+        </em>
+      </p>
+    </div>
+
+    <div class="container mt-3" *ngIf="solicitud">
+      <label>Subir Acta de Finalización de Obra</label>
+      <div class="input-group" *ngIf="!formKey">
+        <div class="custom-file" *ngIf="usuario">
+          <input type="file" class="custom-file-input" id="inputGroupFile01" accept=".pdf" (change)="onUpload($event)" aria-describedby="inputGroupFileAddon01" [disabled]="usuario.perfil.nombre != task.assignee || usuario.id != interventorId">
+          <label *ngIf="solicitud.nombreActaFinObra" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">{{ solicitud.nombreActaFinObra }}</label>
+          <label *ngIf="!solicitud.nombreActaFinObra" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">Elige un archivo</label>
+        </div>
+        <div class="input-group-append">
+          <button *ngIf="urlDoc | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon01" (click)="subirArchivo()">Guardar</button>
+          <ng-template #btnDisabled>
+            <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon01" disabled=true>Guardar</button>
+          </ng-template>
+        </div>
+      </div>
+
+      <div *ngIf="nameDocUp" class="progress">
+        <div class="progress-bar progress-bar-striped bg-primary"
+              role="progressbar" [style.width]="(uploadPercent | async) +'%'">
+        </div>
+      </div>
+      <div *ngIf="formKey">
+        <a [href]="solicitud.urlActaFinObra" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud.nombreActaFinObra }}</a>
+      </div>
+    </div>
+
+    <div class="text-right m-3" *ngIf="usuario">
+      <button type="button" class="btn btn-primary" (click)="completarTarea()" [disabled]="!solicitud.nombreActaFinObra || formKey || usuario.id != interventorId || usuario.perfil.nombre != task.assignee || nameDocUp != null" *ngIf="solicitud">
+        Enviar
+        <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
+      </button>
+  </div>
+
+  <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>
+</div>
+
+
+<!--Modal comentarios-->
+<div class="modal fade" id="verComentarios" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Comentarios</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Los siguientes son los comentarios que se han generado al rechazar la documentación enviada anteriormente.
+          Por favor tengalos en cuenta y envíe el documento nuevamente.
+        </p>
+        <div *ngFor="let comentario of comentariosActaFinObra">
+          <a class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ comentario }}</a>
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+

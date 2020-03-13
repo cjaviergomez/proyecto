@@ -32,4 +32,19 @@ export interface Solicitud {
 
   urlAval?: string;
   nombreAval?: string;
+
+  urlInicioObra?: string;
+  nombreInicioObra?: string;
+
+  urlMinuta?: string;
+  nombreMinuta?: string;
+
+  urlSeguimientoObra?: string;
+  nombreSeguimientoObra?: string;
+
+  urlInformeSupervision?: string;
+  nombreInformeSupervision?: string;
+
+  urlActaFinObra?: string;
+  nombreActaFinObra?: string;
 }

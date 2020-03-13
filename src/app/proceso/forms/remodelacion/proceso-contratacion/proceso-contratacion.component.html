@@ -1,0 +1,40 @@
+<div class="container" *ngIf="task">
+  <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+    <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+    Atrás
+  </button>
+  <h5 class="display-4">{{ task.name }}</h5>
+  <p class="lead">
+    Este apartado es un espacio para indicar que el proceso de contratación esta en trámite. Es por esto, una vez se termine,
+    contratación debe de terminar esta tarea para seguir con el proceso.
+  </p>
+  <div class="row">
+    <p *ngIf="task" class="col text-left">
+      <span class="badge badge-primary">Responsable:</span>
+      <em>
+        {{ task.assignee }}
+      </em>
+    </p>
+
+    <p *ngIf="task && formKey" class="mr-5">
+      <span class="badge badge-secondary">Finalizada:</span>
+      <em>
+        {{ task.endTime | date:'short' }}
+      </em>
+    </p>
+  </div>
+
+  <div class="alert alert-secondary text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Contratando...</h4>
+    <p>
+      <fa-icon [icon]="faCog" [spin]="true" size="4x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>
+
+  <hr class="my-4">
+  <p>Una vez se termine la contratación se debe dar click en terminar</p>
+  <button type="button" class="btn btn-outline-primary float-right mr-3" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Terminar</button>
+</div>

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
+declare var $: any; // Para trabajar con el modal
 import Swal from 'sweetalert2';
 import { Solicitud } from '../../../../solicitudes/models/solicitud';
 
@@ -17,13 +18,17 @@ import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 
 @Component({
-  selector: 'app-emitir-aval',
-  templateUrl: './emitir-aval.component.html',
-  styleUrls: ['./emitir-aval.component.css']
+  selector: 'app-documentos-inicio-obra',
+  templateUrl: './documentos-inicio-obra.component.html',
+  styleUrls: ['./documentos-inicio-obra.component.css']
 })
-export class emitirAvalComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class documentosInicioObraComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
 
   solicitud: Solicitud;
+
+  // Datos a obtener de camunda.
+  comentariosInicioObra: string[] = [];
+  interventorId: string;
 
   //Para trabajar con el documento1
   uploadPercent: Observable<number>;
@@ -63,9 +68,9 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
     const file = e.target.files[0];
     if(file){
       this.nameDocUp = file.name;
-      this.solicitud.nombreCotizacion = this.nameDocUp;
+      this.solicitud.nombreInicioObra = this.nameDocUp;
     }
-    const filePath = `docs/${this.solicitud.id}/aval_${id}`;
+    const filePath = `docs/${this.solicitud.id}/docsInicioObra_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent = task.percentageChanges();
@@ -84,8 +89,8 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
         this.urlDoc
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(url => {
-              this.solicitud.urlAval= url;
-              this.solicitud.nombreAval = this.nameDocUp;
+              this.solicitud.urlInicioObra = url;
+              this.solicitud.nombreInicioObra = this.nameDocUp;
               this.solicitudService.updateSolicitud(this.solicitud);
 
               // Reiniciamos las variables.
@@ -123,12 +128,28 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
     return variables;
   }
 
-  getVariables(){
+  getVariables(variables){
+    for(let variable of variables){
+      if(variable.name == 'comentariosInicioObra'){
+        this.comentariosInicioObra = variable.value;
+      } else if(variable.name == 'interventorId'){
+        this.interventorId = variable.value;
+      }
+    }
     this.cargando = false;
   }
 
-  getVariables2(){
+  getVariables2(variables){
     this.cargando = false;
+  }
+
+  abrirModal(){
+    $('#verComentarios').modal('show');
+  }
+
+  //Metodo para cerrar el modal
+  cerrarModal(){
+    $('#verComentarios').modal('hide');
   }
 
   /**

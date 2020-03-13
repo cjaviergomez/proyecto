@@ -17,11 +17,11 @@ import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 
 @Component({
-  selector: 'app-emitir-aval',
-  templateUrl: './emitir-aval.component.html',
-  styleUrls: ['./emitir-aval.component.css']
+  selector: 'app-seguimiento-obra',
+  templateUrl: './seguimiento-obra.component.html',
+  styleUrls: ['./seguimiento-obra.component.css']
 })
-export class emitirAvalComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class seguimientoObraComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
 
   solicitud: Solicitud;
 
@@ -63,9 +63,9 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
     const file = e.target.files[0];
     if(file){
       this.nameDocUp = file.name;
-      this.solicitud.nombreCotizacion = this.nameDocUp;
+      this.solicitud.nombreSeguimientoObra = this.nameDocUp;
     }
-    const filePath = `docs/${this.solicitud.id}/aval_${id}`;
+    const filePath = `docs/${this.solicitud.id}/seguimientoObra_${id}`;
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     this.uploadPercent = task.percentageChanges();
@@ -84,8 +84,8 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
         this.urlDoc
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(url => {
-              this.solicitud.urlAval= url;
-              this.solicitud.nombreAval = this.nameDocUp;
+              this.solicitud.urlSeguimientoObra = url;
+              this.solicitud.nombreSeguimientoObra = this.nameDocUp;
               this.solicitudService.updateSolicitud(this.solicitud);
 
               // Reiniciamos las variables.
@@ -101,8 +101,8 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
    //Metodo para completar la tarea.
    completarTarea(){
     Swal.fire({
-      title: '¿Está seguro?',
-      text: `¿Está seguro que desea continuar?`,
+      title: '¿Está seguro que quiere terminar?',
+      text: `Después de continuar no podrá volver actualizar el documento`,
       type: 'question',
       showConfirmButton: true,
       showCancelButton: true
@@ -123,7 +123,7 @@ export class emitirAvalComponent extends ComunTaskArchivosComponent implements O
     return variables;
   }
 
-  getVariables(){
+  getVariables(variables){
     this.cargando = false;
   }
 

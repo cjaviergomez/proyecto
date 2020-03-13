@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { takeUntil } from 'rxjs/operators';
+import { NgForm } from '@angular/forms';
 declare var $: any; // Para trabajar con el modal
 import Swal from 'sweetalert2';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
@@ -16,19 +17,18 @@ import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
-import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-revision-informe-financiero',
-  templateUrl: './revision-informe-financiero.component.html',
-  styleUrls: ['./revision-informe-financiero.component.css']
+  selector: 'app-verificar-documentos',
+  templateUrl: './verificar-documentos.component.html',
+  styleUrls: ['./verificar-documentos.component.css']
 })
-export class revisionInformeFinancieroComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class verificarDocumentosComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
 
   solicitud: Solicitud;
 
-  valido: boolean;
-  comentarios: string[] = [];
+  docsInicioObra: boolean;
+  comentariosInicioObra: string[] = [];
   comentario: string;
 
   faTimes = faTimes;
@@ -60,8 +60,8 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
 
   //Metodo para completar la tarea.
   completarTarea( valor: boolean){
-    this.valido = valor;
-    if(this.valido === true){
+    this.docsInicioObra = valor;
+    if(this.docsInicioObra === true){
       Swal.fire({
         title: '¿Está seguro?',
         text: `¿Está seguro que desea aceptar los datos y continuar?`,
@@ -74,7 +74,7 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
           this.completeTask(variables);
         }
       });
-    } else if(this.valido === false){
+    } else if(this.docsInicioObra === false){
       Swal.fire({
         title: '¿Está seguro?',
         text: `¿Está seguro que desea rechazar?`,
@@ -96,7 +96,7 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
   enviarComentario(form: NgForm){
     if(form.invalid){return;}
     $('#addComentario').modal('hide');
-    this.comentarios.push(this.comentario);
+    this.comentariosInicioObra.push(this.comentario);
     form.resetForm();
     let variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
     this.completeTask(variables);
@@ -111,15 +111,15 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
   generateVariablesFromFormFields() {
     const variables = {
       variables: {
-        valido: null,
-        comentarios: null
+        docsInicioObra: null,
+        comentariosInicioObra: null
       }
     };
-    variables.variables.valido = {
-      value: this.valido
+    variables.variables.docsInicioObra = {
+      value: this.docsInicioObra
     };
-    variables.variables.comentarios = {
-      value: this.comentarios
+    variables.variables.comentariosInicioObra = {
+      value: this.comentariosInicioObra
     };
 
     return variables;
@@ -128,7 +128,7 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
   getVariables(variables){
     for(let variable of variables){
       if(variable.name == 'comentarios'){
-        this.comentarios = variable.value;
+        this.comentariosInicioObra = variable.value;
       }
     }
     this.cargando = false;

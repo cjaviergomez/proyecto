@@ -1,0 +1,67 @@
+<div class="container">
+  <div *ngIf="!cargando && task">
+    <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+      <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+      Atrás
+    </button>
+    <h5 class="display-4">{{ task.name }}</h5>
+    <p class="lead">
+      Este tarea tiene como objetivo seleccionar a un interventor para que preste los servicios de interventoria durante
+      la reforma. El interventor debe estar registrado en la plataforma con su perfil de interventor.
+    </p>
+    <div class="row">
+      <p *ngIf="task" class="col text-left">
+        <span class="badge badge-primary">Responsable:</span>
+        <em>
+          {{ task.assignee }}
+        </em>
+      </p>
+
+      <p *ngIf="task && formKey" class="mr-5">
+        <span class="badge badge-secondary">Finalizada:</span>
+        <em>
+          {{ task.endTime | date:'short' }}
+        </em>
+      </p>
+    </div>
+
+    <form #formObservaciones="ngForm">
+      <div class="form-group">
+        <label for="controlMT">Elegir a un interventor</label>
+        <select class="form-control" id="controlMT"
+                #selectM="ngModel"
+                name="selectM"
+                [ngClass]="{'is-invalid': formObservaciones.submitted && formObservaciones.controls['selectM'].errors }"
+                [(ngModel)]="interventorId" required>
+            <option value="null" disabled>Elige un usuario</option>
+            <option *ngFor="let usuario of nombresInterventor"
+              [value]="usuario.id"> {{ usuario.nombres }} </option>
+        </select>
+        <div class="invalid-feedback animated fadeIn" *ngIf="formObservaciones.submitted && formObservaciones.controls['selectM'].errors">
+          Elige un usuario.
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button type="button" class="btn btn-primary" (click)="completarTarea()" [disabled]="!formObservaciones.form.valid || usuario.perfil.nombre != task.assignee || formKey != null" *ngIf="usuario">
+          Enviar
+          <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
+        </button>
+
+      </div>
+    </form>
+  </div>
+
+  <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+  <div *ngIf="cargando"
+        class="alert alert-info text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+    </p>
+    <p class="mb-0">
+      Espere por favor
+    </p>
+  </div>
+</div>
+
