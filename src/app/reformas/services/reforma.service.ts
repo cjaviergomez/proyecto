@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,7 +10,9 @@ import { Reforma } from '../models/reforma';
 })
 export class ReformaService{
 	private reformasCollection: AngularFirestoreCollection<Reforma>;
-	private reformas: Observable<Reforma[]>
+  private reformas: Observable<Reforma[]>
+  private reformaDoc: AngularFirestoreDocument<Reforma>;
+  private reforma: Observable<Reforma>;
 
 	constructor(private afs: AngularFirestore) {}
 
@@ -26,11 +28,37 @@ export class ReformaService{
 		}));
   }
 
-  // TODO: Falta implementar metodo.
-  addReforma( reforma: Reforma) {}
+  // Metodo para agregar a firebase una reforma.
+  addReforma( reforma: Reforma) {
+    this.reformasCollection = this.afs.collection<Reforma>('reformas');
+    return this.reformasCollection.add({
 
-  // TODO: Falta implementar metodo.
-  getReforma ( id: string) {}
+      nombre_edificio: reforma.nombre_edificio,
+      usuario: {
+        ...reforma.usuario
+      },
+      descripcion: reforma.descripcion,
+      piso_edificio: reforma.piso_edificio,
+      fecha: reforma.fecha,
+      objectID: reforma.objectID,
+      nombre_subcapa: reforma.nombre_subcapa,
+      idProccess: reforma.idProccess,
+    });
+  }
+
+  // Metodo para obtener una reforma.
+  getReforma ( id: string) {
+    this.reformaDoc = this.afs.doc<Reforma>(`reformas/${id}`); // Ruta de la solicitud en particular en firebase.
+    return this.reforma = this.reformaDoc.snapshotChanges().pipe(map( action => {
+      if(action.payload.exists == false) {
+        return null;
+      } else {
+        const data = action.payload.data() as Reforma;
+        data.id = action.payload.id;
+        return data;
+      }
+    }));
+  }
 
   // TODO: Falta implementar metodo.
   updateReforma(reforma: Reforma): void {}

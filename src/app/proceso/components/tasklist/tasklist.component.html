@@ -57,6 +57,17 @@
 
   <div *ngIf="!cargando && taskId">
     <generic-form [taskId]="taskId" [formKey]="formKey"></generic-form>
+    <div *ngIf="noFound"
+          class="alert alert-primary text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">¡Tarea no encontrada!</h4>
+    <p>Posiblemente la tarea ya fue realizada.</p>
+    <p>
+      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+    </p>
+    <button type="button" class="btn btn-outline-primary" [routerLink]="['/modProceso/tasklist', processId]">
+      Atrás
+    </button>
+  </div>
   </div>
 </div>
 

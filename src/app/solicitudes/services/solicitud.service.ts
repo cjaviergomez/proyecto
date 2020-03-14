@@ -28,7 +28,7 @@ export class SolicitudService {
 				return data;
 			})
 		}));
-	}
+  }
 
   //Metodo para agregar solicitudes a la base de datos.
   addSolicitud(solicitud: Solicitud){

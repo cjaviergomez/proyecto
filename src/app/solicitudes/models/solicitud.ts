@@ -3,8 +3,8 @@ export interface Solicitud {
 	id?: string;
 	nombre_edificio?: string;
   piso_edificio?: number;
-  fecha?: Date,
-	hora?: Date,
+  fecha?: Date;
+	hora?: Date;
 	objectID?: number;
   estado?:string;
   usuario?: Usuario;
@@ -47,4 +47,17 @@ export interface Solicitud {
 
   urlActaFinObra?: string;
   nombreActaFinObra?: string;
+
+  urlActaLiquidacionObra?: string;
+  nombreActaLiquidacionObra?: string;
+
+  urlResolucion?: string;
+  nombreResolucion?: string;
+
+  urlActaLiquidacionC?: string;
+  nombreActaLiquidacionC?: string;
+
+  urlEntregaR?: string;
+  nombreEntregaR?: string;
+
 }

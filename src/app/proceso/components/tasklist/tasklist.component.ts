@@ -24,6 +24,7 @@ import { UnidadService } from '../../../admin/services/unidad.service';
   styleUrls: ['./tasklist.component.css']
 })
 export class TasklistComponent implements OnInit, OnDestroy {
+
   tasks: Task[] = null;
   tasksComplete: Task[] = null;
   historyVariables: [] = [];
@@ -31,6 +32,7 @@ export class TasklistComponent implements OnInit, OnDestroy {
   taskId: string;
   formKey: string;
   cargando = false;
+  noFound = false;
 
   //Varibales para el formulario de solicitud.
   seccion: number;
@@ -65,6 +67,7 @@ export class TasklistComponent implements OnInit, OnDestroy {
           this.getTasks();
           this.getHistoryVariables();
         } else if(params['id'] != null && params['taskId'] != null && params['formKey'] == null){
+          this.processId = params['id'];
           this.taskId = params['taskId'];
           this.getFormKey();
         } else if(params['id'] != null && params['taskId'] != null && params['formKey'] != null){
@@ -80,7 +83,12 @@ export class TasklistComponent implements OnInit, OnDestroy {
     this.camundaRestService
       .getTaskFormKey(this.taskId)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(formKey => this.formKey = formKey.key);
+      .subscribe(formKey => {
+        this.formKey = formKey.key
+        if(!this.formKey){
+          this.noFound = true;
+        }
+      });
   }
 
   // Metodo para obtener las tareas a completar del proceso

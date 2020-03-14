@@ -1,16 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 // Servicios
 import { ReformaService } from '../../services/reforma.service';
+
 // Modelos
-import { Reforma } from '../../models/reforma';
+import { Reforma } from 'app/reformas/models/reforma';
+
 // Iconos
 import { faSearchPlus, faExclamation, faSyncAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'reformas-list',
-	templateUrl: './reformas-list.component.html'
+  templateUrl: './reformas-list.component.html',
+  styleUrls: ['./reformas-list.component.css']
 })
 
 export class ReformasListComponent implements OnInit, OnDestroy {

@@ -8,10 +8,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 // Components
 import { ReformasListComponent } from './components/reformas-list/reformas-list.component';
+import { ReformaDetailComponent } from './components/reforma-detail/reforma-detail.component';
 
 @NgModule({
   declarations: [
-    ReformasListComponent
+    ReformasListComponent,
+    ReformaDetailComponent
   ],
   imports: [
     CommonModule,

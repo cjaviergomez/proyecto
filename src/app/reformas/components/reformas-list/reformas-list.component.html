@@ -1,4 +1,4 @@
-<!-- Div para mostrar mensaje cuando no hay solicitudes-->
+<!-- Div para mostrar mensaje cuando no hay reformas-->
 <div *ngIf="!cargando && reformas.length === 0"
      class="alert alert-primary text-center mt-3 animated fadeIn faster container">
     <h4 class="alert-heading">No hay reformas</h4>
@@ -7,7 +7,7 @@
     </p>
 </div>
 
-<!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
+<!--Div para mostrar un mensaje de cargando mientras se obtienen las reformas de la base de datos-->
 <div *ngIf="cargando"
      class="alert alert-info text-center mt-3 animated fadeIn faster container">
   <h4 class="alert-heading">Cargando</h4>
@@ -19,18 +19,29 @@
   </p>
 </div>
 
-<!--Div para mostrar las solicitudes que se obtuvieron de la base de datos-->
-<div *ngIf="!cargando && reformas.length > 0">
-	<h3 id="centrado">{{titulo}}</h3>
-	<hr/>
+<!--Mostrar las reformas encontradas-->
+<div *ngIf="!cargando && reformas.length > 0" class="mb-5">
+  <h3 class="mt-3 text-center">Reformas</h3>
+  <div class="m-3 animated fadeIn faster animated container">
 
-	<div *ngFor="let reforma of reformas">
-		<div class="card" style="width: 18rem;">
-			<img src="http://localhost/proyecto-backend/uploads/mecanica.png" class="card-img-top" alt="...">
-			<div class="card-body">
-				<h5 class="card-title">{{ reforma.id }}</h5>
-				<p class="card-text">{{ reforma.descripcion }}</p>
-			</div>
-		</div>
-	</div>
+      <!--Se recorre el arreglo de las reformas encontradas y se muestra su información-->
+      <div *ngFor="let reforma of reformas; let i = index" class="row mb-4 mx-auto" style="width: 600px;">
+        <img src="../../../../assets/img/mecanica.png" class="col img-fluid img-thumbnail images" [alt]="reforma.nombre_edificio">
+
+        <div class="col">
+          <h4>
+            {{ reforma.nombre_edificio }}
+          </h4>
+          <p> {{ reforma.usuario.nombres }} </p>
+          <p> {{ reforma.fecha }} </p>
+          <br>
+          <button type="button" class="btn btn-outline-primary btn-sm mt-3" [routerLink]="['/modReformas/reforma', reforma.id]">
+            <fa-icon [icon]="faSearchPlus"></fa-icon>
+              Ver más...
+          </button>
+        </div>
+
+      </div>
+
+    </div>
 </div>

@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-// Components
-import { ReformasListComponent } from './components/reformas-list/reformas-list.component';
+// Guards
 import { AuthGuard } from '../in/guards/auth.guard';
 
+// Components
+import { ReformasListComponent } from './components/reformas-list/reformas-list.component';
+import { ReformaDetailComponent } from './components/reforma-detail/reforma-detail.component';
+
 const routes: Routes = [
- {path: 'reformas', component: ReformasListComponent, canActivate: [AuthGuard]}
+ {path: 'reformas', component: ReformasListComponent, canActivate: [AuthGuard]},
+ {path: 'reforma/:id', component: ReformaDetailComponent }
 ];
 
 @NgModule({

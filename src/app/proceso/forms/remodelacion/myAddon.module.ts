@@ -32,6 +32,13 @@ import { subirInformeSupervisionComponent } from './subir-informe-supervision/su
 import { actaFinalizacionObraComponent } from './acta-finalizacion-obra/acta-finalizacion-obra.component';
 import { verificarCumplimientoComponent } from './verificar-cumplimiento/verificar-cumplimiento.component';
 import { finalizarObraComponent } from './finalizar-obra/finalizar-obra.component';
+import { actaLiquidacionObraComponent } from './acta-liquidacion-obra/acta-liquidacion-obra.component';
+import { emitirResolucionComponent } from './emitir-resolucion/emitir-resolucion.component';
+import { actaLiquidacionContratoComponent } from './acta-liquidacion-contrato/acta-liquidacion-contrato.component';
+import { revisarDocumentosFinComponent } from './revisar-documentos-fin/revisar-documentos-fin.component';
+import { entregaReformaComponent } from './entrega-reforma/entrega-reforma.component';
+import { revisarDocsReformaComponent } from './revisar-docs-reforma/revisar-docs-reforma.component';
+import { finalizarReformaComponent } from './finalizar-reforma/finalizar-reforma.component';
 
 @NgModule({
   entryComponents: [
@@ -59,7 +66,14 @@ import { finalizarObraComponent } from './finalizar-obra/finalizar-obra.componen
     subirInformeSupervisionComponent,
     actaFinalizacionObraComponent,
     verificarCumplimientoComponent,
-    finalizarObraComponent
+    finalizarObraComponent,
+    actaLiquidacionObraComponent,
+    emitirResolucionComponent,
+    actaLiquidacionContratoComponent,
+    revisarDocumentosFinComponent,
+    entregaReformaComponent,
+    revisarDocsReformaComponent,
+    finalizarReformaComponent
   ],
   declarations: [
     startNewProcessComponent,
@@ -86,7 +100,14 @@ import { finalizarObraComponent } from './finalizar-obra/finalizar-obra.componen
     subirInformeSupervisionComponent,
     actaFinalizacionObraComponent,
     verificarCumplimientoComponent,
-    finalizarObraComponent
+    finalizarObraComponent,
+    actaLiquidacionObraComponent,
+    emitirResolucionComponent,
+    actaLiquidacionContratoComponent,
+    revisarDocumentosFinComponent,
+    entregaReformaComponent,
+    revisarDocsReformaComponent,
+    finalizarReformaComponent
   ],
   imports: [FormsModule, RouterModule, CommonModule, FontAwesomeModule],
   exports: [
@@ -114,7 +135,14 @@ import { finalizarObraComponent } from './finalizar-obra/finalizar-obra.componen
     subirInformeSupervisionComponent,
     actaFinalizacionObraComponent,
     verificarCumplimientoComponent,
-    finalizarObraComponent
+    finalizarObraComponent,
+    actaLiquidacionObraComponent,
+    emitirResolucionComponent,
+    actaLiquidacionContratoComponent,
+    revisarDocumentosFinComponent,
+    entregaReformaComponent,
+    revisarDocsReformaComponent,
+    finalizarReformaComponent
   ]
 })
 export class MyAddonModule {}
@@ -144,3 +172,10 @@ export { subirInformeSupervisionComponent } from './subir-informe-supervision/su
 export { actaFinalizacionObraComponent } from './acta-finalizacion-obra/acta-finalizacion-obra.component';
 export { verificarCumplimientoComponent } from './verificar-cumplimiento/verificar-cumplimiento.component';
 export { finalizarObraComponent } from './finalizar-obra/finalizar-obra.component';
+export { actaLiquidacionObraComponent } from './acta-liquidacion-obra/acta-liquidacion-obra.component';
+export { emitirResolucionComponent } from './emitir-resolucion/emitir-resolucion.component';
+export { actaLiquidacionContratoComponent } from './acta-liquidacion-contrato/acta-liquidacion-contrato.component';
+export { revisarDocumentosFinComponent } from './revisar-documentos-fin/revisar-documentos-fin.component';
+export { entregaReformaComponent } from './entrega-reforma/entrega-reforma.component';
+export { revisarDocsReformaComponent } from './revisar-docs-reforma/revisar-docs-reforma.component';
+export { finalizarReformaComponent } from './finalizar-reforma/finalizar-reforma.component';

@@ -1,0 +1,37 @@
+<div class="container" *ngIf="task">
+  <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+    <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+    Atrás
+  </button>
+  <h5 class="display-4">{{ task.name }}</h5>
+  <p class="lead">
+    Este apartado es un espacio para dar por terminada la reforma. Una vez se termine esta tarea,
+    el proceso se dará por terminado.
+  </p>
+  <div class="row">
+    <p *ngIf="task" class="col text-left">
+      <span class="badge badge-primary">Responsable:</span>
+      <em>
+        {{ task.assignee }}
+      </em>
+    </p>
+
+    <p *ngIf="task && formKey" class="mr-5">
+      <span class="badge badge-secondary">Finalizada:</span>
+      <em>
+        {{ task.endTime | date:'short' }}
+      </em>
+    </p>
+  </div>
+
+  <div class="alert alert-secondary text-center mt-3 animated fadeIn faster container">
+    <h4 class="alert-heading">¿Finalizar reforma?</h4>
+    <p>
+      <fa-icon [icon]="faUsers" size="4x"></fa-icon>
+    </p>
+  </div>
+
+  <hr class="my-4">
+  <p>Para finalizar la reforma seleccione el botón Finalizar</p>
+  <button type="button" class="btn btn-outline-primary float-right mr-3" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Finalizar</button>
+</div>
