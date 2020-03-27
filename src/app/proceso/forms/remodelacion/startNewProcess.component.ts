@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgForm } from '@angular/forms';
+import { takeUntil, finalize } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 declare var $: any; // Para trabajar con el modal
+import { AngularFireStorage } from '@angular/fire/storage';
 
 // Componentes
 import { StartProcessInstanceComponent } from '../general/start-process-instance.component'
@@ -28,7 +31,7 @@ import { faWindowClose, faSearch, faPlus, faExclamation, faArrowCircleRight, faA
   templateUrl: './startNewProcess.component.html',
   styleUrls: []
 })
-export class startNewProcessComponent extends StartProcessInstanceComponent {
+export class startNewProcessComponent extends StartProcessInstanceComponent implements OnDestroy {
   submitted = false;
   model = new MyProcessData([], [], [], '', false);
   material = new Material(); //Modelo del material a agregar a la base de datos.
@@ -46,14 +49,25 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
   faSave = faSave;
   faSyncAlt = faSyncAlt;
 
+  //Para trabajar con el documento1
+  uploadPercent: Observable<number>;
+  urlDoc: Observable<string>;
+  nameDocUp: string;
+
+  storage: AngularFireStorage;
+
+  public ngUnsubscribe: Subject<any> = new Subject<any>();
+
   constructor(route: ActivatedRoute, camundaRestService: CamundaRestService,
               authService: AuthService, usuarioService:UsuarioService,
               solicitudService: SolicitudService,
               unidadService: UnidadService,
               datePipe: DatePipe,
               materialService: MaterialesService,
-              swal: ShowMessagesService) {
+              swal: ShowMessagesService,
+              storage: AngularFireStorage) {
     super(route, camundaRestService, authService, usuarioService, solicitudService, unidadService, datePipe, materialService, swal);
+    this.storage = storage;
   }
 
   buscarMateriales() {
@@ -166,5 +180,58 @@ export class startNewProcessComponent extends StartProcessInstanceComponent {
       this.especialesUsuario.splice(index, 1);
     }
   }
+
+  /**
+   * Método para obtener toda la información del documento a cargar a Firestore
+   * @param e evento que se activa al seleccion un documento
+   */
+  onUpload(e) {
+    const id = Math.random().toString(36).substring(2);
+    const file = e.target.files[0];
+    if(file){
+      this.nameDocUp = file.name;
+    }
+    const filePath = `docs/solicitudes/${this.usuario.nombres}/${id}_${this.nameDocUp}`;
+    const ref = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+    this.uploadPercent = task.percentageChanges();
+    task.snapshotChanges().pipe(finalize(() => this.urlDoc = ref.getDownloadURL()))
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe();
+  }
+
+  /**
+   * Metodo para actualizar la url del archivo de cotizacion
+   */
+  subirArchivo() {
+    this.swal.showQuestionMessage('').then( resp => {
+      if(resp.value){
+        this.swal.showLoading();
+        this.urlDoc
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe(url => {
+              this.url = url;
+              this.name = this.nameDocUp;
+
+              // Reiniciamos las variables.
+              this.urlDoc = null;
+              this.nameDocUp = null;
+
+              this.swal.stopLoading();
+            });
+      }
+    });
+  }
+
+  /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 
 }

@@ -31,21 +31,25 @@ export class SolicitudService {
   }
 
   //Metodo para agregar solicitudes a la base de datos.
-  addSolicitud(solicitud: Solicitud){
+  addSolicitud(solicitud: Solicitud) {
     this.solicitudesCollection = this.afs.collection<Solicitud>('solicitudes');
     return this.solicitudesCollection.add({
-      estado: solicitud.estado,
       nombre_edificio: solicitud.nombre_edificio,
+      nombre_subcapa: solicitud.nombre_subcapa,
       piso_edificio: solicitud.piso_edificio,
+      objectID: solicitud.objectID,
+      idEdificio: solicitud.idEdificio,
+      idSubCapa: solicitud.idSubCapa,
       fecha: solicitud.fecha,
       hora: solicitud.hora,
+      estado: solicitud.estado,
       usuario: {
         ...solicitud.usuario
       },
-      objectID: solicitud.objectID,
-      nombre_subcapa: solicitud.nombre_subcapa,
       idProcess: solicitud.idProcess,
-      descripcion: solicitud.descripcion
+      descripcion: solicitud.descripcion,
+      urlDocumentos: solicitud.urlDocumentos,
+      nombreDocumentos: solicitud.nombreDocumentos
     });
   }
 

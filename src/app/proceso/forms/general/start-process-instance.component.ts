@@ -45,6 +45,7 @@ export class StartProcessInstanceComponent implements OnInit {
   processDefinitionKey;
   idCapa;
   edif;
+  idSubCapa;
   subCapa;
   elem;
   piso;
@@ -52,6 +53,8 @@ export class StartProcessInstanceComponent implements OnInit {
   fecha_actual
   hora
   descripcionS
+  url = '';
+  name = '';
 
   model: MyProcessData;
   submitted
@@ -79,7 +82,6 @@ export class StartProcessInstanceComponent implements OnInit {
       this.datePipe = datePipe;
       this.materialService = materialService;
       this.swal = swal;
-
   }
 
   ngOnInit() {
@@ -107,6 +109,7 @@ export class StartProcessInstanceComponent implements OnInit {
       this.processDefinitionKey = params['processdefinitionkey'];
       this.idCapa = params['idCapa']; // Se obtiene el id por la url
       this.edif = params['edif']; // Se obtiene el id por la url
+      this.idSubCapa = params['idSubCapa'];
       this.subCapa = params['subCapa'];
       this.elem = params['elem'];
       this.piso = params['piso'];
@@ -130,17 +133,21 @@ export class StartProcessInstanceComponent implements OnInit {
         nombre_edificio: this.edif,
         piso_edificio: this.piso,
         fecha: this.fecha_actual,
+        idSubCapa: this.idSubCapa,
+        nombre_subcapa: this.subCapa,
+        idEdificio: this.idCapa,
+        objectID: this.elem,
         hora: this.hora,
         usuario: {
           ...this.usuario
         },
-        nombre_subcapa: this.subCapa,
-        objectID: this.elem,
         idProcess: this.idProcess,
-        descripcion: this.descripcionS
+        descripcion: this.descripcionS,
+        urlDocumentos: this.url,
+        nombreDocumentos: this.name
       };
 
-      this.solicitudService.addSolicitud(this.solicitud).then(()=>{
+      this.solicitudService.addSolicitud(this.solicitud).then(() => {
         this.submitted = true;
         this.swal.stopLoading();
       }).catch(error=>{

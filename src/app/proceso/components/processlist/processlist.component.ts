@@ -14,12 +14,14 @@ import { AuthService } from '../../../out/services/auth.service';
 })
 export class ProcesslistComponent implements OnInit, OnDestroy {
 
-  public processDefinitions;
   public idCapa: string;
   public edif: string;
+  public idSubCapa: string;
   public subCapa: string;
   public elem;
   public piso;
+
+  public processDefinitions;
   private ngUnsubscribe: Subject<any> = new Subject<any>();
   public isCreador: any = null;
 
@@ -31,10 +33,12 @@ export class ProcesslistComponent implements OnInit, OnDestroy {
     this.getCurrentUser();
     this.getProcessDefinitions();
     this.idCapa = this.route.snapshot.paramMap.get('idCapa'); // Se obtiene el id por la url
-    this.edif = this.route.snapshot.paramMap.get('edif'); // Se obtiene el id por la url
+    this.edif = this.route.snapshot.paramMap.get('edif'); // Se obtiene el nombre del edificio por la url
+    this.idSubCapa = this.route.snapshot.paramMap.get('idSubCapa');
     this.subCapa = this.route.snapshot.paramMap.get('subCapa');
     this.elem = this.route.snapshot.paramMap.get('elem');
     this.piso = this.route.snapshot.paramMap.get('piso');
+
   }
 
   getProcessDefinitions(): void {

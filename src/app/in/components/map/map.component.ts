@@ -15,15 +15,19 @@ import { loadModules } from 'esri-loader';
 import esri = __esri; // Esri TypeScript Types
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { Usuario } from 'app/admin/models/usuario';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
+// Modelos
+import { Usuario } from 'app/admin/models/usuario';
+import { Solicitud } from 'app/solicitudes/models/solicitud';
 
 // Servicios
 import { UsuarioService } from '../../../admin/services/usuario.service';
 import { AuthService } from '../../../out/services/auth.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
+import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
+import { Layer } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-esri-map',
@@ -35,6 +39,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject<any>();
   usuario = new Usuario();
   public isCreador: any = null;
+  solicitudes: Solicitud[] = [];
 
   @Output() datos_formulario = new EventEmitter();
   @Output() mapLoaded = new EventEmitter<boolean>();
@@ -43,23 +48,30 @@ export class EsriMapComponent implements OnInit, OnDestroy {
   constructor(private usuarioService: UsuarioService,
               private authService: AuthService,
               private router: Router,
-              private swal: ShowMessagesService) {}
+              private swal: ShowMessagesService,
+              private solicitudService: SolicitudService) {}
 
   async initializeMap() {
 
     try {
-      const [WebScene, FeatureLayer, SceneView, LayerList] = await loadModules([
+      const [WebScene, FeatureLayer, SceneView, LayerList, Query, Sublayer, SceneLayer] = await loadModules([
         'esri/WebScene',
         'esri/layers/FeatureLayer',
         'esri/views/SceneView',
-        'esri/widgets/LayerList'
+        'esri/widgets/LayerList',
+        'esri/tasks/support/Query',
+        'esri/layers/support/Sublayer',
+        'esri/layers/SceneLayer'
       ]);
 
       var creador = this.isCreador;
       var router = this.router;
+      var solicitudes = this.solicitudes;
+
       //Estas variables tendran los datos que se le pasarán al formulario de la solicitud(Edificio, capa, objecto)
       var idCapa: string;
       var nombreEdificio: string;
+      var idSubCapa: string;
       var subCapa: string;
       var objectoId;
       var piso;
@@ -77,24 +89,64 @@ export class EsriMapComponent implements OnInit, OnDestroy {
       // create the scene view
       const view = new SceneView({
         container: this.mapViewEl.nativeElement,
-        map: webScene
+        map: webScene,
+        qualityProfile: 'high',
+          environment: {
+            lighting: {
+              directShadowsEnabled: false,
+              ambientOcclusionEnabled: true
+            }
+          },
+          highlightOptions: {
+            color: [0, 255, 255],
+            fillOpacity: 0.6
+          }
       });
 
       // wait until the webscene finished loading
       webScene.when(function() {
         //Create label for all layer in the web scene
-        webScene.layers.forEach(function(layer) {
+        webScene.layers.forEach(function(layer: any) {
           // Load all contained sublayers but ignore if one or more of them failed to load
           layer.load()
           .catch(function(error) {
               // Ignore any failed resources
-            })
-            .then(function() {
+          })
+          .then(function() {
               var long = layer.fullExtent.center.longitude;
               var lat = layer.fullExtent.center.latitude;
               createLabel(layer, lat, long);
+
+              var highlight; // Variable para aplicar el cambio de color en el elemento
+
+              solicitudes.forEach(function(solicitud){
+
+                if(solicitud.idEdificio === layer.id) { // Para saber el edificio que esta asociado a la solicitud
+                  var elemSceneLayer: esri.Sublayer = layer.allSublayers.filter(function(elem) {
+                    return elem.title === solicitud.nombre_subcapa;  // Obtengo la capa a la cual pertenece el elemento de la solicitud.
+                  }).items[0];
+
+                  view.whenLayerView(layer).then(function(layerView){
+                    console.log(layerView);
+
+                    var query = elemSceneLayer.createQuery();
+                    query.where = 'OBJECTID_1 = 49';
+
+                    elemSceneLayer.queryFeatures(query).then(function(result){
+                      console.log('Holiiii');
+                      if (highlight) {
+                        highlight.remove();
+                      }
+                      highlight = layerView.highlight(result.features);
+                    }).catch(err => {
+                      console.log(err);
+                    });
+                  });
+                }
+              });
             });
         });
+
 
         // Defines an action to zoom out from the selected feature
         var solicitudAction = {
@@ -135,7 +187,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 
         // The function to execute when the solicitud action is clicked
         function irAlformulario() {
-          router.navigate(['/modProceso/processlist', idCapa, nombreEdificio, subCapa, objectoId, piso]);
+          router.navigate(['/modProceso/processlist', idCapa, nombreEdificio, idSubCapa, subCapa, objectoId, piso]);
         }
 
         // The function to execute when the solicitud action is clicked
@@ -183,6 +235,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
       function showInfo(edificio:any, layer:esri.Layer, elemento:any) {
         idCapa = edificio.id;
         nombreEdificio = edificio.title;
+        idSubCapa = layer.id;
         subCapa = layer.title;
         objectoId = elemento.OBJECTID_1;
         piso = elemento.BldgLevel;
@@ -287,6 +340,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
       var layerList = new LayerList({
         view: view
       });
+
       view.ui.add(layerList, {
         position: 'top-right'
       });
@@ -299,6 +353,15 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCurrentUser();
+    this.getSolicitudes();
+  }
+
+  getSolicitudes(){
+    this.solicitudService.getSolicitudes()
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(solicitudes => {
+          this.solicitudes = solicitudes;
+        });
   }
 
   // Metodo para saber si hay un usuario logeado actualmente.
@@ -320,7 +383,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
         .subscribe((usuario: Usuario) => {
           // Obtenemos la información del usuario de la base de datos de firebase.
           this.usuario = usuario;
-          if(this.usuario.primerIngreso) {
+          if(this.usuario && this.usuario.primerIngreso) {
             this.showPrimerIngresoMessage();
           } else {
             this.initializeMap();

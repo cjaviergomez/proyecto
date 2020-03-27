@@ -59,14 +59,14 @@
     <generic-form [taskId]="taskId" [formKey]="formKey"></generic-form>
     <div *ngIf="noFound"
           class="alert alert-primary text-center mt-3 animated fadeIn faster container">
-    <h4 class="alert-heading">¡Tarea no encontrada!</h4>
-    <p>Posiblemente la tarea ya fue realizada.</p>
-    <p>
-      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
-    </p>
-    <button type="button" class="btn btn-outline-primary" [routerLink]="['/modProceso/tasklist', processId]">
-      Atrás
-    </button>
+      <h4 class="alert-heading">¡Tarea no encontrada!</h4>
+      <p>Posiblemente la tarea ya fue realizada.</p>
+      <p>
+        <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+      </p>
+      <button type="button" class="btn btn-outline-primary" [routerLink]="['/modProceso/tasklist', processId]">
+       Atrás
+      </button>
   </div>
   </div>
 </div>
@@ -98,6 +98,10 @@
               <li class="nav-item">
                 <a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
                 <a class="nav-link" *ngIf="seccion != 3" (click)="seccion = 3" [routerLink]="">Observaciones</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" *ngIf="seccion == 4">Documentación</a>
+                <a class="nav-link" *ngIf="seccion != 4" (click)="seccion = 4" [routerLink]="">Documentación</a>
               </li>
             </ul>
           </div>
@@ -189,6 +193,25 @@
                 </div>
               </div>
             </div>
+
+            <!-- Seccion 4-->
+          <div class="card-body" *ngIf="seccion == 4">
+            <label>Documentación (Opcional)</label>
+            <p>Espacio para subir documentación extra: Planos, cotizaciones, etcétera. </p>
+            <div>
+              <div *ngIf="solicitud[0].nombreDocumentos">
+                <a [href]="solicitud[0].urlDocumentos" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud[0].nombreDocumentos }}</a>
+              </div>
+
+              <div *ngIf="!solicitud[0].nombreDocumentos" class="alert alert-primary text-center mt-3 animated fadeIn faster container">
+                <h4 class="alert-heading">¡No hay documentos!</h4>
+                <p>No se subió documentación extra para esta solicitud.</p>
+                <p>
+                  <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+                </p>
+              </div>
+            </div>
+          </div>
           </form>
         </div>
       </div> <!--close body modal-->

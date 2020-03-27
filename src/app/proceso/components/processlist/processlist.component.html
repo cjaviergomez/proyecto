@@ -16,7 +16,7 @@
     <span>Selecciona el proceso que quieres iniciar</span>
     <ul class="processDefinitions mt-3">
       <li *ngFor="let processDefinition of processDefinitions">
-        <p><a [routerLink]="['/modProceso/startprocess/', processDefinition.key, idCapa, edif, subCapa, elem, piso]">{{processDefinition.name}}</a></p>
+        <p><a [routerLink]="['/modProceso/startprocess/', processDefinition.key, idCapa, edif, idSubCapa, subCapa, elem, piso]">{{ processDefinition.name }}</a></p>
       </li>
     </ul>
   </div>

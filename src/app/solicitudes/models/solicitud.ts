@@ -1,16 +1,24 @@
 import { Usuario } from '../../admin/models/usuario';
 export interface Solicitud {
+
 	id?: string;
 	nombre_edificio?: string;
+  nombre_subcapa?: string;
   piso_edificio?: number;
+  objectID?: number;
+
+  idEdificio?: string;
+  idSubCapa?: string;
+
   fecha?: Date;
 	hora?: Date;
-	objectID?: number;
   estado?:string;
   usuario?: Usuario;
   idProcess?: string;
-  nombre_subcapa?: string;
   descripcion?: string;
+
+  urlDocumentos?: string;
+  nombreDocumentos?: string;
 
   urlCTDSI?: string;
   nombreCTDSI?: string;

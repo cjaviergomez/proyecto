@@ -56,6 +56,10 @@
               <a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
               <a class="nav-link" *ngIf="seccion != 3">Observaciones</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link active" *ngIf="seccion == 4">Documentación</a>
+              <a class="nav-link" *ngIf="seccion != 4">Documentación</a>
+            </li>
           </ul>
         </div>
 
@@ -190,7 +194,40 @@
             <!-- Botones-->
             <div class="col text-right">
               <button type="button" class="btn btn-primary mr-1" (click)="seccionAnterior()">
-                <fa-icon [icon]="faArrowCircleLeft" title="Siguiente"></fa-icon>
+                <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+                Atrás
+              </button>
+
+              <button type="button" class="btn btn-primary" (click)="seccionSiguiente()" [disabled]="model.materiales.length === 0 || model.elementosProteccion.length === 0 || model.especiales.length === 0">
+                Siguiente
+                <fa-icon [icon]="faArrowCircleRight" title="Siguiente"></fa-icon>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Seccion 4-->
+          <div class="card-body" *ngIf="seccion == 4">
+            <label>Documentación (Opcional)</label>
+            <p>Espacio para subir documentación extra: Planos, cotizaciones, etcétera. </p>
+            <div>
+              <div *ngIf="solicitud[0].nombreDocumentos">
+                <a [href]="solicitud[0].urlDocumentos" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud[0].nombreDocumentos }}</a>
+              </div>
+
+              <div *ngIf="!solicitud[0].nombreDocumentos" class="alert alert-primary text-center mt-3 animated fadeIn faster container">
+                <h4 class="alert-heading">¡No hay documentos!</h4>
+                <p>No se subió documentación extra para esta solicitud.</p>
+                <p>
+                  <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+                </p>
+              </div>
+            </div>
+
+             <!-- Botones-->
+            <div class="col text-right mt-3">
+              <button type="button" class="btn btn-primary mr-1" (click)="seccionAnterior()">
+                <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
                 Atrás
               </button>
               <button type="button" class="btn btn-secondary mr-1" [disabled]="!formSolicitud.form.valid || usuario.perfil.nombre != task.assignee || formKey" (click)="enviarRespuesta(false)">
@@ -202,7 +239,6 @@
                 <fa-icon [icon]="faCheck" title="Aceptar"></fa-icon>
               </button>
             </div>
-
           </div>
         </form>
       </div>

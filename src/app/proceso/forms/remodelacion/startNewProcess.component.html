@@ -17,6 +17,10 @@
               <a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
               <a class="nav-link" *ngIf="seccion != 3">Observaciones</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link active" *ngIf="seccion == 4">Documentación</a>
+              <a class="nav-link" *ngIf="seccion != 4">Documentación</a>
+            </li>
           </ul>
         </div>
 
@@ -127,7 +131,7 @@
             <!-- Botones-->
             <div class="col text-right">
               <button type="button" class="btn btn-primary mr-1" (click)="seccionAnterior()">
-                <fa-icon [icon]="faArrowCircleLeft" title="Siguiente"></fa-icon>
+                <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
                 Atrás
               </button>
 
@@ -154,12 +158,50 @@
                 <fa-icon [icon]="faArrowCircleLeft" title="Siguiente"></fa-icon>
                 Atrás
               </button>
-              <button type="submit" class="btn btn-primary" [disabled]="!formSolicitud.form.valid">
+              <button type="button" class="btn btn-primary" (click)="seccionSiguiente()" [disabled]="materialesUsuario.length === 0 || elementosUsuario.length === 0 || especialesUsuario.length === 0">
+                Siguiente
+                <fa-icon [icon]="faArrowCircleRight" title="Siguiente"></fa-icon>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Seccion 4-->
+          <div class="card-body" *ngIf="seccion == 4">
+            <label>Documentación (Opcional)</label>
+            <p>Espacio para subir documentación extra: Planos, cotizaciones, etcétera. </p>
+            <div class="input-group">
+              <div class="custom-file" *ngIf="usuario">
+                <input type="file" class="custom-file-input" id="inputGroupFile01" accept=".zip, .rar" (change)="onUpload($event)" aria-describedby="inputGroupFileAddon01">
+                <label *ngIf="nameDocUp && !name" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">{{ nameDocUp }}</label>
+                <label *ngIf="!name && !nameDocUp" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">Elige un archivo</label>
+                <label *ngIf="!nameDocUp && name" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir">{{ name }}</label>
+              </div>
+              <div class="input-group-append">
+                <button *ngIf="urlDoc | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon01" (click)="subirArchivo()">Guardar</button>
+                <ng-template #btnDisabled>
+                  <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon01" disabled=true>Guardar</button>
+                </ng-template>
+              </div>
+            </div>
+
+            <div *ngIf="nameDocUp" class="progress">
+              <div class="progress-bar progress-bar-striped bg-primary"
+                    role="progressbar" [style.width]="(uploadPercent | async) +'%'">
+              </div>
+            </div>
+
+             <!-- Botones-->
+             <div class="col text-right mt-3">
+              <button type="button" class="btn btn-primary mr-1" (click)="seccionAnterior()">
+                <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+                Atrás
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="!formSolicitud.form.valid || (nameDocUp && !name)">
                 Enviar
                 <fa-icon [icon]="faSave" title="Enviar"></fa-icon>
               </button>
             </div>
-
           </div>
         </form>
       </div>
