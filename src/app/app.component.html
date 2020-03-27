@@ -58,6 +58,26 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/modReformas/reformas']" [routerLinkActive]="['activado']">Reformas</a>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Notificaciones <span class="badge badge-primary" *ngIf="notificacionesCount > 0">{{ notificacionesCount }}</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
+            <!-- Div para mostrar mensaje cuando no hay notificaciones-->
+            <div *ngIf="notificacionesCount === 0" class="alert alert-primary text-center m-2 animated fadeIn faster">
+              <h4 class="alert-heading">No hay notificaciones</h4>
+              <p>
+                <fa-icon [icon]="faExclamation" size="2x"></fa-icon>
+              </p>
+            </div>
+            <div *ngIf="usuario && usuario.notificaciones && notificacionesCount > 0">
+              <div *ngFor="let notificacion of usuario.notificaciones">
+                <a class="dropdown-item" (click)="onNotificacion(notificacion)">{{ notificacion.texto }}</a>
+              </div>
+            </div>
+          </div>
+        </li>
         <li class="nav-item dropdown" *ngIf="isSolucionador || isAgregador">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Admin
@@ -93,16 +113,16 @@
 </ng-template>
 
 <section id="main">
-    <ngx-spinner
-      bdOpacity = 0.9
-      bdColor = "#333"
-      size = "large"
-      color = "#385dfa"
-      type = "square-jelly-box"
-      [fullScreen] = "true"
-      >
-<p style="color: white" class="mt-4"> Cargando... </p>
-</ngx-spinner>
+  <ngx-spinner
+    bdOpacity = 0.9
+    bdColor = "#333"
+    size = "large"
+    color = "#385dfa"
+    type = "square-jelly-box"
+    [fullScreen] = "true">
+    <p style="color: white" class="mt-4"> Cargando... </p>
+  </ngx-spinner>
+
   <!-- Componente actual -->
 	<router-outlet></router-outlet>
 </section>

@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+// Iconos
+import { faExclamation } from '@fortawesome/free-solid-svg-icons';
+
 //Servicios
 import { AuthService } from './out/services/auth.service';
 import { UsuarioService } from './admin/services/usuario.service';
@@ -10,6 +13,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 // Models
 import { Usuario } from './admin/models/usuario';
+import { Notificacion } from './in/models/notificacion';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +28,11 @@ export class AppComponent implements OnInit, OnDestroy {
   public isAgregador: any = null;
   public isSolucionador: any = null;
   usuario: Usuario;
+  notificacionesCount: number = 0; // Variables para indicar el número de notificaciones que no sean visto.
   private ngUnsubscribe: Subject<any> = new Subject<any>();
+
+  //Iconos
+  faExclamation = faExclamation; //Icono para colocar cuando no hay notificaciones.
 
   constructor(private auth: AuthService,
               private usuarioService: UsuarioService,
@@ -54,6 +62,9 @@ export class AppComponent implements OnInit, OnDestroy {
         .subscribe((usuario: Usuario) => {
           // Obtenemos la información del usuario de la base de datos de firebase.
           this.usuario = usuario;
+          if(this.usuario.notificaciones){
+            this.notificacionesNoReadedCount(this.usuario.notificaciones);
+          }
         });
 
         this.auth.isUserAdmin(user.uid)
@@ -67,6 +78,29 @@ export class AppComponent implements OnInit, OnDestroy {
         });
       } else {
         this.islogged = false;
+      }
+    });
+  }
+
+  // Metodo para determinar cuantas de las notificaciones aún no han sido leidas.
+  notificacionesNoReadedCount(notificaciones: Notificacion[]){
+    if(notificaciones.length > 0){
+      notificaciones.forEach((notificacion: Notificacion) => {
+        if(notificacion.leido === false){
+          this.notificacionesCount = this.notificacionesCount + 1;
+        }
+      });
+    }
+  }
+
+  // Metodo para cambiarle el estado a la notificación y después ir a la solicitud que está asociada a la notificación.
+  onNotificacion(notificacion: Notificacion){
+    this.usuario.notificaciones.forEach((notificacionU, index) => {
+      if(notificacion.id === notificacionU){
+        this.usuario.notificaciones[index].leido = true;
+        this.usuarioService.updateUsuario(this.usuario).then(()=>{
+          this.router.navigate(['/modSolicitudes/solicitud', notificacion.solicitudId]);
+        });
       }
     });
   }

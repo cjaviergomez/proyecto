@@ -23,9 +23,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
 // Componentes
 import { AppComponent } from './app.component';
-
 import { ErrorComponent } from './out/components/error/error.component';
-
 import { FooterComponent} from './out/components/footer/footer.component';
 
 @NgModule({

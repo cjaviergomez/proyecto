@@ -32,7 +32,7 @@ import { faWindowClose, faSearch, faPlus, faExclamation, faArrowCircleRight, faA
   styleUrls: []
 })
 export class startNewProcessComponent extends StartProcessInstanceComponent implements OnDestroy {
-  submitted = false;
+
   model = new MyProcessData([], [], [], '', false);
   material = new Material(); //Modelo del material a agregar a la base de datos.
   elementoPro = new Material(); //Modelo del elemento de protección a agregar a la base de datos.
@@ -55,8 +55,6 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
   nameDocUp: string;
 
   storage: AngularFireStorage;
-
-  public ngUnsubscribe: Subject<any> = new Subject<any>();
 
   constructor(route: ActivatedRoute, camundaRestService: CamundaRestService,
               authService: AuthService, usuarioService:UsuarioService,
@@ -222,16 +220,5 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
       }
     });
   }
-
-  /**
-   * Este metodo se ejecuta cuando el componente se destruye
-   * Usamos este método para cancelar todos los observables.
-   */
-  ngOnDestroy(): void {
-    // End all subscriptions listening to ngUnsubscribe
-    // to avoid memory leaks.
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-	}
 
 }

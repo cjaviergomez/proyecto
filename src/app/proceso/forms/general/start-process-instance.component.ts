@@ -1,7 +1,9 @@
-import { OnInit } from '@angular/core';
+import { OnInit, OnDestroy } from '@angular/core';
 import { CamundaRestService } from '../../services/camunda-rest.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 // Modelos
 import { Solicitud } from '../../../solicitudes/models/solicitud';
@@ -9,6 +11,7 @@ import { Usuario } from '../../../admin/models/usuario';
 import { Unidad } from 'app/admin/models/unidad';
 import { Material } from '../../models/material';
 import { MyProcessData } from '../../models/MyProcessData';
+import { Notificacion } from 'app/in/models/notificacion';
 
 //Servicios
 import { UsuarioService } from '../../../admin/services/usuario.service';
@@ -18,7 +21,7 @@ import { UnidadService } from '../../../admin/services/unidad.service';
 import { MaterialesService } from '../../services/materiales.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
 
-export class StartProcessInstanceComponent implements OnInit {
+export class StartProcessInstanceComponent implements OnInit, OnDestroy {
   solicitud;
   usuario: Usuario;
   unidad:Unidad; // Unidad academica a la cual pertenece el usuario
@@ -57,10 +60,13 @@ export class StartProcessInstanceComponent implements OnInit {
   name = '';
 
   model: MyProcessData;
-  submitted
+  submitted = false;
   cargando
   route: ActivatedRoute
   camundaRestService: CamundaRestService
+  notificacion: Notificacion;
+
+  public ngUnsubscribe: Subject<any> = new Subject<any>();
 
   constructor(route: ActivatedRoute,
     camundaRestService: CamundaRestService,
@@ -147,8 +153,11 @@ export class StartProcessInstanceComponent implements OnInit {
         nombreDocumentos: this.name
       };
 
-      this.solicitudService.addSolicitud(this.solicitud).then(() => {
+      this.solicitudService.addSolicitud(this.solicitud).then((solicitud) => {
         this.submitted = true;
+        console.log(solicitud);
+        //this.notifyPlaneacion();
+        //this.notifyPlantaFisica();
         this.swal.stopLoading();
       }).catch(error=>{
         this.swal.stopLoading();
@@ -172,6 +181,20 @@ export class StartProcessInstanceComponent implements OnInit {
     return variables;
   }
 
+  // Metodo para notificar a los usuarios de planeación de la nueva solicitud.
+  notifyPlaneacion(){
+    this.usuarioService.getUsuariosPlaneacion()
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(usuarios => {
+          usuarios.forEach(usuario => {
+
+          });
+        });
+  }
+
+  // Metodo para notificar a los usuarios de Planta Física de la nueva solicitud.
+  notifyPlantaFisica(){}
+
   seccionSiguiente(){
 		this.seccion = this.seccion + 1;
 	}
@@ -191,5 +214,16 @@ export class StartProcessInstanceComponent implements OnInit {
       this.cargando = false;
     });
   }
+
+  /**
+   * Este metodo se ejecuta cuando el componente se destruye
+   * Usamos este método para cancelar todos los observables.
+   */
+  ngOnDestroy(): void {
+    // End all subscriptions listening to ngUnsubscribe
+    // to avoid memory leaks.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+	}
 
 }

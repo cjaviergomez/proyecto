@@ -1,4 +1,5 @@
 import { Perfil } from './perfil';
+import { Notificacion } from 'app/in/models/notificacion';
 
 export class Usuario {
 	id?: string;
@@ -12,6 +13,7 @@ export class Usuario {
 	estado?: string;
   photoUrl?:string;
   primerIngreso?: boolean;
+  notificaciones?: Notificacion[];
 
 	constructor(){}
 }

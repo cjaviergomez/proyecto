@@ -26,3 +26,7 @@
 span.perfil{
   font-family: "Consolas", monospace;
 }
+
+.dropdown-menu2 {
+  width: 400px !important;
+}
