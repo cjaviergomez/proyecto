@@ -64,7 +64,11 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
   cargando
   route: ActivatedRoute
   camundaRestService: CamundaRestService
+
+  //Para trabajar con las notificaciones
   notificacion: Notificacion;
+  usuariosPl: Usuario[];
+  usuariosPF: Usuario[];
 
   public ngUnsubscribe: Subject<any> = new Subject<any>();
 
@@ -91,6 +95,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.materialesUsuario = [];
     this.elementosUsuario = [];
     this.especialesUsuario = [];
@@ -153,11 +158,19 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
         nombreDocumentos: this.name
       };
 
-      this.solicitudService.addSolicitud(this.solicitud).then((solicitud) => {
-        this.submitted = true;
-        console.log(solicitud);
-        //this.notifyPlaneacion();
+      this.solicitudService.addSolicitud(this.solicitud).then((data) => {
+        this.notificacion = {
+          leido: false,
+          solicitudId: data.id,
+          texto: 'ha creado una nueva solicitud.',
+          actor: this.usuario.nombres,
+          fecha: new Date()
+        };
+        this.notifyPlaneacion();
         //this.notifyPlantaFisica();
+        //this.updateUsuariosPlaneacion();
+        //this.updateUsuariosPlantaFisica();
+        this.submitted = true;
         this.swal.stopLoading();
       }).catch(error=>{
         this.swal.stopLoading();
@@ -186,14 +199,47 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
     this.usuarioService.getUsuariosPlaneacion()
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(usuarios => {
-          usuarios.forEach(usuario => {
+          this.usuariosPl = usuarios;
+          this.usuariosPl.forEach(usuario => {
+            if(!usuario.notificaciones){
+              usuario.notificaciones = [];
+            }
+            usuario.notificaciones.push(this.notificacion); // Le añadimos la notificación al usuario.
+          });
+          this.updateUsuariosPlaneacion();
+        });
+  }
 
+  // Metodo para actualizar los usuarios de planeación; agregarle la notificación a cada uno.
+  updateUsuariosPlaneacion(){
+    this.usuariosPl.forEach(usuario => {
+      this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
+      console.log('update Planeación');
+    });
+
+  }
+
+  // Metodo para notificar a los usuarios de Planta Física de la nueva solicitud.
+  notifyPlantaFisica(){
+    this.usuarioService.getUsuariosPlantaFisica()
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe( usuarios => {
+          this.usuariosPF = usuarios;
+          this.usuariosPF.forEach(usuario =>{
+            if(!usuario.notificaciones){
+              usuario.notificaciones = [];
+            }
+            usuario.notificaciones.push(this.notificacion); // Le añadimos la notificación al usuario.
           });
         });
   }
 
-  // Metodo para notificar a los usuarios de Planta Física de la nueva solicitud.
-  notifyPlantaFisica(){}
+   // Metodo para actualizar los usuarios de Planta Física; agregarle la notificación a cada uno.
+   updateUsuariosPlantaFisica(){
+    this.usuariosPF.forEach(usuario => {
+      this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
+    });
+  }
 
   seccionSiguiente(){
 		this.seccion = this.seccion + 1;

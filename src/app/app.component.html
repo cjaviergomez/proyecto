@@ -73,7 +73,7 @@
             </div>
             <div *ngIf="usuario && usuario.notificaciones && notificacionesCount > 0">
               <div *ngFor="let notificacion of usuario.notificaciones">
-                <a class="dropdown-item" (click)="onNotificacion(notificacion)">{{ notificacion.texto }}</a>
+                <a class="dropdown-item" (click)="onNotificacion(notificacion)">El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</a>
               </div>
             </div>
           </div>
