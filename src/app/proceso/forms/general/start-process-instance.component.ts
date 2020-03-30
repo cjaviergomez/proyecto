@@ -71,6 +71,8 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
   usuariosPF: Usuario[];
 
   public ngUnsubscribe: Subject<any> = new Subject<any>();
+  public ngUnsubscribeP: Subject<any> = new Subject<any>();
+  public ngUnsubscribePF: Subject<any> = new Subject<any>();
 
   constructor(route: ActivatedRoute,
     camundaRestService: CamundaRestService,
@@ -167,9 +169,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
           fecha: new Date()
         };
         this.notifyPlaneacion();
-        //this.notifyPlantaFisica();
-        //this.updateUsuariosPlaneacion();
-        //this.updateUsuariosPlantaFisica();
+        this.notifyPlantaFisica();
         this.submitted = true;
         this.swal.stopLoading();
       }).catch(error=>{
@@ -195,50 +195,39 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
   }
 
   // Metodo para notificar a los usuarios de planeación de la nueva solicitud.
-  notifyPlaneacion(){
+  notifyPlaneacion() {
     this.usuarioService.getUsuariosPlaneacion()
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntil(this.ngUnsubscribeP))
         .subscribe(usuarios => {
           this.usuariosPl = usuarios;
+          this.ngUnsubscribeP.next();
+          this.ngUnsubscribeP.complete();
           this.usuariosPl.forEach(usuario => {
             if(!usuario.notificaciones){
               usuario.notificaciones = [];
             }
             usuario.notificaciones.push(this.notificacion); // Le añadimos la notificación al usuario.
+            this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
           });
-          this.updateUsuariosPlaneacion();
         });
-  }
-
-  // Metodo para actualizar los usuarios de planeación; agregarle la notificación a cada uno.
-  updateUsuariosPlaneacion(){
-    this.usuariosPl.forEach(usuario => {
-      this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
-      console.log('update Planeación');
-    });
-
   }
 
   // Metodo para notificar a los usuarios de Planta Física de la nueva solicitud.
   notifyPlantaFisica(){
     this.usuarioService.getUsuariosPlantaFisica()
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntil(this.ngUnsubscribePF))
         .subscribe( usuarios => {
           this.usuariosPF = usuarios;
+          this.ngUnsubscribePF.next();
+          this.ngUnsubscribePF.complete();
           this.usuariosPF.forEach(usuario =>{
             if(!usuario.notificaciones){
               usuario.notificaciones = [];
             }
             usuario.notificaciones.push(this.notificacion); // Le añadimos la notificación al usuario.
+            this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
           });
         });
-  }
-
-   // Metodo para actualizar los usuarios de Planta Física; agregarle la notificación a cada uno.
-   updateUsuariosPlantaFisica(){
-    this.usuariosPF.forEach(usuario => {
-      this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
-    });
   }
 
   seccionSiguiente(){

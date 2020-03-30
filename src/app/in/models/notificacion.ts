@@ -1,4 +1,3 @@
-
 export interface Notificacion {
   id?: string;
   texto?: string; //Mensaje a mostrar

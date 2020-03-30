@@ -84,6 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // Metodo para determinar cuantas de las notificaciones aún no han sido leidas.
   notificacionesNoReadedCount(notificaciones: Notificacion[]){
+    this.notificacionesCount = 0;
     if(notificaciones.length > 0){
       notificaciones.forEach((notificacion: Notificacion) => {
         if(notificacion.leido === false){

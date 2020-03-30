@@ -28,5 +28,10 @@ span.perfil{
 }
 
 .dropdown-menu2 {
+  max-width: 400px !important;
   width: 400px !important;
+}
+
+.notificacion {
+
 }
