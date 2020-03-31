@@ -161,7 +161,9 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
       };
 
       this.solicitudService.addSolicitud(this.solicitud).then((data) => {
+        const id = Math.random().toString(36).substring(2);
         this.notificacion = {
+          id: id,
           leido: false,
           solicitudId: data.id,
           texto: 'ha creado una nueva solicitud.',

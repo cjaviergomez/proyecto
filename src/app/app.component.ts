@@ -96,14 +96,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // Metodo para cambiarle el estado a la notificación y después ir a la solicitud que está asociada a la notificación.
   onNotificacion(notificacion: Notificacion){
-    this.usuario.notificaciones.forEach((notificacionU, index) => {
-      if(notificacion.id === notificacionU){
-        this.usuario.notificaciones[index].leido = true;
-        this.usuarioService.updateUsuario(this.usuario).then(()=>{
-          this.router.navigate(['/modSolicitudes/solicitud', notificacion.solicitudId]);
-        });
-      }
-    });
+    if(notificacion.leido === true){
+      this.router.navigate(['/modSolicitudes/solicitud', notificacion.solicitudId]);
+    } else {
+      this.usuario.notificaciones.forEach((notificacionU, index) => {
+        if(notificacion.id === notificacionU.id){
+          this.usuario.notificaciones[index].leido = true;
+          this.usuarioService.updateUsuario(this.usuario).then(()=>{
+            this.router.navigate(['/modSolicitudes/solicitud', notificacion.solicitudId]);
+          });
+        }
+      });
+    }
   }
 
   spinner(): void {
