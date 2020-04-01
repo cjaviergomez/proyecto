@@ -12,6 +12,7 @@ import { EsriMapComponent } from './components/map/map.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { ConfigComponent } from './components/config/config.component';
 
+
 @NgModule({
   declarations: [
     EsriMapComponent,

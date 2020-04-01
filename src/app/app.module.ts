@@ -15,6 +15,9 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
+//Pipes
+import { FechaNotificacionPipe } from './pipes/fecha-notificacion.pipe';
+
 // Rutas
 import { routing, appRoutingProviders } from './app.routing';
 
@@ -30,7 +33,8 @@ import { FooterComponent} from './out/components/footer/footer.component';
   declarations: [
     AppComponent,
     ErrorComponent,
-    FooterComponent
+    FooterComponent,
+    FechaNotificacionPipe
   ],
   imports: [
     BrowserModule,
