@@ -8,6 +8,7 @@ import { faExclamation, faArrowCircleLeft, faSyncAlt } from '@fortawesome/free-s
 import { Usuario } from 'app/admin/models/usuario';
 import { Solicitud } from 'app/solicitudes/models/solicitud';
 import { Task } from 'app/proceso/models/Task';
+import { Notificacion } from 'app/in/models/notificacion';
 
 // Services
 import { CamundaRestService } from '../../../services/camunda-rest.service';
@@ -15,6 +16,7 @@ import { AuthService } from '../../../../out/services/auth.service';
 import { UsuarioService } from '../../../../admin/services/usuario.service';
 import { SolicitudService } from '../../../../solicitudes/services/solicitud.service';
 import { ShowMessagesService } from '../../../../out/services/show-messages.service';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-revisar-solicitud',
@@ -37,13 +39,18 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
   faArrowCircleLeft = faArrowCircleLeft;
   faSyncAlt = faSyncAlt;
 
+  //Notificaciones
+  notificacionEstado: Notificacion;
+  notificacionAvance: Notificacion;
+
   constructor(private camundaRestService: CamundaRestService,
               private route: ActivatedRoute,
               private router: Router,
               private authService: AuthService,
               private usuarioService: UsuarioService,
               private solicitudService: SolicitudService,
-              private swal: ShowMessagesService) { }
+              private swal: ShowMessagesService,
+              private notificacionService: NotificacionService) { }
 
   ngOnInit() {
     this.cargando = true;
@@ -70,7 +77,31 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
     this.swal.showLoading();
     this.solicitud[0].estado = 'En trámite';
     this.camundaRestService.postCompleteTask(this.taskId, {}).subscribe(() => {
-      this.solicitudService.updateSolicitud(this.solicitud[0]).then(()=>{
+      this.solicitudService.updateSolicitud(this.solicitud[0]).then(()=> {
+
+        //Notificar el cambio de estado y avance en el proceso.
+        const id = Math.random().toString(36).substring(2);
+        const id2 = Math.random().toString(36).substring(2);
+        this.notificacionEstado = {
+          id: id,
+          leido: false,
+          solicitudId: this.solicitud[0].id,
+          texto: 'El estado de su solicitud ha cambiado.',
+          fecha: new Date()
+        };
+
+        this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
+        this.notificacionAvance = {
+          id: id2,
+          leido: false,
+          solicitudId: this.solicitud[0].id,
+          texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+          actor: this.usuario.perfil.nombre,
+          fecha: new Date()
+        };
+        this.notificacionService.notifyPlantaFisica(this.notificacionAvance);
+        this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
+
         this.swal.stopLoading();
         this.router.navigate(['/modProceso/tasklist', this.procesoId]);
       }).catch((err) => {

@@ -20,6 +20,7 @@ import { SolicitudService } from '../../../solicitudes/services/solicitud.servic
 import { UnidadService } from '../../../admin/services/unidad.service';
 import { MaterialesService } from '../../services/materiales.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
+import { NotificacionService } from '../../services/notificacion.service';
 
 export class StartProcessInstanceComponent implements OnInit, OnDestroy {
   solicitud;
@@ -39,6 +40,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
   datePipe: DatePipe
   materialService: MaterialesService
   swal: ShowMessagesService
+  notificacionService: NotificacionService
 
   filterPost = ''; // Texto a buscar en los materiales.
   filterElements = ''; // Texto a buscar en los elementos de protección.
@@ -67,12 +69,8 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 
   //Para trabajar con las notificaciones
   notificacion: Notificacion;
-  usuariosPl: Usuario[];
-  usuariosPF: Usuario[];
 
   public ngUnsubscribe: Subject<any> = new Subject<any>();
-  public ngUnsubscribeP: Subject<any> = new Subject<any>();
-  public ngUnsubscribePF: Subject<any> = new Subject<any>();
 
   constructor(route: ActivatedRoute,
     camundaRestService: CamundaRestService,
@@ -82,7 +80,8 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
     unidadService: UnidadService,
     datePipe: DatePipe,
     materialService: MaterialesService,
-    swal: ShowMessagesService
+    swal: ShowMessagesService,
+    notificacionService: NotificacionService
     ) {
       this.cargando = true; //Indicador para saber cuando la información necesaria para el formulario a cargado.
       this.route = route;
@@ -94,6 +93,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
       this.datePipe = datePipe;
       this.materialService = materialService;
       this.swal = swal;
+      this.notificacionService = notificacionService;
   }
 
   ngOnInit() {
@@ -108,16 +108,18 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
     this.fecha_actual = this.datePipe.transform(this.fecha_actual, 'dd/MM/yyyy');
 
     this.authService.estaAutenticado()
-          .subscribe( user => {
-            if(user){
-              this.usuarioService.getUsuario(user.uid)
-                  .subscribe((usuario: Usuario) => {
-                    // Obtenemos la información del usuario de la base de datos de firebase.
-                    this.usuario = usuario;
-                    this.getUnidad(this.usuario.unidad_id);
-                  });
-            }
-          });
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe( user => {
+          if(user){
+            this.usuarioService.getUsuario(user.uid)
+                .pipe(takeUntil(this.ngUnsubscribe))
+                .subscribe((usuario: Usuario) => {
+                  // Obtenemos la información del usuario de la base de datos de firebase.
+                  this.usuario = usuario;
+                  this.getUnidad(this.usuario.unidad_id);
+                });
+          }
+        });
     this.route.params.subscribe(params => {
       this.processDefinitionKey = params['processdefinitionkey'];
       this.idCapa = params['idCapa']; // Se obtiene el id por la url
@@ -170,8 +172,8 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
           actor: this.usuario.nombres,
           fecha: new Date()
         };
-        this.notifyPlaneacion();
-        this.notifyPlantaFisica();
+        this.notificacionService.notifyPlaneacion(this.notificacion);
+        this.notificacionService.notifyPlantaFisica(this.notificacion);
         this.submitted = true;
         this.swal.stopLoading();
       }).catch(error=>{
@@ -194,42 +196,6 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
     });
 
     return variables;
-  }
-
-  // Metodo para notificar a los usuarios de planeación de la nueva solicitud.
-  notifyPlaneacion() {
-    this.usuarioService.getUsuariosPlaneacion()
-        .pipe(takeUntil(this.ngUnsubscribeP))
-        .subscribe(usuarios => {
-          this.usuariosPl = usuarios;
-          this.ngUnsubscribeP.next();
-          this.ngUnsubscribeP.complete();
-          this.usuariosPl.forEach(usuario => {
-            if(!usuario.notificaciones){
-              usuario.notificaciones = [];
-            }
-            usuario.notificaciones.push(this.notificacion); // Le añadimos la notificación al usuario.
-            this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
-          });
-        });
-  }
-
-  // Metodo para notificar a los usuarios de Planta Física de la nueva solicitud.
-  notifyPlantaFisica(){
-    this.usuarioService.getUsuariosPlantaFisica()
-        .pipe(takeUntil(this.ngUnsubscribePF))
-        .subscribe( usuarios => {
-          this.usuariosPF = usuarios;
-          this.ngUnsubscribePF.next();
-          this.ngUnsubscribePF.complete();
-          this.usuariosPF.forEach(usuario =>{
-            if(!usuario.notificaciones){
-              usuario.notificaciones = [];
-            }
-            usuario.notificaciones.push(this.notificacion); // Le añadimos la notificación al usuario.
-            this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
-          });
-        });
   }
 
   seccionSiguiente(){

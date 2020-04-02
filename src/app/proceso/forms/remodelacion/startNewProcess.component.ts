@@ -23,6 +23,7 @@ import { CamundaRestService } from '../../services/camunda-rest.service';
 import { UnidadService } from '../../../admin/services/unidad.service';
 import { MaterialesService } from 'app/proceso/services/materiales.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
+import { NotificacionService } from '../../services/notificacion.service';
 
 import { faWindowClose, faSearch, faPlus, faExclamation, faArrowCircleRight, faArrowCircleLeft, faSave, faSyncAlt } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
@@ -63,8 +64,9 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
               datePipe: DatePipe,
               materialService: MaterialesService,
               swal: ShowMessagesService,
-              storage: AngularFireStorage) {
-    super(route, camundaRestService, authService, usuarioService, solicitudService, unidadService, datePipe, materialService, swal);
+              storage: AngularFireStorage,
+              notificacionService: NotificacionService) {
+    super(route, camundaRestService, authService, usuarioService, solicitudService, unidadService, datePipe, materialService, swal, notificacionService);
     this.storage = storage;
   }
 

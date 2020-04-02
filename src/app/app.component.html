@@ -65,13 +65,15 @@
           </a>
           <div class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
             <!-- Div para mostrar mensaje cuando no hay notificaciones-->
-            <div *ngIf="usuario && usuario.notificaciones && usuario.notificaciones.length === 0" class="card p-0">
-              <div class="card-body p-0">
-                <div class="card-text alert alert-primary text-center animated fadeIn faster m-1 p-0">
-                  <h4 class="alert-heading">No hay notificaciones</h4>
-                  <p>
-                    <fa-icon [icon]="faExclamation" size="2x"></fa-icon>
-                  </p>
+            <div *ngIf="(usuario && !usuario.notificaciones) || (usuario && usuario.notificaciones && usuario.notificaciones.length == 0)" class="scroll">
+              <div class="card">
+                <div class="card-body p-0">
+                  <div class="card-text alert alert-primary text-center animated fadeIn faster m-1">
+                    <h4 class="alert-heading">No tienes notificaciones</h4>
+                    <p>
+                      <fa-icon [icon]="faExclamation" size="2x"></fa-icon>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -79,7 +81,8 @@
             <div *ngIf="usuario && usuario.notificaciones && usuario.notificaciones.length > 0" class="scroll">
               <div *ngFor="let notificacion of usuario.notificaciones.reverse()" class="card list-group">
                 <div class="card-body list-group-item list-group-item-action list-group-item-info animated fadeIn faster" *ngIf="notificacion.leido === false" (click)="onNotificacion(notificacion)" style="cursor: pointer;">
-                  <p class="card-text"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></p>
+                  <p class="card-text" *ngIf="notificacion.actor"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></p>
+                  <p class="card-text" *ngIf="!notificacion.actor"><font size=2>{{ notificacion.texto }}</font></p>
                   <p class="card-text"><small class="text-muted">hace {{ notificacion.fecha | fechaNotificacion }}</small></p>
                 </div>
                 <div class="card-body list-group-item list-group-item-action list-group-item-light animated fadeIn faster" *ngIf="notificacion.leido === true" (click)="onNotificacion(notificacion)" style="cursor: pointer;">

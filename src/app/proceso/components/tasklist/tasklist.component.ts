@@ -61,7 +61,8 @@ export class TasklistComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.route.params != null) {
       this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-        if (params['id'] != null && params['taskId'] == null) {
+        if (params['id'] != null && params['taskId'] == null) { //Si no se ha seleccionado ninguna tarea
+          this.cargando = true;
           this.processId = params['id'];
           this.getSolicitudProcess();
           this.getTasks();

@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div *ngIf="tasks && tasks.length == 0" class="alert alert-info text-center animated fadeIn faster mb-3">
+    <div *ngIf="tasks && tasks.length == 0 && tasksComplete && tasksComplete.length > 0" class="alert alert-info text-center animated fadeIn faster mb-3">
       <h4 class="alert-heading">¡Proceso terminado!</h4>
       <p class="mb-0">
         No hay tareas pendientes
@@ -70,7 +70,6 @@
   </div>
   </div>
 </div>
-
 
 <!--Modal ver formulario-->
 <div class="modal fade" id="verFormulario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
