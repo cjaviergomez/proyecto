@@ -58,20 +58,18 @@ export class NotificacionService {
         });
   }
 
-  // Metodo para notificar a los usuarios de planeación de la nueva solicitud.
-  notifyUsuario(notificacion: Notificacion, usuario: Usuario) {
-    this.usuarioService.getUserEstado(usuario.correo)
+  // Metodo para agregar una notificación a algún usuario
+  notifyUsuario(notificacion: Notificacion, user: Usuario) {
+    this.usuarioService.getUsuario(user.id)
         .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(usuarios => {
+        .subscribe(usuario => {
           this.ngUnsubscribe.next();
           this.ngUnsubscribe.complete();
-          usuarios.forEach(usuario => {
-            if(!usuario.notificaciones){
-              usuario.notificaciones = [];
-            }
-            usuario.notificaciones.push(notificacion); // Le añadimos la notificación al usuario.
-            this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
-          });
+          if(!usuario.notificaciones){
+            usuario.notificaciones = [];
+          }
+          usuario.notificaciones.push(notificacion); // Le añadimos la notificación al usuario.
+          this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
         });
   }
 }

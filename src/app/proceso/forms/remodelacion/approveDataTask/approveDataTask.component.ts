@@ -12,12 +12,12 @@ import { faWindowClose, faSearch, faPlus, faExclamation, faArrowCircleRight, faA
 import { CompleteTaskComponent } from '../../general/complete-task.component';
 
 // Modelos
-import { MyProcessData } from '../../../models/MyProcessData';
 import { Task } from 'app/proceso/models/Task';
 import { Solicitud } from 'app/solicitudes/models/solicitud';
 import { Unidad } from 'app/admin/models/unidad';
 import { Material } from 'app/proceso/models/material';
 import { Usuario } from 'app/admin/models/usuario';
+import { Notificacion } from 'app/in/models/notificacion';
 
 // Services
 import { CamundaRestService } from '../../../services/camunda-rest.service';
@@ -27,6 +27,7 @@ import { ShowMessagesService } from '../../../../out/services/show-messages.serv
 import { MaterialesService } from '../../../services/materiales.service';
 import { UsuarioService } from '../../../../admin/services/usuario.service';
 import { AuthService } from '../../../../out/services/auth.service';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'approveDataTask',
@@ -37,7 +38,6 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
 
   mostrarF: boolean = false;
   seccion: number;
-  model = new MyProcessData([], [], [], '', false);
   cargando: boolean;
   usuario: Usuario;
   public procesoId: string;
@@ -56,7 +56,6 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
   elementosPro: Material[]; // Elementos de protección encontrados en la base de datos.
   especiales: Material[]; // Acciones especiales encontradas en la base de datos.
 
-
   material = new Material(); //Modelo del material a agregar a la base de datos.
   elementoPro = new Material(); //Modelo del elemento de protección a agregar a la base de datos.
   especial = new Material(); //Modelo de la accion especial a agregar a la base de datos.
@@ -73,6 +72,10 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
   faCheck = faCheck; //Icono para aceptar solicitud.
   faTimes = faTimes; //Icono para rechazar la solicitud.
 
+  // Notificaciones
+  notificacionEstado: Notificacion;
+  notificacionAvance: Notificacion;
+
   constructor(route: ActivatedRoute,
     router: Router,
     camundaRestService: CamundaRestService,
@@ -81,7 +84,8 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
     swal: ShowMessagesService,
     materialService: MaterialesService,
     usuarioService: UsuarioService,
-    authService: AuthService) {
+    authService: AuthService,
+    private notificacionService: NotificacionService) {
 
     super(route, router, camundaRestService, solicitudService, unidadService, swal, materialService, usuarioService, authService);
     this.cargando = true;
@@ -316,32 +320,54 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
     this.mostrarF = valor;
   }
 
-  enviarRespuesta(valor: boolean){
+  enviarRespuesta(valor: boolean) {
+    const idSoli = this.solicitud[0].id;
     this.model.approved = valor;
     if(valor === true){
       this.swal.showQuestionMessage('responderSolicitud', null, 'aceptar').then(resp => {
         if(resp.value){
-          this.updateSolicitud();
-          this.onSubmit();
+          this.solicitudService.updateSolicitud(this.solicitud[0]).then(() => {
+            //Notificar el avance en el proceso.
+            const id = Math.random().toString(36).substring(2);
+            this.notificacionAvance = {
+              id: id,
+              leido: false,
+              solicitudId: idSoli,
+              texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+              actor: this.usuario.perfil.nombre,
+              fecha: new Date()
+            };
+            this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
+            this.onSubmit();
+          }).catch((err)=>{
+            console.log(err);
+          });
         }
       }).catch((error) => {
         this.swal.showErrorMessage('');
-      })
+      });
     } else {
       this.swal.showQuestionMessage('responderSolicitud', null, 'rechazar').then(resp =>{
         if(resp.value){
           this.solicitud[0].estado = 'Rechazada';
-          this.updateSolicitud();
-          this.onSubmit();
+          this.solicitudService.updateSolicitud(this.solicitud[0]).then(() => {
+            //Notificar el cambio de estado en la solicitud.
+            const id = Math.random().toString(36).substring(2);
+            this.notificacionEstado = {
+              id: id,
+              leido: false,
+              solicitudId: this.solicitud[0].id,
+              texto: 'El estado de su solicitud ha cambiado.',
+              fecha: new Date()
+            };
+            this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
+            this.onSubmit();
+          });
         }
       }).catch((err)=>{
         this.swal.showErrorMessage('');
       });
     }
-  }
-
-  updateSolicitud(){
-    this.solicitudService.updateSolicitud(this.solicitud[0]);
   }
 
   /**

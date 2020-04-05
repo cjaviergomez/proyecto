@@ -173,7 +173,9 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
           fecha: new Date()
         };
         this.notificacionService.notifyPlaneacion(this.notificacion);
-        this.notificacionService.notifyPlantaFisica(this.notificacion);
+        if(this.usuario.perfil.nombre !== 'Planta Física'){
+          this.notificacionService.notifyPlantaFisica(this.notificacion);
+        }
         this.submitted = true;
         this.swal.stopLoading();
       }).catch(error=>{

@@ -1,5 +1,7 @@
-import { CamundaRestService } from '../../services/camunda-rest.service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+
+//Services
+import { CamundaRestService } from '../../services/camunda-rest.service';
 import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
 import { UnidadService } from '../../../admin/services/unidad.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
@@ -7,8 +9,11 @@ import { MaterialesService } from '../../services/materiales.service';
 import { UsuarioService } from '../../../admin/services/usuario.service';
 import { AuthService } from '../../../out/services/auth.service';
 
+// Modelos
+import { MyProcessData } from 'app/proceso/models/MyProcessData';
+
 export class CompleteTaskComponent {
-  model
+  model = new MyProcessData([], [], [], '', false);
   route: ActivatedRoute
   router: Router
   camundaRestService: CamundaRestService

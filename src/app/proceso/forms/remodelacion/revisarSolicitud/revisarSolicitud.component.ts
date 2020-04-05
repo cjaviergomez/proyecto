@@ -75,10 +75,10 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
    */
   completarTarea() {
     this.swal.showLoading();
+    const idSolicitud = this.solicitud[0].id;
     this.solicitud[0].estado = 'En trámite';
     this.camundaRestService.postCompleteTask(this.taskId, {}).subscribe(() => {
       this.solicitudService.updateSolicitud(this.solicitud[0]).then(()=> {
-
         //Notificar el cambio de estado y avance en el proceso.
         const id = Math.random().toString(36).substring(2);
         const id2 = Math.random().toString(36).substring(2);
@@ -90,7 +90,6 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
           fecha: new Date()
         };
 
-        this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
         this.notificacionAvance = {
           id: id2,
           leido: false,
@@ -99,8 +98,19 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
           actor: this.usuario.perfil.nombre,
           fecha: new Date()
         };
-        this.notificacionService.notifyPlantaFisica(this.notificacionAvance);
-        this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
+
+        if(this.solicitud[0].usuario.perfil.nombre === 'Planta Física') {
+          this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
+          setTimeout(() => {
+            this.notificacionService.notifyPlantaFisica(this.notificacionAvance);
+          }, 2000);
+        } else {
+          this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
+          this.notificacionService.notifyPlantaFisica(this.notificacionAvance);
+          setTimeout(() => {
+            this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
+          }, 2000);
+        }
 
         this.swal.stopLoading();
         this.router.navigate(['/modProceso/tasklist', this.procesoId]);
@@ -157,6 +167,7 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe( solicitud => {
           this.solicitud = solicitud;
+          console.log(solicitud);
         });
   }
 
