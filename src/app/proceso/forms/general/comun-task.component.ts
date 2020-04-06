@@ -13,6 +13,7 @@ import { AuthService } from '../../../out/services/auth.service';
 //Modelos
 import { Task } from 'app/proceso/models/Task';
 import { Usuario } from 'app/admin/models/usuario';
+import { Solicitud } from 'app/solicitudes/models/solicitud';
 
 export class ComunTaskComponent {
 
@@ -31,6 +32,7 @@ export class ComunTaskComponent {
   public task: Task;
   cargando: boolean;
   usuario: Usuario;
+  solicitud: Solicitud;
   public ngUnsubscribe: Subject<any> = new Subject<any>();
 
    //Iconos
@@ -63,6 +65,7 @@ export class ComunTaskComponent {
       this.formKey = params['formKey'];
     });
     this.getCurrentUser();
+    this.getSolicitud();
     if(this.formKey == null){
       this.getTask(this.taskId);
       this.getHistoryVariables();
@@ -92,6 +95,17 @@ export class ComunTaskComponent {
         });
       }
     });
+  }
+
+  /**
+   * Metodo para obtener la solicitud asociada al proceso.
+   */
+  getSolicitud() {
+    this.solicitudService.getSolicitudProcess(this.procesoId)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe( solicitud => {
+          this.solicitud = solicitud[0];
+        });
   }
 
   /**

@@ -37,5 +37,5 @@
 
   <hr class="my-4">
   <p>Para terminar esta tarea y seguir con el proceso, se debe revisar el formulario de solicitud y dar click en continuar</p>
-  <button type="button" class="btn btn-outline-primary float-right mr-3" (click)="completarTarea()" [disabled]="usuario && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Continuar</button>
+  <button type="button" class="btn btn-outline-primary float-right mr-3" (click)="completarTarea()" [disabled]="usuario && usuario.perfil && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Continuar</button>
 </div>

@@ -8,11 +8,15 @@ import Swal from 'sweetalert2';
 // Modelos
 import { Task } from 'app/proceso/models/Task';
 import { Usuario } from 'app/admin/models/usuario';
+import { Notificacion } from 'app/in/models/notificacion';
+import { Solicitud } from 'app/solicitudes/models/solicitud';
 
 // Services
 import { CamundaRestService } from '../../../services/camunda-rest.service';
 import { UsuarioService } from '../../../../admin/services/usuario.service';
 import { AuthService } from '../../../../out/services/auth.service';
+import { SolicitudService } from '../../../../solicitudes/services/solicitud.service';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-enviar-observaciones',
@@ -28,6 +32,7 @@ export class enviarObservacionesComponent implements OnInit, OnDestroy {
   cargando: boolean;
   historyVariables: [] = [];
   usuario: Usuario;
+  solicitud: Solicitud[];
   private ngUnsubscribe: Subject<any> = new Subject<any>();
 
   //Iconos
@@ -38,11 +43,16 @@ export class enviarObservacionesComponent implements OnInit, OnDestroy {
 
   observacionesP: string; //Propio de la tarea.
 
+  // Notificaciones
+  notificacionAvance: Notificacion;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private camundaRestService: CamundaRestService,
               private usuarioService: UsuarioService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private solicitudService: SolicitudService,
+              private notificacionService: NotificacionService) { }
 
   ngOnInit() {
     this.cargando = true;
@@ -52,6 +62,7 @@ export class enviarObservacionesComponent implements OnInit, OnDestroy {
       this.formKey = params['formKey'];
     });
     this.getCurrentUser();
+    this.getSolicitud();
     if(this.formKey == null){
       this.getTask(this.taskId);
     } else {
@@ -59,6 +70,18 @@ export class enviarObservacionesComponent implements OnInit, OnDestroy {
       this.getHistoryVariables();
     }
   }
+
+  /**
+   * Metodo para obtener la solicitud asociada al proceso.
+   */
+  getSolicitud() {
+    this.solicitudService.getSolicitudProcess(this.procesoId)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe( solicitud => {
+          this.solicitud = solicitud;
+        });
+  }
+
 
   /**
    * Metodo para buscar una tarea en especifico.
@@ -121,6 +144,20 @@ export class enviarObservacionesComponent implements OnInit, OnDestroy {
       if(resp.value) {
         const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
         this.camundaRestService.postCompleteTask(this.taskId, variables).subscribe(()=>{
+          //Notificar el avance en el proceso.
+          const id = Math.random().toString(36).substring(2);
+          this.notificacionAvance = {
+            id: id,
+            leido: false,
+            solicitudId: this.solicitud[0].id,
+            texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+            actor: this.usuario.perfil.nombre,
+            fecha: new Date()
+          };
+          this.notificacionService.notifyPlaneacion(this.notificacionAvance);
+          if(this.solicitud[0].usuario.perfil.nombre !== 'Planta Física'){
+            this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
+          }
           this.router.navigate(['/modProceso/tasklist', this.procesoId]);
         });
       }

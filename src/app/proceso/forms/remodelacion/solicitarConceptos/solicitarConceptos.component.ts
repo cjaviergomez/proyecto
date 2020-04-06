@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 
 // Modelos
 import { Usuario } from '../../../../admin/models/usuario';
+import { Notificacion } from 'app/in/models/notificacion';
 
 // Services
 import { CamundaRestService } from '../../../services/camunda-rest.service';
@@ -13,6 +14,7 @@ import { UsuarioService } from '../../../../admin/services/usuario.service';
 import { AuthService } from '../../../../out/services/auth.service';
 import { SolicitudService } from '../../../../solicitudes/services/solicitud.service';
 import { ShowMessagesService } from '../../../../out/services/show-messages.service';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-solicitar-conceptos',
@@ -35,7 +37,8 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
               solicitudService: SolicitudService,
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
-              authService: AuthService) {
+              authService: AuthService,
+              private notificacionService: NotificacionService) {
     super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService);
     }
 
@@ -76,6 +79,7 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
     }).then(resp =>{
       if(resp.value) {
         const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+        this.enviarNotificaciones();
         this.completeTask(variables);
       }
     });
@@ -118,6 +122,44 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
       }
     }
     this.cargando = false;
+  }
+
+  /**
+   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
+   * segùn la tarea.
+   */
+  enviarNotificaciones() {
+    //Notificar el avance en el proceso y la asignaci+on de las uaas asesoras.
+    let notificacionAsignacion: Notificacion;
+    let notificacionAvance: Notificacion;
+    const id = Math.random().toString(36).substring(2);
+    const id2 = Math.random().toString(36).substring(2);
+    notificacionAsignacion = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'te ha asignado como unidad asesora de una solictud.',
+      fecha: new Date(),
+      actor: this.usuario.perfil.nombre
+    };
+
+    notificacionAvance = {
+      id: id2,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+      actor: this.usuario.perfil.nombre,
+      fecha: new Date()
+    };
+    this.notificacionService.notifyPlaneacion(notificacionAvance);
+    setTimeout(()=> {
+      this.notificacionService.notifyUsuarioWithId(notificacionAsignacion, this.planeacionId);
+    }, 1000);
+    this.notificacionService.notifyUsuarioWithId(notificacionAsignacion, this.desiId);
+    this.notificacionService.notifyUsuarioWithId(notificacionAsignacion, this.mantenimientoId);
+    if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+      this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+    }
   }
 
    /**

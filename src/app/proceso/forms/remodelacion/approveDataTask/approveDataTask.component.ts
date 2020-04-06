@@ -337,7 +337,10 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
               actor: this.usuario.perfil.nombre,
               fecha: new Date()
             };
-            this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
+            this.notificacionService.notifyPlaneacion(this.notificacionAvance);
+            if(this.solicitud[0].usuario.perfil.nombre !== 'Planta Física'){
+              this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
+            }
             this.onSubmit();
           }).catch((err)=>{
             console.log(err);
@@ -351,8 +354,9 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
         if(resp.value){
           this.solicitud[0].estado = 'Rechazada';
           this.solicitudService.updateSolicitud(this.solicitud[0]).then(() => {
-            //Notificar el cambio de estado en la solicitud.
+            //Notificar el cambio de estado y avance en la solicitud.
             const id = Math.random().toString(36).substring(2);
+            const id2 = Math.random().toString(36).substring(2);
             this.notificacionEstado = {
               id: id,
               leido: false,
@@ -360,7 +364,19 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
               texto: 'El estado de su solicitud ha cambiado.',
               fecha: new Date()
             };
-            this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
+
+            this.notificacionAvance = {
+              id: id2,
+              leido: false,
+              solicitudId: this.solicitud[0].id,
+              texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+              actor: this.usuario.perfil.nombre,
+              fecha: new Date()
+            };
+            this.notificacionService.notifyPlaneacion(this.notificacionAvance);
+            if(this.solicitud[0].usuario.perfil.nombre !== 'Planta Física'){
+              this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
+            }
             this.onSubmit();
           });
         }

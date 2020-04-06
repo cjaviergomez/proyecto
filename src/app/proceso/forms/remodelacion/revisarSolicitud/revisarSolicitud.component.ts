@@ -66,7 +66,6 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
     } else {
       this.getTaskHistory(this.taskId);
     }
-
   }
 
   /**
@@ -103,15 +102,14 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
           this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
           setTimeout(() => {
             this.notificacionService.notifyPlantaFisica(this.notificacionAvance);
-          }, 2000);
+          }, 1000);
         } else {
           this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
           this.notificacionService.notifyPlantaFisica(this.notificacionAvance);
           setTimeout(() => {
             this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
-          }, 2000);
+          }, 1000);
         }
-
         this.swal.stopLoading();
         this.router.navigate(['/modProceso/tasklist', this.procesoId]);
       }).catch((err) => {
@@ -167,7 +165,6 @@ export class revisarSolicitudComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe( solicitud => {
           this.solicitud = solicitud;
-          console.log(solicitud);
         });
   }
 
