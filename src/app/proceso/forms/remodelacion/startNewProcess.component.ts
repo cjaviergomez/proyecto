@@ -121,7 +121,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
       });
     } else if(flat === 'elemento'){
       $('#addElemento').modal('hide');
-      this.materialService.addElemento(this.elementoPro).then(()=>{
+      this.materialService.addElemento(this.elementoPro).then(() =>{
         form.resetForm();
         this.swal.stopLoading();
       }).catch(()=>{

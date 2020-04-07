@@ -10,11 +10,13 @@ import { SolicitudService } from '../../../solicitudes/services/solicitud.servic
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
 import { UsuarioService } from '../../../admin/services/usuario.service';
 import { AuthService } from '../../../out/services/auth.service';
+import { NotificacionService } from '../../services/notificacion.service';
 
 //Modelos
 import { Task } from 'app/proceso/models/Task';
 import { Usuario } from 'app/admin/models/usuario';
 import { Solicitud } from 'app/solicitudes/models/solicitud';
+import { Notificacion } from 'app/in/models/notificacion';
 
 export class ComunTaskArchivosComponent {
 
@@ -26,6 +28,7 @@ export class ComunTaskArchivosComponent {
   usuarioService: UsuarioService;
   authService: AuthService;
   storage: AngularFireStorage;
+  notificacionService: NotificacionService;
 
   public procesoId: string;
   public taskId: string;
@@ -50,7 +53,8 @@ export class ComunTaskArchivosComponent {
     swal: ShowMessagesService,
     usuarioService: UsuarioService,
     authService: AuthService,
-    storage: AngularFireStorage
+    storage: AngularFireStorage,
+    notificacionService: NotificacionService
     ) {
       this.route = route;
       this.router = router;
@@ -60,6 +64,7 @@ export class ComunTaskArchivosComponent {
       this.usuarioService = usuarioService;
       this.authService = authService;
       this.storage = storage;
+      this.notificacionService = notificacionService;
   }
   metodoInicial() {
     this.cargando = true;
@@ -83,6 +88,47 @@ export class ComunTaskArchivosComponent {
     this.camundaRestService.postCompleteTask(this.taskId, variables).subscribe((data) => {
       this.router.navigate(['/modProceso/tasklist', this.procesoId]);
     });
+  }
+
+  /**
+   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
+   * segùn la tarea.
+   */
+  enviarNotificaciones() {
+    //Notificar el avance en el proceso.
+    let notificacionAvance: Notificacion;
+    const id = Math.random().toString(36).substring(2);
+    notificacionAvance = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+      actor: this.usuario.perfil.nombre,
+      fecha: new Date(),
+      task: this.task.name
+    };
+    if(this.task.assignee === 'Planta Física'){
+      this.notificacionService.notifyPlaneacion(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+      }
+    } else if(this.task.assignee === 'Planeación'){
+      this.notificacionService.notifyPlantaFisica(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+      }
+    } else if(this.task.assignee === 'Solicitante'){
+      this.notificacionService.notifyPlaneacion(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyPlantaFisica(notificacionAvance);
+      }
+    } else if(this.task.assignee === 'UAA Asesora' || this.task.assignee === 'Oficina de Contratación' || this.task.assignee === 'Interventor'){
+      this.notificacionService.notifyPlantaFisica(notificacionAvance);
+      this.notificacionService.notifyPlaneacion(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+      }
+    }
   }
 
   // Metodo para saber si hay un usuario logeado actualmente y obtener su información.

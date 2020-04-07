@@ -1,19 +1,21 @@
-import { CamundaRestService } from '../../services/camunda-rest.service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { faExclamation, faArrowCircleLeft, faSyncAlt, faSave } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
 // Servicios
+import { CamundaRestService } from '../../services/camunda-rest.service';
 import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
 import { UsuarioService } from '../../../admin/services/usuario.service';
 import { AuthService } from '../../../out/services/auth.service';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
 
 //Modelos
 import { Task } from 'app/proceso/models/Task';
 import { Usuario } from 'app/admin/models/usuario';
 import { Solicitud } from 'app/solicitudes/models/solicitud';
+import { Notificacion } from 'app/in/models/notificacion';
 
 export class ComunTaskComponent {
 
@@ -24,6 +26,7 @@ export class ComunTaskComponent {
   swal: ShowMessagesService;
   usuarioService: UsuarioService;
   authService: AuthService;
+  notificacionService: NotificacionService;
 
   public procesoId: string;
   public taskId: string;
@@ -47,7 +50,8 @@ export class ComunTaskComponent {
     solicitudService: SolicitudService,
     swal: ShowMessagesService,
     usuarioService: UsuarioService,
-    authService: AuthService
+    authService: AuthService,
+    notificacionService: NotificacionService
     ) {
       this.route = route;
       this.router = router;
@@ -56,6 +60,7 @@ export class ComunTaskComponent {
       this.swal = swal;
       this.usuarioService = usuarioService;
       this.authService = authService;
+      this.notificacionService = notificacionService;
   }
   metodoInicial() {
     this.cargando = true;
@@ -79,6 +84,47 @@ export class ComunTaskComponent {
     this.camundaRestService.postCompleteTask(this.taskId, variables).subscribe(()=>{
       this.router.navigate(['/modProceso/tasklist', this.procesoId]);
     });
+  }
+
+  /**
+   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
+   * segùn la tarea.
+   */
+  enviarNotificaciones() {
+    //Notificar el avance en el proceso.
+    let notificacionAvance: Notificacion;
+    const id = Math.random().toString(36).substring(2);
+    notificacionAvance = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+      actor: this.usuario.perfil.nombre,
+      fecha: new Date(),
+      task: this.task.name
+    };
+    if(this.task.assignee === 'Planta Física'){
+      this.notificacionService.notifyPlaneacion(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+      }
+    } else if(this.task.assignee === 'Planeación'){
+      this.notificacionService.notifyPlantaFisica(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+      }
+    } else if(this.task.assignee === 'Solicitante'){
+      this.notificacionService.notifyPlaneacion(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyPlantaFisica(notificacionAvance);
+      }
+    } else if(this.task.assignee === 'UAA Asesora' || this.task.assignee === 'Oficina de Contratación' || this.task.assignee === 'Interventor'){
+      this.notificacionService.notifyPlantaFisica(notificacionAvance);
+      this.notificacionService.notifyPlaneacion(notificacionAvance);
+      if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+        this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+      }
+    }
   }
 
   // Metodo para saber si hay un usuario logeado actualmente y obtener su información.

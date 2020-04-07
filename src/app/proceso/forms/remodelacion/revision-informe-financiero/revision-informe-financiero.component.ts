@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
-import { takeUntil } from 'rxjs/operators';
+import { NgForm } from '@angular/forms';
 declare var $: any; // Para trabajar con el modal
 import Swal from 'sweetalert2';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
-import { Solicitud } from '../../../../solicitudes/models/solicitud';
 
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -16,7 +15,7 @@ import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
-import { NgForm } from '@angular/forms';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
 
 @Component({
   selector: 'app-revision-informe-financiero',
@@ -24,8 +23,6 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./revision-informe-financiero.component.css']
 })
 export class revisionInformeFinancieroComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
-
-  solicitud: Solicitud;
 
   valido: boolean;
   comentarios: string[] = [];
@@ -41,21 +38,13 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
               authService: AuthService,
-              storage: AngularFireStorage) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage);
+              storage: AngularFireStorage,
+              notificacionService: NotificacionService) {
+    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage, notificacionService);
   }
 
   ngOnInit() {
     this.metodoInicial();
-    this.getSolicitud();
-  }
-
-  getSolicitud(){
-    this.solicitudService.getSolicitudProcess(this.procesoId)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(solicitud => {
-          this.solicitud = solicitud[0];
-        });
   }
 
   //Metodo para completar la tarea.
@@ -71,6 +60,7 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
       }).then(resp =>{
         if(resp.value) {
           const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+          this.enviarNotificaciones();
           this.completeTask(variables);
         }
       });
@@ -99,6 +89,7 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
     this.comentarios.push(this.comentario);
     form.resetForm();
     let variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+    this.enviarNotificaciones();
     this.completeTask(variables);
   }
 

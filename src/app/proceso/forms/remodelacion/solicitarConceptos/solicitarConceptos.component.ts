@@ -38,8 +38,8 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
               authService: AuthService,
-              private notificacionService: NotificacionService) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService);
+              notificacionService: NotificacionService) {
+    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, notificacionService);
     }
 
   ngOnInit() {

@@ -80,16 +80,33 @@
 
             <div *ngIf="usuario && usuario.notificaciones && usuario.notificaciones.length > 0" class="scroll">
               <div *ngFor="let notificacion of usuario.notificaciones.reverse()" class="card list-group">
-                <div class="card-body list-group-item list-group-item-action list-group-item-info animated fadeIn faster" *ngIf="notificacion.leido === false" (click)="onNotificacion(notificacion)" style="cursor: pointer;">
-                  <p class="card-text" *ngIf="notificacion.actor"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></p>
-                  <p class="card-text" *ngIf="!notificacion.actor"><font size=2>{{ notificacion.texto }}</font></p>
-                  <p class="card-text"><small class="text-muted">hace {{ notificacion.fecha | fechaNotificacion }}</small></p>
+
+                <div class="card-body list-group-item list-group-item-action list-group-item-info animated fadeIn faster" *ngIf="notificacion.leido === false else leida" (click)="onNotificacion(notificacion)" style="cursor: pointer;">
+                  <p class="card-text m-0" *ngIf="notificacion.actor else noActor"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></p>
+                  <ng-template #noActor>
+                    <p class="card-text m-0"><font size=2>{{ notificacion.texto }}</font></p>
+                  </ng-template>
+                  <div class="card-text text-muted mt-1">
+                    <small class="float-right">hace {{ notificacion.fecha | fechaNotificacion }}</small>
+                    <small *ngIf="notificacion.task">{{ notificacion.task }}</small>
+                  </div>
                 </div>
-                <div class="card-body list-group-item list-group-item-action list-group-item-light animated fadeIn faster" *ngIf="notificacion.leido === true" (click)="onNotificacion(notificacion)" style="cursor: pointer;">
-                  <a class="card-text" *ngIf="notificacion.actor"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></a>
-                  <p class="card-text" *ngIf="!notificacion.actor"><font size=2>{{ notificacion.texto }}</font></p>
-                  <p class="card-text"><small class="text-muted">hace {{ notificacion.fecha | fechaNotificacion }}</small></p>
-                </div>
+
+                <ng-template #leida>
+                  <div class="card-body list-group-item list-group-item-action list-group-item-light animated fadeIn faster" (click)="onNotificacion(notificacion)" style="cursor: pointer;">
+                    <a class="card-text m-0" *ngIf="notificacion.actor else noActorLeida"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></a>
+                    <ng-template #noActorLeida>
+                      <p class="card-text m-0"><font size=2>{{ notificacion.texto }}</font></p>
+                    </ng-template>
+                    <div class="card-text text-muted mt-1">
+                      <small class="float-right">hace {{ notificacion.fecha | fechaNotificacion }}</small>
+                      <small *ngIf="notificacion.task">{{ notificacion.task }}</small>
+                    </div>
+                  </div>
+                </ng-template>
+
+
+
               </div>
             </div>
           </div>

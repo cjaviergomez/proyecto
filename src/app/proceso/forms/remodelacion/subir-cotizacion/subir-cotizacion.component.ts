@@ -4,7 +4,9 @@ import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.co
 import { Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Solicitud } from '../../../../solicitudes/models/solicitud';
+
+//Modelos
+import { Notificacion } from 'app/in/models/notificacion';
 
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -15,6 +17,7 @@ import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-subir-cotizacion',
@@ -22,8 +25,6 @@ import { AuthService } from 'app/out/services/auth.service';
   styleUrls: ['./subir-cotizacion.component.css']
 })
 export class subirCotizacionComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
-
-  solicitud: Solicitud;
 
   //Para trabajar con el documento1
   uploadPercent: Observable<number>;
@@ -37,21 +38,13 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
               authService: AuthService,
-              storage: AngularFireStorage) {
+              storage: AngularFireStorage,
+              private notificacionService: NotificacionService) {
     super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage);
   }
 
   ngOnInit() {
     this.metodoInicial();
-    this.getSolicitud();
-  }
-
-  getSolicitud(){
-    this.solicitudService.getSolicitudProcess(this.procesoId)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(solicitud => {
-          this.solicitud = solicitud[0];
-        });
   }
 
   /**
@@ -109,9 +102,33 @@ export class subirCotizacionComponent extends ComunTaskArchivosComponent impleme
     }).then(resp =>{
       if(resp.value) {
         const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+        this.enviarNotificaciones();
         this.completeTask(variables);
       }
     });
+  }
+
+  /**
+   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
+   * segùn la tarea.
+   */
+  enviarNotificaciones() {
+    //Notificar el avance en el proceso.
+    let notificacionAvance: Notificacion;
+    const id = Math.random().toString(36).substring(2);
+
+    notificacionAvance = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+      actor: this.usuario.perfil.nombre,
+      fecha: new Date()
+    };
+    this.notificacionService.notifyPlaneacion(notificacionAvance);
+    if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+      this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+    }
   }
 
   //Metodo para general las variables a guardar en camunda.

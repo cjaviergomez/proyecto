@@ -54,13 +54,12 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
               usuarioService: UsuarioService,
               authService: AuthService,
               storage: AngularFireStorage,
-              private notificacionService: NotificacionService) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage);
+              notificacionService: NotificacionService) {
+    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage, notificacionService);
   }
 
   ngOnInit() {
     this.metodoInicial();
-    this.getSolicitud();
   }
 
    //Metodo para completar la tarea.
@@ -78,30 +77,6 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
         this.completeTask(variables);
       }
     });
-  }
-
-  /**
-   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
-   * segùn la tarea.
-   */
-  enviarNotificaciones() {
-    //Notificar el avance en el proceso.
-    let notificacionAvance: Notificacion;
-    const id = Math.random().toString(36).substring(2);
-
-    notificacionAvance = {
-      id: id,
-      leido: false,
-      solicitudId: this.solicitud.id,
-      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
-      actor: this.usuario.perfil.nombre,
-      fecha: new Date()
-    };
-    this.notificacionService.notifyPlaneacion(notificacionAvance);
-    this.notificacionService.notifyPlantaFisica(notificacionAvance);
-    if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
-      this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
-    }
   }
 
   //Metodo para general las variables a guardar en camunda.
