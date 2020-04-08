@@ -152,7 +152,8 @@ export class enviarObservacionesComponent implements OnInit, OnDestroy {
             solicitudId: this.solicitud[0].id,
             texto: 'ha completado una tarea del proceso al cual estás vinculado.',
             actor: this.usuario.perfil.nombre,
-            fecha: new Date()
+            fecha: new Date(),
+            task: this.task.name
           };
           this.notificacionService.notifyPlaneacion(this.notificacionAvance);
           if(this.solicitud[0].usuario.perfil.nombre !== 'Planta Física'){

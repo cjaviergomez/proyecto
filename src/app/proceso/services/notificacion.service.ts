@@ -20,7 +20,10 @@ export class NotificacionService {
     this.usuarioService = usuarioService;
   }
 
-   // Metodo para notificar a los usuarios de planeación de la nueva solicitud.
+   /**
+    *  Metodo para notificar a los usuarios de planeación de la nueva solicitud.
+    * @param notificacion notificacion a enviar al usuario de planeación
+    */
    notifyPlaneacion(notificacion: Notificacion) {
     let ngUnsubscribeP: Subject<any> = new Subject<any>();
     this.usuarioService.getUsuariosPlaneacion()
@@ -38,7 +41,10 @@ export class NotificacionService {
         });
   }
 
-  // Metodo para notificar a los usuarios de Planta Física de la nueva solicitud.
+  /**
+   *  Metodo para notificar a los usuarios de Planta Física de la nueva solicitud.
+   * @param notificacion notificacion a enviar a los usuarios de planta física.
+   */
   notifyPlantaFisica(notificacion: Notificacion){
     let ngUnsubscribePF: Subject<any> = new Subject<any>();
     this.usuarioService.getUsuariosPlantaFisica()
@@ -56,7 +62,32 @@ export class NotificacionService {
         });
   }
 
-  // Metodo para agregar una notificación a algún usuario
+  /**
+   *  Metodo para notificar a los usuarios de la Oficina de contratación de la nueva solicitud.
+   * @param notificacion notificacion a enviar a los usuarios de la oficina de contratación
+   */
+  notifyOficinaContratacion(notificacion: Notificacion){
+    let ngUnsubscribePF: Subject<any> = new Subject<any>();
+    this.usuarioService.getUsuariosOficinaContratacion()
+        .pipe(takeUntil(ngUnsubscribePF))
+        .subscribe( usuarios => {
+          ngUnsubscribePF.next();
+          ngUnsubscribePF.complete();
+          usuarios.forEach(usuario =>{
+            if(!usuario.notificaciones){
+              usuario.notificaciones = [];
+            }
+            usuario.notificaciones.push(notificacion); // Le añadimos la notificación al usuario.
+            this.usuarioService.updateUsuario(usuario); // Actualizamos el usuario.
+          });
+        });
+  }
+
+  /**
+   * Metodo para agregar una notificación a algún usuario
+   * @param notificacion notificacion a agregarle al usuario.
+   * @param user usuario al que se le va a agregar la notificación
+   */
   notifyUsuario(notificacion: Notificacion, user: Usuario) {
     let ngUnsubscribe: Subject<any> = new Subject<any>();
     this.usuarioService.getUsuario(user.id)
@@ -72,7 +103,11 @@ export class NotificacionService {
         });
   }
 
-  // Metodo para agregar una notificación a algún usuario
+  /**
+   *  Metodo para agregar una notificación a algún usuario
+   * @param notificacion notificación que se va agregar al usuario
+   * @param userId id del usuario que se va a notificar.
+   */
   notifyUsuarioWithId(notificacion: Notificacion, userId: string) {
     let ngUnsubscribe: Subject<any> = new Subject<any>();
     this.usuarioService.getUsuario(userId)

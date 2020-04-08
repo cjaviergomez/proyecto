@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
-import { Observable } from 'rxjs';
-import { takeUntil, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Solicitud } from '../../../../solicitudes/models/solicitud';
 
-import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
+// Componente padre
+import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
+
+// Modelos
+import { Notificacion } from 'app/in/models/notificacion';
 
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
@@ -17,6 +17,7 @@ import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
 
 @Component({
   selector: 'app-agregar-comentarios',
@@ -26,7 +27,6 @@ import { AuthService } from 'app/out/services/auth.service';
 export class agregarComentariosComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy  {
 
   comentariosP: string;
-  solicitud: Solicitud;
 
   constructor(route: ActivatedRoute,
               router: Router,
@@ -35,24 +35,13 @@ export class agregarComentariosComponent extends ComunTaskArchivosComponent impl
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
               authService: AuthService,
-              storage: AngularFireStorage) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage);
-  }
+              storage: AngularFireStorage,
+              notificacionService: NotificacionService) {
+                super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage, notificacionService);
+              }
 
   ngOnInit() {
     this.metodoInicial();
-    this.getSolicitud();
-  }
-
-  /**
-   * Metodo para obtener la solicitud asociada al proceso.
-   */
-  getSolicitud() {
-    this.solicitudService.getSolicitudProcess(this.procesoId)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe( solicitud => {
-          this.solicitud = solicitud[0];
-        });
   }
 
   enviarComentarios(){
@@ -67,10 +56,47 @@ export class agregarComentariosComponent extends ComunTaskArchivosComponent impl
         this.solicitud.estado = 'Rechazada';
         this.solicitudService.updateSolicitud(this.solicitud).then(()=>{
           const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+          this.enviarNotificaciones();
           this.completeTask(variables);
         });
       }
     });
+  }
+
+  /**
+   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
+   * segùn la tarea.
+   */
+  enviarNotificaciones() {
+    //Notificar el avance en el proceso y la asignaci+on de las uaas asesoras.
+    let notificacionEstado: Notificacion;
+    let notificacionAvance: Notificacion;
+    const id = Math.random().toString(36).substring(2);
+    const id2 = Math.random().toString(36).substring(2);
+    notificacionEstado = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud[0].id,
+      texto: 'El estado de su solicitud ha cambiado.',
+      fecha: new Date()
+    };
+
+    notificacionAvance = {
+      id: id2,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+      actor: this.usuario.perfil.nombre,
+      fecha: new Date(),
+      task: this.task.name
+    };
+    this.notificacionService.notifyPlantaFisica(notificacionAvance);
+    setTimeout(() => {
+      this.notificacionService.notifyUsuario(notificacionEstado, this.solicitud.usuario);
+    }, 1000);
+    if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+      this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+    }
   }
 
   //Metodo para general las variables a guardar en camunda.

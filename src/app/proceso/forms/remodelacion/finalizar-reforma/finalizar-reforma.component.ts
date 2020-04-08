@@ -17,6 +17,7 @@ import { AuthService } from '../../../../out/services/auth.service';
 import { SolicitudService } from '../../../../solicitudes/services/solicitud.service';
 import { ShowMessagesService } from '../../../../out/services/show-messages.service';
 import { ReformaService } from '../../../../reformas/services/reforma.service';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
 
 @Component({
   selector: 'app-finalizar-reforma',
@@ -41,8 +42,9 @@ export class finalizarReformaComponent extends ComunTaskComponent implements OnI
               usuarioService: UsuarioService,
               authService: AuthService,
               datePipe: DatePipe,
-              reformaService: ReformaService) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService);
+              reformaService: ReformaService,
+              notificacionService: NotificacionService) {
+    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, notificacionService);
     this.datePipe = datePipe;
     this.reformaService = reformaService;
   }

@@ -15,6 +15,7 @@ import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
 
 @Component({
   selector: 'app-subir-informe-supervision',
@@ -37,9 +38,10 @@ export class subirInformeSupervisionComponent extends ComunTaskArchivosComponent
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
               authService: AuthService,
-              storage: AngularFireStorage) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage);
-  }
+              storage: AngularFireStorage,
+              notificacionService: NotificacionService) {
+                super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage, notificacionService);
+              }
 
   ngOnInit() {
     this.metodoInicial();

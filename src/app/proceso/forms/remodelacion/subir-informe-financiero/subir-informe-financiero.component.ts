@@ -40,9 +40,9 @@ export class subirInformeFinancieroComponent extends ComunTaskArchivosComponent 
               usuarioService: UsuarioService,
               authService: AuthService,
               storage: AngularFireStorage,
-              private notificacionService: NotificacionService) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage);
-  }
+              notificacionService: NotificacionService) {
+                super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage, notificacionService);
+              }
 
   ngOnInit() {
     this.metodoInicial();
@@ -107,29 +107,6 @@ export class subirInformeFinancieroComponent extends ComunTaskArchivosComponent 
         this.completeTask(variables);
       }
     });
-  }
-
-  /**
-   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
-   * segùn la tarea.
-   */
-  enviarNotificaciones() {
-    //Notificar el avance en el proceso.
-    let notificacionAvance: Notificacion;
-    const id = Math.random().toString(36).substring(2);
-
-    notificacionAvance = {
-      id: id,
-      leido: false,
-      solicitudId: this.solicitud.id,
-      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
-      actor: this.usuario.perfil.nombre,
-      fecha: new Date()
-    };
-    this.notificacionService.notifyPlaneacion(notificacionAvance);
-    if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
-      this.notificacionService.notifyPlantaFisica(notificacionAvance);
-    }
   }
 
   //Metodo para general las variables a guardar en camunda.

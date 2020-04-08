@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
-import { Observable } from 'rxjs';
-import { takeUntil, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Solicitud } from '../../../../solicitudes/models/solicitud';
 
@@ -17,6 +15,7 @@ import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
 
 @Component({
   selector: 'app-revisar-informes',
@@ -37,21 +36,13 @@ export class revisarInformesComponent extends ComunTaskArchivosComponent impleme
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
               authService: AuthService,
-              storage: AngularFireStorage) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage);
-  }
+              storage: AngularFireStorage,
+              notificacionService: NotificacionService) {
+                super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, storage, notificacionService);
+              }
 
   ngOnInit() {
     this.metodoInicial();
-    this.getSolicitud();
-  }
-
-  getSolicitud(){
-    this.solicitudService.getSolicitudProcess(this.procesoId)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(solicitud => {
-          this.solicitud = solicitud[0];
-        });
   }
 
   //Metodo para completar la tarea.
@@ -67,6 +58,7 @@ export class revisarInformesComponent extends ComunTaskArchivosComponent impleme
     }).then(resp =>{
       if(resp.value) {
         const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+        this.enviarNotificaciones();
         this.completeTask(variables);
       }
     });

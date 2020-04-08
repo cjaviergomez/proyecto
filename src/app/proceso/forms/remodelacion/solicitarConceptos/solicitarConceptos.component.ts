@@ -149,7 +149,8 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
       solicitudId: this.solicitud.id,
       texto: 'ha completado una tarea del proceso al cual estás vinculado.',
       actor: this.usuario.perfil.nombre,
-      fecha: new Date()
+      fecha: new Date(),
+      task: this.task.name
     };
     this.notificacionService.notifyPlaneacion(notificacionAvance);
     setTimeout(()=> {

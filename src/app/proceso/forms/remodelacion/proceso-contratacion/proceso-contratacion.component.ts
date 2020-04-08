@@ -10,6 +10,7 @@ import { UsuarioService } from '../../../../admin/services/usuario.service';
 import { AuthService } from '../../../../out/services/auth.service';
 import { SolicitudService } from '../../../../solicitudes/services/solicitud.service';
 import { ShowMessagesService } from '../../../../out/services/show-messages.service';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
 
 @Component({
   selector: 'app-proceso-contratacion',
@@ -26,9 +27,10 @@ export class procesoContratacionComponent extends ComunTaskComponent implements 
               solicitudService: SolicitudService,
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
-              authService: AuthService) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService);
-  }
+              authService: AuthService,
+              notificacionService: NotificacionService) {
+                super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, notificacionService);
+              }
 
   ngOnInit() {
     this.metodoInicial();

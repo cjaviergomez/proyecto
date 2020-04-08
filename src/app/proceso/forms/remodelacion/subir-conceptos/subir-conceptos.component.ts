@@ -79,6 +79,30 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
     });
   }
 
+  /**
+   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
+   * segùn la tarea.
+   */
+  enviarNotificaciones() {
+    //Notificar el avance en el proceso.
+    let notificacionAvance: Notificacion;
+    const id = Math.random().toString(36).substring(2);
+    notificacionAvance = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'Se ha completado una tarea del proceso al cual estás vinculado.',
+      fecha: new Date(),
+      task: this.task.name
+    };
+
+    this.notificacionService.notifyPlantaFisica(notificacionAvance);
+    this.notificacionService.notifyPlaneacion(notificacionAvance);
+    if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+      this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+    }
+  }
+
   //Metodo para general las variables a guardar en camunda.
   generateVariablesFromFormFields() {
     const variables = {

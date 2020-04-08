@@ -47,7 +47,7 @@ export class UsuarioService {
 				}));
   }
 
-  // Metodo para obtener todos los usuarios de planeacion registrados en la base de datos incluido su id.
+  // Metodo para obtener todos los interventores registrados en la base de datos incluido su id.
 	getUsuariosInterventor() {
     this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('perfil.nombre', '==', 'Interventor'));
 		return this.usuarios = this.usuariosCollection.snapshotChanges()
@@ -60,7 +60,7 @@ export class UsuarioService {
 				}));
   }
 
-  // Metodo para obtener todos los usuarios de planeacion registrados en la base de datos incluido su id.
+  // Metodo para obtener todos los usuarios de planta física registrados en la base de datos incluido su id.
 	getUsuariosPlantaFisica() {
     this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('perfil.nombre', '==', 'Planta Física'));
 		return this.usuarios = this.usuariosCollection.snapshotChanges()
@@ -73,7 +73,25 @@ export class UsuarioService {
 				}));
   }
 
-  // Metodo para obtener todos los usuarios de un area especifica registrados en la base de datos incluido su id.
+  /**
+   * Metodo para obtener todos los usuarios de la oficina de contratación registrados en la base de datos incluido su id.
+   */
+	getUsuariosOficinaContratacion() {
+    this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('perfil.nombre', '==', 'Oficina de Contratación'));
+		return this.usuarios = this.usuariosCollection.snapshotChanges()
+				.pipe(map( changes => {
+          return changes.map( action => {
+            const data = action.payload.doc.data() as Usuario;
+						data.id = action.payload.doc.id;
+						return data;
+					})
+				}));
+  }
+
+  /**
+   * Metodo para obtener todos los usuarios de un area especifica registrados en la base de datos incluido su id.
+   * @param id id del area a buscar
+   */
 	getUsuariosAreas(id:string) {
     this.usuariosCollection = this.afs.collection<Usuario>('usuarios', ref => ref.where('area_id', '==', id));
 		return this.usuarios = this.usuariosCollection.snapshotChanges()

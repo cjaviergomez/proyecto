@@ -13,6 +13,8 @@ import { UsuarioService } from '../../../../admin/services/usuario.service';
 import { AuthService } from '../../../../out/services/auth.service';
 import { SolicitudService } from '../../../../solicitudes/services/solicitud.service';
 import { ShowMessagesService } from '../../../../out/services/show-messages.service';
+import { NotificacionService } from 'app/proceso/services/notificacion.service';
+import { Notificacion } from 'app/in/models/notificacion';
 
 @Component({
   selector: 'app-elegir-interventor',
@@ -30,9 +32,10 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
               solicitudService: SolicitudService,
               swal: ShowMessagesService,
               usuarioService: UsuarioService,
-              authService: AuthService) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService);
-  }
+              authService: AuthService,
+              notificacionService: NotificacionService) {
+                super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, notificacionService);
+              }
 
   ngOnInit() {
     this.metodoInicial();
@@ -59,9 +62,56 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
     }).then(resp =>{
       if(resp.value) {
         const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+        this.enviarNotificaciones();
         this.completeTask(variables);
       }
     });
+  }
+
+  /**
+   * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
+   * segùn la tarea.
+   */
+  enviarNotificaciones() {
+    //Notificar el avance en el proceso y la asignaci+on de las uaas asesoras.
+    let notificacionAsignacion: Notificacion;
+    let notificacionAvance: Notificacion;
+    let notificacionOficina: Notificacion;
+    const id = Math.random().toString(36).substring(2);
+    const id2 = Math.random().toString(36).substring(2);
+    const id3 = Math.random().toString(36).substring(2);
+    notificacionAsignacion = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'te ha asignado como Interventor de una solictud.',
+      fecha: new Date(),
+      actor: this.usuario.perfil.nombre
+    };
+
+    notificacionAvance = {
+      id: id2,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+      actor: this.usuario.perfil.nombre,
+      fecha: new Date(),
+      task: this.task.name
+    };
+
+    notificacionOficina = {
+      id: id,
+      leido: false,
+      solicitudId: this.solicitud.id,
+      texto: 'Es tu hora de intervenir en el proceso de la solicitud',
+      fecha: new Date()
+    };
+    this.notificacionService.notifyPlaneacion(notificacionAvance);
+    this.notificacionService.notifyUsuarioWithId(notificacionAsignacion, this.interventorId);
+    this.notificacionService.notifyOficinaContratacion(notificacionOficina);
+    if(this.solicitud.usuario.perfil.nombre !== 'Planta Física'){
+      this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+    }
   }
 
   //Metodo para general las variables a guardar en camunda.
