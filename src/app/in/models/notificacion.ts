@@ -1,5 +1,5 @@
 export interface Notificacion {
-  id?: string;
+  id?: string; //id de la notificación
   texto?: string; //Mensaje a mostrar
   leido?: boolean; // Estado de la notificación
   solicitudId?: string; // Solicitud asociada a la notificación.
