@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { CamundaRestService } from '../../services/camunda-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -18,7 +19,8 @@ import { Usuario } from 'app/admin/models/usuario';
 import { Solicitud } from 'app/solicitudes/models/solicitud';
 import { Notificacion } from 'app/in/models/notificacion';
 
-export class ComunTaskArchivosComponent {
+export class ComunTaskArchivosComponent implements OnDestroy {
+	interventorId: string; //Variable para saber si ya hay un interventor en el proceso.
 	route: ActivatedRoute;
 	router: Router;
 	camundaRestService: CamundaRestService;
@@ -95,7 +97,7 @@ export class ComunTaskArchivosComponent {
 	}
 
 	completeTask(variables): void {
-		this.camundaRestService.postCompleteTask(this.taskId, variables).subscribe((data) => {
+		this.camundaRestService.postCompleteTask(this.taskId, variables).subscribe(() => {
 			this.router.navigate(['/modProceso/tasklist', this.procesoId]);
 		});
 	}
@@ -120,15 +122,24 @@ export class ComunTaskArchivosComponent {
 			if (this.solicitud.usuario.perfil.nombre !== 'Planta Física') {
 				this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
 			}
+			if (this.interventorId) {
+				this.notificacionService.notifyUsuarioWithId(notificacionAvance, this.interventorId);
+			}
 		} else if (this.task.assignee === 'Planeación') {
 			this.notificacionService.notifyPlantaFisica(notificacionAvance);
 			if (this.solicitud.usuario.perfil.nombre !== 'Planta Física') {
 				this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
 			}
+			if (this.interventorId) {
+				this.notificacionService.notifyUsuarioWithId(notificacionAvance, this.interventorId);
+			}
 		} else if (this.task.assignee === 'Solicitante') {
 			this.notificacionService.notifyPlaneacion(notificacionAvance);
 			if (this.solicitud.usuario.perfil.nombre !== 'Planta Física') {
 				this.notificacionService.notifyPlantaFisica(notificacionAvance);
+			}
+			if (this.interventorId) {
+				this.notificacionService.notifyUsuarioWithId(notificacionAvance, this.interventorId);
 			}
 		} else if (
 			this.task.assignee === 'UAA Asesora' ||
@@ -139,6 +150,9 @@ export class ComunTaskArchivosComponent {
 			this.notificacionService.notifyPlaneacion(notificacionAvance);
 			if (this.solicitud.usuario.perfil.nombre !== 'Planta Física') {
 				this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+			}
+			if (this.interventorId && this.task.assignee !== 'Interventor') {
+				this.notificacionService.notifyUsuarioWithId(notificacionAvance, this.interventorId);
 			}
 		}
 	}
@@ -205,7 +219,14 @@ export class ComunTaskArchivosComponent {
 	}
 
 	// Metodo para agregar las variables historicas al modelo cuando la tarea aun no se ha realizado
-	getVariables(variables) {}
+	getVariables(variables): void {
+		for (const variable of variables) {
+			if (variable.name == 'interventorId') {
+				this.interventorId = variable.value;
+			}
+		}
+		this.cargando = false;
+	}
 
 	// Metodo para obtener todas las variables que han sido guardadas en el proceso cuando la tarea ya fue realizada.
 	getHistoryVariables2(): void {
@@ -219,12 +240,25 @@ export class ComunTaskArchivosComponent {
 	}
 
 	// Metodo para agregar las variables historicas al modelo cuando la tarea ya fue realizada.
-	getVariables2(variables) {}
+	getVariables2(variables): void {
+		this.cargando = false;
+	}
 
 	/**
 	 * Metodo para devolverse a ver las tareas del proceso.
 	 */
 	irATareas(): void {
 		this.router.navigate(['/modProceso/tasklist', this.procesoId]);
+	}
+
+	/**
+	 * Este metodo se ejecuta cuando el componente se destruye
+	 * Usamos este método para cancelar todos los observables.
+	 */
+	ngOnDestroy(): void {
+		// End all subscriptions listening to ngUnsubscribe
+		// to avoid memory leaks.
+		this.ngUnsubscribe.next();
+		this.ngUnsubscribe.complete();
 	}
 }

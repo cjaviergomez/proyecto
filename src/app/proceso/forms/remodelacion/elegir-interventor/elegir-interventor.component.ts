@@ -136,10 +136,6 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 		return variables;
 	}
 
-	getVariables(): void {
-		this.cargando = false;
-	}
-
 	// Metodo para obtener las variables historicas que se van a usar.
 	getVariables2(variables): void {
 		for (const variable of variables) {
@@ -148,16 +144,5 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 			}
 		}
 		this.cargando = false;
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

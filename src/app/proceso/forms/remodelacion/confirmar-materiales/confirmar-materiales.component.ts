@@ -13,78 +13,66 @@ import { ShowMessagesService } from '../../../../out/services/show-messages.serv
 import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
-  selector: 'app-confirmar-materiales',
-  templateUrl: './confirmar-materiales.component.html',
-  styleUrls: ['./confirmar-materiales.component.css']
+	selector: 'app-confirmar-materiales',
+	templateUrl: './confirmar-materiales.component.html',
+	styleUrls: ['./confirmar-materiales.component.css'],
 })
-export class confirmarMaterialesComponent  extends ComunTaskComponent implements OnInit, OnDestroy {
+export class confirmarMaterialesComponent extends ComunTaskComponent implements OnInit, OnDestroy {
+	faExclamationTriangle = faExclamationTriangle;
+	interventorId: string;
 
-  faExclamationTriangle = faExclamationTriangle;
-  interventorId: string;
+	constructor(
+		route: ActivatedRoute,
+		router: Router,
+		camundaRestService: CamundaRestService,
+		solicitudService: SolicitudService,
+		swal: ShowMessagesService,
+		usuarioService: UsuarioService,
+		authService: AuthService,
+		notificacionService: NotificacionService
+	) {
+		super(
+			route,
+			router,
+			camundaRestService,
+			solicitudService,
+			swal,
+			usuarioService,
+			authService,
+			notificacionService
+		);
+	}
 
-  constructor(route: ActivatedRoute,
-              router: Router,
-              camundaRestService: CamundaRestService,
-              solicitudService: SolicitudService,
-              swal: ShowMessagesService,
-              usuarioService: UsuarioService,
-              authService: AuthService,
-              notificacionService: NotificacionService) {
-    super(route, router, camundaRestService, solicitudService, swal, usuarioService, authService, notificacionService);
-  }
+	ngOnInit(): void {
+		this.metodoInicial();
+	}
 
-  ngOnInit() {
-    this.metodoInicial();
-  }
+	//Metodo para completar la tarea.
+	completarTarea(): void {
+		Swal.fire({
+			title: '¿Está seguro?',
+			text: `¿Está seguro que desea continuar?`,
+			type: 'question',
+			showConfirmButton: true,
+			showCancelButton: true,
+		}).then((resp) => {
+			if (resp.value) {
+				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+				this.completeTask(variables);
+			}
+		});
+	}
 
-  //Metodo para completar la tarea.
-  completarTarea(){
-    Swal.fire({
-      title: '¿Está seguro?',
-      text: `¿Está seguro que desea continuar?`,
-      type: 'question',
-      showConfirmButton: true,
-      showCancelButton: true
-    }).then(resp =>{
-      if(resp.value) {
-        const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-        this.completeTask(variables);
-      }
-    });
-  }
+	//Metodo para general las variables a guardar en camunda.
+	generateVariablesFromFormFields() {
+		const variables = {
+			variables: {},
+		};
+		return variables;
+	}
 
-  //Metodo para general las variables a guardar en camunda.
-  generateVariablesFromFormFields() {
-    const variables = {
-      variables: {
-      }
-    };
-    return variables;
-  }
-
-  getVariables(variables){
-    for(let variable of variables){
-      if(variable.name == 'interventorId'){
-        this.interventorId = variable.value;
-      }
-    }
-    this.cargando = false;
-  }
-
-  // Metodo para obtener las variables historicas que se van a usar.
-  getVariables2(variables) {
-    this.cargando = false;
-  }
-
-  /**
-   * Este metodo se ejecuta cuando el componente se destruye
-   * Usamos este método para cancelar todos los observables.
-   */
-  ngOnDestroy(): void {
-    // End all subscriptions listening to ngUnsubscribe
-    // to avoid memory leaks.
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
+	// Metodo para obtener las variables historicas que se van a usar.
+	getVariables2(variables): void {
+		this.cargando = false;
+	}
 }

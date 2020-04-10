@@ -1,41 +1,52 @@
 <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
 <div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
-  <h4 class="alert-heading">Cargando</h4>
-    <p>
-      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-    </p>
-    <p class="mb-0">
-      Espere por favor
-    </p>
+	<h4 class="alert-heading">Cargando</h4>
+	<p>
+		<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+	</p>
+	<p class="mb-0">
+		Espere por favor
+	</p>
 </div>
 
 <div class="container jumbotron" *ngIf="!cargando && task">
-  <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
-    <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
-    Atrás
-  </button>
-  <h5 class="display-4">{{ task.name }}</h5>
-  <p class="lead">
-    Este apartado tiene como objetivo informar a planeación de la nueva reforma.
-    Es por esto que antes de seguir Planeación debe revisar el formulario de solicitud y después terminar esta tarea.
-  </p>
-  <div class="row">
-    <p *ngIf="task" class="col text-left">
-      <span class="badge badge-primary">Responsable:</span>
-      <em>
-        {{ task.assignee }}
-      </em>
-    </p>
+	<button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+		<fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+		Atrás
+	</button>
+	<h5 class="display-4">{{ task.name }}</h5>
+	<p class="lead">
+		Este apartado tiene como objetivo informar a planeación de la nueva reforma. Es por esto que antes de
+		seguir Planeación debe revisar el formulario de solicitud y después terminar esta tarea.
+	</p>
+	<div class="row">
+		<p *ngIf="task" class="col text-left">
+			<span class="badge badge-primary">Responsable:</span>
+			<em>
+				{{ task.assignee }}
+			</em>
+		</p>
 
-    <p *ngIf="task && formKey" class="mr-5">
-      <span class="badge badge-secondary">Finalizada:</span>
-      <em>
-        {{ task.endTime | date:'short' }}
-      </em>
-    </p>
-  </div>
+		<p *ngIf="task && formKey" class="mr-5">
+			<span class="badge badge-secondary">Finalizada:</span>
+			<em>
+				{{ task.endTime | date: 'short' }}
+			</em>
+		</p>
+	</div>
 
-  <hr class="my-4">
-  <p>Para terminar esta tarea y seguir con el proceso, se debe revisar el formulario de solicitud y dar click en continuar</p>
-  <button type="button" class="btn btn-outline-primary float-right mr-3" (click)="completarTarea()" [disabled]="usuario && usuario.perfil && usuario.perfil.nombre != task.assignee || formKey" *ngIf="usuario">Continuar</button>
+	<hr class="my-4" />
+	<p>
+		Para terminar esta tarea y seguir con el proceso, se debe revisar el formulario de solicitud y dar click
+		en continuar
+	</p>
+	<button
+		type="button"
+		class="btn btn-outline-primary float-right mr-3"
+		(click)="completarTarea()"
+		[disabled]="(usuario && usuario.perfil && usuario.perfil.nombre != task.assignee) || formKey"
+		*ngIf="usuario"
+	>
+		Continuar
+	</button>
 </div>
