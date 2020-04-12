@@ -1,71 +1,69 @@
 import { Usuario } from '../../admin/models/usuario';
 export interface Solicitud {
-
 	id?: string;
 	nombre_edificio?: string;
-  nombre_subcapa?: string;
-  piso_edificio?: number;
-  objectID?: number;
+	nombre_subcapa?: string;
+	piso_edificio?: number;
+	objectID?: number;
 
-  idEdificio?: string;
-  idSubCapa?: string;
+	idEdificio?: string;
+	idSubCapa?: string;
 
-  fecha?: Date;
+	fecha?: Date;
 	hora?: Date;
-  estado?:string;
-  usuario?: Usuario;
-  idProcess?: string;
-  descripcion?: string;
+	estado?: string;
+	usuario?: Usuario;
+	idProcess?: string;
+	descripcion?: string;
 
-  urlDocumentos?: string;
-  nombreDocumentos?: string;
+	urlDocumentos?: string;
+	nombreDocumentos?: string;
 
-  urlCTDSI?: string;
-  nombreCTDSI?: string;
+	urlCTDSI?: string;
+	nombreCTDSI?: string;
 
-  urlCTMT?: string;
-  nombreCTMT?: string;
+	urlCTMT?: string;
+	nombreCTMT?: string;
 
-  urlCTPlaneacion?: string;
-  nombreCTPlaneacion?: string;
+	urlCTPlaneacion?: string;
+	nombreCTPlaneacion?: string;
 
-  urlCotizacion?: string;
-  nombreCotizacion?: string;
+	urlCotizacion?: string;
+	nombreCotizacion?: string;
 
-  urlProveedores?: string;
-  nombreProveedores?: string;
+	urlProveedores?: string;
+	nombreProveedores?: string;
 
-  urlInformeFinanciero?: string;
-  nombreInformeFinanciero?: string;
+	urlInformeFinanciero?: string;
+	nombreInformeFinanciero?: string;
 
-  urlAval?: string;
-  nombreAval?: string;
+	urlAval?: string;
+	nombreAval?: string;
 
-  urlInicioObra?: string;
-  nombreInicioObra?: string;
+	urlInicioObra?: string;
+	nombreInicioObra?: string;
 
-  urlMinuta?: string;
-  nombreMinuta?: string;
+	urlMinuta?: string;
+	nombreMinuta?: string;
 
-  urlSeguimientoObra?: string;
-  nombreSeguimientoObra?: string;
+	urlSeguimientoObra?: string;
+	nombreSeguimientoObra?: string;
 
-  urlInformeSupervision?: string;
-  nombreInformeSupervision?: string;
+	urlInformeSupervision?: string;
+	nombreInformeSupervision?: string;
 
-  urlActaFinObra?: string;
-  nombreActaFinObra?: string;
+	urlActaFinObra?: string;
+	nombreActaFinObra?: string;
 
-  urlActaLiquidacionObra?: string;
-  nombreActaLiquidacionObra?: string;
+	urlActaLiquidacionObra?: string;
+	nombreActaLiquidacionObra?: string;
 
-  urlResolucion?: string;
-  nombreResolucion?: string;
+	urlResolucion?: string;
+	nombreResolucion?: string;
 
-  urlActaLiquidacionC?: string;
-  nombreActaLiquidacionC?: string;
+	urlActaLiquidacionC?: string;
+	nombreActaLiquidacionC?: string;
 
-  urlEntregaR?: string;
-  nombreEntregaR?: string;
-
+	urlEntregaR?: string;
+	nombreEntregaR?: string;
 }

@@ -20,7 +20,7 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 @Component({
 	selector: 'app-agregar-comentarios',
 	templateUrl: './agregar-comentarios.component.html',
-	styleUrls: ['./agregar-comentarios.component.css'],
+	styleUrls: ['./agregar-comentarios.component.css']
 })
 export class agregarComentariosComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	comentariosP: string;
@@ -64,7 +64,7 @@ export class agregarComentariosComponent extends ComunTaskComponent implements O
 			text: `¿Está seguro que desea enviar las observaciones?`,
 			type: 'question',
 			showConfirmButton: true,
-			showCancelButton: true,
+			showCancelButton: true
 		}).then((resp) => {
 			if (resp.value) {
 				this.solicitud.estado = 'Rechazada';
@@ -89,7 +89,7 @@ export class agregarComentariosComponent extends ComunTaskComponent implements O
 			leido: false,
 			solicitudId: this.solicitud.id,
 			texto: 'El estado de su solicitud ha cambiado.',
-			fecha: new Date(),
+			fecha: new Date()
 		};
 
 		const notificacionAvance: Notificacion = {
@@ -99,7 +99,7 @@ export class agregarComentariosComponent extends ComunTaskComponent implements O
 			texto: 'ha completado una tarea del proceso al cual estás vinculado.',
 			actor: this.usuario.perfil.nombre,
 			fecha: new Date(),
-			task: this.task.name,
+			task: this.task.name
 		};
 		this.notificacionService.notifyPlantaFisica(notificacionAvance);
 		setTimeout(() => {
@@ -116,11 +116,11 @@ export class agregarComentariosComponent extends ComunTaskComponent implements O
 	generateVariablesFromFormFields() {
 		const variables = {
 			variables: {
-				comentariosP: null,
-			},
+				comentariosP: null
+			}
 		};
 		variables.variables.comentariosP = {
-			value: this.comentariosP,
+			value: this.comentariosP
 		};
 		return variables;
 	}

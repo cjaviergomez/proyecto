@@ -1,7 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 declare let $: any; // Para trabajar con el modal
 
@@ -9,25 +7,20 @@ import {
 	faWindowClose,
 	faSearch,
 	faPlus,
-	faExclamation,
 	faArrowCircleRight,
-	faArrowCircleLeft,
-	faSyncAlt,
 	faEye,
 	faEyeSlash,
 	faCheck,
-	faTimes,
+	faTimes
 } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
-// Componentes
-import { CompleteTaskComponent } from '../../general/complete-task.component';
+// Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 // Modelos
-import { Task } from 'app/proceso/models/Task';
-import { Solicitud } from 'app/solicitudes/models/solicitud';
 import { Unidad } from 'app/admin/models/unidad';
 import { Material } from 'app/proceso/models/material';
-import { Usuario } from 'app/admin/models/usuario';
+import { MyProcessData } from 'app/proceso/models/MyProcessData';
 import { Notificacion } from 'app/in/models/notificacion';
 
 // Services
@@ -43,20 +36,13 @@ import { NotificacionService } from '../../../services/notificacion.service';
 @Component({
 	selector: 'approveDataTask',
 	templateUrl: './approveDataTask.component.html',
-	styleUrls: [],
+	styleUrls: []
 })
-export class approveDataTaskComponent extends CompleteTaskComponent implements OnDestroy {
+export class approveDataTaskComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	mostrarF = false;
 	seccion: number;
-	cargando: boolean;
-	usuario: Usuario;
-	public procesoId: string;
-	public taskId: string;
-	public formKey: string;
-	public task: Task;
-	solicitud: Solicitud[];
-	private ngUnsubscribe: Subject<any> = new Subject<any>();
 	public unidad: Unidad;
+	model = new MyProcessData([], [], [], '', false);
 
 	filterPost = ''; // Texto a buscar en los materiales.
 	filterElements = ''; // Texto a buscar en los elementos de protección.
@@ -73,139 +59,178 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
 	faWindowClose = faWindowClose;
 	faSearch = faSearch;
 	faPlus = faPlus;
-	faExclamation = faExclamation;
 	faArrowCircleRight = faArrowCircleRight; // Flecha del botón siguiente.
-	faArrowCircleLeft = faArrowCircleLeft; // Flecha del botón atrás
-	faSyncAlt = faSyncAlt;
 	faEye = faEye; //Icono para mostar formulario
 	faEyeSlash = faEyeSlash; // Icono para ocultar formulario
 	faCheck = faCheck; //Icono para aceptar solicitud.
 	faTimes = faTimes; //Icono para rechazar la solicitud.
-
-	// Notificaciones
-	notificacionEstado: Notificacion;
-	notificacionAvance: Notificacion;
 
 	constructor(
 		route: ActivatedRoute,
 		router: Router,
 		camundaRestService: CamundaRestService,
 		solicitudService: SolicitudService,
-		unidadService: UnidadService,
 		swal: ShowMessagesService,
-		materialService: MaterialesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		private notificacionService: NotificacionService
+		notificacionService: NotificacionService,
+		private unidadService: UnidadService,
+		private materialService: MaterialesService
 	) {
 		super(
 			route,
 			router,
 			camundaRestService,
 			solicitudService,
-			unidadService,
 			swal,
-			materialService,
 			usuarioService,
-			authService
+			authService,
+			notificacionService
 		);
-		this.cargando = true;
+	}
+
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
+	ngOnInit(): void {
 		this.seccion = 1;
-		this.route.params.subscribe((params) => {
-			this.procesoId = params['id'];
-			this.taskId = params['taskId'];
-			this.formKey = params['formKey'];
-			if (this.formKey == null) {
-				const variableNames = Object.keys(this.model).join(',');
-				this.loadExistingVariables(this.taskId, variableNames);
-			}
-		});
-		this.getCurrentUser();
-		this.getHistoryVariables();
-		this.getSolicitud();
+		this.metodoInicial();
 		if (this.formKey == null) {
-			this.getTask(this.taskId);
-		} else {
-			this.getTaskHistory(this.taskId);
-			this.getHistoryVariables();
+			const variableNames = Object.keys(this.model).join(',');
+			this.loadExistingVariables(this.taskId, variableNames);
 		}
+		setTimeout(() => {
+			this.getUnidad(this.solicitud.usuario.unidad_id);
+		}, 2000);
 	}
 
 	/**
-	 * Metodo para buscar una tarea en especifico.
-	 * @param id id de la tarea a consultar
+	 * Método para leer de camunda las variables a usar en el modelo
+	 * @param taskId id de la tarea
+	 * @param variableNames variables a buscar
 	 */
-	getTask(id: string): void {
-		this.camundaRestService.getTask(id).subscribe((task) => {
-			this.task = task;
+	loadExistingVariables(taskId: string, variableNames: string): void {
+		this.camundaRestService.getVariablesForTask(taskId, variableNames).subscribe((result) => {
+			this.generateModelFromVariables(result);
 		});
 	}
 
 	/**
-	 * Metodo para buscar una tarea que ya fue realizada.
-	 * @param id id de la tarea a consultar
+	 * Método para crear el modelo apartir de las variables encontradas en Camunda
+	 * @param variables variables de Camunda
 	 */
-	getTaskHistory(id: string): void {
-		this.camundaRestService.getTaskHistory(id).subscribe((task) => {
-			this.task = task[0];
+	generateModelFromVariables(variables): void {
+		Object.keys(variables).forEach((variableName) => {
+			this.model[variableName] = variables[variableName].value;
 		});
 	}
 
-	// Metodo para saber si hay un usuario logeado actualmente y obtener su información.
-	getCurrentUser(): void {
-		this.authService
-			.estaAutenticado()
-			.pipe(takeUntil(this.ngUnsubscribe))
-			.subscribe((user) => {
-				if (user) {
-					this.usuarioService
-						.getUsuario(user.uid)
-						.pipe(takeUntil(this.ngUnsubscribe))
-						.subscribe((usuario: Usuario) => {
-							// Obtenemos la información del usuario de la base de datos de firebase.
-							this.usuario = usuario;
-						});
-				}
-			});
-	}
-
 	/**
-	 * Metodo para obtener la solicitud asociada al proceso.
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea aun NO se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
 	 */
-	getSolicitud(): void {
-		this.solicitudService
-			.getSolicitudProcess(this.procesoId)
-			.pipe(takeUntil(this.ngUnsubscribe))
-			.subscribe((solicitud) => {
-				this.solicitud = solicitud;
-				this.getUnidad(this.solicitud[0].usuario.unidad_id);
-			});
-	}
-
-	/**
-	 * Metodo para devolverse a ver las tareas del proceso.
-	 */
-	irATareas(): void {
-		this.router.navigate(['/modProceso/tasklist', this.procesoId]);
-	}
-
-	// Metodo para obtener todas las variables que han sido guardadas en el proceso.
-	getHistoryVariables(): void {
-		this.camundaRestService
-			.getHistoryVariables(this.procesoId)
-			.pipe(takeUntil(this.ngUnsubscribe))
-			.subscribe((variables) => {
-				this.generateModel(variables);
-			});
-	}
-
-	// Metodo para agregar las variables historicas al modelo.
-	generateModel(variables): void {
+	getVariables(variables): void {
 		for (const variable of variables) {
 			if (this.model[variable.name] != null) {
 				this.model[variable.name] = variable.value;
 			}
 		}
+		this.cargando = false;
+	}
+
+	/**
+	 * Método para obtener la Unidad academica administrativa del usuario usando el metodo getUnidad del servicio.
+	 * @param id id de la unidad a buscar
+	 */
+	getUnidad(id: string): void {
+		this.unidadService.getUnidad(id).subscribe((unidad) => {
+			this.unidad = unidad;
+			this.cargando = false;
+		});
+	}
+
+	enviarRespuesta(valor: boolean): void {
+		this.model.approved = valor;
+		if (valor === true) {
+			this.swal
+				.showQuestionMessage('responderSolicitud', null, 'aceptar')
+				.then((resp) => {
+					if (resp.value) {
+						this.solicitudService
+							.updateSolicitud(this.solicitud)
+							.then(() => {
+								const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+								this.enviarNotificaciones();
+								this.completeTask(variables);
+							})
+							.catch((err) => {
+								console.log(err);
+							});
+					}
+				})
+				.catch((error) => {
+					this.swal.showErrorMessage('');
+				});
+		} else {
+			this.swal
+				.showQuestionMessage('responderSolicitud', null, 'rechazar')
+				.then((resp) => {
+					if (resp.value) {
+						this.solicitud.estado = 'Rechazada';
+						this.solicitudService.updateSolicitud(this.solicitud).then(() => {
+							//Notificar el cambio de estado y avance en la solicitud.
+							const id = Math.random().toString(36).substring(2);
+							const id2 = Math.random().toString(36).substring(2);
+							const notificacionEstado: Notificacion = {
+								id: id,
+								leido: false,
+								solicitudId: this.solicitud.id,
+								texto: 'El estado de su solicitud ha cambiado.',
+								fecha: new Date()
+							};
+
+							const notificacionAvance: Notificacion = {
+								id: id2,
+								leido: false,
+								solicitudId: this.solicitud.id,
+								texto: 'ha completado una tarea del proceso al cual estás vinculado.',
+								actor: this.usuario.perfil.nombre,
+								fecha: new Date(),
+								task: this.task.name
+							};
+							this.notificacionService.notifyPlaneacion(notificacionAvance);
+							if (this.solicitud.usuario.perfil.nombre !== 'Planta Física') {
+								this.notificacionService.notifyUsuario(notificacionEstado, this.solicitud.usuario);
+								setTimeout(() => {
+									this.notificacionService.notifyUsuario(notificacionAvance, this.solicitud.usuario);
+								}, 1000);
+							}
+							const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+							this.completeTask(variables);
+						});
+					}
+				})
+				.catch((err) => {
+					this.swal.showErrorMessage('');
+				});
+		}
+	}
+
+	/**
+	 * Método para generar las variables a guardar en Camunda.
+	 */
+	generateVariablesFromFormFields() {
+		const variables = {
+			variables: {}
+		};
+		Object.keys(this.model).forEach((field) => {
+			variables.variables[field] = {
+				value: this.model[field]
+			};
+		});
+
+		return variables;
 	}
 
 	seccionSiguiente(): void {
@@ -218,14 +243,6 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
 
 	actualSeccion(sesion: number): void {
 		this.seccion = sesion;
-	}
-
-	//Metodo para obtener la Unidad academica administrativa del usuario usando el metodo getUnidad del servicio.
-	getUnidad(id: string): void {
-		this.unidadService.getUnidad(id).subscribe((unidad) => {
-			this.unidad = unidad;
-			this.cargando = false;
-		});
 	}
 
 	buscarMateriales(): void {
@@ -353,96 +370,5 @@ export class approveDataTaskComponent extends CompleteTaskComponent implements O
 
 	mostrarFormulario(valor: boolean): void {
 		this.mostrarF = valor;
-	}
-
-	enviarRespuesta(valor: boolean): void {
-		const idSoli = this.solicitud[0].id;
-		this.model.approved = valor;
-		if (valor === true) {
-			this.swal
-				.showQuestionMessage('responderSolicitud', null, 'aceptar')
-				.then((resp) => {
-					if (resp.value) {
-						this.solicitudService
-							.updateSolicitud(this.solicitud[0])
-							.then(() => {
-								//Notificar el avance en el proceso.
-								const id = Math.random().toString(36).substring(2);
-								this.notificacionAvance = {
-									id: id,
-									leido: false,
-									solicitudId: idSoli,
-									texto: 'ha completado una tarea del proceso al cual estás vinculado.',
-									actor: this.usuario.perfil.nombre,
-									fecha: new Date(),
-									task: this.task.name,
-								};
-								this.notificacionService.notifyPlaneacion(this.notificacionAvance);
-								if (this.solicitud[0].usuario.perfil.nombre !== 'Planta Física') {
-									this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
-								}
-								this.onSubmit();
-							})
-							.catch((err) => {
-								console.log(err);
-							});
-					}
-				})
-				.catch((error) => {
-					this.swal.showErrorMessage('');
-				});
-		} else {
-			this.swal
-				.showQuestionMessage('responderSolicitud', null, 'rechazar')
-				.then((resp) => {
-					if (resp.value) {
-						this.solicitud[0].estado = 'Rechazada';
-						this.solicitudService.updateSolicitud(this.solicitud[0]).then(() => {
-							//Notificar el cambio de estado y avance en la solicitud.
-							const id = Math.random().toString(36).substring(2);
-							const id2 = Math.random().toString(36).substring(2);
-							this.notificacionEstado = {
-								id: id,
-								leido: false,
-								solicitudId: this.solicitud[0].id,
-								texto: 'El estado de su solicitud ha cambiado.',
-								fecha: new Date(),
-							};
-
-							this.notificacionAvance = {
-								id: id2,
-								leido: false,
-								solicitudId: this.solicitud[0].id,
-								texto: 'ha completado una tarea del proceso al cual estás vinculado.',
-								actor: this.usuario.perfil.nombre,
-								fecha: new Date(),
-								task: this.task.name,
-							};
-							this.notificacionService.notifyPlaneacion(this.notificacionAvance);
-							if (this.solicitud[0].usuario.perfil.nombre !== 'Planta Física') {
-								this.notificacionService.notifyUsuario(this.notificacionEstado, this.solicitud[0].usuario);
-								setTimeout(() => {
-									this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud[0].usuario);
-								}, 1000);
-							}
-							this.onSubmit();
-						});
-					}
-				})
-				.catch((err) => {
-					this.swal.showErrorMessage('');
-				});
-		}
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }
