@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
-import Swal from 'sweetalert2';
+
+// Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 //Modelos
 import { Notificacion } from 'app/in/models/notificacion';
@@ -24,7 +25,7 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 	templateUrl: './subir-conceptos.component.html',
 	styleUrls: ['./subir-conceptos.component.css'],
 })
-export class subirConceptosComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class subirConceptosComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	planeacionId: string = null;
 	desiId: string = null;
 	mantenimientoId: string = null;
@@ -52,10 +53,10 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
 		swal: ShowMessagesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		storage: AngularFireStorage,
+		private storage: AngularFireStorage,
 		notificacionService: NotificacionService
 	) {
-		super({
+		super(
 			route,
 			router,
 			camundaRestService,
@@ -63,30 +64,16 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
 			swal,
 			usuarioService,
 			authService,
-			storage,
-			notificacionService,
-		});
+			notificacionService
+		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
-	}
-
-	//Metodo para completar la tarea.
-	completarTarea(): void {
-		Swal.fire({
-			title: '¿Está seguro?',
-			text: `¿Está seguro que desea continuar?`,
-			type: 'question',
-			showConfirmButton: true,
-			showCancelButton: true,
-		}).then((resp) => {
-			if (resp.value) {
-				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-				this.enviarNotificaciones();
-				this.completeTask(variables);
-			}
-		});
 	}
 
 	/**
@@ -112,15 +99,10 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
 		}
 	}
 
-	//Metodo para general las variables a guardar en camunda.
-	generateVariablesFromFormFields() {
-		const variables = {
-			variables: {},
-		};
-		return variables;
-	}
-
-	// Metodo para obtener las variables historicas que se van a usar.
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea aun NO se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
 	getVariables(variables): void {
 		for (const variable of variables) {
 			if (variable.name == 'planeacionId') {
@@ -134,7 +116,10 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
 		this.cargando = false;
 	}
 
-	// Metodo para obtener las variables historicas que se van a usar.
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya fue realizada.
+	 * @param variables variables guardas en camunda
+	 */
 	getVariables2(variables): void {
 		this.getVariables(variables);
 	}
@@ -269,16 +254,5 @@ export class subirConceptosComponent extends ComunTaskArchivosComponent implemen
 				});
 			}
 		});
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

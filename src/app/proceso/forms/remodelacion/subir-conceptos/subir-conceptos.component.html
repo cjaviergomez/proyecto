@@ -76,7 +76,7 @@
 					role="progressbar"
 					[style.width]="(uploadPercent | async) + '%'"
 				>
-					{{ uploadPercent | async }}%
+					{{ uploadPercent | async | number: '1.0-0' }}%
 				</div>
 			</div>
 			<div *ngIf="formKey">
@@ -146,7 +146,7 @@
 					role="progressbar"
 					[style.width]="(uploadPercent2 | async) + '%'"
 				>
-					{{ uploadPercent2 | async }}%
+					{{ uploadPercent2 | async | number: '1.0-0' }}%
 				</div>
 			</div>
 			<div *ngIf="formKey">
@@ -216,7 +216,7 @@
 					role="progressbar"
 					[style.width]="(uploadPercent3 | async) + '%'"
 				>
-					{{ uploadPercent3 | async }}%
+					{{ uploadPercent3 | async | number: '1.0-0' }}%
 				</div>
 			</div>
 			<div *ngIf="formKey">

@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Solicitud } from '../../../../solicitudes/models/solicitud';
+
+// Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -20,10 +21,9 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 @Component({
 	selector: 'app-realizar-minuta',
 	templateUrl: './realizar-minuta.component.html',
-	styleUrls: ['./realizar-minuta.component.css'],
+	styleUrls: ['./realizar-minuta.component.css']
 })
-export class realizarMinutaComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
-	solicitud: Solicitud;
+export class realizarMinutaComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	interventorId: string;
 
 	//Para trabajar con el documento1
@@ -39,10 +39,10 @@ export class realizarMinutaComponent extends ComunTaskArchivosComponent implemen
 		swal: ShowMessagesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		storage: AngularFireStorage,
+		private storage: AngularFireStorage,
 		notificacionService: NotificacionService
 	) {
-		super({
+		super(
 			route,
 			router,
 			camundaRestService,
@@ -50,11 +50,14 @@ export class realizarMinutaComponent extends ComunTaskArchivosComponent implemen
 			swal,
 			usuarioService,
 			authService,
-			storage,
-			notificacionService,
-		});
+			notificacionService
+		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
 	}
@@ -101,53 +104,5 @@ export class realizarMinutaComponent extends ComunTaskArchivosComponent implemen
 				});
 			}
 		});
-	}
-
-	//Metodo para completar la tarea.
-	completarTarea(): void {
-		Swal.fire({
-			title: '¿Está seguro que quiere terminar la tarea?',
-			text: `Después de continuar no podrá volver actualizar la minuta`,
-			type: 'question',
-			showConfirmButton: true,
-			showCancelButton: true,
-		}).then((resp) => {
-			if (resp.value) {
-				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-				this.completeTask(variables);
-			}
-		});
-	}
-
-	//Metodo para general las variables a guardar en camunda.
-	generateVariablesFromFormFields() {
-		const variables = {
-			variables: {},
-		};
-		return variables;
-	}
-
-	getVariables(variables): void {
-		for (const variable of variables) {
-			if (variable.name == 'interventorId') {
-				this.interventorId = variable.value;
-			}
-		}
-		this.cargando = false;
-	}
-
-	getVariables2(): void {
-		this.cargando = false;
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

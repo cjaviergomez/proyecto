@@ -47,6 +47,10 @@ export class revisarSolicitudComponent extends ComunTaskComponent implements OnI
 		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
 	}
@@ -109,13 +113,5 @@ export class revisarSolicitudComponent extends ComunTaskComponent implements OnI
 				this.notificacionService.notifyUsuario(this.notificacionAvance, this.solicitud.usuario);
 			}, 1000);
 		}
-	}
-
-	//Metodo para general las variables a guardar en camunda.
-	generateVariablesFromFormFields() {
-		const variables = {
-			variables: {},
-		};
-		return variables;
 	}
 }

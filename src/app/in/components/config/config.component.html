@@ -1,128 +1,188 @@
 <div class="card text-center">
-  <div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" *ngIf="seccion == 1">Foto</a>
+	<div class="card-header">
+		<ul class="nav nav-tabs card-header-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" *ngIf="seccion == 1">Foto</a>
 				<a class="nav-link" *ngIf="seccion != 1" [routerLink]="" (click)="cambiarSeccion(1)">Foto</a>
-      </li>
-      <li class="nav-item">
+			</li>
+			<li class="nav-item">
 				<a class="nav-link active" *ngIf="seccion == 2">Contraseña</a>
 				<a class="nav-link" *ngIf="seccion != 2" [routerLink]="" (click)="cambiarSeccion(2)">Contraseña</a>
-      </li>
+			</li>
 			<li class="nav-item">
 				<a class="nav-link active" *ngIf="seccion == 3">Credenciales</a>
 				<a class="nav-link" *ngIf="seccion != 3" [routerLink]="" (click)="cambiarSeccion(3)">Credenciales</a>
-      </li>
-      <li class="nav-item">
+			</li>
+			<li class="nav-item">
 				<a class="nav-link active" *ngIf="seccion == 4">Cuenta</a>
 				<a class="nav-link" *ngIf="seccion != 4" [routerLink]="" (click)="cambiarSeccion(4)">Cuenta</a>
-      </li>
-    </ul>
-  </div>
+			</li>
+		</ul>
+	</div>
 
-  <div class="card-body" *ngIf="seccion == 1">
-    <div class="form-group">
-      <h5>Cambiar Imagen</h5>
-      <img *ngIf="urlImage | async; else imgUsuario" src="{{ urlImage | async }}" class="rounded-circle img-thumbnail" alt="profile" style="max-width: 40%; max-height: 300px;">
-      <ng-template #imgUsuario>
-          <img src="{{ usuario.photoUrl }}" class="rounded-circle img-thumbnail" alt="profile" style="max-width: 40%; max-height: 300px;">
-      </ng-template>
+	<div class="card-body" *ngIf="seccion == 1">
+		<div class="form-group">
+			<h5>Cambiar Imagen</h5>
+			<img
+				*ngIf="urlImage | async; else imgUsuario"
+				src="{{ urlImage | async }}"
+				class="rounded-circle img-thumbnail"
+				alt="profile"
+				style="max-width: 40%; max-height: 300px;"
+			/>
+			<ng-template #imgUsuario>
+				<img
+					src="{{ usuario.photoUrl }}"
+					class="rounded-circle img-thumbnail"
+					alt="profile"
+					style="max-width: 40%; max-height: 300px;"
+				/>
+			</ng-template>
 
-      <div class="container">
-        <div class="input-group mt-3">
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="inputGroupFile04" accept=".png, .jpg" (change)="onUpload($event)" aria-describedby="inputGroupFileAddon04">
-            <label *ngIf="nameImageUp" class="custom-file-label" for="inputGroupFile04" data-browse="Elegir">{{ nameImageUp }}</label>
-            <label *ngIf="!nameImageUp" class="custom-file-label" for="inputGroupFile04" data-browse="Elegir">Elija una imagen</label>
-          </div>
-          <div class="input-group-append">
-            <button *ngIf="urlImage | async; else btnDisabled" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04" (click)="cambiarImagen()">Guardar</button>
-            <ng-template #btnDisabled>
-              <button class="btn btn-outline-secondary btn-block" type="button" id="inputGroupFileAddon04" disabled=true>Guardar</button>
-            </ng-template>
-          </div>
-        </div>
+			<div class="container">
+				<div class="input-group mt-3">
+					<div class="custom-file">
+						<input
+							type="file"
+							class="custom-file-input"
+							id="inputGroupFile04"
+							accept=".png, .jpg"
+							(change)="onUpload($event)"
+							aria-describedby="inputGroupFileAddon04"
+						/>
+						<label
+							*ngIf="nameImageUp"
+							class="custom-file-label"
+							for="inputGroupFile04"
+							data-browse="Elegir"
+							>{{ nameImageUp }}</label
+						>
+						<label *ngIf="!nameImageUp" class="custom-file-label" for="inputGroupFile04" data-browse="Elegir"
+							>Elija una imagen</label
+						>
+					</div>
+					<div class="input-group-append">
+						<button
+							*ngIf="urlImage | async; else btnDisabled"
+							class="btn btn-outline-secondary"
+							type="button"
+							id="inputGroupFileAddon04"
+							(click)="cambiarImagen()"
+						>
+							Guardar
+						</button>
+						<ng-template #btnDisabled>
+							<button
+								class="btn btn-outline-secondary btn-block"
+								type="button"
+								id="inputGroupFileAddon04"
+								disabled="true"
+							>
+								Guardar
+							</button>
+						</ng-template>
+					</div>
+				</div>
 
-        <div *ngIf="nameImageUp" class="progress">
-          <div class="progress-bar progress-bar-striped bg-primary"
-                role="progressbar" [style.width]="(uploadPercent | async) +'%'">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+				<div *ngIf="nameImageUp" class="progress">
+					<div
+						class="progress-bar progress-bar-striped bg-primary"
+						role="progressbar"
+						[style.width]="(uploadPercent | async) + '%'"
+					>
+						{{ uploadPercent | async | number: '1.0-0' }}%
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-  <div class="card-body mt-3 br-15" *ngIf="seccion == 2" style="max-width: 30rem;margin: 0 auto;">
-    <h5 class="card-title">Cambiar Contraseña</h5>
+	<div class="card-body mt-3 br-15" *ngIf="seccion == 2" style="max-width: 30rem; margin: 0 auto;">
+		<h5 class="card-title">Cambiar Contraseña</h5>
 
-    <form #formPass="ngForm" (ngSubmit)="cambiarContrasena(formPass)" novalidate="">
-      <div class="form-group">
-        <input type="password"
-              class="form-control"
-              [ngClass]="{'is-invalid': formPass.submitted && formPass.controls['password'].errors}"
-              #pass= "ngModel"
-              [(ngModel)]="passSave.actual"
-              name="password"
-              required
-              id="exampleInputPassword1"
-              placeholder="Contraseña actual">
-        <div class="invalid-feedback animated fadeIn" *ngIf="formPass.submitted && formPass.controls['password'].errors">
-                Este campo es requerido.
-        </div>
-      </div>
-      <div class="form-group">
-        <input type="password"
-              class="form-control"
-              [ngClass]="{'is-invalid': formPass.submitted && formPass.controls['password2'].errors}"
-              #passN= "ngModel"
-              [(ngModel)]="passSave.new"
-              name="password2"
-              minlength="6"
-              maxlength="40"
-              required
-              id="exampleInputPassword2"
-              placeholder="Nueva contraseña">
-        <div class="invalid-feedback animated fadeIn" *ngIf="formPass.submitted && formPass.controls['password2'].errors">
-            Introduce al menos 6 caracteres
-        </div>
-      </div>
-      <div class="form-group">
-        <input type="password"
-              class="form-control"
-              [ngClass]="{'is-invalid': formPass.submitted && formPass.controls['password3'].errors}"
-              #passN2= "ngModel"
-              [(ngModel)]="passSave.new2"
-              name="password3"
-              id="exampleInputPassword3"
-              minlength="6"
-              maxlength="40"
-              required
-              placeholder="Repetir contraseña">
-        <div class="invalid-feedback animated fadeIn" *ngIf="formPass.submitted && formPass.controls['password3'].errors">
-                Introduce al menos 6 caracteres
-        </div>
-      </div>
-      <button type="submit" class="btn btn-primary">Cambiar</button>
-    </form>
+		<form #formPass="ngForm" (ngSubmit)="cambiarContrasena(formPass)" novalidate="">
+			<div class="form-group">
+				<input
+					type="password"
+					class="form-control"
+					[ngClass]="{ 'is-invalid': formPass.submitted && formPass.controls['password'].errors }"
+					#pass="ngModel"
+					[(ngModel)]="passSave.actual"
+					name="password"
+					required
+					id="exampleInputPassword1"
+					placeholder="Contraseña actual"
+				/>
+				<div
+					class="invalid-feedback animated fadeIn"
+					*ngIf="formPass.submitted && formPass.controls['password'].errors"
+				>
+					Este campo es requerido.
+				</div>
+			</div>
+			<div class="form-group">
+				<input
+					type="password"
+					class="form-control"
+					[ngClass]="{ 'is-invalid': formPass.submitted && formPass.controls['password2'].errors }"
+					#passN="ngModel"
+					[(ngModel)]="passSave.new"
+					name="password2"
+					minlength="6"
+					maxlength="40"
+					required
+					id="exampleInputPassword2"
+					placeholder="Nueva contraseña"
+				/>
+				<div
+					class="invalid-feedback animated fadeIn"
+					*ngIf="formPass.submitted && formPass.controls['password2'].errors"
+				>
+					Introduce al menos 6 caracteres
+				</div>
+			</div>
+			<div class="form-group">
+				<input
+					type="password"
+					class="form-control"
+					[ngClass]="{ 'is-invalid': formPass.submitted && formPass.controls['password3'].errors }"
+					#passN2="ngModel"
+					[(ngModel)]="passSave.new2"
+					name="password3"
+					id="exampleInputPassword3"
+					minlength="6"
+					maxlength="40"
+					required
+					placeholder="Repetir contraseña"
+				/>
+				<div
+					class="invalid-feedback animated fadeIn"
+					*ngIf="formPass.submitted && formPass.controls['password3'].errors"
+				>
+					Introduce al menos 6 caracteres
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">Cambiar</button>
+		</form>
+	</div>
 
-  </div>
+	<div class="card-body" *ngIf="seccion == 3">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Credenciales para ingreso al mapa</h5>
+				<p class="card-text">Puedes usar las siguientes credenciales para ingresar al mapa</p>
+				<pre>Usuario: <span>carlos.gomez0</span></pre>
+				<pre>Contraseña: <span>carlos</span></pre>
+				<a [routerLink]="['/modIn/map']" class="btn btn-primary">Ir al mapa</a>
+			</div>
+		</div>
+	</div>
 
-  <div class="card-body" *ngIf="seccion == 3">
-
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Credenciales para ingreso al mapa</h5>
-        <p class="card-text">Puedes usar las siguientes credenciales para ingresar al mapa</p>
-        <pre>Usuario: <span>carlos.gomez0</span></pre>
-        <pre>Contraseña: <span>carlos</span></pre>
-        <a [routerLink]="['/modIn/map']" class="btn btn-primary">Ir al mapa</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="card-body" *ngIf="seccion == 4">
-    <h5 class="card-title">Desactivar cuenta</h5>
-    <p class="card-text">Al desactivar tu cuenta no podrás acceder de nuevo hasta comunicarte con un administrador.</p>
-    <button (click)="desactivarCuenta(usuario)" type="button" class="btn btn-danger">Desactivar</button>
-  </div>
+	<div class="card-body" *ngIf="seccion == 4">
+		<h5 class="card-title">Desactivar cuenta</h5>
+		<p class="card-text">
+			Al desactivar tu cuenta no podrás acceder de nuevo hasta comunicarte con un administrador.
+		</p>
+		<button (click)="desactivarCuenta(usuario)" type="button" class="btn btn-danger">Desactivar</button>
+	</div>
 </div>

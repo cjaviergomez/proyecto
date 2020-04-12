@@ -1,50 +1,57 @@
 <!-- Div para mostrar mensaje cuando no hay solicitudes-->
-<div *ngIf="!cargando && solicitudes.length === 0"
-     class="alert alert-primary text-center mt-3 animated fadeIn faster container">
-    <h4 class="alert-heading">No hay solicitudes</h4>
-    <p>
-      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
-    </p>
+<div
+	*ngIf="!cargando && solicitudes.length === 0"
+	class="alert alert-primary text-center mt-3 animated fadeIn faster container"
+>
+	<h4 class="alert-heading">No hay solicitudes</h4>
+	<p>
+		<fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+	</p>
 </div>
 
 <!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
-<div *ngIf="cargando"
-     class="alert alert-info text-center mt-3 animated fadeIn faster container">
-  <h4 class="alert-heading">Cargando</h4>
-  <p>
-      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-  </p>
-  <p class="mb-0">
-    Espere por favor
-  </p>
+<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
+	<h4 class="alert-heading">Cargando</h4>
+	<p>
+		<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+	</p>
+	<p class="mb-0">
+		Espere por favor
+	</p>
 </div>
 
 <!--Mostrar las solicitudes encontradas-->
 <div *ngIf="!cargando && solicitudes.length > 0" class="mb-5">
-  <h3 class="mt-3 text-center">Solicitudes</h3>
-  <div class="m-3 animated fadeIn faster animated container">
+	<h3 class="mt-3 text-center">Solicitudes</h3>
+	<div class="m-3 animated fadeIn faster animated container">
+		<!--Se recorre el arreglo de las solicitudes encontradas y se muestra su información-->
+		<div *ngFor="let solicitud of solicitudes; let i = index" class="row mb-4 mx-auto" style="width: 600px;">
+			<img
+				src="../../../../assets/img/mecanica.png"
+				class="col img-fluid img-thumbnail images"
+				[alt]="solicitud.nombre_edificio"
+			/>
 
-      <!--Se recorre el arreglo de las solicitudes encontradas y se muestra su información-->
-      <div *ngFor="let solicitud of solicitudes; let i = index" class="row mb-4 mx-auto" style="width: 600px;">
-        <img src="../../../../assets/img/mecanica.png" class="col img-fluid img-thumbnail images" [alt]="solicitud.nombre_edificio">
-
-        <div class="col">
-          <h4>
-            {{ solicitud.nombre_edificio }}
-          </h4>
-          <p> {{ solicitud.usuario.nombres }} </p>
-          <p> {{ solicitud.fecha }} </p>
-          <label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
-          <label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
-          <label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
-          <br>
-          <button type="button" class="btn btn-outline-primary btn-sm mt-3" [routerLink]="['/modSolicitudes/solicitud', solicitud.id]">
-            <fa-icon [icon]="faSearchPlus"></fa-icon>
-              Ver más...
-          </button>
-        </div>
-
-      </div>
-
-    </div>
+			<div class="col">
+				<h4>
+					{{ solicitud.nombre_edificio }}
+				</h4>
+				<p>{{ solicitud.usuario.nombres }}</p>
+				<p>{{ solicitud.fecha }}</p>
+				<label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
+				<label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
+				<label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
+				<label *ngIf="solicitud.estado == 'Finalizada'" class="badge badge-primary">Finalizada</label>
+				<br />
+				<button
+					type="button"
+					class="btn btn-outline-primary btn-sm mt-3"
+					[routerLink]="['/modSolicitudes/solicitud', solicitud.id]"
+				>
+					<fa-icon [icon]="faSearchPlus"></fa-icon>
+					Ver más...
+				</button>
+			</div>
+		</div>
+	</div>
 </div>

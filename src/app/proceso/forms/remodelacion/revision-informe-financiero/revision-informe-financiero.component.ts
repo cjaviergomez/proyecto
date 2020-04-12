@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { NgForm } from '@angular/forms';
 declare let $: any; // Para trabajar con el modal
-import Swal from 'sweetalert2';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
+import Swal from 'sweetalert2';
 
-//Para subir los archivos
-import { AngularFireStorage } from '@angular/fire/storage';
+// Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
@@ -22,8 +21,7 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 	templateUrl: './revision-informe-financiero.component.html',
 	styleUrls: ['./revision-informe-financiero.component.css'],
 })
-export class revisionInformeFinancieroComponent extends ComunTaskArchivosComponent
-	implements OnInit, OnDestroy {
+export class revisionInformeFinancieroComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	valido: boolean;
 	comentarios: string[] = [];
 	comentario: string;
@@ -39,10 +37,9 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
 		swal: ShowMessagesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		storage: AngularFireStorage,
 		notificacionService: NotificacionService
 	) {
-		super({
+		super(
 			route,
 			router,
 			camundaRestService,
@@ -50,17 +47,22 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
 			swal,
 			usuarioService,
 			authService,
-			storage,
-			notificacionService,
-		});
+			notificacionService
+		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
 	}
 
-	//Metodo para completar la tarea.
-	completarTarea(valor: boolean): void {
+	/**
+	 * Metodo para completar la tarea
+	 */
+	terminarTarea(valor: boolean): void {
 		this.valido = valor;
 		if (this.valido === true) {
 			Swal.fire({
@@ -91,10 +93,10 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
 		}
 	}
 
-	mostrarModal(): void {
-		$('#addComentario').modal('show');
-	}
-
+	/**
+	 * Método para enviar los comentarios del motivo del rechazo.
+	 * @param form formulario con los datos del comentario
+	 */
 	enviarComentario(form: NgForm): void {
 		if (form.invalid) {
 			return;
@@ -107,12 +109,24 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
 		this.completeTask(variables);
 	}
 
+	/**
+	 * Método para abrir el modal
+	 */
+	mostrarModal(): void {
+		$('#addComentario').modal('show');
+	}
+
+	/**
+	 * Método para cerrar el modal
+	 */
 	cerrarModal(form: NgForm): void {
 		form.resetForm();
 		$('#addComentario').modal('hide');
 	}
 
-	//Metodo para general las variables a guardar en camunda.
+	/**
+	 * Método para generar las variables a guardar en camunda.
+	 */
 	generateVariablesFromFormFields() {
 		const variables = {
 			variables: {
@@ -130,6 +144,10 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
 		return variables;
 	}
 
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea aun NO se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
 	getVariables(variables): void {
 		for (const variable of variables) {
 			if (variable.name == 'comentarios') {
@@ -137,20 +155,5 @@ export class revisionInformeFinancieroComponent extends ComunTaskArchivosCompone
 			}
 		}
 		this.cargando = false;
-	}
-
-	getVariables2(): void {
-		this.cargando = false;
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

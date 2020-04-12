@@ -1,69 +1,81 @@
 <!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
-<div *ngIf="cargando"
-     class="alert alert-info text-center mt-3 animated fadeIn faster container">
-  <h4 class="alert-heading">Cargando</h4>
-  <p>
-      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-  </p>
-  <p class="mb-0">
-    Espere por favor
-  </p>
+<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
+	<h4 class="alert-heading">Cargando</h4>
+	<p>
+		<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+	</p>
+	<p class="mb-0">
+		Espere por favor
+	</p>
 </div>
 
 <div *ngIf="!cargando" class="mt-5">
-  <div *ngIf="solicitud" class="offset-lg-3 col-lg-6 main-section card">
-    <div class="user-details">
+	<div *ngIf="solicitud" class="offset-lg-3 col-lg-6 main-section card">
+		<div class="user-details">
+			<div class="row">
+				<img
+					src="../../../../assets/img/mecanica.png"
+					class="col img-fluid img-thumbnail m-2 images"
+					alt="Edificio"
+				/>
 
-      <div class="row">
-        <img src="../../../../assets/img/mecanica.png" class="col img-fluid img-thumbnail m-2 images" alt="Edificio">
+				<div class="col m-2">
+					<p>
+						<strong> Solicitante: </strong><br />
+						<a [routerLink]="['/modIn/perfil', solicitud.usuario.id]">{{ solicitud.usuario.nombres }}</a>
+					</p>
+					<p>
+						<strong> Descripción: </strong><br />
+						{{ solicitud.descripcion }}
+					</p>
+				</div>
 
-        <div class="col m-2">
-          <p> <strong> Solicitante: </strong><br>
-            <a [routerLink]="['/modIn/perfil', solicitud.usuario.id]">{{ solicitud.usuario.nombres }}</a>
-          </p>
-          <p> <strong> Descripción: </strong><br>
-              {{ solicitud.descripcion }}
-          </p>
-        </div>
+				<table class="table table-responsive m-2 text-center">
+					<thead>
+						<tr>
+							<th scope="col">Edificio</th>
+							<th scope="col">Piso</th>
+							<th scope="col">Capa</th>
+							<th scope="col">ObjetoID</th>
+							<th scope="col">Fecha</th>
+							<th scope="col">Hora</th>
+							<th scope="col">Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ solicitud.nombre_edificio }}</td>
+							<td>{{ solicitud.piso_edificio }}</td>
+							<td>{{ solicitud.nombre_subcapa }}</td>
+							<td>{{ solicitud.objectID }}</td>
+							<td>{{ solicitud.fecha }}</td>
+							<td>{{ solicitud.hora }}</td>
+							<td>
+								<label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
+								<label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
+								<label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
+								<label *ngIf="solicitud.estado == 'Finalizada'" class="badge badge-primary">Finalizada</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button
+					class="m-1 btn btn-outline-primary btn-block"
+					[routerLink]="['/modProceso/tasklist', solicitud.idProcess]"
+				>
+					Ver proceso
+				</button>
+			</div>
+		</div>
+	</div>
 
-        <table class="table table-responsive m-2 text-center">
-          <thead>
-            <tr>
-              <th scope="col">Edificio</th>
-              <th scope="col">Piso</th>
-              <th scope="col">Capa</th>
-              <th scope="col">ObjetoID</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Hora</th>
-              <th scope="col">Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ solicitud.nombre_edificio }}</td>
-              <td>{{ solicitud.piso_edificio }}</td>
-              <td> {{ solicitud.nombre_subcapa }}</td>
-              <td>{{ solicitud.objectID }}</td>
-              <td>{{ solicitud.fecha }}</td>
-              <td> {{ solicitud.hora }}</td>
-              <td>
-                <label *ngIf="solicitud.estado == 'En trámite'" class="badge badge-success">En trámite</label>
-                <label *ngIf="solicitud.estado == 'Rechazada'" class="badge badge-danger">Rechazada</label>
-                <label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button class="m-1 btn btn-outline-primary btn-block" [routerLink]="['/modProceso/tasklist', solicitud.idProcess]">Ver proceso</button>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="!solicitud"
-        class="alert alert-primary text-center animated fadeIn faster offset-lg-4 col-lg-4 col-sm-6 col-12 main-section card mt-5">
-    <h4 class="alert-heading">Solicitud no encontrada</h4>
-    <p>
-      <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
-    </p>
-  </div>
+	<div
+		*ngIf="!solicitud"
+		class="alert alert-primary text-center animated fadeIn faster offset-lg-4 col-lg-4 col-sm-6 col-12 main-section card mt-5"
+	>
+		<h4 class="alert-heading">Solicitud no encontrada</h4>
+		<p>
+			<fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+		</p>
+	</div>
 </div>

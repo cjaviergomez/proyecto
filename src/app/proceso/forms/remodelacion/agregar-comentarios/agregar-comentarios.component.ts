@@ -4,10 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 // Componente padre
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
-
-//Para subir los archivos
-import { AngularFireStorage } from '@angular/fire/storage';
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 // Modelos
 import { Notificacion } from 'app/in/models/notificacion';
@@ -25,7 +22,7 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 	templateUrl: './agregar-comentarios.component.html',
 	styleUrls: ['./agregar-comentarios.component.css'],
 })
-export class agregarComentariosComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class agregarComentariosComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	comentariosP: string;
 
 	constructor(
@@ -36,10 +33,9 @@ export class agregarComentariosComponent extends ComunTaskArchivosComponent impl
 		swal: ShowMessagesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		storage: AngularFireStorage,
 		notificacionService: NotificacionService
 	) {
-		super({
+		super(
 			route,
 			router,
 			camundaRestService,
@@ -47,16 +43,22 @@ export class agregarComentariosComponent extends ComunTaskArchivosComponent impl
 			swal,
 			usuarioService,
 			authService,
-			storage,
-			notificacionService,
-		});
+			notificacionService
+		);
 	}
 
-	ngOnInit() {
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
+	ngOnInit(): void {
 		this.metodoInicial();
 	}
 
-	enviarComentarios() {
+	/**
+	 * Método para enviar la información de la tarea y terminarla.
+	 */
+	enviarComentarios(): void {
 		Swal.fire({
 			title: '¿Está seguro?',
 			text: `¿Está seguro que desea enviar las observaciones?`,
@@ -79,13 +81,13 @@ export class agregarComentariosComponent extends ComunTaskArchivosComponent impl
 	 * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
 	 * segùn la tarea.
 	 */
-	enviarNotificaciones() {
+	enviarNotificaciones(): void {
 		const id = Math.random().toString(36).substring(2);
 		const id2 = Math.random().toString(36).substring(2);
 		const notificacionEstado: Notificacion = {
 			id: id,
 			leido: false,
-			solicitudId: this.solicitud[0].id,
+			solicitudId: this.solicitud.id,
 			texto: 'El estado de su solicitud ha cambiado.',
 			fecha: new Date(),
 		};
@@ -108,7 +110,9 @@ export class agregarComentariosComponent extends ComunTaskArchivosComponent impl
 		}
 	}
 
-	//Metodo para general las variables a guardar en camunda.
+	/**
+	 * Método para generar las variables a guardar en Camunda.
+	 */
 	generateVariablesFromFormFields() {
 		const variables = {
 			variables: {
@@ -121,29 +125,16 @@ export class agregarComentariosComponent extends ComunTaskArchivosComponent impl
 		return variables;
 	}
 
-	// Metodo para obtener las variables historicas que se van a usar.
-	getVariables(variables) {
-		this.cargando = false;
-	}
-
-	// Metodo para obtener las variables historicas que se van a usar.
-	getVariables2(variables) {
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya fue realizada.
+	 * @param variables variables guardas en camunda
+	 */
+	getVariables2(variables): void {
 		for (const variable of variables) {
 			if (variable.name == 'comentariosP') {
 				this.comentariosP = variable.value;
 			}
 		}
 		this.cargando = false;
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

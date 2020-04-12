@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
+
+// Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
-import Swal from 'sweetalert2';
 
 // Modelos
 import { Usuario } from '../../../../admin/models/usuario';
@@ -47,12 +48,18 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
 		this.getUsuarios();
 	}
 
-	//Metodo para obtener los usuario con los distintos perfiles de la base de datos.
+	/**
+	 * Método para obtener los usuario con el perfil Interventor de la base de datos.
+	 */
 	getUsuarios(): void {
 		this.usuarioService
 			.getUsuariosInterventor()
@@ -60,23 +67,6 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 			.subscribe((usuariosP) => {
 				this.nombresInterventor = usuariosP;
 			});
-	}
-
-	//Metodo para completar la tarea.
-	completarTarea(): void {
-		Swal.fire({
-			title: '¿Está seguro?',
-			text: `¿Está seguro que desea continuar?`,
-			type: 'question',
-			showConfirmButton: true,
-			showCancelButton: true,
-		}).then((resp) => {
-			if (resp.value) {
-				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-				this.enviarNotificaciones();
-				this.completeTask(variables);
-			}
-		});
 	}
 
 	/**
@@ -123,7 +113,9 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 		}
 	}
 
-	//Metodo para general las variables a guardar en camunda.
+	/**
+	 * Método para general las variables a guardar en camunda.
+	 */
 	generateVariablesFromFormFields() {
 		const variables = {
 			variables: {
@@ -136,7 +128,10 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 		return variables;
 	}
 
-	// Metodo para obtener las variables historicas que se van a usar.
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya fue realizada.
+	 * @param variables variables que vienen de camunda
+	 */
 	getVariables2(variables): void {
 		for (const variable of variables) {
 			if (variable.name == 'interventorId') {

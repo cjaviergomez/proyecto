@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { faExclamation, faArrowCircleLeft, faSyncAlt, faSave } from '@fortawesome/free-solid-svg-icons'; // Iconos
+import Swal from 'sweetalert2';
 
 // Servicios
 import { CamundaRestService } from '../../services/camunda-rest.service';
@@ -64,6 +65,10 @@ export class ComunTaskComponent implements OnDestroy {
 		this.authService = authService;
 		this.notificacionService = notificacionService;
 	}
+
+	/**
+	 * Método para inicializar todas las variables presentes (necesarias) en cada componente.
+	 */
 	metodoInicial(): void {
 		this.cargando = true;
 		this.route.params.subscribe((params) => {
@@ -80,6 +85,35 @@ export class ComunTaskComponent implements OnDestroy {
 			this.getTaskHistory(this.taskId);
 			this.getHistoryVariables2();
 		}
+	}
+
+	/**
+	 * Método para enviar la información de la tarea y terminarla.
+	 */
+	completarTarea(): void {
+		Swal.fire({
+			title: '¿Está seguro?',
+			text: `¿Está seguro que desea continuar?`,
+			type: 'question',
+			showConfirmButton: true,
+			showCancelButton: true
+		}).then((resp) => {
+			if (resp.value) {
+				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+				this.enviarNotificaciones();
+				this.completeTask(variables);
+			}
+		});
+	}
+
+	/**
+	 * Método para generar las variables a guardar en Camunda.
+	 */
+	generateVariablesFromFormFields() {
+		const variables = {
+			variables: {}
+		};
+		return variables;
 	}
 
 	/**
@@ -105,7 +139,7 @@ export class ComunTaskComponent implements OnDestroy {
 			texto: 'ha completado una tarea del proceso al cual estás vinculado.',
 			actor: this.usuario.perfil.nombre,
 			fecha: new Date(),
-			task: this.task.name,
+			task: this.task.name
 		};
 		if (this.task.assignee === 'Planta Física') {
 			this.notificacionService.notifyPlaneacion(notificacionAvance);
@@ -147,7 +181,9 @@ export class ComunTaskComponent implements OnDestroy {
 		}
 	}
 
-	// Metodo para saber si hay un usuario logeado actualmente y obtener su información.
+	/**
+	 * Metodo para saber si hay un usuario logeado actualmente y obtener su información.
+	 */
 	getCurrentUser(): void {
 		this.authService
 			.estaAutenticado()
@@ -197,7 +233,9 @@ export class ComunTaskComponent implements OnDestroy {
 		});
 	}
 
-	// Metodo para obtener todas las variables que han sido guardadas en el proceso cuando la tarea no se ha realizado.
+	/**
+	 * Metodo para obtener todas las variables que han sido guardadas en el proceso cuando la tarea no se ha realizado.
+	 */
 	getHistoryVariables(): void {
 		this.camundaRestService
 			.getHistoryVariables(this.procesoId)
@@ -208,7 +246,10 @@ export class ComunTaskComponent implements OnDestroy {
 			});
 	}
 
-	// Metodo para agregar las variables historicas al modelo cuando la tarea aun no se ha realizado
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea aun NO se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
 	getVariables(variables): void {
 		for (const variable of variables) {
 			if (variable.name == 'interventorId') {
@@ -218,7 +259,9 @@ export class ComunTaskComponent implements OnDestroy {
 		this.cargando = false;
 	}
 
-	// Metodo para obtener todas las variables que han sido guardadas en el proceso cuando la tarea ya fue realizada.
+	/**
+	 * Metodo para obtener todas las variables que han sido guardadas en el proceso cuando la tarea ya fue realizada.
+	 */
 	getHistoryVariables2(): void {
 		this.camundaRestService
 			.getHistoryVariables(this.procesoId)
@@ -229,7 +272,10 @@ export class ComunTaskComponent implements OnDestroy {
 			});
 	}
 
-	// Metodo para agregar las variables historicas al modelo cuando la tarea ya fue realizada.
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya fue realizada.
+	 * @param variables variables guardas en camunda
+	 */
 	getVariables2(variables): void {
 		this.cargando = false;
 	}

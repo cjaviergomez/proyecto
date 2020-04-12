@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
-import Swal from 'sweetalert2';
+
+// Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -19,9 +20,9 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 @Component({
 	selector: 'app-acta-liquidacion-obra',
 	templateUrl: './acta-liquidacion-obra.component.html',
-	styleUrls: ['./acta-liquidacion-obra.component.css'],
+	styleUrls: ['./acta-liquidacion-obra.component.css']
 })
-export class actaLiquidacionObraComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class actaLiquidacionObraComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	interventorId: string;
 
 	//Para trabajar con el documento1
@@ -37,10 +38,10 @@ export class actaLiquidacionObraComponent extends ComunTaskArchivosComponent imp
 		swal: ShowMessagesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		storage: AngularFireStorage,
+		private storage: AngularFireStorage,
 		notificacionService: NotificacionService
 	) {
-		super({
+		super(
 			route,
 			router,
 			camundaRestService,
@@ -48,11 +49,14 @@ export class actaLiquidacionObraComponent extends ComunTaskArchivosComponent imp
 			swal,
 			usuarioService,
 			authService,
-			storage,
-			notificacionService,
-		});
+			notificacionService
+		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
 	}
@@ -99,53 +103,5 @@ export class actaLiquidacionObraComponent extends ComunTaskArchivosComponent imp
 				});
 			}
 		});
-	}
-
-	//Metodo para completar la tarea.
-	completarTarea(): void {
-		Swal.fire({
-			title: '¿Está seguro?',
-			text: `¿Está seguro que desea continuar?`,
-			type: 'question',
-			showConfirmButton: true,
-			showCancelButton: true,
-		}).then((resp) => {
-			if (resp.value) {
-				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-				this.completeTask(variables);
-			}
-		});
-	}
-
-	//Metodo para general las variables a guardar en camunda.
-	generateVariablesFromFormFields() {
-		const variables = {
-			variables: {},
-		};
-		return variables;
-	}
-
-	getVariables(variables): void {
-		for (const variable of variables) {
-			if (variable.name == 'interventorId') {
-				this.interventorId = variable.value;
-			}
-		}
-		this.cargando = false;
-	}
-
-	getVariables2(): void {
-		this.cargando = false;
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

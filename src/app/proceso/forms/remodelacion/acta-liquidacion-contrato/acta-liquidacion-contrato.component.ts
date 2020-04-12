@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import { Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 declare let $: any; // Para trabajar con el modal
-import Swal from 'sweetalert2';
+
+// Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -20,10 +21,9 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 @Component({
 	selector: 'app-acta-liquidacion-contrato',
 	templateUrl: './acta-liquidacion-contrato.component.html',
-	styleUrls: ['./acta-liquidacion-contrato.component.css'],
+	styleUrls: ['./acta-liquidacion-contrato.component.css']
 })
-export class actaLiquidacionContratoComponent extends ComunTaskArchivosComponent
-	implements OnInit, OnDestroy {
+export class actaLiquidacionContratoComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	// Datos a obtener de Camunda.
 	comentariosResolucion: string[] = [];
 
@@ -40,10 +40,10 @@ export class actaLiquidacionContratoComponent extends ComunTaskArchivosComponent
 		swal: ShowMessagesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		storage: AngularFireStorage,
+		private storage: AngularFireStorage,
 		notificacionService: NotificacionService
 	) {
-		super({
+		super(
 			route,
 			router,
 			camundaRestService,
@@ -51,11 +51,14 @@ export class actaLiquidacionContratoComponent extends ComunTaskArchivosComponent
 			swal,
 			usuarioService,
 			authService,
-			storage,
-			notificacionService,
-		});
+			notificacionService
+		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
 	}
@@ -104,60 +107,32 @@ export class actaLiquidacionContratoComponent extends ComunTaskArchivosComponent
 		});
 	}
 
-	//Metodo para completar la tarea.
-	completarTarea(): void {
-		Swal.fire({
-			title: '¿Está seguro?',
-			text: `¿Está seguro que desea continuar?`,
-			type: 'question',
-			showConfirmButton: true,
-			showCancelButton: true,
-		}).then((resp) => {
-			if (resp.value) {
-				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-				this.completeTask(variables);
-			}
-		});
-	}
-
-	//Metodo para general las variables a guardar en camunda.
-	generateVariablesFromFormFields() {
-		const variables = {
-			variables: {},
-		};
-		return variables;
-	}
-
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea aun NO se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
 	getVariables(variables): void {
 		for (const variable of variables) {
 			if (variable.name == 'comentariosResolucion') {
 				this.comentariosResolucion = variable.value;
+			} else if (variable.name == 'interventorId') {
+				this.interventorId = variable.value;
 			}
 		}
 		this.cargando = false;
 	}
 
-	getVariables2(): void {
-		this.cargando = false;
-	}
-
+	/**
+	 * Metodo para abrir el modal
+	 */
 	abrirModal(): void {
 		$('#verComentarios').modal('show');
 	}
 
-	//Metodo para cerrar el modal
+	/**
+	 * Metodo para cerrar el modal
+	 */
 	cerrarModal(): void {
 		$('#verComentarios').modal('hide');
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

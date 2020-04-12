@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskComponent } from '../../general/comun-task.component';
-import Swal from 'sweetalert2';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'; // Iconos
+
+//Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 // Services
 import { CamundaRestService } from '../../../services/camunda-rest.service';
@@ -43,36 +44,11 @@ export class confirmarMaterialesComponent extends ComunTaskComponent implements 
 		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
-	}
-
-	//Metodo para completar la tarea.
-	completarTarea(): void {
-		Swal.fire({
-			title: '¿Está seguro?',
-			text: `¿Está seguro que desea continuar?`,
-			type: 'question',
-			showConfirmButton: true,
-			showCancelButton: true,
-		}).then((resp) => {
-			if (resp.value) {
-				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
-				this.completeTask(variables);
-			}
-		});
-	}
-
-	//Metodo para general las variables a guardar en camunda.
-	generateVariablesFromFormFields() {
-		const variables = {
-			variables: {},
-		};
-		return variables;
-	}
-
-	// Metodo para obtener las variables historicas que se van a usar.
-	getVariables2(variables): void {
-		this.cargando = false;
 	}
 }

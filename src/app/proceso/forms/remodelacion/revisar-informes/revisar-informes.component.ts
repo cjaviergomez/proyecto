@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComunTaskArchivosComponent } from '../../general/comun-task-archivos.component';
 import Swal from 'sweetalert2';
-
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
-//Para subir los archivos
-import { AngularFireStorage } from '@angular/fire/storage';
+// Componente padre
+import { ComunTaskComponent } from '../../general/comun-task.component';
 
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
@@ -21,7 +19,7 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 	templateUrl: './revisar-informes.component.html',
 	styleUrls: ['./revisar-informes.component.css'],
 })
-export class revisarInformesComponent extends ComunTaskArchivosComponent implements OnInit, OnDestroy {
+export class revisarInformesComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	validos: boolean;
 	faTimes = faTimes;
 	faCheck = faCheck;
@@ -34,10 +32,9 @@ export class revisarInformesComponent extends ComunTaskArchivosComponent impleme
 		swal: ShowMessagesService,
 		usuarioService: UsuarioService,
 		authService: AuthService,
-		storage: AngularFireStorage,
 		notificacionService: NotificacionService
 	) {
-		super({
+		super(
 			route,
 			router,
 			camundaRestService,
@@ -45,19 +42,24 @@ export class revisarInformesComponent extends ComunTaskArchivosComponent impleme
 			swal,
 			usuarioService,
 			authService,
-			storage,
-			notificacionService,
-		});
+			notificacionService
+		);
 	}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente y
+	 * se ejecuta tan pronto se inicia el componente.
+	 */
 	ngOnInit(): void {
 		this.metodoInicial();
 	}
 
-	//Metodo para completar la tarea.
-	completarTarea(valor: boolean): void {
+	/**
+	 * Metodo para completar la tarea.
+	 * @param valor booleano pasar saber si acepto o no los documentos
+	 */
+	terminarTarea(valor: boolean): void {
 		this.validos = valor;
-
 		Swal.fire({
 			title: '¿Estás seguro?',
 			text: `¿Estás seguro que deseas continuar?`,
@@ -73,7 +75,9 @@ export class revisarInformesComponent extends ComunTaskArchivosComponent impleme
 		});
 	}
 
-	//Metodo para general las variables a guardar en camunda.
+	/**
+	 * Método para general las variables a guardar en camunda.
+	 */
 	generateVariablesFromFormFields() {
 		const variables = {
 			variables: {
@@ -84,26 +88,5 @@ export class revisarInformesComponent extends ComunTaskArchivosComponent impleme
 			value: this.validos,
 		};
 		return variables;
-	}
-
-	// Metodo para obtener las variables historicas que se van a usar.
-	getVariables(variables): void {
-		this.cargando = false;
-	}
-
-	// Metodo para obtener las variables historicas que se van a usar.
-	getVariables2(variables): void {
-		this.getVariables(variables);
-	}
-
-	/**
-	 * Este metodo se ejecuta cuando el componente se destruye
-	 * Usamos este método para cancelar todos los observables.
-	 */
-	ngOnDestroy(): void {
-		// End all subscriptions listening to ngUnsubscribe
-		// to avoid memory leaks.
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 	}
 }

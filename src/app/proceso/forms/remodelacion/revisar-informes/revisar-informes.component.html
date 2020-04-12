@@ -1,76 +1,102 @@
 <div class="container">
-  <div *ngIf="!cargando && task">
-    <button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
-      <fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
-      Atrás
-    </button>
-    <h5 class="display-4">{{ task.name }}</h5>
-    <p class="lead">
-      Este tarea tiene como objetivo verificar que los documentos suministrados cumplan con los requisitos
-      necesarios para que la solicitud pueda continuar.
-    </p>
-    <div class="row">
-      <p *ngIf="task" class="col text-left">
-        <span class="badge badge-primary">Responsable:</span>
-        <em>
-          {{ task.assignee }}
-        </em>
-      </p>
+	<div *ngIf="!cargando && task">
+		<button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+			<fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
+			Atrás
+		</button>
+		<h5 class="display-4">{{ task.name }}</h5>
+		<p class="lead">
+			Este tarea tiene como objetivo verificar que los documentos suministrados cumplan con los requisitos
+			necesarios para que la solicitud pueda continuar.
+		</p>
+		<div class="row">
+			<p *ngIf="task" class="col text-left">
+				<span class="badge badge-primary">Responsable:</span>
+				<em>
+					{{ task.assignee }}
+				</em>
+			</p>
 
-      <p *ngIf="task && formKey" class="mr-5">
-        <span class="badge badge-secondary">Finalizada:</span>
-        <em>
-          {{ task.endTime | date:'short' }}
-        </em>
-      </p>
-    </div>
+			<p *ngIf="task && formKey" class="mr-5">
+				<span class="badge badge-secondary">Finalizada:</span>
+				<em>
+					{{ task.endTime | date: 'short' }}
+				</em>
+			</p>
+		</div>
 
-    <div class="container" *ngIf="solicitud">
-      <label>Conceptos técnicos:</label>
+		<div class="container" *ngIf="solicitud">
+			<label>Conceptos técnicos:</label>
 
-      <div>
-        <a [href]="solicitud.urlCTMT" target="_blank" class="list-group-item list-group-item-action list-group-item-dark">Mantenimiento tecnológico - {{ solicitud.nombreCTMT }}</a>
-      </div>
+			<div>
+				<a
+					[href]="solicitud.urlCTMT"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-dark"
+					>Mantenimiento tecnológico - {{ solicitud.nombreCTMT }}</a
+				>
+			</div>
 
-      <div class="mt-2">
-        <a [href]="solicitud.urlCTDSI" target="_blank" class="list-group-item list-group-item-action list-group-item-dark">División de Servicios de Información - {{ solicitud.nombreCTDSI }}</a>
-      </div>
+			<div class="mt-2">
+				<a
+					[href]="solicitud.urlCTDSI"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-dark"
+					>División de Servicios de Información - {{ solicitud.nombreCTDSI }}</a
+				>
+			</div>
 
-      <div class="mt-2">
-        <a [href]="solicitud.urlCTPlaneacion" target="_blank" class="list-group-item list-group-item-action list-group-item-dark">Planeación - {{ solicitud.nombreCTPlaneacion }}</a>
-      </div>
+			<div class="mt-2">
+				<a
+					[href]="solicitud.urlCTPlaneacion"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-dark"
+					>Planeación - {{ solicitud.nombreCTPlaneacion }}</a
+				>
+			</div>
 
-      <label class="mt-2">Informe Financiero:</label>
-      <div>
-        <a [href]="solicitud.urlInformeFinanciero" target="_blank" class="list-group-item list-group-item-action list-group-item-dark">{{ solicitud.nombreInformeFinanciero }}</a>
-      </div>
-    </div>
+			<label class="mt-2">Informe Financiero:</label>
+			<div>
+				<a
+					[href]="solicitud.urlInformeFinanciero"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-dark"
+					>{{ solicitud.nombreInformeFinanciero }}</a
+				>
+			</div>
+		</div>
 
-    <!-- Botones-->
-    <div class="col text-right mt-3 mb-5" *ngIf="usuario">
-      <button type="button" class="btn btn-secondary mr-1" [disabled]="usuario.perfil.nombre != task.assignee || formKey" (click)="completarTarea(false)">
-        Rechazar
-        <fa-icon [icon]="faTimes" title="Rechazar"></fa-icon>
-      </button>
-      <button type="button" class="btn btn-primary" [disabled]="usuario.perfil.nombre != task.assignee || formKey" (click)="completarTarea(true)">
-        Aceptar
-        <fa-icon [icon]="faCheck" title="Aceptar"></fa-icon>
-      </button>
-    </div>
-  </div>
+		<!-- Botones-->
+		<div class="col text-right mt-3 mb-5" *ngIf="usuario">
+			<button
+				type="button"
+				class="btn btn-secondary mr-1"
+				[disabled]="usuario.perfil.nombre != task.assignee || formKey"
+				(click)="terminarTarea(false)"
+			>
+				Rechazar
+				<fa-icon [icon]="faTimes" title="Rechazar"></fa-icon>
+			</button>
+			<button
+				type="button"
+				class="btn btn-primary"
+				[disabled]="usuario.perfil.nombre != task.assignee || formKey"
+				(click)="terminarTarea(true)"
+			>
+				Aceptar
+				<fa-icon [icon]="faCheck" title="Aceptar"></fa-icon>
+			</button>
+		</div>
+	</div>
 
-
-  <!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
-  <div *ngIf="cargando"
-        class="alert alert-info text-center mt-3 animated fadeIn faster container">
-    <h4 class="alert-heading">Cargando</h4>
-    <p>
-      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-    </p>
-    <p class="mb-0">
-      Espere por favor
-    </p>
-  </div>
+	<!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+	<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
+		<h4 class="alert-heading">Cargando</h4>
+		<p>
+			<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+		</p>
+		<p class="mb-0">
+			Espere por favor
+		</p>
+	</div>
 </div>
-
-
