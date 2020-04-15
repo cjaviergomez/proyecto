@@ -115,8 +115,8 @@ export class SolicitudService {
 	 * Método para borrar a una solicitud de la base de datos de firebase.
 	 * @param id id de la solicitud a eliminar
 	 */
-	deleteSolicitud(id: string): void {
+	deleteSolicitud(id: string): Promise<void> {
 		this.solicitudDoc = this.afs.doc<Solicitud>(`solicitudes/${id}`);
-		this.solicitudDoc.delete();
+		return this.solicitudDoc.delete();
 	}
 }

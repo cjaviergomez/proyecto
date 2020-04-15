@@ -29,7 +29,7 @@ export class actaFinalizacionObraComponent extends ComunTaskComponent implements
 	comentariosActaFinObra: string[] = [];
 
 	//Para trabajar con el documento1
-	uploadPercent: Observable<number>;
+	uploadPercent: Observable<number>; // porcentaje de subida
 	urlDoc: Observable<string>;
 	nameDocUp: string;
 

@@ -1,6 +1,6 @@
 <!-- Div para mostrar mensaje cuando no hay solicitudes-->
 <div
-	*ngIf="!cargando && solicitudes.length === 0"
+	*ngIf="!cargando && solicitudes && solicitudes.length === 0"
 	class="alert alert-primary text-center mt-3 animated fadeIn faster container"
 >
 	<h4 class="alert-heading">No hay solicitudes</h4>
@@ -21,7 +21,7 @@
 </div>
 
 <!--Mostrar las solicitudes encontradas-->
-<div *ngIf="!cargando && solicitudes.length > 0" class="mb-5">
+<div *ngIf="!cargando && solicitudes && solicitudes.length > 0" class="mb-5">
 	<h3 class="mt-3 text-center">Solicitudes</h3>
 	<div class="m-3 animated fadeIn faster animated container">
 		<!--Se recorre el arreglo de las solicitudes encontradas y se muestra su información-->
@@ -43,6 +43,19 @@
 				<label *ngIf="solicitud.estado == 'Pendiente'" class="badge badge-warning">Pendiente</label>
 				<label *ngIf="solicitud.estado == 'Finalizada'" class="badge badge-primary">Finalizada</label>
 				<br />
+
+				<button
+					*ngIf="
+						solicitud.usuario.id === usuario.id &&
+						(solicitud.estado === 'Pendiente' || solicitud.estado === 'Rechazada')
+					"
+					type="button"
+					class="btn btn-outline-danger btn-sm mt-3 mr-1"
+					(click)="onDeleteSolicitud(solicitud.id)"
+				>
+					<fa-icon [icon]="faTrash" title="Eliminar"></fa-icon>
+				</button>
+
 				<button
 					type="button"
 					class="btn btn-outline-primary btn-sm mt-3"

@@ -17,7 +17,7 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 @Component({
 	selector: 'app-revisar-informes',
 	templateUrl: './revisar-informes.component.html',
-	styleUrls: ['./revisar-informes.component.css'],
+	styleUrls: ['./revisar-informes.component.css']
 })
 export class revisarInformesComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	validos: boolean;
@@ -65,7 +65,7 @@ export class revisarInformesComponent extends ComunTaskComponent implements OnIn
 			text: `¿Estás seguro que deseas continuar?`,
 			type: 'question',
 			showConfirmButton: true,
-			showCancelButton: true,
+			showCancelButton: true
 		}).then((resp) => {
 			if (resp.value) {
 				const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
@@ -81,11 +81,11 @@ export class revisarInformesComponent extends ComunTaskComponent implements OnIn
 	generateVariablesFromFormFields() {
 		const variables = {
 			variables: {
-				validos: null,
-			},
+				validos: null
+			}
 		};
 		variables.variables.validos = {
-			value: this.validos,
+			value: this.validos
 		};
 		return variables;
 	}

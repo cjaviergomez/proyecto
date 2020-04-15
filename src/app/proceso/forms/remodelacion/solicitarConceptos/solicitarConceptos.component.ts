@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
@@ -20,7 +21,7 @@ import { NotificacionService } from '../../../services/notificacion.service';
 @Component({
 	selector: 'app-solicitar-conceptos',
 	templateUrl: './solicitarConceptos.component.html',
-	styleUrls: ['./solicitarConceptos.component.css'],
+	styleUrls: ['./solicitarConceptos.component.css']
 })
 export class solicitarConceptosComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	nombresDSI: Usuario[] = [];
@@ -95,19 +96,42 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
 			variables: {
 				planeacionId: null,
 				desiId: null,
-				mantenimientoId: null,
-			},
+				mantenimientoId: null
+			}
 		};
 		variables.variables.planeacionId = {
-			value: this.planeacionId,
+			value: this.planeacionId
 		};
 		variables.variables.desiId = {
-			value: this.desiId,
+			value: this.desiId
 		};
 		variables.variables.mantenimientoId = {
-			value: this.mantenimientoId,
+			value: this.mantenimientoId
 		};
 		return variables;
+	}
+
+	/**
+	 * Método para enviar la información de la tarea y terminarla.
+	 */
+	completarTarea(): void {
+		Swal.fire({
+			title: '¿Está seguro?',
+			text: `¿Está seguro que desea enviar las observaciones?`,
+			type: 'question',
+			showConfirmButton: true,
+			showCancelButton: true
+		}).then((resp) => {
+			if (resp.value) {
+				this.solicitud.dsiId = this.desiId;
+				this.solicitud.mtId = this.mantenimientoId;
+				this.solicitudService.updateSolicitud(this.solicitud).then(() => {
+					const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+					this.enviarNotificaciones();
+					this.completeTask(variables);
+				});
+			}
+		});
 	}
 
 	/**
@@ -141,7 +165,7 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
 			solicitudId: this.solicitud.id,
 			texto: 'te ha asignado como unidad asesora de una solictud.',
 			fecha: new Date(),
-			actor: this.usuario.perfil.nombre,
+			actor: this.usuario.perfil.nombre
 		};
 
 		const notificacionAvance: Notificacion = {
@@ -151,7 +175,7 @@ export class solicitarConceptosComponent extends ComunTaskComponent implements O
 			texto: 'ha completado una tarea del proceso al cual estás vinculado.',
 			actor: this.usuario.perfil.nombre,
 			fecha: new Date(),
-			task: this.task.name,
+			task: this.task.name
 		};
 		this.notificacionService.notifyPlaneacion(notificacionAvance);
 		setTimeout(() => {

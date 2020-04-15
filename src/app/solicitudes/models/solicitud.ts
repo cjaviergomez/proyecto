@@ -19,6 +19,11 @@ export interface Solicitud {
 	urlDocumentos?: string;
 	nombreDocumentos?: string;
 
+	interventorId?: string;
+
+	dsiId?: string;
+	mtId?: string;
+
 	urlCTDSI?: string;
 	nombreCTDSI?: string;
 

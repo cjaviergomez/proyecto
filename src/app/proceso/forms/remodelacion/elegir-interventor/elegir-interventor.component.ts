@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
@@ -20,7 +21,7 @@ import { Notificacion } from 'app/in/models/notificacion';
 @Component({
 	selector: 'app-elegir-interventor',
 	templateUrl: './elegir-interventor.component.html',
-	styleUrls: ['./elegir-interventor.component.css'],
+	styleUrls: ['./elegir-interventor.component.css']
 })
 export class elegirInterventorComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	nombresInterventor: Usuario[] = [];
@@ -70,6 +71,28 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 	}
 
 	/**
+	 * Método para enviar la información de la tarea y terminarla.
+	 */
+	completarTarea(): void {
+		Swal.fire({
+			title: '¿Está seguro?',
+			text: `¿Está seguro que desea enviar las observaciones?`,
+			type: 'question',
+			showConfirmButton: true,
+			showCancelButton: true
+		}).then((resp) => {
+			if (resp.value) {
+				this.solicitud.interventorId = this.interventorId;
+				this.solicitudService.updateSolicitud(this.solicitud).then(() => {
+					const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
+					this.enviarNotificaciones();
+					this.completeTask(variables);
+				});
+			}
+		});
+	}
+
+	/**
 	 * Metodo para enviar las respectivas notificaciones a cada uno de los actores del proceso
 	 * segùn la tarea.
 	 */
@@ -85,7 +108,7 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 			solicitudId: this.solicitud.id,
 			texto: 'te ha asignado como Interventor de una solictud.',
 			fecha: new Date(),
-			actor: this.usuario.perfil.nombre,
+			actor: this.usuario.perfil.nombre
 		};
 
 		const notificacionAvance: Notificacion = {
@@ -95,7 +118,7 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 			texto: 'ha completado una tarea del proceso al cual estás vinculado.',
 			actor: this.usuario.perfil.nombre,
 			fecha: new Date(),
-			task: this.task.name,
+			task: this.task.name
 		};
 
 		const notificacionOficina: Notificacion = {
@@ -103,7 +126,7 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 			leido: false,
 			solicitudId: this.solicitud.id,
 			texto: 'Es tu hora de intervenir en el proceso de la solicitud',
-			fecha: new Date(),
+			fecha: new Date()
 		};
 		this.notificacionService.notifyPlaneacion(notificacionAvance);
 		this.notificacionService.notifyUsuarioWithId(notificacionAsignacion, this.interventorId);
@@ -119,11 +142,11 @@ export class elegirInterventorComponent extends ComunTaskComponent implements On
 	generateVariablesFromFormFields() {
 		const variables = {
 			variables: {
-				interventorId: null,
-			},
+				interventorId: null
+			}
 		};
 		variables.variables.interventorId = {
-			value: this.interventorId,
+			value: this.interventorId
 		};
 		return variables;
 	}
