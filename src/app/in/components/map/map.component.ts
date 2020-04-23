@@ -54,14 +54,20 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 
 	async initializeMap() {
 		try {
-			const [WebScene, FeatureLayer, SceneView, LayerList, Query, Sublayer, SceneLayer] = await loadModules([
+			const [
+				WebScene,
+				FeatureLayer,
+				SceneView,
+				LayerList,
+				BuildingSceneLayer,
+				Collection
+			] = await loadModules([
 				'esri/WebScene',
 				'esri/layers/FeatureLayer',
 				'esri/views/SceneView',
 				'esri/widgets/LayerList',
-				'esri/tasks/support/Query',
-				'esri/layers/support/Sublayer',
-				'esri/layers/SceneLayer'
+				'esri/layers/BuildingSceneLayer',
+				'esri/core/Collection'
 			]);
 
 			const creador = this.isCreador;
@@ -89,20 +95,8 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 			// create the scene view
 			const view = new SceneView({
 				container: this.mapViewEl.nativeElement,
-				map: webScene,
-				qualityProfile: 'high',
-				environment: {
-					lighting: {
-						directShadowsEnabled: false,
-						ambientOcclusionEnabled: true
-					}
-				},
-				highlightOptions: {
-					color: [0, 255, 255],
-					fillOpacity: 0.6
-				}
+				map: webScene
 			});
-
 			// wait until the webscene finished loading
 			webScene.when(function () {
 				//Función que muestra la información del elemento seleccionado.
@@ -213,7 +207,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 				} //Close function createLabel
 
 				//Create label for all layer in the web scene
-				webScene.layers.forEach(function (layer: any) {
+				webScene.layers.forEach(function (layer: esri.BuildingSceneLayer) {
 					// Load all contained sublayers but ignore if one or more of them failed to load
 					layer
 						.load()
@@ -225,34 +219,86 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 							const lat = layer.fullExtent.center.latitude;
 							createLabel(layer, lat, long);
 
-							let highlight; // Variable para aplicar el cambio de color en el elemento
-							//const query = new Query();
-
 							solicitudes.forEach(function (solicitud) {
 								if (solicitud.idEdificio === layer.id) {
-									// Para saber el edificio que esta asociado a la solicitud
-									const elemSceneLayer: esri.SceneLayer = layer.allSublayers.filter(function (elem) {
+									//Para saber el edificio que esta asociado a la solicitud
+									const buildingSublayer = layer.allSublayers.find(function (elem) {
 										return elem.title === solicitud.nombre_subcapa; // Obtengo la capa a la cual pertenece el elemento de la solicitud.
-									}).items[0];
-
-									view.whenLayerView(layer).then(function (layerView) {
-										//Esperamos a que cargue la vista del layer
-										layerView.watch('updating', (val) => {
-											if (!val) {
-												let subView: esri.LayerView;
-												//Recorremos los sublayerviews
-												layerView.componentLayerViews.items.forEach((subLayerView) => {
-													if (subLayerView.layer.id === elemSceneLayer.id) {
-														//Obtenemos el subView de la capa asociada a la solicitud
-														subView = subLayerView.layerView;
-														subView.watch('updating', (valor) => {
-															console.log(valor);
-														});
-													}
-												});
-											}
-										});
 									});
+
+									if (solicitud.estado === 'Rechazada') {
+										buildingSublayer.renderer = {
+											type: 'unique-value', // autocasts as new UniqueValueRenderer()
+											field: 'OBJECTID_1',
+											uniqueValueInfos: [
+												{
+													// All interior doors are displayed red
+													value: solicitud.objectID,
+													symbol: {
+														type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+														symbolLayers: [
+															{
+																type: 'fill', // autocasts as new FillSymbol3DLayer()
+																material: {
+																	color: 'red'
+																}
+															}
+														]
+													}
+												}
+											]
+										};
+									} else if (solicitud.estado === 'En trámite') {
+										buildingSublayer.renderer = {
+											type: 'unique-value', // autocasts as new UniqueValueRenderer()
+											field: 'OBJECTID_1',
+											uniqueValueInfos: [
+												{
+													// All interior doors are displayed red
+													value: solicitud.objectID,
+													symbol: {
+														type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+														symbolLayers: [
+															{
+																type: 'fill',
+																material: {
+																	color: '#28A745',
+																	colorMixMode: 'replace'
+																},
+																edges: {
+																	type: 'solid',
+																	color: '#016AD9',
+																	size: 10.5
+																}
+															}
+														]
+													}
+												}
+											]
+										};
+									} else if (solicitud.estado === 'Pendiente') {
+										buildingSublayer.renderer = {
+											type: 'unique-value', // autocasts as new UniqueValueRenderer()
+											field: 'OBJECTID_1',
+											uniqueValueInfos: [
+												{
+													// All interior doors are displayed red
+													value: solicitud.objectID,
+													symbol: {
+														type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+														symbolLayers: [
+															{
+																type: 'fill', // autocasts as new FillSymbol3DLayer()
+																material: {
+																	color: 'yellow'
+																}
+															}
+														]
+													}
+												}
+											]
+										};
+									}
 								}
 							});
 						});
