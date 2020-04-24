@@ -9,12 +9,17 @@ import { ReformasListComponent } from './components/reformas-list/reformas-list.
 import { ReformaDetailComponent } from './components/reforma-detail/reforma-detail.component';
 
 const routes: Routes = [
- {path: 'reformas', component: ReformasListComponent, canActivate: [AuthGuard]},
- {path: 'reforma/:id', component: ReformaDetailComponent }
+	{ path: 'reformas', component: ReformasListComponent, canActivate: [AuthGuard] },
+	{
+		path: 'reformas/:nombreEdificio/:subCapa/:objectoId/:piso',
+		component: ReformasListComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'reforma/:id', component: ReformaDetailComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forChild(routes)],
+	exports: [RouterModule]
 })
-export class ReformasRoutingModule { }
+export class ReformasRoutingModule {}

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { ActivatedRoute, Params } from '@angular/router';
 
 // Iconos
 import { faSearchPlus, faExclamation, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +28,13 @@ export class SolicitudesListComponent implements OnInit, OnDestroy {
 	cargando = false;
 	private ngUnsubscribe: Subject<any> = new Subject<any>();
 
+	//Para trabajar con las filtraciones desde el mapa.
+	idCapa;
+	idSubCapa;
+	subCapa;
+	objectoId;
+	piso;
+
 	solicitudes$;
 
 	// Icons
@@ -39,11 +47,19 @@ export class SolicitudesListComponent implements OnInit, OnDestroy {
 		private solicitudService: SolicitudService,
 		private authService: AuthService,
 		private usuarioService: UsuarioService,
-		private swal: ShowMessagesService
+		private swal: ShowMessagesService,
+		private route: ActivatedRoute
 	) {}
 
 	ngOnInit(): void {
 		this.getCurrentUser();
+		this.route.params.forEach((params: Params) => {
+			this.idCapa = params['idCapa'];
+			this.idSubCapa = params['idSubCapa'];
+			this.subCapa = params['subCapa'];
+			this.objectoId = params['objectoId'];
+			this.piso = params['piso'];
+		});
 	}
 
 	/**
@@ -84,6 +100,21 @@ export class SolicitudesListComponent implements OnInit, OnDestroy {
 				map((solicitudes: Solicitud[]) =>
 					solicitudes.filter(
 						(solicitud) => solicitud.dsiId === this.usuario.id || solicitud.mtId === this.usuario.id
+					)
+				)
+			);
+		}
+
+		if (this.idCapa && this.idSubCapa && this.subCapa && this.objectoId && this.piso) {
+			this.solicitudes$ = this.solicitudes$.pipe(
+				map((solicitudes: Solicitud[]) =>
+					solicitudes.filter(
+						(solicitud) =>
+							solicitud.idEdificio === this.idCapa &&
+							solicitud.idSubCapa === this.idSubCapa &&
+							solicitud.nombre_subcapa === this.subCapa &&
+							solicitud.objectID === this.objectoId &&
+							solicitud.piso_edificio === this.piso
 					)
 				)
 			);

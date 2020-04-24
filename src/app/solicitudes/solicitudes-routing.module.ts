@@ -11,14 +11,19 @@ import { SolicitudDetailComponent } from './components/solicitud-detail/solicitu
 import { AuthGuard } from '../in/guards/auth.guard';
 
 const routes: Routes = [
-  {path: 'solicitudes', component: SolicitudesListComponent, canActivate: [ AuthGuard ]},
-	{path: 'solicitud-creada', component: SolicitudAddedComponent, canActivate: [ AuthGuard ]},
-	{path: 'solicitud-error', component: SolicitudAddErrorComponent, canActivate: [ AuthGuard ]},
-	{path: 'solicitud/:id', component: SolicitudDetailComponent }
+	{ path: 'solicitudes', component: SolicitudesListComponent, canActivate: [AuthGuard] },
+	{
+		path: 'solicitudes/:idCapa/:idSubCapa/:subCapa/:objectoId/:piso',
+		component: SolicitudesListComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'solicitud-creada', component: SolicitudAddedComponent, canActivate: [AuthGuard] },
+	{ path: 'solicitud-error', component: SolicitudAddErrorComponent, canActivate: [AuthGuard] },
+	{ path: 'solicitud/:id', component: SolicitudDetailComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forChild(routes)],
+	exports: [RouterModule]
 })
-export class SolicitudesRoutingModule { }
+export class SolicitudesRoutingModule {}

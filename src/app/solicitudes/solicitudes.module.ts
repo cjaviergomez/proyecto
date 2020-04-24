@@ -17,19 +17,13 @@ import { SolicitudDetailComponent } from './components/solicitud-detail/solicitu
 import { SolicitudService } from './services/solicitud.service';
 
 @NgModule({
-  declarations: [
-    SolicitudesListComponent,
-    SolicitudAddedComponent,
-    SolicitudAddErrorComponent,
-    SolicitudDetailComponent
-  ],
-  imports: [
-    CommonModule,
-    SolicitudesRoutingModule,
-    FontAwesomeModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  providers: [SolicitudService]
+	declarations: [
+		SolicitudesListComponent,
+		SolicitudAddedComponent,
+		SolicitudAddErrorComponent,
+		SolicitudDetailComponent
+	],
+	imports: [CommonModule, SolicitudesRoutingModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
+	providers: [SolicitudService]
 })
-export class SolicitudesModule { }
+export class SolicitudesModule {}

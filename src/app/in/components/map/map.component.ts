@@ -60,19 +60,22 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 				SceneView,
 				LayerList,
 				BuildingSceneLayer,
-				Collection
+				Collection,
+				UniqueValueRenderer
 			] = await loadModules([
 				'esri/WebScene',
 				'esri/layers/FeatureLayer',
 				'esri/views/SceneView',
 				'esri/widgets/LayerList',
 				'esri/layers/BuildingSceneLayer',
-				'esri/core/Collection'
+				'esri/core/Collection',
+				'esri/renderers/UniqueValueRenderer'
 			]);
 
 			const creador = this.isCreador;
 			const router = this.router;
 			const solicitudes = this.solicitudes;
+			const usuario = this.usuario;
 
 			//Estas variables tendran los datos que se le pasarán al formulario de la solicitud(Edificio, capa, objecto)
 			let idCapa: string;
@@ -220,13 +223,23 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 							createLabel(layer, lat, long);
 
 							solicitudes.forEach(function (solicitud) {
+								let tieneNotificacion: boolean;
 								if (solicitud.idEdificio === layer.id) {
 									//Para saber el edificio que esta asociado a la solicitud
 									const buildingSublayer = layer.allSublayers.find(function (elem) {
 										return elem.title === solicitud.nombre_subcapa; // Obtengo la capa a la cual pertenece el elemento de la solicitud.
 									});
 
+									if (usuario.notificaciones) {
+										usuario.notificaciones.forEach((notificacion) => {
+											if (notificacion.leido === false && notificacion.solicitudId === solicitud.id) {
+												tieneNotificacion = true;
+											}
+										});
+									}
+
 									if (solicitud.estado === 'Rechazada') {
+										console.log('entró rechazada');
 										buildingSublayer.renderer = {
 											type: 'unique-value', // autocasts as new UniqueValueRenderer()
 											field: 'OBJECTID_1',
@@ -249,41 +262,68 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 											]
 										};
 									} else if (solicitud.estado === 'En trámite') {
-										buildingSublayer.renderer = {
-											type: 'unique-value', // autocasts as new UniqueValueRenderer()
-											field: 'OBJECTID_1',
-											uniqueValueInfos: [
-												{
-													// All interior doors are displayed red
-													value: solicitud.objectID,
-													symbol: {
-														type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-														symbolLayers: [
-															{
-																type: 'fill',
-																material: {
-																	color: '#28A745',
-																	colorMixMode: 'replace'
-																},
-																edges: {
-																	type: 'solid',
-																	color: '#016AD9',
-																	size: 10.5
+										console.log('entró en tramite');
+										if (tieneNotificacion === true) {
+											buildingSublayer.renderer = {
+												type: 'unique-value', // autocasts as new UniqueValueRenderer()
+												field: 'OBJECTID_1',
+												uniqueValueInfos: [
+													{
+														// All interior doors are displayed red
+														value: solicitud.objectID,
+														symbol: {
+															type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+															symbolLayers: [
+																{
+																	type: 'fill',
+																	material: {
+																		color: '#28A745',
+																		colorMixMode: 'replace'
+																	},
+																	edges: {
+																		type: 'solid',
+																		color: '#016AD9',
+																		size: 10.5
+																	}
 																}
-															}
-														]
+															]
+														}
 													}
-												}
-											]
-										};
+												]
+											};
+										} else {
+											buildingSublayer.renderer = {
+												type: 'unique-value', // autocasts as new UniqueValueRenderer()
+												field: 'OBJECTID_1',
+												uniqueValueInfos: [
+													{
+														// All interior doors are displayed red
+														value: solicitud.objectID,
+														symbol: {
+															type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+															symbolLayers: [
+																{
+																	type: 'fill',
+																	material: {
+																		color: '#28A745',
+																		colorMixMode: 'replace'
+																	}
+																}
+															]
+														}
+													}
+												]
+											};
+										}
 									} else if (solicitud.estado === 'Pendiente') {
+										console.log('entró pendiente');
 										buildingSublayer.renderer = {
 											type: 'unique-value', // autocasts as new UniqueValueRenderer()
 											field: 'OBJECTID_1',
 											uniqueValueInfos: [
 												{
 													// All interior doors are displayed red
-													value: solicitud.objectID,
+													value: [solicitud.objectID],
 													symbol: {
 														type: 'mesh-3d', // autocasts as new MeshSymbol3D()
 														symbolLayers: [
@@ -356,11 +396,11 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 
 				// The function to execute when the solicitud action is clicked
 				function irASolicitudes(): void {
-					router.navigate(['/modSolicitudes/solicitudes']);
+					router.navigate(['/modSolicitudes/solicitudes', idCapa, idSubCapa, subCapa, objectoId, piso]);
 				}
 
 				function irAReformas(): void {
-					router.navigate(['/modReformas/reformas']);
+					router.navigate(['/modReformas/reformas', nombreEdificio, subCapa, objectoId, piso]);
 				}
 
 				// This event fires for each click on any action
