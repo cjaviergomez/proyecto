@@ -85,6 +85,47 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 			let objectoId;
 			let piso;
 
+			let layerSolicitudes: Solicitud[];
+
+			//Simbolo para un elmento con solicitud rechazada.
+			const rechaSym: esri.MeshSymbol3D = {
+				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+				symbolLayers: [
+					{
+						type: 'fill', // autocasts as new FillSymbol3DLayer()
+						material: {
+							color: 'red'
+						}
+					}
+				]
+			};
+
+			//Simbolo para un elemento con solicitud pendiente.
+			const pendienteSym: esri.MeshSymbol3D = {
+				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+				symbolLayers: [
+					{
+						type: 'fill', // autocasts as new FillSymbol3DLayer()
+						material: {
+							color: 'yellow'
+						}
+					}
+				]
+			};
+
+			//Simbolo para un elmento con solicitud en trámite.
+			const entramiteeSym: esri.MeshSymbol3D = {
+				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+				symbolLayers: [
+					{
+						type: 'fill', // autocasts as new FillSymbol3DLayer()
+						material: {
+							color: 'green'
+						}
+					}
+				]
+			};
+
 			//Set the webscene
 			const websceneProperties: esri.WebSceneProperties = {
 				portalItem: {
@@ -222,125 +263,156 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 							const lat = layer.fullExtent.center.latitude;
 							createLabel(layer, lat, long);
 
-							solicitudes.forEach(function (solicitud) {
-								let tieneNotificacion: boolean;
-								if (solicitud.idEdificio === layer.id) {
-									//Para saber el edificio que esta asociado a la solicitud
-									const buildingSublayer = layer.allSublayers.find(function (elem) {
-										return elem.title === solicitud.nombre_subcapa; // Obtengo la capa a la cual pertenece el elemento de la solicitud.
-									});
-
-									if (usuario.notificaciones) {
-										usuario.notificaciones.forEach((notificacion) => {
-											if (notificacion.leido === false && notificacion.solicitudId === solicitud.id) {
-												tieneNotificacion = true;
-											}
-										});
+							layer.allSublayers.forEach((subLayer: esri.BuildingComponentSublayer) => {
+								console.log(subLayer.title);
+								layerSolicitudes = [];
+								solicitudes.forEach((solicitud) => {
+									if (solicitud.idEdificio === layer.id && solicitud.idSubCapa === subLayer.id.toString()) {
+										layerSolicitudes.push(solicitud);
 									}
+								});
 
-									if (solicitud.estado === 'Rechazada') {
-										console.log('entró rechazada');
-										buildingSublayer.renderer = {
-											type: 'unique-value', // autocasts as new UniqueValueRenderer()
-											field: 'OBJECTID_1',
-											uniqueValueInfos: [
-												{
-													// All interior doors are displayed red
-													value: solicitud.objectID,
-													symbol: {
-														type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-														symbolLayers: [
-															{
-																type: 'fill', // autocasts as new FillSymbol3DLayer()
-																material: {
-																	color: 'red'
-																}
-															}
-														]
-													}
-												}
-											]
-										};
-									} else if (solicitud.estado === 'En trámite') {
-										console.log('entró en tramite');
-										if (tieneNotificacion === true) {
-											buildingSublayer.renderer = {
-												type: 'unique-value', // autocasts as new UniqueValueRenderer()
-												field: 'OBJECTID_1',
-												uniqueValueInfos: [
-													{
-														// All interior doors are displayed red
-														value: solicitud.objectID,
-														symbol: {
-															type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-															symbolLayers: [
-																{
-																	type: 'fill',
-																	material: {
-																		color: '#28A745',
-																		colorMixMode: 'replace'
-																	},
-																	edges: {
-																		type: 'solid',
-																		color: '#016AD9',
-																		size: 10.5
-																	}
-																}
-															]
-														}
-													}
-												]
-											};
-										} else {
-											buildingSublayer.renderer = {
-												type: 'unique-value', // autocasts as new UniqueValueRenderer()
-												field: 'OBJECTID_1',
-												uniqueValueInfos: [
-													{
-														// All interior doors are displayed red
-														value: solicitud.objectID,
-														symbol: {
-															type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-															symbolLayers: [
-																{
-																	type: 'fill',
-																	material: {
-																		color: '#28A745',
-																		colorMixMode: 'replace'
-																	}
-																}
-															]
-														}
-													}
-												]
-											};
-										}
-									} else if (solicitud.estado === 'Pendiente') {
-										console.log('entró pendiente');
-										buildingSublayer.renderer = {
-											type: 'unique-value', // autocasts as new UniqueValueRenderer()
-											field: 'OBJECTID_1',
-											uniqueValueInfos: [
-												{
-													// All interior doors are displayed red
-													value: [solicitud.objectID],
-													symbol: {
-														type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-														symbolLayers: [
-															{
-																type: 'fill', // autocasts as new FillSymbol3DLayer()
-																material: {
-																	color: 'yellow'
-																}
-															}
-														]
-													}
-												}
-											]
-										};
+								const renderer: esri.UniqueValueRenderer = {
+									type: 'unique-value', // autocasts as new UniqueValueRenderer()
+									field: 'OBJECTID_1',
+									uniqueValueInfos: []
+								};
+
+								layerSolicitudes.forEach((solicitudLayer) => {
+									if (solicitudLayer.estado === 'Pendiente') {
+										renderer.uniqueValueInfos.push({ value: solicitudLayer.objectID, symbol: pendienteSym });
+									} else if (solicitudLayer.estado === 'Rechazada') {
+										renderer.uniqueValueInfos.push({ value: solicitudLayer.objectID, symbol: rechaSym });
+									} else if (solicitudLayer.estado === 'En trámite') {
+										renderer.uniqueValueInfos.push({ value: solicitudLayer.objectID, symbol: entramiteeSym });
 									}
-								}
+								});
+
+								console.log(subLayer.title, renderer);
+
+								subLayer.renderer = renderer;
 							});
+
+							// solicitudes.forEach(function (solicitud) {
+							// 	let tieneNotificacion: boolean;
+							// 	if (solicitud.idEdificio === layer.id) {
+							// 		//Para saber el edificio que esta asociado a la solicitud
+							// 		const buildingSublayer: esri.BuildingComponentSublayer = layer.allSublayers.find(function (
+							// 			elem
+							// 		) {
+							// 			return elem.title === solicitud.nombre_subcapa; // Obtengo la capa a la cual pertenece el elemento de la solicitud.
+							// 		});
+
+							// 		if (usuario.notificaciones) {
+							// 			usuario.notificaciones.forEach((notificacion) => {
+							// 				if (notificacion.leido === false && notificacion.solicitudId === solicitud.id) {
+							// 					tieneNotificacion = true;
+							// 				}
+							// 			});
+							// 		}
+
+							// 		if (solicitud.estado === 'Rechazada') {
+							// 			buildingSublayer.renderer = {
+							// 				type: 'unique-value', // autocasts as new UniqueValueRenderer()
+							// 				field: 'OBJECTID_1',
+							// 				uniqueValueInfos: [
+							// 					{
+							// 						// All interior doors are displayed red
+							// 						value: solicitud.objectID,
+							// 						symbol: {
+							// 							type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+							// 							symbolLayers: [
+							// 								{
+							// 									type: 'fill', // autocasts as new FillSymbol3DLayer()
+							// 									material: {
+							// 										color: 'red'
+							// 									}
+							// 								}
+							// 							]
+							// 						}
+							// 					}
+							// 				]
+							// 			};
+							// 		} else if (solicitud.estado === 'En trámite') {
+							// 			console.log('entró en tramite');
+							// 			if (tieneNotificacion === true) {
+							// 				buildingSublayer.renderer = {
+							// 					type: 'unique-value', // autocasts as new UniqueValueRenderer()
+							// 					field: 'OBJECTID_1',
+							// 					uniqueValueInfos: [
+							// 						{
+							// 							// All interior doors are displayed red
+							// 							value: solicitud.objectID,
+							// 							symbol: {
+							// 								type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+							// 								symbolLayers: [
+							// 									{
+							// 										type: 'fill',
+							// 										material: {
+							// 											color: '#28A745',
+							// 											colorMixMode: 'replace'
+							// 										},
+							// 										edges: {
+							// 											type: 'solid',
+							// 											color: '#016AD9',
+							// 											size: 10.5
+							// 										}
+							// 									}
+							// 								]
+							// 							}
+							// 						}
+							// 					]
+							// 				};
+							// 			} else {
+							// 				buildingSublayer.renderer = {
+							// 					type: 'unique-value', // autocasts as new UniqueValueRenderer()
+							// 					field: 'OBJECTID_1',
+							// 					uniqueValueInfos: [
+							// 						{
+							// 							// All interior doors are displayed red
+							// 							value: solicitud.objectID,
+							// 							symbol: {
+							// 								type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+							// 								symbolLayers: [
+							// 									{
+							// 										type: 'fill',
+							// 										material: {
+							// 											color: '#28A745',
+							// 											colorMixMode: 'replace'
+							// 										}
+							// 									}
+							// 								]
+							// 							}
+							// 						}
+							// 					]
+							// 				};
+							// 			}
+							// 		} else if (solicitud.estado === 'Pendiente') {
+							// 			console.log('entró pendiente');
+							// 			buildingSublayer.renderer = {
+							// 				type: 'unique-value', // autocasts as new UniqueValueRenderer()
+							// 				field: 'OBJECTID_1',
+							// 				uniqueValueInfos: [
+							// 					{
+							// 						// All interior doors are displayed red
+							// 						value: [solicitud.objectID],
+							// 						symbol: {
+							// 							type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+							// 							symbolLayers: [
+							// 								{
+							// 									type: 'fill', // autocasts as new FillSymbol3DLayer()
+							// 									material: {
+							// 										color: 'yellow'
+							// 									}
+							// 								}
+							// 							]
+							// 						}
+							// 					}
+							// 				]
+							// 			};
+							// 		}
+							// 	}
+							// });
 						});
 				});
 
