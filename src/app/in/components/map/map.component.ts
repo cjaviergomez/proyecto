@@ -61,7 +61,8 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 				LayerList,
 				BuildingSceneLayer,
 				Collection,
-				UniqueValueRenderer
+				UniqueValueRenderer,
+				Legend
 			] = await loadModules([
 				'esri/WebScene',
 				'esri/layers/FeatureLayer',
@@ -69,7 +70,8 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 				'esri/widgets/LayerList',
 				'esri/layers/BuildingSceneLayer',
 				'esri/core/Collection',
-				'esri/renderers/UniqueValueRenderer'
+				'esri/renderers/UniqueValueRenderer',
+				'esri/widgets/Legend'
 			]);
 
 			const creador = this.isCreador;
@@ -120,7 +122,26 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 					{
 						type: 'fill', // autocasts as new FillSymbol3DLayer()
 						material: {
-							color: 'green'
+							color: '#28A745'
+						}
+					}
+				]
+			};
+
+			//Simbolo para un elmento con solicitud en trámite.
+			const notificacionSym: esri.MeshSymbol3D = {
+				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
+				symbolLayers: [
+					{
+						type: 'fill',
+						material: {
+							color: '#28A745',
+							colorMixMode: 'replace'
+						},
+						edges: {
+							type: 'solid',
+							color: '#016AD9',
+							size: 10.5
 						}
 					}
 				]
@@ -264,8 +285,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 							createLabel(layer, lat, long);
 
 							layer.allSublayers.forEach((subLayer: esri.BuildingComponentSublayer) => {
-								console.log(subLayer.title);
-								layerSolicitudes = [];
+								layerSolicitudes = []; //Para guargar las solicitudes asociadas al sublayer
 								solicitudes.forEach((solicitud) => {
 									if (solicitud.idEdificio === layer.id && solicitud.idSubCapa === subLayer.id.toString()) {
 										layerSolicitudes.push(solicitud);
@@ -279,140 +299,42 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 								};
 
 								layerSolicitudes.forEach((solicitudLayer) => {
+									let notifySolicitud: Solicitud[] = []; //Variable para almacenar las notificaciones de la solicitud.
+									if (usuario.notificaciones) {
+										notifySolicitud = usuario.notificaciones.filter((notificacion) => {
+											return notificacion.solicitudId == solicitudLayer.id && notificacion.leido == false;
+										});
+									}
+
 									if (solicitudLayer.estado === 'Pendiente') {
-										renderer.uniqueValueInfos.push({ value: solicitudLayer.objectID, symbol: pendienteSym });
+										renderer.uniqueValueInfos.push({
+											value: solicitudLayer.objectID,
+											symbol: pendienteSym
+										});
 									} else if (solicitudLayer.estado === 'Rechazada') {
 										renderer.uniqueValueInfos.push({ value: solicitudLayer.objectID, symbol: rechaSym });
 									} else if (solicitudLayer.estado === 'En trámite') {
-										renderer.uniqueValueInfos.push({ value: solicitudLayer.objectID, symbol: entramiteeSym });
+										renderer.uniqueValueInfos.push({
+											value: solicitudLayer.objectID,
+											symbol: entramiteeSym
+										});
+									}
+
+									//Agregar el render de las solicitudes con notificaciones
+									if (notifySolicitud.length > 0) {
+										notifySolicitud.forEach((notificacion) => {
+											renderer.uniqueValueInfos.push({
+												value: solicitudLayer.objectID,
+												symbol: notificacionSym
+											});
+										});
 									}
 								});
 
-								console.log(subLayer.title, renderer);
-
-								subLayer.renderer = renderer;
+								if (renderer.uniqueValueInfos.length > 0) {
+									subLayer.renderer = renderer;
+								}
 							});
-
-							// solicitudes.forEach(function (solicitud) {
-							// 	let tieneNotificacion: boolean;
-							// 	if (solicitud.idEdificio === layer.id) {
-							// 		//Para saber el edificio que esta asociado a la solicitud
-							// 		const buildingSublayer: esri.BuildingComponentSublayer = layer.allSublayers.find(function (
-							// 			elem
-							// 		) {
-							// 			return elem.title === solicitud.nombre_subcapa; // Obtengo la capa a la cual pertenece el elemento de la solicitud.
-							// 		});
-
-							// 		if (usuario.notificaciones) {
-							// 			usuario.notificaciones.forEach((notificacion) => {
-							// 				if (notificacion.leido === false && notificacion.solicitudId === solicitud.id) {
-							// 					tieneNotificacion = true;
-							// 				}
-							// 			});
-							// 		}
-
-							// 		if (solicitud.estado === 'Rechazada') {
-							// 			buildingSublayer.renderer = {
-							// 				type: 'unique-value', // autocasts as new UniqueValueRenderer()
-							// 				field: 'OBJECTID_1',
-							// 				uniqueValueInfos: [
-							// 					{
-							// 						// All interior doors are displayed red
-							// 						value: solicitud.objectID,
-							// 						symbol: {
-							// 							type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-							// 							symbolLayers: [
-							// 								{
-							// 									type: 'fill', // autocasts as new FillSymbol3DLayer()
-							// 									material: {
-							// 										color: 'red'
-							// 									}
-							// 								}
-							// 							]
-							// 						}
-							// 					}
-							// 				]
-							// 			};
-							// 		} else if (solicitud.estado === 'En trámite') {
-							// 			console.log('entró en tramite');
-							// 			if (tieneNotificacion === true) {
-							// 				buildingSublayer.renderer = {
-							// 					type: 'unique-value', // autocasts as new UniqueValueRenderer()
-							// 					field: 'OBJECTID_1',
-							// 					uniqueValueInfos: [
-							// 						{
-							// 							// All interior doors are displayed red
-							// 							value: solicitud.objectID,
-							// 							symbol: {
-							// 								type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-							// 								symbolLayers: [
-							// 									{
-							// 										type: 'fill',
-							// 										material: {
-							// 											color: '#28A745',
-							// 											colorMixMode: 'replace'
-							// 										},
-							// 										edges: {
-							// 											type: 'solid',
-							// 											color: '#016AD9',
-							// 											size: 10.5
-							// 										}
-							// 									}
-							// 								]
-							// 							}
-							// 						}
-							// 					]
-							// 				};
-							// 			} else {
-							// 				buildingSublayer.renderer = {
-							// 					type: 'unique-value', // autocasts as new UniqueValueRenderer()
-							// 					field: 'OBJECTID_1',
-							// 					uniqueValueInfos: [
-							// 						{
-							// 							// All interior doors are displayed red
-							// 							value: solicitud.objectID,
-							// 							symbol: {
-							// 								type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-							// 								symbolLayers: [
-							// 									{
-							// 										type: 'fill',
-							// 										material: {
-							// 											color: '#28A745',
-							// 											colorMixMode: 'replace'
-							// 										}
-							// 									}
-							// 								]
-							// 							}
-							// 						}
-							// 					]
-							// 				};
-							// 			}
-							// 		} else if (solicitud.estado === 'Pendiente') {
-							// 			console.log('entró pendiente');
-							// 			buildingSublayer.renderer = {
-							// 				type: 'unique-value', // autocasts as new UniqueValueRenderer()
-							// 				field: 'OBJECTID_1',
-							// 				uniqueValueInfos: [
-							// 					{
-							// 						// All interior doors are displayed red
-							// 						value: [solicitud.objectID],
-							// 						symbol: {
-							// 							type: 'mesh-3d', // autocasts as new MeshSymbol3D()
-							// 							symbolLayers: [
-							// 								{
-							// 									type: 'fill', // autocasts as new FillSymbol3DLayer()
-							// 									material: {
-							// 										color: 'yellow'
-							// 									}
-							// 								}
-							// 							]
-							// 						}
-							// 					}
-							// 				]
-							// 			};
-							// 		}
-							// 	}
-							// });
 						});
 				});
 

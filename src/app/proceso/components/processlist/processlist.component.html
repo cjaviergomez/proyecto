@@ -1,23 +1,50 @@
-<div class="col" *ngIf="!isCreador">
-	<div class="jumbotron">
+<div
+	*ngIf="cargando; else yaCargo"
+	class="alert alert-info text-center mt-3 animated fadeIn faster container"
+>
+	<h4 class="alert-heading">Cargando</h4>
+	<p>
+		<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+	</p>
+	<p class="mb-0">
+		Espere por favor
+	</p>
+</div>
 
-		<img src="../assets/img/error.png" id="img">
-		<div id="centrado">
-			<h2>No puedes hacer solicitudes</h2>
-			<p>No cuentas con los permisos para realizar solicitudes.</p>
-		</div>
+<ng-template #yaCargo>
+	<div
+		class="alert alert-info text-center mt-3 animated fadeIn faster container"
+		*ngIf="!isCreador; else userCreador"
+	>
+		<h2>No puedes hacer solicitudes</h2>
+		<p>No cuentas con los permisos para realizar solicitudes.</p>
+		<p>
+			<fa-icon [icon]="faExclamation" size="2x"></fa-icon>
+		</p>
 	</div>
-</div>
-
-
-<div class="container" *ngIf="isCreador">
-  <div class="jumbotron">
-    <h3 class="mb-3">Iniciar proceso</h3>
-    <span>Selecciona el proceso que quieres iniciar</span>
-    <ul class="processDefinitions mt-3">
-      <li *ngFor="let processDefinition of processDefinitions">
-        <p><a [routerLink]="['/modProceso/startprocess/', processDefinition.key, idCapa, edif, idSubCapa, subCapa, elem, piso]">{{ processDefinition.name }}</a></p>
-      </li>
-    </ul>
-  </div>
-</div>
+	<ng-template #userCreador>
+		<div class="jumbotron m-5">
+			<h3 class="mb-3">Iniciar proceso</h3>
+			<span>Selecciona el proceso que quieres iniciar</span>
+			<ul class="processDefinitions mt-3">
+				<li *ngFor="let processDefinition of processDefinitions">
+					<p>
+						<a
+							[routerLink]="[
+								'/modProceso/startprocess/',
+								processDefinition.key,
+								idCapa,
+								edif,
+								idSubCapa,
+								subCapa,
+								elem,
+								piso
+							]"
+							>{{ processDefinition.name }}</a
+						>
+					</p>
+				</li>
+			</ul>
+		</div>
+	</ng-template>
+</ng-template>
