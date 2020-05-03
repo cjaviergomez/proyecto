@@ -39,6 +39,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 	public isCreador: any = null;
 	solicitudes: Solicitud[] = [];
 	solicitudes$;
+	mostrarLegend = false;
 
 	@Output() datos_formulario = new EventEmitter();
 	@Output() mapLoaded = new EventEmitter<boolean>();
@@ -62,7 +63,9 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 				BuildingSceneLayer,
 				Collection,
 				UniqueValueRenderer,
-				Legend
+				Legend,
+				DefaultUI,
+				Expand
 			] = await loadModules([
 				'esri/WebScene',
 				'esri/layers/FeatureLayer',
@@ -71,7 +74,9 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 				'esri/layers/BuildingSceneLayer',
 				'esri/core/Collection',
 				'esri/renderers/UniqueValueRenderer',
-				'esri/widgets/Legend'
+				'esri/widgets/Legend',
+				'esri/views/ui/DefaultUI',
+				'esri/widgets/Expand'
 			]);
 
 			const creador = this.isCreador;
@@ -109,7 +114,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 					{
 						type: 'fill', // autocasts as new FillSymbol3DLayer()
 						material: {
-							color: 'yellow'
+							color: '#FAE20D'
 						}
 					}
 				]
@@ -141,7 +146,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 						edges: {
 							type: 'solid',
 							color: '#016AD9',
-							size: 10.5
+							size: 5.5
 						}
 					}
 				]
@@ -436,6 +441,17 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 			view.ui.add(layerList, {
 				position: 'top-right'
 			});
+
+			const legend = new Expand({
+				content: document.getElementById('legendContent'),
+				view: view,
+				expanded: true
+			});
+
+			view.ui.add(legend, 'top-left');
+
+			await view.when();
+			return view;
 		} catch (error) {
 			alert('We have an error: ' + error);
 		}
@@ -485,6 +501,13 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 
 		this.solicitudes$.subscribe((solicitudes) => {
 			this.solicitudes = solicitudes;
+			if (this.usuario && this.usuario.primerIngreso) {
+				this.showPrimerIngresoMessage();
+			} else {
+				this.initializeMap().then((view) => {
+					this.mostrarLegend = true;
+				});
+			}
 		});
 	}
 
@@ -511,11 +534,6 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 							// Obtenemos la información del usuario de la base de datos de firebase.
 							this.usuario = usuario;
 							this.getSolicitudes();
-							if (this.usuario && this.usuario.primerIngreso) {
-								this.showPrimerIngresoMessage();
-							} else {
-								this.initializeMap();
-							}
 						});
 				}
 			});
@@ -563,7 +581,9 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 					this.usuarioService
 						.updateUsuario(this.usuario) // Actualizamos el usuario en firebase
 						.then(() => {
-							this.initializeMap();
+							this.initializeMap().then((view) => {
+								this.mostrarLegend = true;
+							});
 						})
 						.catch((err) => {
 							this.swal.showErrorMessage(err);

@@ -1,2 +1,12 @@
 <!-- Here's the DIV that we inject the map into -->
 <div #mapViewNode></div>
+<div id="legendContent" class="legend">
+	<div class="card container animated fadeIn faster" *ngIf="mostrarLegend">
+		<p>Estado de las solictudes</p>
+		<ul class="list-group">
+			<span class="badge badge-success">En trámite</span>
+			<span class="badge badge-danger mt-1">Rechazada</span>
+			<span class="badge badge-warning mt-1">Pendiente</span>
+		</ul>
+	</div>
+</div>
