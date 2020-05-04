@@ -1,4 +1,5 @@
 import { Usuario } from '../../admin/models/usuario';
+import { Documento } from 'app/proceso/models/documento';
 export interface Solicitud {
 	id?: string;
 	nombre_edificio?: string;
@@ -16,8 +17,7 @@ export interface Solicitud {
 	idProcess?: string;
 	descripcion?: string;
 
-	urlDocumentos?: string;
-	nombreDocumentos?: string;
+	documentos?: Documento[];
 
 	interventorId?: string;
 

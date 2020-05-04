@@ -12,6 +12,7 @@ import { StartProcessInstanceComponent } from '../general/start-process-instance
 
 // Modelos
 import { Material } from '../../models/material';
+import { Documento } from 'app/proceso/models/documento';
 
 // Servicios
 import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
@@ -31,13 +32,13 @@ import {
 	faArrowCircleRight,
 	faArrowCircleLeft,
 	faSave,
-	faSyncAlt,
+	faSyncAlt
 } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
 @Component({
 	selector: 'startNewProcess',
 	templateUrl: './startNewProcess.component.html',
-	styleUrls: [],
+	styleUrls: []
 })
 export class startNewProcessComponent extends StartProcessInstanceComponent implements OnDestroy {
 	material = new Material(); //Modelo del material a agregar a la base de datos.
@@ -54,7 +55,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 	faSave = faSave;
 	faSyncAlt = faSyncAlt;
 
-	//Para trabajar con el documento1
+	//Para trabajar con el documento a subir
 	uploadPercent: Observable<number>;
 	urlDoc: Observable<string>;
 	nameDocUp: string;
@@ -87,6 +88,29 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 			notificacionService
 		);
 		this.storage = storage;
+	}
+
+	agregarDocumento(): void {
+		this.document = new Documento();
+		$('#addDocumento').modal('show');
+	}
+
+	cerrarModalDocumento(form: NgForm): void {
+		form.resetForm();
+		$('#addDocumento').modal('hide');
+	}
+
+	guardarDocumento(form: NgForm): void {
+		if (form.invalid) {
+			return;
+		}
+		console.log(this.document);
+		this.documents.push(this.document);
+
+		// Reiniciamos las variables.
+		this.document = new Documento();
+		form.resetForm();
+		$('#addDocumento').modal('hide');
 	}
 
 	buscarMateriales(): void {
@@ -219,9 +243,9 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 		const id = Math.random().toString(36).substring(2);
 		const file = e.target.files[0];
 		if (file) {
-			this.nameDocUp = file.name;
+			this.document.name = file.name;
 		}
-		const filePath = `docs/solicitudes/${this.usuario.nombres}/${id}_${this.nameDocUp}`;
+		const filePath = `docs/solicitudes/${this.usuario.nombres}/${id}_${this.document.name}`;
 		const ref = this.storage.ref(filePath);
 		const task = this.storage.upload(filePath, file);
 		this.uploadPercent = task.percentageChanges();
@@ -240,13 +264,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 			if (resp.value) {
 				this.swal.showLoading();
 				this.urlDoc.pipe(takeUntil(this.ngUnsubscribe)).subscribe((url) => {
-					this.url = url;
-					this.name = this.nameDocUp;
-
-					// Reiniciamos las variables.
-					this.urlDoc = null;
-					this.nameDocUp = null;
-
+					this.document.urldocument = url;
 					this.swal.stopLoading();
 				});
 			}

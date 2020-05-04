@@ -12,6 +12,7 @@ import { Unidad } from 'app/admin/models/unidad';
 import { Material } from '../../models/material';
 import { MyProcessData } from '../../models/MyProcessData';
 import { Notificacion } from 'app/in/models/notificacion';
+import { Documento } from 'app/proceso/models/documento';
 
 //Servicios
 import { UsuarioService } from '../../../admin/services/usuario.service';
@@ -58,8 +59,9 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 	fecha_actual;
 	hora;
 	descripcionS;
-	url = '';
-	name = '';
+	// Para trabajar con los documentos de la solicitud.
+	documents: Documento[] = [];
+	document: Documento = new Documento();
 
 	model = new MyProcessData([], [], [], '', false);
 	submitted = false;
@@ -101,13 +103,13 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 		this.materialesUsuario = [];
 		this.elementosUsuario = [];
 		this.especialesUsuario = [];
-		this.seccion = 1;
+		this.seccion = 4;
 
 		this.fecha_actual = new Date();
 		this.hora = this.fecha_actual.toLocaleTimeString('en-US', {
 			hour12: true,
 			hour: 'numeric',
-			minute: 'numeric',
+			minute: 'numeric'
 		});
 		this.fecha_actual = this.datePipe.transform(this.fecha_actual, 'dd/MM/yyyy');
 
@@ -139,8 +141,8 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 				fecha: this.fecha_actual,
 				hora: this.hora,
 				usuario: {
-					...this.usuario,
-				},
+					...this.usuario
+				}
 			};
 		});
 	}
@@ -160,12 +162,11 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 				objectID: this.elem,
 				hora: this.hora,
 				usuario: {
-					...this.usuario,
+					...this.usuario
 				},
 				idProcess: this.idProcess,
 				descripcion: this.descripcionS,
-				urlDocumentos: this.url,
-				nombreDocumentos: this.name,
+				documentos: this.documents
 			};
 
 			this.solicitudService
@@ -178,7 +179,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 						solicitudId: data.id,
 						texto: 'ha creado una nueva solicitud.',
 						actor: this.usuario.nombres,
-						fecha: new Date(),
+						fecha: new Date()
 					};
 					this.notificacionService.notifyPlaneacion(this.notificacion);
 					if (this.usuario.perfil.nombre !== 'Planta Física') {
@@ -197,11 +198,11 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 		this.model.elementosProteccion = this.elementosUsuario;
 		this.model.especiales = this.especialesUsuario;
 		const variables = {
-			variables: {},
+			variables: {}
 		};
 		Object.keys(this.model).forEach((field) => {
 			variables.variables[field] = {
-				value: this.model[field],
+				value: this.model[field]
 			};
 		});
 
