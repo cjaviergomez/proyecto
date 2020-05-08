@@ -42,7 +42,7 @@ export class approveDataTaskComponent extends ComunTaskComponent implements OnIn
 	mostrarF = false;
 	seccion: number;
 	public unidad: Unidad;
-	model = new MyProcessData([], [], [], '', false);
+	model = new MyProcessData([], [], [], [], '', false);
 
 	filterPost = ''; // Texto a buscar en los materiales.
 	filterElements = ''; // Texto a buscar en los elementos de protección.

@@ -1,222 +1,321 @@
 <div class="container mt-4">
+	<!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
+	<div *ngIf="cargando" class="alert alert-info text-center animated fadeIn faster">
+		<h4 class="alert-heading">Cargando</h4>
+		<p>
+			<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+		</p>
+		<p class="mb-0">
+			Espere por favor
+		</p>
+	</div>
 
-  <!--Div para mostrar un mensaje de cargando mientras se obtienen las solicitudes de la base de datos-->
-  <div *ngIf="cargando"
-        class="alert alert-info text-center animated fadeIn faster">
-    <h4 class="alert-heading">Cargando</h4>
-    <p>
-      <fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-    </p>
-    <p class="mb-0">
-      Espere por favor
-    </p>
-  </div>
+	<div class="list-group" *ngIf="!cargando && !taskId">
+		<h4>Proceso</h4>
+		<p>
+			El proceso esta dividido en tareas y cada una de ellas debe ser realizadas por un actor especifico.
+			<br />
+			Por favor, selecione una tarea.
+		</p>
+		<div *ngIf="historyVariables.length > 0" class="mb-3">
+			<button
+				class="list-group-item list-group-item-action list-group-item-success"
+				(click)="verFormulario()"
+			>
+				Formulario de solicitud
+			</button>
+		</div>
 
-  <div class="list-group" *ngIf="!cargando && !taskId">
-    <h4>Proceso</h4>
-    <p>El proceso esta dividido en tareas y cada una de ellas debe ser realizadas por un actor especifico. <br>
-      Por favor, selecione una tarea.
-    </p>
-    <div *ngIf="historyVariables.length > 0" class="mb-3">
-      <button class="list-group-item list-group-item-action list-group-item-success" (click)="verFormulario()">Formulario de solicitud</button>
-    </div>
+		<div *ngIf="tasks && tasks.length > 0" class="mb-3">
+			<h5>Tareas pendientes</h5>
+			<div *ngFor="let task of tasks">
+				<a
+					routerLink="/modProceso/tasklist/{{ processId }}/{{ task.id }}"
+					class="list-group-item list-group-item-action list-group-item-primary mb-1"
+					>{{ task.name }}
+					<span class="badge badge-pill badge-primary float-right">{{ task.assignee }}</span></a
+				>
+			</div>
+		</div>
 
-    <div *ngIf="tasks && tasks.length > 0" class="mb-3">
-      <h5>Tareas pendientes</h5>
-      <div *ngFor="let task of tasks">
-        <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}" class="list-group-item list-group-item-action list-group-item-primary mb-1">{{ task.name }} <span class="badge badge-pill badge-primary float-right">{{task.assignee}}</span></a>
-      </div>
-    </div>
+		<div
+			*ngIf="tasks && tasks.length == 0 && tasksComplete && tasksComplete.length > 0"
+			class="alert alert-info text-center animated fadeIn faster mb-3"
+		>
+			<h4 class="alert-heading">¡Proceso terminado!</h4>
+			<p class="mb-0">
+				No hay tareas pendientes
+			</p>
+			<p>
+				<fa-icon [icon]="faExclamation" size="2x"></fa-icon>
+			</p>
+		</div>
 
-    <div *ngIf="tasks && tasks.length == 0 && tasksComplete && tasksComplete.length > 0" class="alert alert-info text-center animated fadeIn faster mb-3">
-      <h4 class="alert-heading">¡Proceso terminado!</h4>
-      <p class="mb-0">
-        No hay tareas pendientes
-      </p>
-      <p>
-        <fa-icon [icon]="faExclamation" size="2x"></fa-icon>
-      </p>
-    </div>
+		<div *ngIf="tasksComplete && tasksComplete.length > 0" class="mb-5">
+			<h5>Tareas completadas</h5>
+			<div *ngFor="let task of tasksComplete">
+				<a
+					routerLink="/modProceso/tasklist/{{ processId }}/{{ task.id }}/{{ task.taskDefinitionKey }}"
+					class="list-group-item list-group-item-action list-group-item-secondary mb-1"
+					>{{ task.name }}
+					<span class="badge badge-pill badge-secondary float-right">{{ task.endTime | date: 'short' }}</span>
+				</a>
+			</div>
+		</div>
 
-    <div *ngIf="tasksComplete && tasksComplete.length > 0" class="mb-5">
-      <h5>Tareas completadas</h5>
-      <div *ngFor="let task of tasksComplete">
-        <a routerLink="/modProceso/tasklist/{{processId}}/{{task.id}}/{{task.taskDefinitionKey}}" class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{ task.name }} <span class="badge badge-pill badge-secondary float-right">{{ task.endTime | date:'short' }}</span> </a>
-      </div>
-    </div>
+		<div
+			*ngIf="tasksComplete && tasksComplete.length == 0 && tasks && tasks.length == 0"
+			class="alert alert-primary text-center mt-3 animated fadeIn faster container"
+		>
+			<h4 class="alert-heading">No se encontraron tareas para este proceso.</h4>
+			<p>
+				<fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+			</p>
+		</div>
+	</div>
 
-    <div *ngIf="tasksComplete && tasksComplete.length == 0 && tasks && tasks.length == 0"
-          class="alert alert-primary text-center mt-3 animated fadeIn faster container">
-      <h4 class="alert-heading">No se encontraron tareas para este proceso.</h4>
-      <p>
-        <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
-      </p>
-    </div>
-
-  </div>
-
-  <div *ngIf="!cargando && taskId">
-    <generic-form [taskId]="taskId" [formKey]="formKey"></generic-form>
-    <div *ngIf="noFound"
-          class="alert alert-primary text-center mt-3 animated fadeIn faster container">
-      <h4 class="alert-heading">¡Tarea no encontrada!</h4>
-      <p>Posiblemente la tarea ya fue realizada.</p>
-      <p>
-        <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
-      </p>
-      <button type="button" class="btn btn-outline-primary" [routerLink]="['/modProceso/tasklist', processId]">
-       Atrás
-      </button>
-  </div>
-  </div>
+	<div *ngIf="!cargando && taskId">
+		<generic-form [taskId]="taskId" [formKey]="formKey"></generic-form>
+		<div *ngIf="noFound" class="alert alert-primary text-center mt-3 animated fadeIn faster container">
+			<h4 class="alert-heading">¡Tarea no encontrada!</h4>
+			<p>Posiblemente la tarea ya fue realizada.</p>
+			<p>
+				<fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+			</p>
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				[routerLink]="['/modProceso/tasklist', processId]"
+			>
+				Atrás
+			</button>
+		</div>
+	</div>
 </div>
 
 <!--Modal ver formulario-->
-<div class="modal fade" id="verFormulario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title text-center mb-2" id="exampleModalLabel1">Formulario de Solicitud</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+<div
+	class="modal fade"
+	id="verFormulario"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="exampleModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title text-center mb-2" id="exampleModalLabel1">Formulario de Solicitud</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="card text-left">
+					<div class="card-header">
+						<ul class="nav nav-tabs card-header-tabs">
+							<li class="nav-item">
+								<a class="nav-link active" *ngIf="seccion == 1">Solicitante</a>
+								<a class="nav-link" *ngIf="seccion != 1" (click)="seccion = 1" [routerLink]="">Solicitante</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active" *ngIf="seccion == 2">Requerimientos</a>
+								<a class="nav-link" *ngIf="seccion != 2" (click)="seccion = 2" [routerLink]=""
+									>Requerimientos</a
+								>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
+								<a class="nav-link" *ngIf="seccion != 3" (click)="seccion = 3" [routerLink]=""
+									>Observaciones</a
+								>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active" *ngIf="seccion == 4">Documentación</a>
+								<a class="nav-link" *ngIf="seccion != 4" (click)="seccion = 4" [routerLink]=""
+									>Documentación</a
+								>
+							</li>
+						</ul>
+					</div>
 
-        <div class="card text-left">
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-              <li class="nav-item">
-                <a class="nav-link active" *ngIf="seccion == 1">Solicitante</a>
-                <a class="nav-link" *ngIf="seccion != 1" (click)="seccion = 1" [routerLink]="">Solicitante</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" *ngIf="seccion == 2">Requerimientos</a>
-                <a class="nav-link" *ngIf="seccion != 2" (click)="seccion = 2" [routerLink]="">Requerimientos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" *ngIf="seccion == 3">Observaciones</a>
-                <a class="nav-link" *ngIf="seccion != 3" (click)="seccion = 3" [routerLink]="">Observaciones</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" *ngIf="seccion == 4">Documentación</a>
-                <a class="nav-link" *ngIf="seccion != 4" (click)="seccion = 4" [routerLink]="">Documentación</a>
-              </li>
-            </ul>
-          </div>
+					<form #formSolicitud="ngForm" novalidate="">
+						<!-- Seccion 1-->
+						<div class="card-body" *ngIf="seccion == 1">
+							<div class="form-group" *ngIf="unidad">
+								<label for="unidad">UAA o entidad solicitante</label>
+								<input type="text" name="unidad" [(ngModel)]="unidad.nombre" class="form-control" disabled />
+							</div>
 
-          <form #formSolicitud="ngForm" novalidate="">
-            <!-- Seccion 1-->
-            <div class="card-body" *ngIf="seccion == 1">
-              <div class="form-group" *ngIf="unidad">
-                <label for="unidad">UAA o entidad solicitante</label>
-                <input type="text" name="unidad" [(ngModel)]="unidad.nombre" class="form-control" disabled/>
-              </div>
+							<div class="form-row" *ngIf="solicitud">
+								<div class="form-group col-md-6">
+									<label for="fecha">Fecha de solicitud (dd/mm/aa)</label>
+									<input
+										type="text"
+										name="fecha"
+										[(ngModel)]="solicitud[0].fecha"
+										class="form-control"
+										disabled
+									/>
+								</div>
+								<div class="form-group col-md-6">
+									<label for="hora">Hora:</label>
+									<input
+										type="text"
+										name="hora"
+										[(ngModel)]="solicitud[0].hora"
+										class="form-control"
+										disabled
+									/>
+								</div>
+							</div>
 
-              <div class="form-row" *ngIf="solicitud">
-                <div class="form-group col-md-6">
-                  <label for="fecha">Fecha de solicitud (dd/mm/aa)</label>
-                  <input type="text" name="fecha" [(ngModel)]="solicitud[0].fecha" class="form-control" disabled/>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="hora">Hora:</label>
-                  <input type="text" name="hora" [(ngModel)]="solicitud[0].hora" class="form-control" disabled />
-                </div>
-              </div>
+							<div class="form-group">
+								<label for="nombre">Nombre del solicitante</label>
+								<input
+									type="text"
+									name="nombre"
+									[(ngModel)]="solicitud[0].usuario.nombres"
+									class="form-control"
+									disabled
+								/>
+							</div>
 
-              <div class="form-group">
-                <label for="nombre">Nombre del solicitante</label>
-                <input type="text" name="nombre" [(ngModel)]="solicitud[0].usuario.nombres" class="form-control" disabled />
+							<div class="form-row">
+								<div class="form-group col">
+									<label for="descripcionServicio">Descripción del servicio solicitado</label>
+									<textarea
+										#descripcion="ngModel"
+										name="descripcion"
+										[(ngModel)]="solicitud[0].descripcion"
+										class="form-control"
+										disabled
+									></textarea>
+								</div>
+							</div>
+						</div>
 
-              </div>
+						<!-- Seccion 2-->
+						<div class="card-body" *ngIf="seccion == 2">
+							<div class="form-group">
+								<label for="materiales">Listado de materiales</label>
+								<div class="row">
+									<input
+										type="text"
+										class="form-control col-9 ml-2"
+										name="filterPost"
+										placeholder="Buscar material..."
+										disabled
+									/>
+								</div>
 
-              <div class="form-row">
-                <div class="form-group col">
-                  <label for="descripcionServicio">Descripción del servicio solicitado</label>
-                  <textarea #descripcion="ngModel" name="descripcion"
-                            [(ngModel)]="solicitud[0].descripcion"
-                            class="form-control"
-                            disabled></textarea>
-                </div>
-              </div>
-            </div>
+								<div class="row">
+									<div *ngFor="let material of model.materiales; let i = index">
+										<span class="badge badge-secondary mr-2 ml-2"
+											>{{ material.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar"></fa-icon
+										></span>
+									</div>
+								</div>
+							</div>
 
-            <!-- Seccion 2-->
-            <div class="card-body" *ngIf="seccion == 2">
-              <div class="form-group">
-                <label for="materiales">Listado de materiales</label>
-                <div class="row">
-                  <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar material..." disabled>
-                </div>
+							<div class="form-group">
+								<label for="materiales">Elementos de protección ( Gafas, guantes, respirador, etc..)</label>
+								<div class="row">
+									<input
+										type="text"
+										class="form-control col-9 ml-2"
+										name="filterPost"
+										placeholder="Buscar elemento de protección..."
+										disabled
+									/>
+								</div>
 
-                <div class="row">
-                  <div *ngFor="let material of model.materiales; let i = index">
-                    <span class="badge badge-secondary mr-2 ml-2">{{ material.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar"></fa-icon></span>
-                  </div>
-                </div>
-              </div>
+								<div class="row">
+									<div *ngFor="let elemento of model.elementosProteccion; let i = index">
+										<span class="badge badge-secondary mr-2 ml-2"
+											>{{ elemento.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar"></fa-icon
+										></span>
+									</div>
+								</div>
+							</div>
 
-              <div class="form-group">
-                <label for="materiales">Elementos de protección ( Gafas, guantes, respirador, etc..)</label>
-                <div class="row">
-                  <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar elemento de protección..." disabled>
-                </div>
+							<div class="form-group">
+								<label for="materiales">Especiales ( Corte de energía, corte de agua, etc...)</label>
+								<div class="row">
+									<input
+										type="text"
+										class="form-control col-9 ml-2"
+										name="filterPost"
+										placeholder="Buscar acción especial..."
+										disabled
+									/>
+								</div>
 
-                <div class="row">
-                  <div *ngFor="let elemento of model.elementosProteccion; let i = index">
-                    <span class="badge badge-secondary mr-2 ml-2">{{ elemento.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar"></fa-icon></span>
-                  </div>
-                </div>
-              </div>
+								<div class="row">
+									<div *ngFor="let especial of model.especiales; let i = index">
+										<span class="badge badge-secondary mr-2 ml-2"
+											>{{ especial.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar"></fa-icon
+										></span>
+									</div>
+								</div>
+							</div>
+						</div>
 
-              <div class="form-group">
-                <label for="materiales">Especiales ( Corte de energía, corte de agua, etc...)</label>
-                <div class="row">
-                  <input type="text" class="form-control col-9 ml-2" name="filterPost" placeholder="Buscar acción especial..." disabled>
-                </div>
+						<!-- Seccion 3-->
+						<div class="card-body" *ngIf="seccion == 3">
+							<div class="form-row">
+								<div class="form-group col">
+									<label for="observaciones">Observaciones (Opcional)</label>
+									<textarea
+										name="observaciones"
+										[(ngModel)]="model.observaciones"
+										class="form-control"
+										id="observaciones"
+										rows="3"
+										disabled
+									></textarea>
+								</div>
+							</div>
+						</div>
 
-                <div class="row">
-                  <div *ngFor="let especial of model.especiales; let i = index">
-                    <span class="badge badge-secondary mr-2 ml-2">{{ especial.nombre }} <fa-icon [icon]="faWindowClose" title="Eliminar"></fa-icon></span>
-                  </div>
-                </div>
-              </div>
-            </div>
+						<!-- Seccion 4-->
+						<div class="card-body" *ngIf="seccion == 4">
+							<label>Documentación (Opcional)</label>
+							<p>Espacio para subir documentación extra: Planos, cotizaciones, etcétera.</p>
+							<div>
+								<div *ngIf="model.documents && model.documents.length > 0">
+									<div *ngFor="let documento of model.documents">
+										<label> {{ documento.label }}</label>
+										<a
+											[href]="documento.urldocument"
+											target="_blank"
+											class="list-group-item list-group-item-action list-group-item-dark mb-1"
+											>{{ documento.name }}</a
+										>
+									</div>
+								</div>
 
-            <!-- Seccion 3-->
-            <div class="card-body" *ngIf="seccion == 3">
-              <div class="form-row">
-                <div class="form-group col">
-                  <label for="observaciones">Observaciones (Opcional)</label>
-                  <textarea name="observaciones" [(ngModel)]="model.observaciones" class="form-control" id="observaciones" rows="3" disabled></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- Seccion 4-->
-          <div class="card-body" *ngIf="seccion == 4">
-            <label>Documentación (Opcional)</label>
-            <p>Espacio para subir documentación extra: Planos, cotizaciones, etcétera. </p>
-            <div>
-              <div *ngIf="solicitud[0].nombreDocumentos">
-                <a [href]="solicitud[0].urlDocumentos" target="_blank" class="list-group-item list-group-item-action list-group-item-dark mb-1">{{ solicitud[0].nombreDocumentos }}</a>
-              </div>
-
-              <div *ngIf="!solicitud[0].nombreDocumentos" class="alert alert-primary text-center mt-3 animated fadeIn faster container">
-                <h4 class="alert-heading">¡No hay documentos!</h4>
-                <p>No se subió documentación extra para esta solicitud.</p>
-                <p>
-                  <fa-icon [icon]="faExclamation" size="3x"></fa-icon>
-                </p>
-              </div>
-            </div>
-          </div>
-          </form>
-        </div>
-      </div> <!--close body modal-->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
-      </div>
-    </div>
-  </div>
+								<div
+									*ngIf="model.documents && model.documents.length == 0"
+									class="alert alert-primary text-center mt-3 animated fadeIn faster container"
+								>
+									<h4 class="alert-heading">¡No hay documentos!</h4>
+									<p>No se subió documentación extra para esta solicitud.</p>
+									<p>
+										<fa-icon [icon]="faExclamation" size="3x"></fa-icon>
+									</p>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!--close body modal-->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+					Cerrar
+				</button>
+			</div>
+		</div>
+	</div>
 </div>

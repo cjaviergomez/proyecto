@@ -6,56 +6,59 @@ import { NgForm } from '@angular/forms';
 declare let $: any;
 
 // Servicios
-import { UnidadService } from '../../services/unidad.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
+import { TiposDocumentsService } from '../../services/tipos-documents.service';
 
 // Modelos
-import { Unidad } from 'app/admin/models/unidad';
+import { Documento } from 'app/proceso/models/documento';
 
 // Iconos
 import { faPlus, faPen, faSyncAlt, faExclamation } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-	selector: 'app-unidades',
-	templateUrl: './unidades.component.html',
-	styleUrls: ['./unidades.component.css']
+	selector: 'app-tipos-documents',
+	templateUrl: './tipos-documents.component.html',
+	styleUrls: ['./tipos-documents.component.css']
 })
-export class UnidadesComponent implements OnInit, OnDestroy {
+export class TiposDocumentsComponent implements OnInit, OnDestroy {
 	//Iconos
 	faPlus = faPlus;
 	faPen = faPen;
 	faSyncAlt = faSyncAlt;
 	faExclamation = faExclamation;
 
-	unidad = new Unidad();
-	unidadT = new Unidad();
-	cargarUnidades = true;
-	public unidades: Unidad[];
+	documento = new Documento();
+	documentoT = new Documento();
+	cargarDocumentos = true;
+	public documentos: Documento[];
 	private ngUnsubscribe: Subject<any> = new Subject<any>();
 
-	constructor(private unidadService: UnidadService, private swal: ShowMessagesService) {}
+	constructor(private tipodocumentsService: TiposDocumentsService, private swal: ShowMessagesService) {}
 
 	ngOnInit(): void {
-		this.getUnidades();
+		this.getDocumentos();
 	}
 
-	getUnidades(): void {
-		this.unidadService
-			.getUnidades()
+	getDocumentos(): void {
+		this.tipodocumentsService
+			.getTiposDocuments()
 			.pipe(takeUntil(this.ngUnsubscribe))
-			.subscribe((unidades) => {
-				this.cargarUnidades = false;
-				this.unidades = unidades;
+			.subscribe((documentos) => {
+				this.cargarDocumentos = false;
+				this.documentos = documentos;
 			});
 	}
 
-	guardarUnidad(form: NgForm): void {
+	guardarDocumento(form: NgForm): void {
 		if (form.invalid) {
 			return;
 		}
-		$('#unidadModal').modal('hide');
-		this.unidadService
-			.addUnidad(this.unidad)
+
+		$('#documentoModal').modal('hide');
+		this.documento.id = Math.random().toString(36).substring(2);
+		this.documento.label = this.documento.name;
+		this.tipodocumentsService
+			.addDocumento(this.documento)
 			.then(() => {
 				form.resetForm();
 			})
@@ -66,25 +69,25 @@ export class UnidadesComponent implements OnInit, OnDestroy {
 
 	cerrarModal(form: NgForm): void {
 		form.resetForm();
-		$('#unidadModal').modal('hide');
+		$('#documentoModal').modal('hide');
 	}
 
-	abrirModal(unidad: Unidad): void {
-		this.unidadT = unidad;
-		$('#updateUnidadModal').modal('show');
+	abrirModal(documento: Documento): void {
+		this.documentoT = documento;
+		$('#updateDocumentoModal').modal('show');
 	}
 
 	cerrarModalUpdate(form: NgForm): void {
-		$('#updateUnidadModal').modal('hide');
+		$('#updateDocumentoModal').modal('hide');
 	}
 
-	actualizarUnidad(form: NgForm): void {
+	actualizarDocumento(form: NgForm): void {
 		if (form.invalid) {
 			return;
 		}
-		$('#updateUnidadModal').modal('hide');
-		this.unidadService
-			.updateUnidad(this.unidadT)
+		$('#updateDocumentoModal').modal('hide');
+		this.tipodocumentsService
+			.updateDocumento(this.documentoT)
 			.then(() => {
 				this.swal.showSuccessMessage('');
 			})

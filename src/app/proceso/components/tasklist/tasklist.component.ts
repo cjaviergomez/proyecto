@@ -136,7 +136,7 @@ export class TasklistComponent implements OnInit, OnDestroy {
 	}
 
 	// Metodo para obtener la solicitud que esta asociada al proceso.
-	getSolicitudProcess() {
+	getSolicitudProcess(): void {
 		this.solictudService
 			.getSolicitudProcess(this.processId)
 			.pipe(takeUntil(this.ngUnsubscribe))

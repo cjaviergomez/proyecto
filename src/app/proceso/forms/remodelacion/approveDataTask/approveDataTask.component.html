@@ -320,17 +320,20 @@
 						<label>Documentación (Opcional)</label>
 						<p>Espacio para subir documentación extra: Planos, cotizaciones, etcétera.</p>
 						<div>
-							<div *ngIf="solicitud.nombreDocumentos">
-								<a
-									[href]="solicitud.urlDocumentos"
-									target="_blank"
-									class="list-group-item list-group-item-action list-group-item-dark mb-1"
-									>{{ solicitud.nombreDocumentos }}</a
-								>
+							<div *ngIf="model.documents && model.documents.length > 0">
+								<div *ngFor="let documento of model.documents">
+									<label> {{ documento.label }}</label>
+									<a
+										[href]="documento.urldocument"
+										target="_blank"
+										class="list-group-item list-group-item-action list-group-item-dark mb-1"
+										>{{ documento.name }}</a
+									>
+								</div>
 							</div>
 
 							<div
-								*ngIf="!solicitud.nombreDocumentos"
+								*ngIf="model.documents && model.documents.length == 0"
 								class="alert alert-primary text-center mt-3 animated fadeIn faster container"
 							>
 								<h4 class="alert-heading">¡No hay documentos!</h4>

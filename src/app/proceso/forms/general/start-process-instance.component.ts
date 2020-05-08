@@ -63,7 +63,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 	documents: Documento[] = [];
 	document: Documento = new Documento();
 
-	model = new MyProcessData([], [], [], '', false);
+	model = new MyProcessData([], [], [], [], '', false);
 	submitted = false;
 	cargando;
 	route: ActivatedRoute;
@@ -103,7 +103,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 		this.materialesUsuario = [];
 		this.elementosUsuario = [];
 		this.especialesUsuario = [];
-		this.seccion = 4;
+		this.seccion = 1;
 
 		this.fecha_actual = new Date();
 		this.hora = this.fecha_actual.toLocaleTimeString('en-US', {
@@ -165,8 +165,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 					...this.usuario
 				},
 				idProcess: this.idProcess,
-				descripcion: this.descripcionS,
-				documentos: this.documents
+				descripcion: this.descripcionS
 			};
 
 			this.solicitudService
@@ -197,6 +196,7 @@ export class StartProcessInstanceComponent implements OnInit, OnDestroy {
 		this.model.materiales = this.materialesUsuario;
 		this.model.elementosProteccion = this.elementosUsuario;
 		this.model.especiales = this.especialesUsuario;
+		this.model.documents = this.documents;
 		const variables = {
 			variables: {}
 		};

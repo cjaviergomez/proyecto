@@ -57,9 +57,7 @@ export class SolicitudService {
 				...solicitud.usuario
 			},
 			idProcess: solicitud.idProcess,
-			descripcion: solicitud.descripcion,
-			urlDocumentos: solicitud.urlDocumentos,
-			nombreDocumentos: solicitud.nombreDocumentos
+			descripcion: solicitud.descripcion
 		});
 	}
 

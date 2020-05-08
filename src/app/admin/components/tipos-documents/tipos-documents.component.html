@@ -1,15 +1,15 @@
 <!--Unidades-->
-<div *ngIf="!cargarUnidades" class="container mt-4">
+<div *ngIf="!cargarDocumentos" class="container mt-4">
 	<div class="row mt-2">
 		<div class="col">
-			<h3>Unidades Academico y/o Administrativas</h3>
+			<h3>Tipos de documentos</h3>
 		</div>
 		<div class="col text-right">
 			<button
 				type="button"
 				class="btn btn-primary"
 				data-toggle="modal"
-				data-target="#unidadModal"
+				data-target="#documentoModal"
 				data-whatever="@getbootstrap"
 			>
 				<fa-icon [icon]="faPlus" title="Nuevo"></fa-icon>
@@ -18,7 +18,7 @@
 		</div>
 	</div>
 	<table
-		*ngIf="!cargarUnidades && unidades.length > 0"
+		*ngIf="!cargarDocumentos && documentos.length > 0"
 		class="table mt-3 mb-5 animated fadeIn faster animated fadeIn faster"
 	>
 		<thead class="thead-light">
@@ -31,13 +31,13 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let unidad of unidades; let i = index">
+			<tr *ngFor="let documento of documentos; let i = index">
 				<th scope="row">{{ i + 1 }}</th>
-				<td>{{ unidad.nombre }}</td>
-				<td>{{ unidad.descripcion }}</td>
+				<td>{{ documento.name }}</td>
+				<td>{{ documento.descripcion }}</td>
 
 				<td>
-					<button (click)="abrirModal(unidad)" class="btn btn-primary">
+					<button (click)="abrirModal(documento)" class="btn btn-primary">
 						<fa-icon [icon]="faPen" title="Editar"></fa-icon>
 					</button>
 				</td>
@@ -45,18 +45,18 @@
 		</tbody>
 	</table>
 	<div
-		*ngIf="!cargarUnidades && unidades.length === 0"
+		*ngIf="!cargarDocumentos && documentos.length === 0"
 		class="alert alert-warning text-center mt-3 animated fadeIn faster"
 	>
-		<h4 class="alert-heading">No hay unidades</h4>
+		<h4 class="alert-heading">No se han agregado ningún tipo de documento</h4>
 		<p>
 			<fa-icon [icon]="faExclamation" size="3x"></fa-icon>
 		</p>
 	</div>
 </div>
 
-<div *ngIf="cargarUnidades" class="alert alert-info text-center mt-3 animated fadeIn faster container">
-	<h4 class="alert-heading">Cargando unidades</h4>
+<div *ngIf="cargarDocumentos" class="alert alert-info text-center mt-3 animated fadeIn faster container">
+	<h4 class="alert-heading">Cargando</h4>
 	<p>
 		<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
 	</p>
@@ -65,19 +65,19 @@
 	</p>
 </div>
 
-<!--Modal unidad-->
+<!--Modal documento-->
 <div
 	class="modal fade"
-	id="unidadModal"
+	id="documentoModal"
 	tabindex="-1"
 	role="dialog"
 	aria-labelledby="exampleModalLabel"
 	aria-hidden="true"
 >
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel1">Nueva unidad</h5>
+				<h5 class="modal-title" id="exampleModalLabel1">Nuevo documento</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -85,7 +85,7 @@
 			<div class="modal-body">
 				<form
 					#formRegistro="ngForm"
-					(ngSubmit)="guardarUnidad(formRegistro)"
+					(ngSubmit)="guardarDocumento(formRegistro)"
 					novalidate=""
 					class="form-signin"
 				>
@@ -95,9 +95,9 @@
 							type="text"
 							class="form-control"
 							#nombreU="ngModel"
-							[(ngModel)]="unidad.nombre"
+							[(ngModel)]="documento.name"
 							id="nombreU"
-							minlength="10"
+							minlength="3"
 							maxlength="40"
 							required
 							name="nombreU"
@@ -118,7 +118,7 @@
 							minlength="10"
 							type="text"
 							#descripcionU="ngModel"
-							[(ngModel)]="unidad.descripcion"
+							[(ngModel)]="documento.descripcion"
 							maxlength="100"
 							required
 							name="descripcionU"
@@ -145,19 +145,19 @@
 	</div>
 </div>
 
-<!--Modal update unidad unidad-->
+<!--Modal update documento-->
 <div
 	class="modal fade"
-	id="updateUnidadModal"
+	id="updateDocumentoModal"
 	tabindex="-1"
 	role="dialog"
 	aria-labelledby="exampleModalLabel"
 	aria-hidden="true"
 >
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Actualizar unidad</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Actualizar documento</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -165,7 +165,7 @@
 			<div class="modal-body">
 				<form
 					#formUpdate="ngForm"
-					(ngSubmit)="actualizarUnidad(formUpdate)"
+					(ngSubmit)="actualizarDocumento(formUpdate)"
 					novalidate=""
 					class="form-signin"
 				>
@@ -175,9 +175,9 @@
 							type="text"
 							class="form-control"
 							#nombre="ngModel"
-							[(ngModel)]="unidadT.nombre"
+							[(ngModel)]="documentoT.name"
 							id="nombre"
-							minlength="10"
+							minlength="3"
 							maxlength="40"
 							required
 							name="nombre"
@@ -198,7 +198,7 @@
 							minlength="10"
 							type="text"
 							#descripcion="ngModel"
-							[(ngModel)]="unidadT.descripcion"
+							[(ngModel)]="documentoT.descripcion"
 							maxlength="100"
 							required
 							name="descripcion"

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgForm } from '@angular/forms';
@@ -23,6 +23,7 @@ import { UnidadService } from '../../../admin/services/unidad.service';
 import { MaterialesService } from 'app/proceso/services/materiales.service';
 import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { NotificacionService } from '../../services/notificacion.service';
+import { TiposDocumentsService } from '../../../admin/services/tipos-documents.service';
 
 import {
 	faWindowClose,
@@ -40,7 +41,7 @@ import {
 	templateUrl: './startNewProcess.component.html',
 	styleUrls: []
 })
-export class startNewProcessComponent extends StartProcessInstanceComponent implements OnDestroy {
+export class startNewProcessComponent extends StartProcessInstanceComponent implements OnInit, OnDestroy {
 	material = new Material(); //Modelo del material a agregar a la base de datos.
 	elementoPro = new Material(); //Modelo del elemento de protección a agregar a la base de datos.
 	especial = new Material(); //Modelo de la accion especial a agregar a la base de datos.
@@ -61,6 +62,10 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 	nameDocUp: string;
 
 	storage: AngularFireStorage;
+	tiposdocumentosService: TiposDocumentsService;
+
+	tiposDocuments: Documento[] = [];
+	otroLabel: string; //Variable para asignarle el nombre al label en caso de que se seleccione otro documento
 
 	constructor(
 		route: ActivatedRoute,
@@ -73,7 +78,8 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 		materialService: MaterialesService,
 		swal: ShowMessagesService,
 		storage: AngularFireStorage,
-		notificacionService: NotificacionService
+		notificacionService: NotificacionService,
+		tiposdocumentosService: TiposDocumentsService
 	) {
 		super(
 			route,
@@ -88,10 +94,19 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 			notificacionService
 		);
 		this.storage = storage;
+		this.tiposdocumentosService = tiposdocumentosService;
+		this.tiposdocumentosService
+			.getTiposDocuments()
+			.pipe(takeUntil(this.ngUnsubscribe))
+			.subscribe((documentos) => {
+				this.tiposDocuments = documentos;
+			});
 	}
 
 	agregarDocumento(): void {
 		this.document = new Documento();
+		this.document.label = null;
+		this.otroLabel = null;
 		$('#addDocumento').modal('show');
 	}
 
@@ -104,7 +119,9 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 		if (form.invalid) {
 			return;
 		}
-		console.log(this.document);
+		if (this.otroLabel) {
+			this.document.label = this.otroLabel;
+		}
 		this.documents.push(this.document);
 
 		// Reiniciamos las variables.
@@ -252,7 +269,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 		task
 			.snapshotChanges()
 			.pipe(finalize(() => (this.urlDoc = ref.getDownloadURL())))
-			.pipe(takeUntil(this.ngUnsubscribe))
+			.pipe()
 			.subscribe();
 	}
 

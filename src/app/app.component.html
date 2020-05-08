@@ -1,162 +1,263 @@
 <!--Menú para usuarios no logueados-->
 <div *ngIf="!islogged; else logueado">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="">CampusGIS</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="">CampusGIS</a>
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-toggle="collapse"
+			data-target="#navbarText"
+			aria-controls="navbarText"
+			aria-expanded="false"
+			aria-label="Toggle navigation"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/modOut/home']" [routerLinkActive]="['activado']">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/modOut/proceso']" [routerLinkActive]="['activado']">Proceso</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/modOut/questions']" [routerLinkActive]="['activado']">Preguntas Frecuentes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/modOut/contacto']" [routerLinkActive]="['activado']">Contáctanos</a>
-        </li>
-      </ul>
+		<div class="collapse navbar-collapse" id="navbarText">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" [routerLink]="['/modOut/home']" [routerLinkActive]="['activado']">Inicio</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" [routerLink]="['/modOut/proceso']" [routerLinkActive]="['activado']">Proceso</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" [routerLink]="['/modOut/questions']" [routerLinkActive]="['activado']"
+						>Preguntas Frecuentes</a
+					>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" [routerLink]="['/modOut/contacto']" [routerLinkActive]="['activado']"
+						>Contáctanos</a
+					>
+				</li>
+			</ul>
 
-      <span class="navbar-text m-0 p-0">
-
-        <button [routerLink]="['/modOut/login']"
-                [routerLinkActive]="['active']"
-                type="button"
-                class="btn btn-outline-primary btn-sm mr-2">Ingresar</button>
-        <button [routerLink]="['/modOut/registro']"
-                [routerLinkActive]="['active']"
-                type="button"
-                class="btn btn-outline-primary btn-sm">Registrarse</button>
-      </span>
-    </div>
-  </nav>
+			<span class="navbar-text m-0 p-0">
+				<button
+					[routerLink]="['/modOut/login']"
+					[routerLinkActive]="['active']"
+					type="button"
+					class="btn btn-outline-primary btn-sm mr-2"
+				>
+					Ingresar
+				</button>
+				<button
+					[routerLink]="['/modOut/registro']"
+					[routerLinkActive]="['active']"
+					type="button"
+					class="btn btn-outline-primary btn-sm"
+				>
+					Registrarse
+				</button>
+			</span>
+		</div>
+	</nav>
 </div>
 
 <!--Menú para usuarios logueados-->
 <ng-template #logueado>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="">CampusGIS</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText2" aria-controls="navbarText2" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText2">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/modIn/map']" [routerLinkActive]="['activado']">Mapa</a>
-        </li>
-        <li class="nav-item" *ngIf="isVerificador">
-          <a class="nav-link" [routerLink]="['/modAdmin/usuarios']" [routerLinkActive]="['activado']">Usuarios</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/modSolicitudes/solicitudes']" [routerLinkActive]="['activado']">Solicitudes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/modReformas/reformas']" [routerLinkActive]="['activado']">Reformas</a>
-        </li>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="">CampusGIS</a>
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-toggle="collapse"
+			data-target="#navbarText2"
+			aria-controls="navbarText2"
+			aria-expanded="false"
+			aria-label="Toggle navigation"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarText2">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" [routerLink]="['/modIn/map']" [routerLinkActive]="['activado']">Mapa</a>
+				</li>
+				<li class="nav-item" *ngIf="isVerificador">
+					<a class="nav-link" [routerLink]="['/modAdmin/usuarios']" [routerLinkActive]="['activado']"
+						>Usuarios</a
+					>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" [routerLink]="['/modSolicitudes/solicitudes']" [routerLinkActive]="['activado']"
+						>Solicitudes</a
+					>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" [routerLink]="['/modReformas/reformas']" [routerLinkActive]="['activado']"
+						>Reformas</a
+					>
+				</li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Notificaciones <span class="badge badge-primary" *ngIf="notificacionesCount > 0">{{ notificacionesCount }}</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
-            <!-- Div para mostrar mensaje cuando no hay notificaciones-->
-            <div *ngIf="(usuario && !usuario.notificaciones) || (usuario && usuario.notificaciones && usuario.notificaciones.length == 0)" class="scroll">
-              <div class="card">
-                <div class="card-body p-0">
-                  <div class="card-text alert alert-primary text-center animated fadeIn faster m-1">
-                    <h4 class="alert-heading">No tienes notificaciones</h4>
-                    <p>
-                      <fa-icon [icon]="faExclamation" size="2x"></fa-icon>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+				<li class="nav-item dropdown">
+					<a
+						class="nav-link"
+						href="#"
+						id="navbarDropdown"
+						role="button"
+						data-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false"
+					>
+						Notificaciones
+						<span class="badge badge-primary" *ngIf="notificacionesCount > 0">{{ notificacionesCount }}</span>
+					</a>
+					<div class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
+						<!-- Div para mostrar mensaje cuando no hay notificaciones-->
+						<div
+							*ngIf="
+								(usuario && !usuario.notificaciones) ||
+								(usuario && usuario.notificaciones && usuario.notificaciones.length == 0)
+							"
+							class="scroll"
+						>
+							<div class="card">
+								<div class="card-body p-0">
+									<div class="card-text alert alert-primary text-center animated fadeIn faster m-1">
+										<h4 class="alert-heading">No tienes notificaciones</h4>
+										<p>
+											<fa-icon [icon]="faExclamation" size="2x"></fa-icon>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
 
-            <div *ngIf="usuario && usuario.notificaciones && usuario.notificaciones.length > 0" class="scroll">
-              <div *ngFor="let notificacion of usuario.notificaciones.reverse()" class="card list-group">
+						<div
+							*ngIf="usuario && usuario.notificaciones && usuario.notificaciones.length > 0"
+							class="scroll"
+						>
+							<div *ngFor="let notificacion of usuario.notificaciones.reverse()" class="card list-group">
+								<div
+									class="card-body list-group-item list-group-item-action list-group-item-info animated fadeIn faster"
+									*ngIf="notificacion.leido === false; else leida"
+									(click)="onNotificacion(notificacion)"
+									style="cursor: pointer;"
+								>
+									<p class="card-text m-0" *ngIf="notificacion.actor; else noActor">
+										<font size="2">
+											El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font
+										>
+									</p>
+									<ng-template #noActor>
+										<p class="card-text m-0">
+											<font size="2">{{ notificacion.texto }}</font>
+										</p>
+									</ng-template>
+									<div class="card-text text-muted mt-1">
+										<small class="float-right">hace {{ notificacion.fecha | fechaNotificacion }}</small>
+										<small *ngIf="notificacion.task">{{ notificacion.task }}</small>
+									</div>
+								</div>
 
-                <div class="card-body list-group-item list-group-item-action list-group-item-info animated fadeIn faster" *ngIf="notificacion.leido === false; else leida" (click)="onNotificacion(notificacion)" style="cursor: pointer;">
-                  <p class="card-text m-0" *ngIf="notificacion.actor; else noActor"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></p>
-                  <ng-template #noActor>
-                    <p class="card-text m-0"><font size=2>{{ notificacion.texto }}</font></p>
-                  </ng-template>
-                  <div class="card-text text-muted mt-1">
-                    <small class="float-right">hace {{ notificacion.fecha | fechaNotificacion }}</small>
-                    <small *ngIf="notificacion.task">{{ notificacion.task }}</small>
-                  </div>
-                </div>
+								<ng-template #leida>
+									<div
+										class="card-body list-group-item list-group-item-action list-group-item-light animated fadeIn faster"
+										(click)="onNotificacion(notificacion)"
+										style="cursor: pointer;"
+									>
+										<a class="card-text m-0" *ngIf="notificacion.actor; else noActorLeida"
+											><font size="2">
+												El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font
+											></a
+										>
+										<ng-template #noActorLeida>
+											<p class="card-text m-0">
+												<font size="2">{{ notificacion.texto }}</font>
+											</p>
+										</ng-template>
+										<div class="card-text text-muted mt-1">
+											<small class="float-right">hace {{ notificacion.fecha | fechaNotificacion }}</small>
+											<small *ngIf="notificacion.task">{{ notificacion.task }}</small>
+										</div>
+									</div>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li class="nav-item dropdown" *ngIf="isSolucionador || isAgregador">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						id="navbarDropdown"
+						role="button"
+						data-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false"
+					>
+						Admin
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" [routerLink]="['/modAdmin/perfiles']" *ngIf="isAgregador">Perfiles</a>
+						<a class="dropdown-item" [routerLink]="['/modAdmin/unidades']" *ngIf="isAgregador">UAAs</a>
+						<a class="dropdown-item" [routerLink]="['/modAdmin/comentarios']" *ngIf="isSolucionador"
+							>Comentarios</a
+						>
+						<a class="dropdown-item" [routerLink]="['/modAdmin/tiposDocuments']" *ngIf="isAgregador"
+							>Tipos de documentos</a
+						>
+					</div>
+				</li>
+			</ul>
 
-                <ng-template #leida>
-                  <div class="card-body list-group-item list-group-item-action list-group-item-light animated fadeIn faster" (click)="onNotificacion(notificacion)" style="cursor: pointer;">
-                    <a class="card-text m-0" *ngIf="notificacion.actor; else noActorLeida"><font size=2> El usuario <strong>{{ notificacion.actor }} </strong> {{ notificacion.texto }}</font></a>
-                    <ng-template #noActorLeida>
-                      <p class="card-text m-0"><font size=2>{{ notificacion.texto }}</font></p>
-                    </ng-template>
-                    <div class="card-text text-muted mt-1">
-                      <small class="float-right">hace {{ notificacion.fecha | fechaNotificacion }}</small>
-                      <small *ngIf="notificacion.task">{{ notificacion.task }}</small>
-                    </div>
-                  </div>
-                </ng-template>
-
-
-
-              </div>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item dropdown" *ngIf="isSolucionador || isAgregador">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Admin
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" [routerLink]="['/modAdmin/perfiles']" *ngIf="isAgregador">Perfiles</a>
-            <a class="dropdown-item" [routerLink]="['/modAdmin/unidades']" *ngIf="isAgregador">UAAs</a>
-            <a class="dropdown-item" [routerLink]="['/modAdmin/comentarios']" *ngIf="isSolucionador">Comentarios</a>
-          </div>
-        </li>
-      </ul>
-
-      <span class="navbar-text m-0 p-0">
-        <div class="collapse navbar-collapse" *ngIf="usuario">
-          <ul class="navbar-nav mr-auto">
-            <p class="mt-2"> {{ usuario.nombres }} <span class="perfil">({{usuario.perfil.nombre}}) </span> </p>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle alinear" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="{{ usuario.photoUrl }}" class="rounded-circle dataPerfil" alt="profile">
-              </a>
-              <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/modIn/perfil', usuario.id]">Perfil</a>
-                <a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/modIn/config']">Configuración</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item alCentro" [routerLink]="" (click)="salir()" style="color: #000000;" >Cerrar Sesión</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </span>
-    </div>
-  </nav>
+			<span class="navbar-text m-0 p-0">
+				<div class="collapse navbar-collapse" *ngIf="usuario">
+					<ul class="navbar-nav mr-auto">
+						<p class="mt-2">
+							{{ usuario.nombres }} <span class="perfil">({{ usuario.perfil.nombre }}) </span>
+						</p>
+						<li class="nav-item dropdown">
+							<a
+								class="nav-link dropdown-toggle alinear"
+								href="#"
+								id="navbarDropdown"
+								role="button"
+								data-toggle="dropdown"
+								aria-haspopup="true"
+								aria-expanded="false"
+							>
+								<img src="{{ usuario.photoUrl }}" class="rounded-circle dataPerfil" alt="profile" />
+							</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a
+									class="dropdown-item alCentro"
+									style="color: #000000;"
+									[routerLink]="['/modIn/perfil', usuario.id]"
+									>Perfil</a
+								>
+								<a class="dropdown-item alCentro" style="color: #000000;" [routerLink]="['/modIn/config']"
+									>Configuración</a
+								>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item alCentro" [routerLink]="" (click)="salir()" style="color: #000000;"
+									>Cerrar Sesión</a
+								>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</span>
+		</div>
+	</nav>
 </ng-template>
 
 <section id="main">
-  <ngx-spinner
-    bdOpacity = 0.9
-    bdColor = "#333"
-    size = "large"
-    color = "#385dfa"
-    type = "square-jelly-box"
-    [fullScreen] = "true">
-    <p style="color: white" class="mt-4"> Cargando... </p>
-  </ngx-spinner>
+	<ngx-spinner
+		bdOpacity="0.9"
+		bdColor="#333"
+		size="large"
+		color="#385dfa"
+		type="square-jelly-box"
+		[fullScreen]="true"
+	>
+		<p style="color: white;" class="mt-4">Cargando...</p>
+	</ngx-spinner>
 
-  <!-- Componente actual -->
+	<!-- Componente actual -->
 	<router-outlet></router-outlet>
 </section>
 

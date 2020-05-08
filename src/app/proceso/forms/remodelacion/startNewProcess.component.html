@@ -823,13 +823,13 @@
 	id="addDocumento"
 	tabindex="-1"
 	role="dialog"
-	aria-labelledby="exampleModalLabel"
+	aria-labelledby="exampleModal"
 	aria-hidden="true"
 >
 	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel1">Agregar documento</h5>
+				<h5 class="modal-title" id="exampleModal">Agregar documento</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -842,54 +842,81 @@
 					class="form-signin"
 				>
 					<div class="form-group mb-2">
-						<label for="nombreM" class="col-form-label">Nombre:</label>
-						<input
-							type="text"
-							class="form-control"
-							#nombreM="ngModel"
-							[(ngModel)]="document.label"
-							id="nombreM"
-							minlength="5"
-							maxlength="40"
-							required
-							name="nombreM"
-							[ngClass]="{
-								'is-invalid':
+						<label for="nombreM" class="col-form-label">Tipo de documento</label>
+						<div class="mt-2">
+							<select
+								class="form-control"
+								#selectTipo="ngModel"
+								name="selectTipo"
+								[ngClass]="{
+									'is-invalid': formAddDocumento.submitted && formAddDocumento.controls['selectTipo'].errors
+								}"
+								[(ngModel)]="document.label"
+								npm
+								required
+							>
+								<option value="null" disabled>Seleccione un tipo de documento</option>
+								<option *ngFor="let documento of tiposDocuments" [value]="documento.name">
+									{{ documento.name }}
+								</option>
+							</select>
+							<div
+								class="invalid-feedback animated fadeIn"
+								*ngIf="formAddDocumento.submitted && formAddDocumento.controls['selectTipo'].errors"
+							>
+								Elige un tipo de documento.
+							</div>
+						</div>
+						<div class="form-group mt-2" *ngIf="document.label == 'Otro'">
+							<input
+								class="form-control"
+								id="otroLabelN"
+								minlength="10"
+								type="text"
+								#otroLabelN="ngModel"
+								[(ngModel)]="otroLabel"
+								maxlength="500"
+								required
+								placeholder="Tipo de documento"
+								name="otroLabelN"
+								[ngClass]="{
+									'is-invalid':
+										formAddDocumento.submitted &&
+										formAddDocumento.controls['otroLabelN'] &&
+										formAddDocumento.controls['otroLabelN'].errors
+								}"
+							/>
+							<div
+								class="invalid-feedback animated fadeIn"
+								*ngIf="
 									formAddDocumento.submitted &&
-									formAddDocumento.controls['nombreM'] &&
-									formAddDocumento.controls['nombreM'].errors
-							}"
-						/>
-						<div
-							class="invalid-feedback animated fadeIn"
-							*ngIf="
-								formAddDocumento.submitted &&
-								formAddDocumento.controls['nombreM'] &&
-								formAddDocumento.controls['nombreM'].errors
-							"
-						>
-							Introduce un nombre válido.
+									formAddDocumento.controls['otroLabelN'] &&
+									formAddDocumento.controls['otroLabelN'].errors
+								"
+							>
+								Introduce un nombre válido.
+							</div>
 						</div>
 						<div class="input-group mt-2">
 							<div class="custom-file" *ngIf="usuario">
 								<input
 									type="file"
 									class="custom-file-input"
-									id="inputGroupFile01"
+									id="inputDocument"
 									(change)="onUpload($event)"
 									aria-describedby="inputGroupFileAddon01"
 								/>
 								<label
 									*ngIf="document && document.name"
 									class="custom-file-label"
-									for="inputGroupFile01"
+									for="inputDocument"
 									data-browse="Elegir"
 									>{{ document.name }}</label
 								>
 								<label
 									*ngIf="document && !document.name"
 									class="custom-file-label"
-									for="inputGroupFile01"
+									for="inputDocument"
 									data-browse="Elegir"
 									>Elige un archivo</label
 								>
@@ -899,7 +926,7 @@
 									*ngIf="urlDoc | async; else btnDisabled"
 									class="btn btn-outline-secondary"
 									type="button"
-									id="inputGroupFileAddon01"
+									id="inputDocument1"
 									(click)="subirArchivo()"
 								>
 									Guardar
@@ -908,7 +935,7 @@
 									<button
 										class="btn btn-outline-secondary btn-block"
 										type="button"
-										id="inputGroupFileAddon01"
+										id="inputDocument2"
 										disabled="true"
 									>
 										Guardar
