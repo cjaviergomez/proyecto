@@ -6,7 +6,8 @@
 		</button>
 		<h5 class="display-4">{{ task.name }}</h5>
 		<p class="lead">
-			Este tarea tiene como proposito dar a conocer las cotizaciones que conlleva la respectiva solicitud.
+			Este tarea tiene como proposito dar a conocer las cotizaciones que conlleva la respectiva solicitud y
+			los posibles proveedores de los productos y/o servicios de la misma.
 		</p>
 
 		<div class="row">
@@ -22,6 +23,18 @@
 				<em>
 					{{ task.endTime | date: 'short' }}
 				</em>
+			</p>
+		</div>
+
+		<div>
+			<p>
+				<span class="badge badge-info">Formato:</span>
+
+				<a
+					class="ml-2"
+					href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.59.doc"
+					>FCO.59</a
+				>
 			</p>
 		</div>
 

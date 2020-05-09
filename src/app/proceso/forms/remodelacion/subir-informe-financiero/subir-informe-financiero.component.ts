@@ -1,14 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { NgForm } from '@angular/forms';
 import { takeUntil, finalize } from 'rxjs/operators';
 declare let $: any; // Para trabajar con el modal
+
+import { faPlus } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
 
 //Para subir los archivos
 import { AngularFireStorage } from '@angular/fire/storage';
+
+//Modelos
+import { Documento } from 'app/proceso/models/documento';
 
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
@@ -17,11 +23,12 @@ import { ShowMessagesService } from 'app/out/services/show-messages.service';
 import { UsuarioService } from 'app/admin/services/usuario.service';
 import { AuthService } from 'app/out/services/auth.service';
 import { NotificacionService } from 'app/proceso/services/notificacion.service';
+import { TiposDocumentsService } from 'app/admin/services/tipos-documents.service';
 
 @Component({
 	selector: 'app-subir-informe-financiero',
 	templateUrl: './subir-informe-financiero.component.html',
-	styleUrls: ['./subir-informe-financiero.component.css'],
+	styleUrls: ['./subir-informe-financiero.component.css']
 })
 export class subirInformeFinancieroComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	comentarios: string[] = [];
@@ -29,7 +36,24 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 	//Para trabajar con el documento1
 	uploadPercent: Observable<number>;
 	urlDoc: Observable<string>;
-	nameDocUp: string;
+
+	//Para trabajar con el documento2
+	uploadPercent2: Observable<number>;
+	urlDoc2: Observable<string>;
+
+	//Para trabajar con archivos extras a subir
+	uploadPercentOtro: Observable<number>;
+	urlDocOtro: Observable<string>;
+
+	//Para trabajar con los documentos
+	documents: Documento[] = [];
+	document: Documento = new Documento(); // Documento evaluación de cotizaciones
+	document2: Documento = new Documento(); // CDP
+	newDocumento: Documento = new Documento(); // Documento nuevo a agregar.
+	tiposDocuments: Documento[] = [];
+	otroLabel: string; //Variable para asignarle el nombre al label en caso de que se seleccione otro documento
+
+	faPlus = faPlus;
 
 	constructor(
 		route: ActivatedRoute,
@@ -40,7 +64,8 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 		usuarioService: UsuarioService,
 		authService: AuthService,
 		private storage: AngularFireStorage,
-		notificacionService: NotificacionService
+		notificacionService: NotificacionService,
+		private tiposdocumentosService: TiposDocumentsService
 	) {
 		super(
 			route,
@@ -52,6 +77,13 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 			authService,
 			notificacionService
 		);
+
+		this.tiposdocumentosService
+			.getTiposDocuments()
+			.pipe(takeUntil(this.ngUnsubscribe))
+			.subscribe((documentos) => {
+				this.tiposDocuments = documentos;
+			});
 	}
 
 	/**
@@ -60,6 +92,8 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 	 */
 	ngOnInit(): void {
 		this.metodoInicial();
+		this.document.id = 'evaluacion';
+		this.document2.id = 'CDP';
 	}
 
 	/**
@@ -70,10 +104,9 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 		const id = Math.random().toString(36).substring(2);
 		const file = e.target.files[0];
 		if (file) {
-			this.nameDocUp = file.name;
-			this.solicitud.nombreInformeFinanciero = this.nameDocUp;
+			this.document.name = file.name;
 		}
-		const filePath = `docs/${this.solicitud.id}/informeFinanciero_${id}`;
+		const filePath = `docs/${this.solicitud.id}/evaluacionCotizaciones_${id}`;
 		const ref = this.storage.ref(filePath);
 		const task = this.storage.upload(filePath, file);
 		this.uploadPercent = task.percentageChanges();
@@ -85,21 +118,86 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 	}
 
 	/**
-	 * Metodo para actualizar la url del archivo de cotizacion
+	 * Método para obtener toda la información del documento a cargar a Firestore
+	 * @param e evento que se activa al seleccion un documento
+	 */
+	onUpload2(e): void {
+		const id = Math.random().toString(36).substring(2);
+		const file = e.target.files[0];
+		if (file) {
+			this.document2.name = file.name;
+		}
+		const filePath = `docs/${this.solicitud.id}/CDP_${id}`;
+		const ref = this.storage.ref(filePath);
+		const task = this.storage.upload(filePath, file);
+		this.uploadPercent2 = task.percentageChanges();
+		task
+			.snapshotChanges()
+			.pipe(finalize(() => (this.urlDoc2 = ref.getDownloadURL())))
+			.pipe(takeUntil(this.ngUnsubscribe))
+			.subscribe();
+	}
+
+	/**
+	 * Método para obtener toda la información del documento a cargar a Firestore
+	 * @param e evento que se activa al seleccion un documento
+	 */
+	onUploadOtro(e): void {
+		const id = Math.random().toString(36).substring(2);
+		const file = e.target.files[0];
+		if (file) {
+			this.newDocumento.name = file.name;
+		}
+		const filePath = `docs/${this.solicitud.id}/Otro_${id}`;
+		const ref = this.storage.ref(filePath);
+		const task = this.storage.upload(filePath, file);
+		this.uploadPercentOtro = task.percentageChanges();
+		task
+			.snapshotChanges()
+			.pipe(finalize(() => (this.urlDocOtro = ref.getDownloadURL())))
+			.pipe(takeUntil(this.ngUnsubscribe))
+			.subscribe();
+	}
+
+	/**
+	 * Metodo para actualizar la url del archivo de evaluación de cotizaciones
 	 */
 	subirArchivo(): void {
 		this.swal.showQuestionMessage('').then((resp) => {
 			if (resp.value) {
 				this.swal.showLoading();
 				this.urlDoc.pipe(takeUntil(this.ngUnsubscribe)).subscribe((url) => {
-					this.solicitud.urlInformeFinanciero = url;
-					this.solicitud.nombreInformeFinanciero = this.nameDocUp;
-					this.solicitudService.updateSolicitud(this.solicitud);
+					this.document.urldocument = url;
+					this.swal.stopLoading();
+				});
+			}
+		});
+	}
 
-					// Reiniciamos las variables.
-					this.urlDoc = null;
-					this.nameDocUp = null;
+	/**
+	 * Metodo para actualizar la url del archivo del CDP
+	 */
+	subirArchivo2(): void {
+		this.swal.showQuestionMessage('').then((resp) => {
+			if (resp.value) {
+				this.swal.showLoading();
+				this.urlDoc2.pipe(takeUntil(this.ngUnsubscribe)).subscribe((url) => {
+					this.document2.urldocument = url;
+					this.swal.stopLoading();
+				});
+			}
+		});
+	}
 
+	/**
+	 * Metodo para actualizar la url del archivo de evaluación de cotizaciones
+	 */
+	subirArchivoOtro(): void {
+		this.swal.showQuestionMessage('').then((resp) => {
+			if (resp.value) {
+				this.swal.showLoading();
+				this.urlDocOtro.pipe(takeUntil(this.ngUnsubscribe)).subscribe((url) => {
+					this.newDocumento.urldocument = url;
 					this.swal.stopLoading();
 				});
 			}
@@ -114,9 +212,28 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 		for (const variable of variables) {
 			if (variable.name == 'comentarios') {
 				this.comentarios = variable.value;
+			} else if (variable.name == 'informeDocumentos') {
+				this.documents = variable.value;
 			}
 		}
+		if (this.documents.length > 0) {
+			this.documents.forEach((documento) => {
+				if (documento.id === 'evaluacion') {
+					this.document = documento;
+				} else if (documento.id === 'CDP') {
+					this.document2 = documento;
+				}
+			});
+		}
 		this.cargando = false;
+	}
+
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya fue realizada.
+	 * @param variables variables guardas en camunda
+	 */
+	getVariables2(variables): void {
+		this.getVariables(variables);
 	}
 
 	/**
@@ -131,5 +248,50 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 	 */
 	cerrarModal(): void {
 		$('#verComentarios').modal('hide');
+	}
+
+	agregarDocumento(): void {
+		this.newDocumento = new Documento();
+		this.newDocumento.label = null;
+		$('#addDocumento').modal('show');
+	}
+
+	cerrarModalDocumento(form: NgForm): void {
+		form.resetForm();
+		$('#addDocumento').modal('hide');
+	}
+
+	guardarDocumento(form: NgForm): void {
+		if (form.invalid) {
+			return;
+		}
+		if (this.otroLabel) {
+			this.newDocumento.label = this.otroLabel;
+		}
+		this.newDocumento.id = Math.random().toString(36).substring(2);
+		this.documents.push(this.newDocumento);
+
+		// Reiniciamos las variables.
+		this.newDocumento = new Documento();
+		form.resetForm();
+		$('#addDocumento').modal('hide');
+	}
+
+	/**
+	 * Método para generar las variables a guardar en Camunda.
+	 */
+	generateVariablesFromFormFields() {
+		this.documents.push(this.document);
+		this.documents.push(this.document2);
+		const variables = {
+			variables: {
+				informeDocumentos: null
+			}
+		};
+
+		variables.variables.informeDocumentos = {
+			value: this.documents
+		};
+		return variables;
 	}
 }

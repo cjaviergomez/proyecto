@@ -20,7 +20,7 @@ import { NotificacionService } from '../../../services/notificacion.service';
 @Component({
 	selector: 'app-subir-cotizacion',
 	templateUrl: './subir-cotizacion.component.html',
-	styleUrls: ['./subir-cotizacion.component.css'],
+	styleUrls: ['./subir-cotizacion.component.css']
 })
 export class subirCotizacionComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	//Para trabajar con el documento1

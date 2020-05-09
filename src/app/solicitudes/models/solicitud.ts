@@ -36,9 +36,6 @@ export interface Solicitud {
 	urlProveedores?: string;
 	nombreProveedores?: string;
 
-	urlInformeFinanciero?: string;
-	nombreInformeFinanciero?: string;
-
 	urlAval?: string;
 	nombreAval?: string;
 

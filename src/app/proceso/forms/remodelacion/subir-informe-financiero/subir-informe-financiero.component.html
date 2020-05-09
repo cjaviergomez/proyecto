@@ -33,8 +33,20 @@
 			</p>
 		</div>
 
+		<div>
+			<p>
+				<span class="badge badge-info">Formatos:</span>
+
+				<a
+					class="ml-2"
+					href="https://www.uis.edu.co/intranet/calidad/documentos/contratacion/Formatos/FCO.59.doc"
+					>Evaluación de cotización (Parte 2)</a
+				>
+			</p>
+		</div>
+
 		<div class="container mt-3" *ngIf="solicitud">
-			<label>Informe Finaciero</label>
+			<label>Evaluación de cotización</label>
 			<div class="input-group" *ngIf="!formKey">
 				<div class="custom-file" *ngIf="usuario">
 					<input
@@ -47,17 +59,13 @@
 						[disabled]="usuario.nombres != solicitud.usuario.nombres"
 					/>
 					<label
-						*ngIf="solicitud.nombreInformeFinanciero"
+						*ngIf="document.name"
 						class="custom-file-label"
 						for="inputGroupFile01"
 						data-browse="Elegir"
-						>{{ solicitud.nombreInformeFinanciero }}</label
+						>{{ document.name }}</label
 					>
-					<label
-						*ngIf="!solicitud.nombreInformeFinanciero"
-						class="custom-file-label"
-						for="inputGroupFile01"
-						data-browse="Elegir"
+					<label *ngIf="!document.name" class="custom-file-label" for="inputGroupFile01" data-browse="Elegir"
 						>Elige un archivo</label
 					>
 				</div>
@@ -84,7 +92,7 @@
 				</div>
 			</div>
 
-			<div *ngIf="nameDocUp" class="progress">
+			<div *ngIf="document && document.name && !document.urldocument" class="progress">
 				<div
 					class="progress-bar progress-bar-striped bg-primary"
 					role="progressbar"
@@ -95,12 +103,97 @@
 			</div>
 			<div *ngIf="formKey">
 				<a
-					[href]="solicitud.urlInformeFinanciero"
+					[href]="document.urldocument"
 					target="_blank"
 					class="list-group-item list-group-item-action list-group-item-dark mb-1"
-					>{{ solicitud.nombreInformeFinanciero }}</a
+					>{{ document.name }}</a
 				>
 			</div>
+		</div>
+
+		<div class="container mt-3" *ngIf="solicitud">
+			<label>CDP</label>
+			<div class="input-group" *ngIf="!formKey">
+				<div class="custom-file" *ngIf="usuario">
+					<input
+						type="file"
+						class="custom-file-input"
+						id="inputGroupFile02"
+						accept=".pdf"
+						(change)="onUpload2($event)"
+						aria-describedby="inputGroupFileAddon02"
+						[disabled]="usuario.nombres != solicitud.usuario.nombres"
+					/>
+					<label
+						*ngIf="document2.name"
+						class="custom-file-label"
+						for="inputGroupFile02"
+						data-browse="Elegir"
+						>{{ document2.name }}</label
+					>
+					<label *ngIf="!document2.name" class="custom-file-label" for="inputGroupFile02" data-browse="Elegir"
+						>Elige un archivo</label
+					>
+				</div>
+				<div class="input-group-append">
+					<button
+						*ngIf="urlDoc2 | async; else btnDisabled"
+						class="btn btn-outline-secondary"
+						type="button"
+						id="inputGroupFileAddon02"
+						(click)="subirArchivo2()"
+					>
+						Guardar
+					</button>
+					<ng-template #btnDisabled>
+						<button
+							class="btn btn-outline-secondary btn-block"
+							type="button"
+							id="inputGroupFileAddon02"
+							disabled="true"
+						>
+							Guardar
+						</button>
+					</ng-template>
+				</div>
+			</div>
+
+			<div *ngIf="document2 && document2.name && !document2.urldocument" class="progress">
+				<div
+					class="progress-bar progress-bar-striped bg-primary"
+					role="progressbar"
+					[style.width]="(uploadPercent2 | async) + '%'"
+				>
+					{{ uploadPercent2 | async | number: '1.0-0' }}%
+				</div>
+			</div>
+			<div *ngIf="formKey">
+				<a
+					[href]="document2.urldocument"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-dark mb-1"
+					>{{ document2.name }}</a
+				>
+			</div>
+		</div>
+
+		<div *ngFor="let documento of documents" class="container mt-3">
+			<div *ngIf="documento.id !== document.id && documento.id !== document2.id">
+				<label>{{ documento.label }}</label>
+				<a
+					[href]="documento.urldocument"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-primary mb-1"
+					>{{ documento.name }}</a
+				>
+			</div>
+		</div>
+
+		<div class="text-center">
+			<button type="button" class="btn btn-outline-primary mt-3" (click)="agregarDocumento()">
+				<fa-icon [icon]="faPlus" title="Agregar"></fa-icon>
+				Agregar documento
+			</button>
 		</div>
 
 		<div class="text-right m-3" *ngIf="usuario">
@@ -109,10 +202,10 @@
 				class="btn btn-primary"
 				(click)="completarTarea()"
 				[disabled]="
-					!solicitud.nombreInformeFinanciero ||
+					!document.urldocument ||
 					formKey ||
 					usuario.nombres != solicitud.usuario.nombres ||
-					nameDocUp != null
+					!document2.urldocument
 				"
 				*ngIf="solicitud"
 			>
@@ -164,6 +257,161 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Modal nuevo documento-->
+<div
+	class="modal fade"
+	id="addDocumento"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="exampleModal"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModal">Agregar documento</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form
+					#formAddDocumento="ngForm"
+					(ngSubmit)="guardarDocumento(formAddDocumento)"
+					novalidate=""
+					class="form-signin"
+				>
+					<div class="form-group mb-2">
+						<label for="nombreM" class="col-form-label">Tipo de documento</label>
+						<div class="mt-2">
+							<select
+								class="form-control"
+								#selectTipo="ngModel"
+								name="selectTipo"
+								[ngClass]="{
+									'is-invalid': formAddDocumento.submitted && formAddDocumento.controls['selectTipo'].errors
+								}"
+								[(ngModel)]="newDocumento.label"
+								npm
+								required
+							>
+								<option value="null" disabled>Seleccione un tipo de documento</option>
+								<option *ngFor="let documento of tiposDocuments" [value]="documento.name">
+									{{ documento.name }}
+								</option>
+							</select>
+							<div
+								class="invalid-feedback animated fadeIn"
+								*ngIf="formAddDocumento.submitted && formAddDocumento.controls['selectTipo'].errors"
+							>
+								Elige un tipo de documento.
+							</div>
+						</div>
+						<div class="form-group mt-2" *ngIf="newDocumento.label == 'Otro'">
+							<input
+								class="form-control"
+								id="otroLabelN"
+								minlength="10"
+								type="text"
+								#otroLabelN="ngModel"
+								[(ngModel)]="otroLabel"
+								maxlength="500"
+								required
+								placeholder="Tipo de documento"
+								name="otroLabelN"
+								[ngClass]="{
+									'is-invalid':
+										formAddDocumento.submitted &&
+										formAddDocumento.controls['otroLabelN'] &&
+										formAddDocumento.controls['otroLabelN'].errors
+								}"
+							/>
+							<div
+								class="invalid-feedback animated fadeIn"
+								*ngIf="
+									formAddDocumento.submitted &&
+									formAddDocumento.controls['otroLabelN'] &&
+									formAddDocumento.controls['otroLabelN'].errors
+								"
+							>
+								Introduce un nombre válido.
+							</div>
+						</div>
+						<div class="input-group mt-2">
+							<div class="custom-file" *ngIf="usuario">
+								<input
+									type="file"
+									class="custom-file-input"
+									id="inputOtroDocument"
+									(change)="onUploadOtro($event)"
+									aria-describedby="inputGroupFile01"
+								/>
+								<label
+									*ngIf="newDocumento && newDocumento.name"
+									class="custom-file-label"
+									for="inputOtroDocument"
+									data-browse="Elegir"
+									>{{ newDocumento.name }}</label
+								>
+								<label
+									*ngIf="newDocumento && !newDocumento.name"
+									class="custom-file-label"
+									for="inputOtroDocument"
+									data-browse="Elegir"
+									>Elige un archivo</label
+								>
+							</div>
+							<div class="input-group-append">
+								<button
+									*ngIf="urlDocOtro | async; else btnDisabled"
+									class="btn btn-outline-secondary"
+									type="button"
+									id="inputOtroDocument1"
+									(click)="subirArchivoOtro()"
+								>
+									Guardar
+								</button>
+								<ng-template #btnDisabled>
+									<button
+										class="btn btn-outline-secondary btn-block"
+										type="button"
+										id="inputOtroDocument2"
+										disabled="true"
+									>
+										Guardar
+									</button>
+								</ng-template>
+							</div>
+						</div>
+
+						<div *ngIf="newDocumento && newDocumento.name" class="progress">
+							<div
+								class="progress-bar progress-bar-striped bg-primary"
+								role="progressbar"
+								[style.width]="(uploadPercentOtro | async) + '%'"
+							>
+								{{ uploadPercentOtro | async | number: '1.0-0' }}%
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" (click)="cerrarModalDocumento(formAddDocumento)">
+							Cerrar
+						</button>
+						<button
+							type="submit"
+							class="btn btn-primary"
+							[disabled]="!formAddDocumento.form.valid || !newDocumento.urldocument"
+						>
+							Guardar
+						</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

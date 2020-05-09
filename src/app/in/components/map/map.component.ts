@@ -27,6 +27,7 @@ import { UsuarioService } from '../../../admin/services/usuario.service';
 import { AuthService } from '../../../out/services/auth.service';
 import { ShowMessagesService } from '../../../out/services/show-messages.service';
 import { SolicitudService } from '../../../solicitudes/services/solicitud.service';
+import { MeshSymbol3D } from 'esri/symbols';
 
 @Component({
 	selector: 'app-esri-map',
@@ -95,7 +96,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 			let layerSolicitudes: Solicitud[];
 
 			//Simbolo para un elmento con solicitud rechazada.
-			const rechaSym: esri.MeshSymbol3D = {
+			const rechaSym = {
 				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
 				symbolLayers: [
 					{
@@ -108,7 +109,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 			};
 
 			//Simbolo para un elemento con solicitud pendiente.
-			const pendienteSym: esri.MeshSymbol3D = {
+			const pendienteSym = {
 				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
 				symbolLayers: [
 					{
@@ -121,7 +122,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 			};
 
 			//Simbolo para un elmento con solicitud en trámite.
-			const entramiteeSym: esri.MeshSymbol3D = {
+			const entramiteeSym = {
 				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
 				symbolLayers: [
 					{
@@ -134,7 +135,7 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 			};
 
 			//Simbolo para un elmento con solicitud en trámite.
-			const notificacionSym: esri.MeshSymbol3D = {
+			const notificacionSym = {
 				type: 'mesh-3d', // autocasts as new MeshSymbol3D()
 				symbolLayers: [
 					{
@@ -300,7 +301,8 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 								const renderer: esri.UniqueValueRenderer = {
 									type: 'unique-value', // autocasts as new UniqueValueRenderer()
 									field: 'OBJECTID_1',
-									uniqueValueInfos: []
+									uniqueValueInfos: [],
+									...BuildingSceneLayer
 								};
 
 								layerSolicitudes.forEach((solicitudLayer) => {
@@ -314,14 +316,20 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 									if (solicitudLayer.estado === 'Pendiente') {
 										renderer.uniqueValueInfos.push({
 											value: solicitudLayer.objectID,
-											symbol: pendienteSym
+											symbol: pendienteSym,
+											...BuildingSceneLayer
 										});
 									} else if (solicitudLayer.estado === 'Rechazada') {
-										renderer.uniqueValueInfos.push({ value: solicitudLayer.objectID, symbol: rechaSym });
+										renderer.uniqueValueInfos.push({
+											value: solicitudLayer.objectID,
+											symbol: rechaSym,
+											...BuildingSceneLayer
+										});
 									} else if (solicitudLayer.estado === 'En trámite') {
 										renderer.uniqueValueInfos.push({
 											value: solicitudLayer.objectID,
-											symbol: entramiteeSym
+											symbol: entramiteeSym,
+											...BuildingSceneLayer
 										});
 									}
 
@@ -330,7 +338,8 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 										notifySolicitud.forEach((notificacion) => {
 											renderer.uniqueValueInfos.push({
 												value: solicitudLayer.objectID,
-												symbol: notificacionSym
+												symbol: notificacionSym,
+												...BuildingSceneLayer
 											});
 										});
 									}

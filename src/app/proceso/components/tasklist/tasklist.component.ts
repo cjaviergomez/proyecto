@@ -46,7 +46,7 @@ export class TasklistComponent implements OnInit, OnDestroy {
 	seccion: number;
 	solicitud: Solicitud[];
 	unidad: Unidad;
-	model = new MyProcessData([], [], [], '', false);
+	model = new MyProcessData([], [], [], [], '', false);
 
 	// Iconos
 	faWindowClose = faWindowClose;
