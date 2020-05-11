@@ -39,9 +39,6 @@ export interface Solicitud {
 	urlAval?: string;
 	nombreAval?: string;
 
-	urlInicioObra?: string;
-	nombreInicioObra?: string;
-
 	urlMinuta?: string;
 	nombreMinuta?: string;
 

@@ -26,20 +26,44 @@
 			</p>
 		</div>
 
-		<div class="container mt-3" *ngIf="solicitud">
+		<div class="container mt-3" *ngIf="document">
 			<label>Informe Finaciero</label>
 			<div>
 				<a
-					[href]="solicitud.urlInformeFinanciero"
+					[href]="document.urldocument"
 					target="_blank"
 					class="list-group-item list-group-item-action list-group-item-dark mb-1"
-					>{{ solicitud.nombreInformeFinanciero }}</a
+					>{{ document.name }}</a
+				>
+			</div>
+		</div>
+
+		<div class="container mt-3" *ngIf="document2">
+			<label>CDP</label>
+			<div>
+				<a
+					[href]="document2.urldocument"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-dark mb-1"
+					>{{ document2.name }}</a
+				>
+			</div>
+		</div>
+
+		<div *ngFor="let documento of documents" class="container mt-3">
+			<div *ngIf="documento.id !== document.id && documento.id !== document2.id">
+				<label>{{ documento.label }}</label>
+				<a
+					[href]="documento.urldocument"
+					target="_blank"
+					class="list-group-item list-group-item-action list-group-item-primary mb-1"
+					>{{ documento.name }}</a
 				>
 			</div>
 		</div>
 
 		<!-- Botones-->
-		<div class="col text-right mt-3" *ngIf="usuario">
+		<div class="col text-right mt-3 mb-5" *ngIf="usuario">
 			<button
 				type="button"
 				class="btn btn-secondary mr-1"

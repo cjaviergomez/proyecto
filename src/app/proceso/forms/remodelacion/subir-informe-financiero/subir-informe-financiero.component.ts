@@ -5,7 +5,7 @@ import { NgForm } from '@angular/forms';
 import { takeUntil, finalize } from 'rxjs/operators';
 declare let $: any; // Para trabajar con el modal
 
-import { faPlus } from '@fortawesome/free-solid-svg-icons'; // Iconos
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
@@ -36,14 +36,17 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 	//Para trabajar con el documento1
 	uploadPercent: Observable<number>;
 	urlDoc: Observable<string>;
+	nameUp: string;
 
 	//Para trabajar con el documento2
 	uploadPercent2: Observable<number>;
 	urlDoc2: Observable<string>;
+	nameUp2: string;
 
 	//Para trabajar con archivos extras a subir
 	uploadPercentOtro: Observable<number>;
 	urlDocOtro: Observable<string>;
+	nameUpOtro: string;
 
 	//Para trabajar con los documentos
 	documents: Documento[] = [];
@@ -54,6 +57,7 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 	otroLabel: string; //Variable para asignarle el nombre al label en caso de que se seleccione otro documento
 
 	faPlus = faPlus;
+	faTrash = faTrashAlt;
 
 	constructor(
 		route: ActivatedRoute,
@@ -92,8 +96,6 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 	 */
 	ngOnInit(): void {
 		this.metodoInicial();
-		this.document.id = 'evaluacion';
-		this.document2.id = 'CDP';
 	}
 
 	/**
@@ -104,9 +106,10 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 		const id = Math.random().toString(36).substring(2);
 		const file = e.target.files[0];
 		if (file) {
-			this.document.name = file.name;
+			this.nameUp = file.name;
+			this.document.name = this.nameUp;
 		}
-		const filePath = `docs/${this.solicitud.id}/evaluacionCotizaciones_${id}`;
+		const filePath = `docs/${this.solicitud.id}/evaluacionCotizaciones_${id}${this.nameUp}`;
 		const ref = this.storage.ref(filePath);
 		const task = this.storage.upload(filePath, file);
 		this.uploadPercent = task.percentageChanges();
@@ -125,9 +128,10 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 		const id = Math.random().toString(36).substring(2);
 		const file = e.target.files[0];
 		if (file) {
-			this.document2.name = file.name;
+			this.nameUp2 = file.name;
+			this.document2.name = this.nameUp2;
 		}
-		const filePath = `docs/${this.solicitud.id}/CDP_${id}`;
+		const filePath = `docs/${this.solicitud.id}/CDP_${id}${this.nameUp2}`;
 		const ref = this.storage.ref(filePath);
 		const task = this.storage.upload(filePath, file);
 		this.uploadPercent2 = task.percentageChanges();
@@ -146,9 +150,10 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 		const id = Math.random().toString(36).substring(2);
 		const file = e.target.files[0];
 		if (file) {
-			this.newDocumento.name = file.name;
+			this.nameUpOtro = file.name;
+			this.newDocumento.name = this.nameUpOtro;
 		}
-		const filePath = `docs/${this.solicitud.id}/Otro_${id}`;
+		const filePath = `docs/${this.solicitud.id}/${id}${this.nameUpOtro}`;
 		const ref = this.storage.ref(filePath);
 		const task = this.storage.upload(filePath, file);
 		this.uploadPercentOtro = task.percentageChanges();
@@ -168,6 +173,8 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 				this.swal.showLoading();
 				this.urlDoc.pipe(takeUntil(this.ngUnsubscribe)).subscribe((url) => {
 					this.document.urldocument = url;
+					//Reiuniciamos las variables
+					this.nameUp = null;
 					this.swal.stopLoading();
 				});
 			}
@@ -183,6 +190,8 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 				this.swal.showLoading();
 				this.urlDoc2.pipe(takeUntil(this.ngUnsubscribe)).subscribe((url) => {
 					this.document2.urldocument = url;
+					//Reiuniciamos las variables
+					this.nameUp2 = null;
 					this.swal.stopLoading();
 				});
 			}
@@ -198,6 +207,8 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 				this.swal.showLoading();
 				this.urlDocOtro.pipe(takeUntil(this.ngUnsubscribe)).subscribe((url) => {
 					this.newDocumento.urldocument = url;
+					//Reiuniciamos las variables
+					this.nameUpOtro = null;
 					this.swal.stopLoading();
 				});
 			}
@@ -222,6 +233,26 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 					this.document = documento;
 				} else if (documento.id === 'CDP') {
 					this.document2 = documento;
+				}
+			});
+		}
+		if (!this.document.id) {
+			this.document.id = 'evaluacion';
+			this.document.label = 'Evaluación de cotizaciones';
+		} else {
+			this.documents.forEach((documento, index) => {
+				if (documento.id === this.document.id) {
+					this.documents.splice(index, 1);
+				}
+			});
+		}
+		if (!this.document2.id) {
+			this.document2.id = 'CDP';
+			this.document2.label = 'CDP';
+		} else {
+			this.documents.forEach((documento, index) => {
+				if (documento.id === this.document2.id) {
+					this.documents.splice(index, 1);
 				}
 			});
 		}
@@ -293,5 +324,9 @@ export class subirInformeFinancieroComponent extends ComunTaskComponent implemen
 			value: this.documents
 		};
 		return variables;
+	}
+
+	eliminarDocumento(index: number): void {
+		this.documents.splice(index, 1);
 	}
 }

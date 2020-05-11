@@ -33,7 +33,8 @@ import {
 	faArrowCircleRight,
 	faArrowCircleLeft,
 	faSave,
-	faSyncAlt
+	faSyncAlt,
+	faTrashAlt
 } from '@fortawesome/free-solid-svg-icons'; // Iconos
 
 @Component({
@@ -55,6 +56,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 	faArrowCircleLeft = faArrowCircleLeft; // Flecha del botón atrás
 	faSave = faSave;
 	faSyncAlt = faSyncAlt;
+	faTrashAlt = faTrashAlt;
 
 	//Para trabajar con el documento a subir
 	uploadPercent: Observable<number>;
@@ -286,5 +288,9 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 				});
 			}
 		});
+	}
+
+	eliminarDocumento(index: number): void {
+		this.documents.splice(index, 1);
 	}
 }

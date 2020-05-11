@@ -56,47 +56,47 @@
 			</div>
 
 			<label class="mt-2">Informe Financiero:</label>
-			<div>
+			<div *ngFor="let documento of documents.reverse()" class="mt-2">
 				<a
-					[href]="solicitud.urlInformeFinanciero"
+					[href]="documento.urldocument"
 					target="_blank"
 					class="list-group-item list-group-item-action list-group-item-dark"
-					>{{ solicitud.nombreInformeFinanciero }}</a
+					>{{ documento.label }} - {{ documento.name }}</a
 				>
+			</div>
+
+			<!-- Botones-->
+			<div class="col text-right mt-3 mb-5" *ngIf="usuario">
+				<button
+					type="button"
+					class="btn btn-secondary mr-1"
+					[disabled]="usuario.perfil.nombre != task.assignee || formKey"
+					(click)="terminarTarea(false)"
+				>
+					Rechazar
+					<fa-icon [icon]="faTimes" title="Rechazar"></fa-icon>
+				</button>
+				<button
+					type="button"
+					class="btn btn-primary"
+					[disabled]="usuario.perfil.nombre != task.assignee || formKey"
+					(click)="terminarTarea(true)"
+				>
+					Aceptar
+					<fa-icon [icon]="faCheck" title="Aceptar"></fa-icon>
+				</button>
 			</div>
 		</div>
 
-		<!-- Botones-->
-		<div class="col text-right mt-3 mb-5" *ngIf="usuario">
-			<button
-				type="button"
-				class="btn btn-secondary mr-1"
-				[disabled]="usuario.perfil.nombre != task.assignee || formKey"
-				(click)="terminarTarea(false)"
-			>
-				Rechazar
-				<fa-icon [icon]="faTimes" title="Rechazar"></fa-icon>
-			</button>
-			<button
-				type="button"
-				class="btn btn-primary"
-				[disabled]="usuario.perfil.nombre != task.assignee || formKey"
-				(click)="terminarTarea(true)"
-			>
-				Aceptar
-				<fa-icon [icon]="faCheck" title="Aceptar"></fa-icon>
-			</button>
+		<!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+		<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
+			<h4 class="alert-heading">Cargando</h4>
+			<p>
+				<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+			</p>
+			<p class="mb-0">
+				Espere por favor
+			</p>
 		</div>
-	</div>
-
-	<!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
-	<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
-		<h4 class="alert-heading">Cargando</h4>
-		<p>
-			<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-		</p>
-		<p class="mb-0">
-			Espere por favor
-		</p>
 	</div>
 </div>

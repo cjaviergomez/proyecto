@@ -4,4 +4,5 @@ export class Documento {
 	label: string;
 	urldocument?: string;
 	descripcion?: string;
+	fechaUp?: string; //Fecha de subida del documento
 }

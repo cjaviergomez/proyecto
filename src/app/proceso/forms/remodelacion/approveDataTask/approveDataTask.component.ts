@@ -157,6 +157,7 @@ export class approveDataTaskComponent extends ComunTaskComponent implements OnIn
 				.showQuestionMessage('responderSolicitud', null, 'aceptar')
 				.then((resp) => {
 					if (resp.value) {
+						console.log(this.solicitud);
 						this.solicitudService
 							.updateSolicitud(this.solicitud)
 							.then(() => {

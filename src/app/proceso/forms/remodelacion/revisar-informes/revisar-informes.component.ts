@@ -6,6 +6,9 @@ import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
 
+// Modelos
+import { Documento } from 'app/proceso/models/documento';
+
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
 import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
@@ -23,6 +26,8 @@ export class revisarInformesComponent extends ComunTaskComponent implements OnIn
 	validos: boolean;
 	faTimes = faTimes;
 	faCheck = faCheck;
+
+	documents: Documento[] = [];
 
 	constructor(
 		route: ActivatedRoute,
@@ -88,5 +93,26 @@ export class revisarInformesComponent extends ComunTaskComponent implements OnIn
 			value: this.validos
 		};
 		return variables;
+	}
+
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea aun NO se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
+	getVariables(variables): void {
+		for (const variable of variables) {
+			if (variable.name == 'informeDocumentos') {
+				this.documents = variable.value;
+			}
+		}
+		this.cargando = false;
+	}
+
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
+	getVariables2(variables): void {
+		this.getVariables(variables);
 	}
 }

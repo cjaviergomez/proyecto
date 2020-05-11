@@ -268,14 +268,24 @@
 						<label>Documentación (Opcional)</label>
 						<p>Espacio para subir documentación extra: Planos, cotizaciones, etcétera.</p>
 
-						<div *ngFor="let documento of documents">
+						<div *ngFor="let documento of documents; let i = index" class="m-3">
 							<label>{{ documento.label }}</label>
-							<a
-								[href]="documento.urldocument"
-								target="_blank"
-								class="list-group-item list-group-item-action list-group-item-primary mb-1"
-								>{{ documento.name }}</a
-							>
+							<div class="row">
+								<a
+									[href]="documento.urldocument"
+									target="_blank"
+									class="list-group-item list-group-item-action list-group-item-primary mb-1 col-11 text-left"
+									>{{ documento.name }}
+								</a>
+								<button
+									*ngIf="usuario"
+									type="button"
+									class="btn btn-outline-danger btn-sm float-right mb-1 col ml-1"
+									(click)="eliminarDocumento(i)"
+								>
+									<fa-icon [icon]="faTrashAlt" title="Borrar"></fa-icon>
+								</button>
+							</div>
 						</div>
 
 						<div class="text-center">

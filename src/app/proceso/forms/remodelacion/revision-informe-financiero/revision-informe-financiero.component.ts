@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
+import { Documento } from 'app/proceso/models/documento';
 
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
@@ -19,12 +20,17 @@ import { NotificacionService } from 'app/proceso/services/notificacion.service';
 @Component({
 	selector: 'app-revision-informe-financiero',
 	templateUrl: './revision-informe-financiero.component.html',
-	styleUrls: ['./revision-informe-financiero.component.css'],
+	styleUrls: ['./revision-informe-financiero.component.css']
 })
 export class revisionInformeFinancieroComponent extends ComunTaskComponent implements OnInit, OnDestroy {
 	valido: boolean;
 	comentarios: string[] = [];
 	comentario: string;
+
+	//Para trabajar con los documentos enviados anteriormente.
+	documents: Documento[];
+	document: Documento;
+	document2: Documento;
 
 	faTimes = faTimes;
 	faCheck = faCheck;
@@ -70,7 +76,7 @@ export class revisionInformeFinancieroComponent extends ComunTaskComponent imple
 				text: `¿Está seguro que desea aceptar los datos y continuar?`,
 				type: 'question',
 				showConfirmButton: true,
-				showCancelButton: true,
+				showCancelButton: true
 			}).then((resp) => {
 				if (resp.value) {
 					const variables = this.generateVariablesFromFormFields(); //Generamos las variables a enviar.
@@ -84,7 +90,7 @@ export class revisionInformeFinancieroComponent extends ComunTaskComponent imple
 				text: `¿Está seguro que desea rechazar?`,
 				type: 'question',
 				showConfirmButton: true,
-				showCancelButton: true,
+				showCancelButton: true
 			}).then((resp) => {
 				if (resp.value) {
 					this.mostrarModal();
@@ -131,14 +137,14 @@ export class revisionInformeFinancieroComponent extends ComunTaskComponent imple
 		const variables = {
 			variables: {
 				valido: null,
-				comentarios: null,
-			},
+				comentarios: null
+			}
 		};
 		variables.variables.valido = {
-			value: this.valido,
+			value: this.valido
 		};
 		variables.variables.comentarios = {
-			value: this.comentarios,
+			value: this.comentarios
 		};
 
 		return variables;
@@ -152,8 +158,27 @@ export class revisionInformeFinancieroComponent extends ComunTaskComponent imple
 		for (const variable of variables) {
 			if (variable.name == 'comentarios') {
 				this.comentarios = variable.value;
+			} else if (variable.name == 'informeDocumentos') {
+				this.documents = variable.value;
 			}
 		}
+		if (this.documents.length > 0) {
+			this.documents.forEach((documento) => {
+				if (documento.id === 'evaluacion') {
+					this.document = documento;
+				} else if (documento.id === 'CDP') {
+					this.document2 = documento;
+				}
+			});
+		}
 		this.cargando = false;
+	}
+
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
+	getVariables2(variables): void {
+		this.getVariables(variables);
 	}
 }

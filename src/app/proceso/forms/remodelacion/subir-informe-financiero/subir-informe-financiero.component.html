@@ -1,6 +1,6 @@
 <div class="container">
 	<div *ngIf="!cargando && task">
-		<button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+		<button type="button" class="btn btn-outline-primary float-right mt-4 mr-3" (click)="irATareas()">
 			<fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
 			Atrás
 		</button>
@@ -92,7 +92,7 @@
 				</div>
 			</div>
 
-			<div *ngIf="document && document.name && !document.urldocument" class="progress">
+			<div *ngIf="nameUp" class="progress">
 				<div
 					class="progress-bar progress-bar-striped bg-primary"
 					role="progressbar"
@@ -158,7 +158,7 @@
 				</div>
 			</div>
 
-			<div *ngIf="document2 && document2.name && !document2.urldocument" class="progress">
+			<div *ngIf="nameUp2" class="progress">
 				<div
 					class="progress-bar progress-bar-striped bg-primary"
 					role="progressbar"
@@ -177,35 +177,48 @@
 			</div>
 		</div>
 
-		<div *ngFor="let documento of documents" class="container mt-3">
+		<div *ngFor="let documento of documents; let i = index" class="container mt-3">
 			<div *ngIf="documento.id !== document.id && documento.id !== document2.id">
 				<label>{{ documento.label }}</label>
-				<a
-					[href]="documento.urldocument"
-					target="_blank"
-					class="list-group-item list-group-item-action list-group-item-primary mb-1"
-					>{{ documento.name }}</a
-				>
+				<div class="row m-1">
+					<a
+						[href]="documento.urldocument"
+						target="_blank"
+						class="list-group-item list-group-item-action list-group-item-primary mb-1 col-11 text-left"
+						>{{ documento.name }}
+					</a>
+					<button
+						*ngIf="usuario && solicitud"
+						type="button"
+						class="btn btn-outline-danger btn-sm float-right mb-1 col ml-1"
+						(click)="eliminarDocumento(i)"
+						[disabled]="usuario.id != solicitud.usuario.id || formKey"
+					>
+						<fa-icon [icon]="faTrash" title="Borrar"></fa-icon>
+					</button>
+				</div>
 			</div>
 		</div>
 
-		<div class="text-center">
-			<button type="button" class="btn btn-outline-primary mt-3" (click)="agregarDocumento()">
+		<div class="text-center mt-2" *ngIf="!formKey && usuario && solicitud">
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				(click)="agregarDocumento()"
+				[disabled]="usuario.id != solicitud.usuario.id"
+			>
 				<fa-icon [icon]="faPlus" title="Agregar"></fa-icon>
 				Agregar documento
 			</button>
 		</div>
 
-		<div class="text-right m-3" *ngIf="usuario">
+		<div class="text-right m-3 mb-5" *ngIf="usuario">
 			<button
 				type="button"
 				class="btn btn-primary"
 				(click)="completarTarea()"
 				[disabled]="
-					!document.urldocument ||
-					formKey ||
-					usuario.nombres != solicitud.usuario.nombres ||
-					!document2.urldocument
+					!document.urldocument || formKey || usuario.id != solicitud.usuario.id || !document2.urldocument
 				"
 				*ngIf="solicitud"
 			>
@@ -213,50 +226,50 @@
 				<fa-icon [icon]="faSave" title="Enviar"></fa-icon>
 			</button>
 		</div>
-
-		<!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
-		<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
-			<h4 class="alert-heading">Cargando</h4>
-			<p>
-				<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-			</p>
-			<p class="mb-0">
-				Espere por favor
-			</p>
-		</div>
 	</div>
 
-	<!--Modal comentario-->
-	<div
-		class="modal fade"
-		id="verComentarios"
-		tabindex="-1"
-		role="dialog"
-		aria-labelledby="exampleModalLabel"
-		aria-hidden="true"
-	>
-		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel1">Comentarios</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+	<!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+	<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
+		<h4 class="alert-heading">Cargando</h4>
+		<p>
+			<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+		</p>
+		<p class="mb-0">
+			Espere por favor
+		</p>
+	</div>
+</div>
+
+<!--Modal comentario-->
+<div
+	class="modal fade"
+	id="verComentarios"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="exampleModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel1">Comentarios</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>
+					Los siguientes son los comentarios que se han generado al rechazar la documentación enviada
+					anteriormente. Por favor tengalos en cuenta y envíe el documento nuevamente.
+				</p>
+				<div *ngFor="let comentario of comentarios">
+					<a class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{
+						comentario
+					}}</a>
 				</div>
-				<div class="modal-body">
-					<p>
-						Los siguientes son los comentarios que se han generado al rechazar la documentación enviada
-						anteriormente. Por favor tengalos en cuenta y envíe el documento nuevamente.
-					</p>
-					<div *ngFor="let comentario of comentarios">
-						<a class="list-group-item list-group-item-action list-group-item-secondary mb-1">{{
-							comentario
-						}}</a>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
-				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
 			</div>
 		</div>
 	</div>
@@ -389,7 +402,7 @@
 							</div>
 						</div>
 
-						<div *ngIf="newDocumento && newDocumento.name" class="progress">
+						<div *ngIf="nameUpOtro" class="progress">
 							<div
 								class="progress-bar progress-bar-striped bg-primary"
 								role="progressbar"

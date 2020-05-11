@@ -8,6 +8,9 @@ import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
 
+// Modelos
+import { Documento } from 'app/proceso/models/documento';
+
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
 import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
@@ -25,6 +28,10 @@ export class verificarDocumentosComponent extends ComunTaskComponent implements 
 	docsInicioObra: boolean;
 	comentariosInicioObra: string[] = [];
 	comentario: string;
+
+	//Para trabajar con los documentos enviados anteriormente.
+	documents: Documento[];
+	document: Documento;
 
 	faTimes = faTimes;
 	faCheck = faCheck;
@@ -154,8 +161,26 @@ export class verificarDocumentosComponent extends ComunTaskComponent implements 
 				this.comentariosInicioObra = variable.value;
 			} else if (variable.name == 'interventorId') {
 				this.interventorId = variable.value;
+			} else if (variable.name == 'documentsInicioObra') {
+				this.documents = variable.value;
 			}
 		}
+
+		if (this.documents.length > 0) {
+			this.documents.forEach((documento) => {
+				if (documento.id === 'actaInicio') {
+					this.document = documento;
+				}
+			});
+		}
 		this.cargando = false;
+	}
+
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea ya se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
+	getVariables2(variables): void {
+		this.getVariables(variables);
 	}
 }
