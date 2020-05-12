@@ -7,9 +7,8 @@
 		<h5 class="display-4">{{ task.name }}</h5>
 		<p class="lead">
 			Esta tarea tiene como proposito subir la documentación para hacer seguimiento de la obra. Tenga en
-			cuenta que puede ir actualizando el documento a subir, al final el documento de seguimiento de obra será
-			uno sólo; el documento final con cada uno de los reportes. Al terminar la tarea no podrá actualizar el
-			documento.
+			cuenta que cada día puede subir la documentación necesaria para el seguimiento de la obra. Por favor use
+			el formato de referencia.
 		</p>
 
 		<div class="row">
@@ -56,7 +55,7 @@
 						type="button"
 						class="btn btn-outline-danger btn-sm float-right mb-1 col ml-1"
 						(click)="eliminarDocumento(i)"
-						[disabled]="usuario.id != solicitud.usuario.id || formKey"
+						[disabled]="usuario.id != solicitud.usuario.id || formKey || documento.fechaUp !== fecha"
 					>
 						<fa-icon [icon]="faTrash" title="Borrar"></fa-icon>
 					</button>
@@ -79,7 +78,7 @@
 		<div class="text-right m-3" *ngIf="usuario">
 			<button
 				type="button"
-				class="btn btn-primary"
+				class="btn btn-primary mb-5"
 				(click)="completarTarea()"
 				[disabled]="
 					documentsSeguimientoObra.length === 0 || formKey || usuario.perfil.nombre != task.assignee

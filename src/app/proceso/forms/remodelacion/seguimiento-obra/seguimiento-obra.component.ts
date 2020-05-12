@@ -143,6 +143,14 @@ export class seguimientoObraComponent extends ComunTaskComponent implements OnIn
 		this.cargando = false;
 	}
 
+	/**
+	 * Metodo para agregar las variables historicas al modelo cuando la tarea aun NO se ha realizado
+	 * @param variables variables que han sido guardas en camunda con anterioridad.
+	 */
+	getVariables2(variables): void {
+		this.getVariables(variables);
+	}
+
 	agregarDocumento(): void {
 		this.newDocumento = new Documento();
 		this.newDocumento.label = null;
@@ -165,16 +173,27 @@ export class seguimientoObraComponent extends ComunTaskComponent implements OnIn
 		this.newDocumento.id = Math.random().toString(36).substring(2);
 		this.documentsSeguimientoObra.push(this.newDocumento);
 
-		// Reiniciamos las variables.
-		this.newDocumento = new Documento();
-		form.resetForm();
-		$('#addDocumento').modal('hide');
+		const variables = this.generateVariablesFromFormFields2();
+
+		// Usamos el servicio para actualizar la variable
+		this.camundaRestService
+			.updateVariables(
+				this.procesoId,
+				variables.variables.documentsSeguimientoObra,
+				'documentsSeguimientoObra'
+			)
+			.subscribe((resp) => {
+				// Reiniciamos las variables.
+				this.newDocumento = new Documento();
+				form.resetForm();
+				$('#addDocumento').modal('hide');
+			});
 	}
 
 	/**
 	 * Método para generar las variables a guardar en Camunda.
 	 */
-	generateVariablesFromFormFields() {
+	generateVariablesFromFormFields2() {
 		const variables = {
 			variables: {
 				documentsSeguimientoObra: null
@@ -189,5 +208,13 @@ export class seguimientoObraComponent extends ComunTaskComponent implements OnIn
 
 	eliminarDocumento(index: number): void {
 		this.documentsSeguimientoObra.splice(index, 1);
+		const variables = this.generateVariablesFromFormFields2();
+		this.camundaRestService
+			.updateVariables(
+				this.procesoId,
+				variables.variables.documentsSeguimientoObra,
+				'documentsSeguimientoObra'
+			)
+			.subscribe();
 	}
 }
