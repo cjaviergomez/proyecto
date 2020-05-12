@@ -1,6 +1,6 @@
 <div class="container">
 	<div *ngIf="!cargando && task">
-		<button type="button" class="btn btn-outline-primary float-right m-4" (click)="irATareas()">
+		<button type="button" class="btn btn-outline-primary float-right mt-4 mr-1" (click)="irATareas()">
 			<fa-icon [icon]="faArrowCircleLeft" title="Atrás"></fa-icon>
 			Atrás
 		</button>
@@ -26,20 +26,23 @@
 			</p>
 		</div>
 
-		<div class="container mt-3" *ngIf="solicitud">
+		<div class="mt-3" *ngIf="solicitud">
 			<label>Documentos de entrega de reforma</label>
-			<div>
-				<a
-					[href]="solicitud.urlEntregaR"
-					target="_blank"
-					class="list-group-item list-group-item-action list-group-item-dark mb-1"
-					>{{ solicitud.nombreEntregaR }}</a
-				>
+			<div *ngFor="let documento of documentsEntregaReforma; let i = index" class="mt-3">
+				<label>{{ documento.label }}</label>
+				<div class="row m-1">
+					<a
+						[href]="documento.urldocument"
+						target="_blank"
+						class="list-group-item list-group-item-action list-group-item-dark mb-1 col text-left"
+						>{{ documento.name }}
+					</a>
+				</div>
 			</div>
 		</div>
 
 		<!-- Botones-->
-		<div class="col text-right mt-3" *ngIf="usuario">
+		<div class="col text-right mt-3 mb-5 p-0" *ngIf="usuario">
 			<button
 				type="button"
 				class="btn btn-secondary mr-1"
@@ -59,82 +62,81 @@
 				<fa-icon [icon]="faCheck" title="Aceptar"></fa-icon>
 			</button>
 		</div>
-
-		<!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
-		<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
-			<h4 class="alert-heading">Cargando</h4>
-			<p>
-				<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
-			</p>
-			<p class="mb-0">
-				Espere por favor
-			</p>
-		</div>
 	</div>
+	<!--Div para mostrar un mensaje de cargando mientras se obtiene la información del formulario de la base de datos-->
+	<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster container">
+		<h4 class="alert-heading">Cargando</h4>
+		<p>
+			<fa-icon [icon]="faSyncAlt" [spin]="true" size="2x"></fa-icon>
+		</p>
+		<p class="mb-0">
+			Espere por favor
+		</p>
+	</div>
+</div>
 
-	<!--Modal comentario-->
-	<div
-		class="modal fade"
-		id="addComentario"
-		tabindex="-1"
-		role="dialog"
-		aria-labelledby="exampleModalLabel"
-		aria-hidden="true"
-	>
-		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel1">Enviar comentario</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<p>Introduce el motivo del rechazo de la documentación</p>
-					<form
-						#formComentario="ngForm"
-						(ngSubmit)="enviarComentario(formComentario)"
-						novalidate=""
-						class="form-signin"
+<!--Modal comentario-->
+<div
+	class="modal fade"
+	id="addComentario"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="exampleModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel1">Enviar comentario</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Introduce el motivo del rechazo de la documentación</p>
+				<form
+					#formComentario="ngForm"
+					(ngSubmit)="enviarComentario(formComentario)"
+					novalidate=""
+					class="form-signin"
+				>
+					<div class="form-group">
+						<label for="comentario">Comentario:</label>
+						<textarea
+							class="form-control"
+							id="comentarioR"
+							#comentarioR="ngModel"
+							[(ngModel)]="comentario"
+							rows="3"
+							minlength="10"
+							maxlength="40"
+							name="comentarioR"
+							[ngClass]="{
+								'is-invalid':
+									formComentario.submitted &&
+									formComentario.controls['comentarioR'] &&
+									formComentario.controls['comentarioR'].errors
+							}"
+							required
+						></textarea>
+					</div>
+					<div
+						class="invalid-feedback animated fadeIn"
+						*ngIf="
+							formComentario.submitted &&
+							formComentario.controls['comentarioR'] &&
+							formComentario.controls['comentarioR'].errors
+						"
 					>
-						<div class="form-group">
-							<label for="comentario">Comentario:</label>
-							<textarea
-								class="form-control"
-								id="comentarioR"
-								#comentarioR="ngModel"
-								[(ngModel)]="comentario"
-								rows="3"
-								minlength="10"
-								maxlength="40"
-								required
-								name="comentarioR"
-								[ngClass]="{
-									'is-invalid':
-										formComentario.submitted &&
-										formComentario.controls['comentarioR'] &&
-										formComentario.controls['comentarioR'].errors
-								}"
-							></textarea>
-						</div>
-						<div
-							class="invalid-feedback animated fadeIn"
-							*ngIf="
-								formComentario.submitted &&
-								formComentario.controls['comentarioR'] &&
-								formComentario.controls['comentarioR'].errors
-							"
-						>
-							Introduce un nombre válido.
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" (click)="cerrarModal(formComentario)">
-								Cerrar
-							</button>
-							<button type="submit" class="btn btn-primary">Guardar</button>
-						</div>
-					</form>
-				</div>
+						Introduce un nombre válido.
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" (click)="cerrarModal(formComentario)">
+							Cerrar
+						</button>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

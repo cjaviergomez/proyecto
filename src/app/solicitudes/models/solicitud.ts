@@ -39,9 +39,6 @@ export interface Solicitud {
 	urlAval?: string;
 	nombreAval?: string;
 
-	urlSeguimientoObra?: string;
-	nombreSeguimientoObra?: string;
-
 	urlInformeSupervision?: string;
 	nombreInformeSupervision?: string;
 
@@ -56,7 +53,4 @@ export interface Solicitud {
 
 	urlActaLiquidacionC?: string;
 	nombreActaLiquidacionC?: string;
-
-	urlEntregaR?: string;
-	nombreEntregaR?: string;
 }

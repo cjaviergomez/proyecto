@@ -8,6 +8,9 @@ import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'; // Iconos
 // Componente padre
 import { ComunTaskComponent } from '../../general/comun-task.component';
 
+// Modelos
+import { Documento } from 'app/proceso/models/documento';
+
 //Services
 import { CamundaRestService } from 'app/proceso/services/camunda-rest.service';
 import { SolicitudService } from 'app/solicitudes/services/solicitud.service';
@@ -25,6 +28,8 @@ export class revisarDocsReformaComponent extends ComunTaskComponent implements O
 	docsReforma: boolean;
 	comentariosEntregaR: string[] = [];
 	comentario: string;
+
+	documentsEntregaReforma: Documento[] = [];
 
 	faTimes = faTimes;
 	faCheck = faCheck;
@@ -156,6 +161,8 @@ export class revisarDocsReformaComponent extends ComunTaskComponent implements O
 				this.comentariosEntregaR = variable.value;
 			} else if (variable.name == 'interventorId') {
 				this.interventorId = variable.value;
+			} else if (variable.name == 'documentsEntregaReforma') {
+				this.documentsEntregaReforma = variable.value;
 			}
 		}
 		this.cargando = false;
