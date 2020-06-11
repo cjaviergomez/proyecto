@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
 	AngularFirestore,
 	AngularFirestoreCollection,
-	AngularFirestoreDocument,
+	AngularFirestoreDocument
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 import { Perfil } from '../models/perfil';
 
 @Injectable({
-	providedIn: 'root',
+	providedIn: 'root'
 })
 export class PerfilService {
 	private perfilesCollection: AngularFirestoreCollection<Perfil>;
@@ -41,7 +41,7 @@ export class PerfilService {
 		return this.perfilesCollection.add({
 			nombre: perfil.nombre,
 			roles: perfil.roles,
-			descripcion: perfil.descripcion,
+			descripcion: perfil.descripcion
 		});
 	}
 

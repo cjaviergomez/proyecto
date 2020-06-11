@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-preguntas-frecuentes',
-  templateUrl: './preguntas-frecuentes.component.html',
-  styleUrls: ['./preguntas-frecuentes.component.css']
+	selector: 'app-preguntas-frecuentes',
+	templateUrl: './preguntas-frecuentes.component.html',
+	styleUrls: ['./preguntas-frecuentes.component.css']
 })
-export class PreguntasFrecuentesComponent implements OnInit {
+export class PreguntasFrecuentesComponent {
+	titulo: string;
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+	constructor() {
+		this.titulo = 'Preguntas Frecuentes';
+	}
 }
