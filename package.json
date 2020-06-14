@@ -30,7 +30,7 @@
 		"bootstrap": "^4.4.1",
 		"esri-loader": "^2.13.0",
 		"firebase": "^6.6.2",
-		"jquery": "^3.4.1",
+		"jquery": "^3.5.0",
 		"jshint": "^2.10.2",
 		"mixin-deep": "^2.0.1",
 		"ngx-spinner": "^8.0.3",
