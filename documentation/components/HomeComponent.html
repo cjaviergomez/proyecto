@@ -1,0 +1,452 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>proyecto documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">proyecto documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>HomeComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/out/components/home/home.component.ts</code>
+</p>
+
+
+
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>home</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./home.component.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./home.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/app/out/components/home/home.component.ts:8</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+
+@Component({
+  selector: &#x27;home&#x27;,
+  templateUrl: &#x27;./home.component.html&#x27;,
+  styleUrls: [&#x27;./home.component.css&#x27;]
+})
+export class HomeComponent {
+
+	constructor() {}
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;main role&#x3D;&quot;main&quot;&gt;
+  &lt;div id&#x3D;&quot;myCarousel&quot; class&#x3D;&quot;carousel slide&quot; data-ride&#x3D;&quot;carousel&quot;&gt;
+    &lt;ol class&#x3D;&quot;carousel-indicators&quot;&gt;
+      &lt;li data-target&#x3D;&quot;#myCarousel&quot; data-slide-to&#x3D;&quot;0&quot; class&#x3D;&quot;active&quot;&gt;&lt;/li&gt;
+      &lt;li data-target&#x3D;&quot;#myCarousel&quot; data-slide-to&#x3D;&quot;1&quot;&gt;&lt;/li&gt;
+      &lt;li data-target&#x3D;&quot;#myCarousel&quot; data-slide-to&#x3D;&quot;2&quot;&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+    &lt;div class&#x3D;&quot;carousel-inner&quot;&gt;
+      &lt;div class&#x3D;&quot;carousel-item active&quot;&gt;
+        &lt;svg class&#x3D;&quot;bd-placeholder-img&quot; width&#x3D;&quot;100%&quot; height&#x3D;&quot;100%&quot; preserveAspectRatio&#x3D;&quot;xMidYMid slice&quot; focusable&#x3D;&quot;false&quot; role&#x3D;&quot;img&quot;&gt;&lt;rect width&#x3D;&quot;100%&quot; height&#x3D;&quot;100%&quot; fill&#x3D;&quot;#777&quot;/&gt;&lt;/svg&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;carousel-caption text-left&quot;&gt;
+            &lt;h1&gt;Bienvenido a CampusGIS&lt;/h1&gt;
+            &lt;p&gt;Plataforma con la que podrás realizar cambios de infraestructura, ver detalladamente las reformas que se han hecho en el campus y demás.&lt;/p&gt;
+            &lt;p&gt;&lt;a class&#x3D;&quot;btn btn-lg btn-primary&quot; [routerLink]&#x3D;&quot;[&#x27;/modOut//login&#x27;]&quot; role&#x3D;&quot;button&quot;&gt;Iniciar Sesión&lt;/a&gt;&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;carousel-item&quot;&gt;
+        &lt;svg class&#x3D;&quot;bd-placeholder-img&quot; width&#x3D;&quot;100%&quot; height&#x3D;&quot;100%&quot; preserveAspectRatio&#x3D;&quot;xMidYMid slice&quot; focusable&#x3D;&quot;false&quot; role&#x3D;&quot;img&quot;&gt;&lt;rect width&#x3D;&quot;100%&quot; height&#x3D;&quot;100%&quot; fill&#x3D;&quot;#777&quot;/&gt;&lt;/svg&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;carousel-caption&quot;&gt;
+            &lt;h1&gt;Obtén tu cuenta&lt;/h1&gt;
+            &lt;p&gt;Es muy sencillo ser parte de CampusGIS, sólo debes ser miembro de la comunidad universitaria y contar con tu correo institucional.&lt;/p&gt;
+            &lt;p&gt;&lt;a class&#x3D;&quot;btn btn-lg btn-primary&quot; [routerLink]&#x3D;&quot;[&#x27;/modOut/registro&#x27;]&quot; role&#x3D;&quot;button&quot;&gt;¡Registrate!&lt;/a&gt;&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;carousel-item&quot;&gt;
+        &lt;svg class&#x3D;&quot;bd-placeholder-img&quot; width&#x3D;&quot;100%&quot; height&#x3D;&quot;100%&quot; preserveAspectRatio&#x3D;&quot;xMidYMid slice&quot; focusable&#x3D;&quot;false&quot; role&#x3D;&quot;img&quot;&gt;&lt;rect width&#x3D;&quot;100%&quot; height&#x3D;&quot;100%&quot; fill&#x3D;&quot;#777&quot;/&gt;&lt;/svg&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;carousel-caption text-right&quot;&gt;
+            &lt;h1&gt;¿Tienes preguntas?&lt;/h1&gt;
+            &lt;p&gt;Si tienes alguna inquietud no dudes en contactarnos.&lt;/p&gt;
+            &lt;p&gt;&lt;a class&#x3D;&quot;btn btn-lg btn-primary&quot; [routerLink]&#x3D;&quot;[&#x27;/modOut/contacto&#x27;]&quot; role&#x3D;&quot;button&quot;&gt;Contáctanos&lt;/a&gt;&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;a class&#x3D;&quot;carousel-control-prev&quot; href&#x3D;&quot;#myCarousel&quot; role&#x3D;&quot;button&quot; data-slide&#x3D;&quot;prev&quot;&gt;
+      &lt;span class&#x3D;&quot;carousel-control-prev-icon&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/span&gt;
+      &lt;span class&#x3D;&quot;sr-only&quot;&gt;Previous&lt;/span&gt;
+    &lt;/a&gt;
+    &lt;a class&#x3D;&quot;carousel-control-next&quot; href&#x3D;&quot;#myCarousel&quot; role&#x3D;&quot;button&quot; data-slide&#x3D;&quot;next&quot;&gt;
+      &lt;span class&#x3D;&quot;carousel-control-next-icon&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/span&gt;
+      &lt;span class&#x3D;&quot;sr-only&quot;&gt;Next&lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/div&gt;
+
+
+  &lt;!-- Marketing messaging and featurettes
+  &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+  &lt;!-- Wrap the rest of the page in another container to center all the content. --&gt;
+
+  &lt;div class&#x3D;&quot;container marketing&quot;&gt;
+
+    &lt;!-- Three columns of text below the carousel --&gt;
+    &lt;div class&#x3D;&quot;row mb-5&quot;&gt;
+      &lt;div class&#x3D;&quot;col-lg-4&quot;&gt;
+        &lt;img class&#x3D;&quot;bd-placeholder-img rounded-circle&quot; src&#x3D;&quot;../../../assets/img/add-user.png&quot; width&#x3D;&quot;140&quot; height&#x3D;&quot;140&quot; preserveAspectRatio&#x3D;&quot;xMidYMid slice&quot; focusable&#x3D;&quot;false&quot; role&#x3D;&quot;img&quot;&gt;
+        &lt;h2&gt;Registrate&lt;/h2&gt;
+        &lt;p&gt;Se parte de CampusGIS registrandote. Es sencillo, sólo tienes que tener tu correo institucional. Registrate y empieza a gestionar tus solicitudes de remodelación.&lt;/p&gt;
+        &lt;p&gt;&lt;a class&#x3D;&quot;btn btn-secondary&quot; [routerLink]&#x3D;&quot;[&#x27;/modOut//registro&#x27;]&quot; role&#x3D;&quot;button&quot;&gt;Registrate &amp;raquo;&lt;/a&gt;&lt;/p&gt;
+      &lt;/div&gt;&lt;!-- /.col-lg-4 --&gt;
+      &lt;div class&#x3D;&quot;col-lg-4&quot;&gt;
+        &lt;img class&#x3D;&quot;bd-placeholder-img rounded-circle&quot; src&#x3D;&quot;../../../assets/img/strategy.png&quot; width&#x3D;&quot;140&quot; height&#x3D;&quot;140&quot; preserveAspectRatio&#x3D;&quot;xMidYMid slice&quot; focusable&#x3D;&quot;false&quot; role&#x3D;&quot;img&quot;&gt;
+        &lt;h2&gt;Proceso&lt;/h2&gt;
+        &lt;p&gt;Conozca todos los detalles del proceso de remodelación de edificaciones en la universidad; cada una de sus etapas, sus documentación y cada uno de sus actores que son importantes para que este proceso se lleve a cabo.&lt;/p&gt;
+        &lt;p&gt;&lt;a class&#x3D;&quot;btn btn-secondary&quot; [routerLink]&#x3D;&quot;[&#x27;/modOut//proceso&#x27;]&quot; role&#x3D;&quot;button&quot;&gt;Ver detalles &amp;raquo;&lt;/a&gt;&lt;/p&gt;
+      &lt;/div&gt;&lt;!-- /.col-lg-4 --&gt;
+      &lt;div class&#x3D;&quot;col-lg-4&quot;&gt;
+        &lt;img class&#x3D;&quot;bd-placeholder-img rounded-circle&quot; src&#x3D;&quot;../../../assets/img/skyscrapper.png&quot; width&#x3D;&quot;140&quot; height&#x3D;&quot;140&quot; preserveAspectRatio&#x3D;&quot;xMidYMid slice&quot; focusable&#x3D;&quot;false&quot; role&#x3D;&quot;img&quot;&gt;
+        &lt;h2&gt;Reformas&lt;/h2&gt;
+        &lt;p&gt;Consulta todas las reformas que han sufrido las edificaciones del campus en los últimos años. Además, podrás realizar cambios de infraestructura con la ayuda de CampusGIS&lt;/p&gt;
+        &lt;p&gt;&lt;a class&#x3D;&quot;btn btn-secondary&quot; [routerLink]&#x3D;&quot;[&#x27;/modOut//login&#x27;]&quot; role&#x3D;&quot;button&quot;&gt;Inicia Sesión &amp;raquo;&lt;/a&gt;&lt;/p&gt;
+      &lt;/div&gt;&lt;!-- /.col-lg-4 --&gt;
+    &lt;/div&gt;&lt;!-- /.row --&gt;
+
+
+
+  &lt;/div&gt;&lt;!-- /.container --&gt;
+
+&lt;/main&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./home.component.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  color: #5a5a5a;
+}
+
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+  margin-bottom: 4rem;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  bottom: 3rem;
+  z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel-item {
+  height: 21rem;
+}
+.carousel-item &gt; img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  height: 32rem;
+}
+
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+.marketing .col-lg-4 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.marketing h2 {
+  font-weight: 400;
+}
+.marketing .col-lg-4 p {
+  margin-right: .75rem;
+  margin-left: .75rem;
+}
+
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {
+  margin: 5rem 0; /* Space out the Bootstrap &lt;hr&gt; more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.05rem;
+}
+
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 40em) {
+  /* Bump up size of carousel content */
+  .carousel-caption p {
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+@media (min-width: 62em) {
+  .featurette-heading {
+    margin-top: 7rem;
+  }
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><main role="main">  <div id="myCarousel" class="carousel slide" data-ride="carousel">    <ol class="carousel-indicators">      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>      <li data-target="#myCarousel" data-slide-to="1"></li>      <li data-target="#myCarousel" data-slide-to="2"></li>    </ol>    <div class="carousel-inner">      <div class="carousel-item active">        <svg class="bd-placeholder-img" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>        <div class="container">          <div class="carousel-caption text-left">            <h1>Bienvenido a CampusGIS</h1>            <p>Plataforma con la que podrás realizar cambios de infraestructura, ver detalladamente las reformas que se han hecho en el campus y demás.</p>            <p><a class="btn btn-lg btn-primary" [routerLink]="[\'/modOut//login\']" role="button">Iniciar Sesión</a></p>          </div>        </div>      </div>      <div class="carousel-item">        <svg class="bd-placeholder-img" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>        <div class="container">          <div class="carousel-caption">            <h1>Obtén tu cuenta</h1>            <p>Es muy sencillo ser parte de CampusGIS, sólo debes ser miembro de la comunidad universitaria y contar con tu correo institucional.</p>            <p><a class="btn btn-lg btn-primary" [routerLink]="[\'/modOut/registro\']" role="button">¡Registrate!</a></p>          </div>        </div>      </div>      <div class="carousel-item">        <svg class="bd-placeholder-img" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>        <div class="container">          <div class="carousel-caption text-right">            <h1>¿Tienes preguntas?</h1>            <p>Si tienes alguna inquietud no dudes en contactarnos.</p>            <p><a class="btn btn-lg btn-primary" [routerLink]="[\'/modOut/contacto\']" role="button">Contáctanos</a></p>          </div>        </div>      </div>    </div>    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">      <span class="carousel-control-prev-icon" aria-hidden="true"></span>      <span class="sr-only">Previous</span>    </a>    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">      <span class="carousel-control-next-icon" aria-hidden="true"></span>      <span class="sr-only">Next</span>    </a>  </div>  <!-- Marketing messaging and featurettes  ================================================== -->  <!-- Wrap the rest of the page in another container to center all the content. -->  <div class="container marketing">    <!-- Three columns of text below the carousel -->    <div class="row mb-5">      <div class="col-lg-4">        <img class="bd-placeholder-img rounded-circle" src="../../../assets/img/add-user.png" width="140" height="140" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">        <h2>Registrate</h2>        <p>Se parte de CampusGIS registrandote. Es sencillo, sólo tienes que tener tu correo institucional. Registrate y empieza a gestionar tus solicitudes de remodelación.</p>        <p><a class="btn btn-secondary" [routerLink]="[\'/modOut//registro\']" role="button">Registrate &raquo;</a></p>      </div><!-- /.col-lg-4 -->      <div class="col-lg-4">        <img class="bd-placeholder-img rounded-circle" src="../../../assets/img/strategy.png" width="140" height="140" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">        <h2>Proceso</h2>        <p>Conozca todos los detalles del proceso de remodelación de edificaciones en la universidad; cada una de sus etapas, sus documentación y cada uno de sus actores que son importantes para que este proceso se lleve a cabo.</p>        <p><a class="btn btn-secondary" [routerLink]="[\'/modOut//proceso\']" role="button">Ver detalles &raquo;</a></p>      </div><!-- /.col-lg-4 -->      <div class="col-lg-4">        <img class="bd-placeholder-img rounded-circle" src="../../../assets/img/skyscrapper.png" width="140" height="140" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">        <h2>Reformas</h2>        <p>Consulta todas las reformas que han sufrido las edificaciones del campus en los últimos años. Además, podrás realizar cambios de infraestructura con la ayuda de CampusGIS</p>        <p><a class="btn btn-secondary" [routerLink]="[\'/modOut//login\']" role="button">Inicia Sesión &raquo;</a></p>      </div><!-- /.col-lg-4 -->    </div><!-- /.row -->  </div><!-- /.container --></main></div>'
+    var COMPONENTS = [{'name': 'actaFinalizacionObraComponent', 'selector': 'app-acta-finalizacion-obra'},{'name': 'actaLiquidacionContratoComponent', 'selector': 'app-acta-liquidacion-contrato'},{'name': 'actaLiquidacionObraComponent', 'selector': 'app-acta-liquidacion-obra'},{'name': 'agregarComentariosComponent', 'selector': 'app-agregar-comentarios'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'approveDataTaskComponent', 'selector': 'approveDataTask'},{'name': 'ComentarioComponent', 'selector': 'app-comentario'},{'name': 'ComentariosComponent', 'selector': 'app-comentarios'},{'name': 'ConfigComponent', 'selector': 'app-config'},{'name': 'confirmarMaterialesComponent', 'selector': 'app-confirmar-materiales'},{'name': 'ContactoComponent', 'selector': 'app-contacto'},{'name': 'documentosInicioObraComponent', 'selector': 'app-documentos-inicio-obra'},{'name': 'elegirInterventorComponent', 'selector': 'app-elegir-interventor'},{'name': 'emitirAvalComponent', 'selector': 'app-emitir-aval'},{'name': 'emitirResolucionComponent', 'selector': 'app-emitir-resolucion'},{'name': 'entregaReformaComponent', 'selector': 'app-entrega-reforma'},{'name': 'enviarObservacionesComponent', 'selector': 'app-enviar-observaciones'},{'name': 'ErrorComponent', 'selector': 'error'},{'name': 'EsriMapComponent', 'selector': 'app-esri-map'},{'name': 'finalizarObraComponent', 'selector': 'app-finalizar-obra'},{'name': 'finalizarReformaComponent', 'selector': 'app-finalizar-reforma'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GenericForm', 'selector': 'generic-form'},{'name': 'HomeComponent', 'selector': 'home'},{'name': 'iniciarObraComponent', 'selector': 'app-iniciar-obra'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'PerfilAdminComponent', 'selector': 'app-perfil-admin'},{'name': 'PerfilComponent', 'selector': 'app-perfil'},{'name': 'PerfilEditComponent', 'selector': 'app-perfil-edit'},{'name': 'PerfilesComponent', 'selector': 'app-perfiles'},{'name': 'PreguntasFrecuentesComponent', 'selector': 'app-preguntas-frecuentes'},{'name': 'ProcesoComponent', 'selector': 'app-proceso'},{'name': 'procesoContratacionComponent', 'selector': 'app-proceso-contratacion'},{'name': 'ProcesslistComponent', 'selector': 'app-processlist'},{'name': 'realizarMinutaComponent', 'selector': 'app-realizar-minuta'},{'name': 'recomendarProveedoresComponent', 'selector': 'app-recomendar-provedores'},{'name': 'ReformaDetailComponent', 'selector': 'app-reforma-detail'},{'name': 'ReformasListComponent', 'selector': 'reformas-list'},{'name': 'RegistroComponent', 'selector': 'app-registro'},{'name': 'ResetPassComponent', 'selector': 'app-reset-pass'},{'name': 'revisarDocsReformaComponent', 'selector': 'app-revisar-docs-reforma'},{'name': 'revisarDocumentosFinComponent', 'selector': 'app-revisar-documentos-fin'},{'name': 'revisarInformesComponent', 'selector': 'app-revisar-informes'},{'name': 'revisarSolicitudComponent', 'selector': 'app-revisar-solicitud'},{'name': 'revisionInformeFinancieroComponent', 'selector': 'app-revision-informe-financiero'},{'name': 'seguimientoObraComponent', 'selector': 'app-seguimiento-obra'},{'name': 'solicitarConceptosComponent', 'selector': 'app-solicitar-conceptos'},{'name': 'SolicitudAddedComponent', 'selector': 'solicitud-added'},{'name': 'SolicitudAddErrorComponent', 'selector': 'solicitud-addError'},{'name': 'SolicitudDetailComponent', 'selector': 'solicitud-detail'},{'name': 'SolicitudesListComponent', 'selector': 'solicitudes-list'},{'name': 'startNewProcessComponent', 'selector': 'startNewProcess'},{'name': 'StartProcessComponent', 'selector': 'app-start-process'},{'name': 'subirConceptosComponent', 'selector': 'app-subir-conceptos'},{'name': 'subirCotizacionComponent', 'selector': 'app-subir-cotizacion'},{'name': 'subirInformeFinancieroComponent', 'selector': 'app-subir-informe-financiero'},{'name': 'subirInformeSupervisionComponent', 'selector': 'app-subir-informe-supervision'},{'name': 'TasklistComponent', 'selector': 'app-tasklist'},{'name': 'TiposDocumentsComponent', 'selector': 'app-tipos-documents'},{'name': 'UnidadesComponent', 'selector': 'app-unidades'},{'name': 'UserManagerComponent', 'selector': 'app-user-manager'},{'name': 'UsuariosComponent', 'selector': 'app-usuarios'},{'name': 'verificarCumplimientoComponent', 'selector': 'app-verificar-cumplimiento'},{'name': 'verificarDocumentosComponent', 'selector': 'app-verificar-documentos'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'HomeComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'HomeComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

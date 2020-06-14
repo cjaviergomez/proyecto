@@ -16,7 +16,7 @@ import { faExclamation, faSyncAlt, faTrash, faArrowLeft } from '@fortawesome/fre
 @Component({
 	selector: 'app-comentario',
 	templateUrl: './comentario.component.html',
-	styleUrls: ['./comentario.component.css'],
+	styleUrls: ['./comentario.component.css']
 })
 export class ComentarioComponent implements OnInit, OnDestroy {
 	comentario: Mensaje;
@@ -36,6 +36,10 @@ export class ComentarioComponent implements OnInit, OnDestroy {
 		private swal: ShowMessagesService
 	) {}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente
+	 * y es el primero en ejecutarse.
+	 */
 	ngOnInit(): void {
 		const id = this.route.snapshot.paramMap.get('id'); // Se obtiene el id por la url
 
@@ -44,25 +48,35 @@ export class ComentarioComponent implements OnInit, OnDestroy {
 			.getMensaje(id)
 			.pipe(takeUntil(this.ngUnsubscribe))
 			.subscribe((mensaje: Mensaje) => {
-				// Obtenemos la informacion del usuario de la base de datos de firebase.
+				// Obtenemos el comentario de la base de datos de firebase.
 				this.comentario = mensaje;
 				this.cargando = false;
+				// cambiamos el estado del comentario.
 				this.updateComentario(this.comentario);
 			});
 	}
 
+	/**
+	 * Método para elimnar de la base de datos un comentario.
+	 * @param id id del comentario a eliminar.
+	 */
 	eliminarMensaje(id: string): void {
 		this.swal.showQuestionMessage('deleteComment').then((resp) => {
 			if (resp.value) {
 				this.swal.showLoading();
 				this.mensajeServices.deleteMensaje(id).then(() => {
 					this.swal.stopLoading();
+					//Se redirije al componente comentarios.
 					this.router.navigate(['/comentarios']);
 				});
 			}
 		});
 	}
 
+	/**
+	 * Método para actualizar el estado de un comentario.
+	 * @param comentario Comentario a actualizar.
+	 */
 	updateComentario(comentario: Mensaje): void {
 		if (comentario.estado === 'Pendiente') {
 			comentario.estado = 'Leido';

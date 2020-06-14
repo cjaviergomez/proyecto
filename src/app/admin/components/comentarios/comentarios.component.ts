@@ -16,7 +16,7 @@ import { faTrash, faEye, faSyncAlt, faExclamation } from '@fortawesome/free-soli
 @Component({
 	selector: 'app-comentarios',
 	templateUrl: './comentarios.component.html',
-	styles: [],
+	styles: []
 })
 export class ComentariosComponent implements OnInit, OnDestroy {
 	//Iconos
@@ -31,10 +31,17 @@ export class ComentariosComponent implements OnInit, OnDestroy {
 
 	constructor(private mensajesService: MensajesService, private swal: ShowMessagesService) {}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente
+	 * y es el primero en ejecutarse.
+	 */
 	ngOnInit(): void {
 		this.getMensajes();
 	}
 
+	/**
+	 * Método para obtener todos los mensajes de la base de datos.
+	 */
 	getMensajes(): void {
 		this.mensajesService
 			.getMensajes()
@@ -45,6 +52,10 @@ export class ComentariosComponent implements OnInit, OnDestroy {
 			});
 	}
 
+	/**
+	 * Método para eliminar un mensaje de la base de datos.
+	 * @param id id del mensaje a eliminar.
+	 */
 	eliminarMensaje(id: string): void {
 		this.swal.showQuestionMessage('deleteComment').then((resp) => {
 			if (resp.value) {
