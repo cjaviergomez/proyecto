@@ -336,11 +336,13 @@ export class EsriMapComponent implements OnInit, OnDestroy {
 									//Agregar el render de las solicitudes con notificaciones
 									if (notifySolicitud.length > 0) {
 										notifySolicitud.forEach((notificacion) => {
-											renderer.uniqueValueInfos.push({
-												value: solicitudLayer.objectID,
-												symbol: notificacionSym,
-												...BuildingSceneLayer
-											});
+											if (solicitudLayer.estado === 'En trámite') {
+												renderer.uniqueValueInfos.push({
+													value: solicitudLayer.objectID,
+													symbol: notificacionSym,
+													...BuildingSceneLayer
+												});
+											}
 										});
 									}
 								});

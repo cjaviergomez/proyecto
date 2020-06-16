@@ -121,7 +121,7 @@ export class startNewProcessComponent extends StartProcessInstanceComponent impl
 		if (form.invalid) {
 			return;
 		}
-		if (this.otroLabel) {
+		if (this.document.label === 'Otro') {
 			this.document.label = this.otroLabel;
 		}
 		this.documents.push(this.document);

@@ -244,7 +244,7 @@ export class documentosInicioObraComponent extends ComunTaskComponent implements
 		if (form.invalid) {
 			return;
 		}
-		if (this.otroLabel) {
+		if (this.newDocumento.label === 'Otro') {
 			this.newDocumento.label = this.otroLabel;
 		}
 		this.newDocumento.id = Math.random().toString(36).substring(2);
