@@ -14,25 +14,35 @@ import { ShowMessagesService } from '../../../out/services/show-messages.service
 
 @Component({
 	selector: 'app-usuarios',
-	templateUrl: './usuarios.component.html',
+	templateUrl: './usuarios.component.html'
 })
 export class UsuariosComponent implements OnInit, OnDestroy {
 	usuarios: Usuario[] = [];
 	cargando = false;
 	private ngUnsubscribe: Subject<any> = new Subject<any>();
 
-	// Icons
-	faSearchPlus = faSearchPlus; // Icono a implementar en el botón de borrar.
-	faExclamation = faExclamation; // Icono de exclamación.
-	faSyncAlt = faSyncAlt; // Icono que da vueltas al cargar.
+	/** Icono a implementar en el botón de borrar. */
+	faSearchPlus = faSearchPlus;
+	/** Icono de exclamación. */
+	faExclamation = faExclamation;
+	/** Icono que da vueltas al cargar. */
+	faSyncAlt = faSyncAlt;
 
 	constructor(private usuarioService: UsuarioService, private swal: ShowMessagesService) {}
 
+	/**
+	 * Este método forma parte del ciclo de vida del componente
+	 * y es el primero en ejecutarse.
+	 */
 	ngOnInit(): void {
 		this.cargarUsuarios();
 	}
 
-	// Metodo para cambiar el estado de los usuarios
+	/**
+	 * Metodo para cambiar el estado de los usuarios
+	 * @param usuario Usuario a cambiarle el estado.
+	 * @param estado Estado a insertar en el usuario.
+	 */
 	cambiarEstado(usuario: Usuario, estado: string): void {
 		this.swal.showQuestionMessage('disableUserAccount', usuario, estado).then((resp) => {
 			if (resp.value) {
@@ -44,7 +54,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	// Metodo para cargar los usuarios de firebase haciendo uso del servicio.
+	/**
+	 * Metodo para cargar los usuarios de firebase haciendo uso del servicio.
+	 */
 	cargarUsuarios(): void {
 		this.cargando = true;
 		this.usuarioService

@@ -27,31 +27,48 @@ import {
 	faGrinBeamSweat
 } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Componente para editar el perfil de un usuario.
+ */
 @Component({
 	selector: 'app-perfil-edit',
 	templateUrl: './perfil-edit.component.html',
 	styleUrls: ['./perfil-edit.component.css']
 })
 export class PerfilEditComponent implements OnInit, OnDestroy {
+	/** Variable para almacenar la UAA del usuario al que se le va a modificar el perfil */
 	public unidad: Unidad;
+	/** Variable para almacenar el área técnica del usuario al que se le va a modificar el perfil */
 	public areatecnica: AreaTecnica;
+	/** Variable para almacenar todas las áreas tecnicas presentes en la base de datos */
 	public areasTecnicas: AreaTecnica[];
+	/** Variable para almacenar todos los perfiles presentes en la base de datos. */
 	public perfiles: Perfil[] = [];
+	/** Variable para almacenar todas las unidades presentes en la base de datos. */
 	public unidades: Unidad[];
+	/** Variable para almacenar la información del usuario al que se le va a modificar el perfil */
 	usuario: Usuario;
+	/** Variable para almacenar la información de usuario actual */
 	usuarioLogin: Usuario;
+	/** Variable para decidir si un usuario es o no verificador. */
 	public isVerificador: any = null;
+	/** Variable para mostrar un mensaje de cargando mientras se obtiene la información. */
 	cargando = false;
+	/** Observable para desubscribir todos los observables. */
 	private ngUnsubscribe: Subject<any> = new Subject<any>(); // Observable para desubscribir todos los observables
 
 	/**
 	 * Icono de exclamación.
 	 */
-	faExclamation = faExclamation; // Icono de exclamación.
-	faSave = faSave; // Icono para el boton guardar
-	faSmileWink = faSmileWink; //Icono para el boton de activado
-	faDizzy = faDizzy; // Icono para el boton de desactivado
-	faGrinBeamSweat = faGrinBeamSweat; //Icono para el boton de pendiente
+	faExclamation = faExclamation;
+	/** Icono para el boton guardar */
+	faSave = faSave;
+	/** Icono para el boton de activado */
+	faSmileWink = faSmileWink;
+	/** Icono para el boton de desactivado */
+	faDizzy = faDizzy;
+	/** Icono para el boton de pendiente */
+	faGrinBeamSweat = faGrinBeamSweat;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -207,7 +224,7 @@ export class PerfilEditComponent implements OnInit, OnDestroy {
 	 * Método obteener de la base de datos un perfil seleccionado.
 	 * @param centroId id del perfil seleccionado.
 	 */
-	onChange(centroId): void {
+	onChange(centroId: string): void {
 		this.perfilService
 			.getPerfil(centroId)
 			.pipe(takeUntil(this.ngUnsubscribe))

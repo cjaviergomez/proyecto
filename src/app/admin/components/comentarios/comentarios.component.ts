@@ -13,20 +13,44 @@ import { Mensaje } from '../../models/mensaje';
 // Iconos
 import { faTrash, faEye, faSyncAlt, faExclamation } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Componente para visualizar los comentarios almacenados en la base de datos.
+ */
 @Component({
 	selector: 'app-comentarios',
 	templateUrl: './comentarios.component.html',
 	styles: []
 })
 export class ComentariosComponent implements OnInit, OnDestroy {
-	//Iconos
+	/**
+	 * Icono para el botón de eliminar
+	 */
 	faTrash = faTrash;
+	/**
+	 * Icono para el botón de ver comentario.
+	 */
 	faEye = faEye;
+	/**
+	 * Icono que gira mientras carga la información.
+	 */
 	faSyncAlt = faSyncAlt;
+	/**
+	 * Icono de exclamación usado cuando no se encuentran comentarios en la base de datos
+	 */
 	faExclamation = faExclamation;
 
+	/**
+	 * Variable usada para mostrar mensaje de cargando mientras se obtienen los comentarios de la base de datos.
+	 */
 	cargarMensajes = true;
+	/**
+	 * Variable para almacenar todos los mensajes obtenidos de la base de datos.
+	 */
 	public mensajes: Mensaje[] = [];
+
+	/**
+	 * Observable para desubscribir todos los observables.
+	 */
 	private ngUnsubscribe: Subject<any> = new Subject<any>();
 
 	constructor(private mensajesService: MensajesService, private swal: ShowMessagesService) {}

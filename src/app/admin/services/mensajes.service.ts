@@ -10,6 +10,9 @@ import { map } from 'rxjs/operators';
 // Modelo
 import { Mensaje } from '../models/mensaje';
 
+/**
+ * Servicio para todo el CRUD respecto a los mensajes.
+ */
 @Injectable({
 	providedIn: 'root'
 })
@@ -21,7 +24,10 @@ export class MensajesService {
 
 	constructor(private afs: AngularFirestore) {}
 
-	// Metodo para agregar un mensaje a la base de datos de firebase.
+	/**
+	 * Metodo para agregar un mensaje a la base de datos de firebase.
+	 * @param m mensaje a agregar a la base de datos.
+	 */
 	addMensaje(m: Mensaje) {
 		this.mensajesCollection = this.afs.collection<Mensaje>('mensajes');
 		return this.mensajesCollection.add({
@@ -34,8 +40,10 @@ export class MensajesService {
 		});
 	}
 
-	// Método para obtener todos los mensajes de la base de datos.
-	getMensajes() {
+	/**
+	 * Método para obtener todos los mensajes de la base de datos.
+	 */
+	getMensajes(): Observable<Mensaje[]> {
 		this.mensajesCollection = this.afs.collection<Mensaje>('mensajes');
 		return (this.mensajes = this.mensajesCollection.snapshotChanges().pipe(
 			map((changes) => {
@@ -48,8 +56,11 @@ export class MensajesService {
 		));
 	}
 
-	// Metodo para obtener un Mensaje especifico de Firebase.
-	getMensaje(id: string) {
+	/**
+	 * Metodo para obtener un Mensaje especifico de Firebase.
+	 * @param id id del mensaje a consultar en la base de datos.
+	 */
+	getMensaje(id: string): Observable<Mensaje> {
 		this.mensajeDoc = this.afs.doc<Mensaje>(`mensajes/${id}`); // Ruta del usuario en particular.
 		return (this.mensaje = this.mensajeDoc.snapshotChanges().pipe(
 			map((action) => {
@@ -64,16 +75,22 @@ export class MensajesService {
 		));
 	}
 
-	// Metodo para actualizar la informaciòn de un mensaje en Firebase.
-	updateMensaje(mensaje: Mensaje) {
+	/**
+	 * Metodo para actualizar la informaciòn de un mensaje en Firebase.
+	 * @param mensaje Mensaje a actualizar.
+	 */
+	updateMensaje(mensaje: Mensaje): Promise<void> {
 		const idMensaje = mensaje.id;
 		delete mensaje.id; // Le borramos el id al usuario para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados.
 		this.mensajeDoc = this.afs.doc<Mensaje>(`mensajes/${idMensaje}`);
 		return this.mensajeDoc.update(mensaje);
 	}
 
-	// Metodo para borrar a un usuario de la base de datos de firebase.
-	deleteMensaje(id: string) {
+	/**
+	 * Metodo para borrar a un usuario de la base de datos de firebase.
+	 * @param id id del mensaje a eliminar.
+	 */
+	deleteMensaje(id: string): Promise<void> {
 		this.mensajeDoc = this.afs.doc<Mensaje>(`mensajes/${id}`);
 		return this.mensajeDoc.delete();
 	}

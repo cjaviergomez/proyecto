@@ -15,20 +15,38 @@ import { Roles } from 'app/admin/models/roles';
 // Iconos
 import { faSave, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Componente para visualizar o crear un nuevo perfil.
+ */
 @Component({
 	selector: 'app-perfil-admin',
 	templateUrl: './perfil-admin.component.html',
 	styleUrls: ['./perfil-admin.component.css']
 })
 export class PerfilAdminComponent implements OnInit, OnDestroy {
+	/**
+	 * Variable que contiene la información del perfil a visualizar.
+	 */
 	perfil: Perfil = new Perfil();
+	/**
+	 * Observable para desubscribir todos los observables.
+	 */
 	private ngUnsubscribe: Subject<any> = new Subject<any>();
+	/**
+	 * Id del perfil a visualizar obtenido desde la url. Si se va a crear un nuevo perfil, este id será "nuevo"
+	 */
 	public id: string;
 
-	//Iconos
+	/**
+	 * Icono para el botón "guardar"
+	 */
 	faSave = faSave;
+	/**
+	 * Icono para el botón "Regresar"
+	 */
 	faArrowLeft = faArrowLeft;
 
+	/** Variable para almacenar los roles */
 	public roles: Roles = {
 		verificador: false,
 		observador_general: false,
@@ -67,7 +85,7 @@ export class PerfilAdminComponent implements OnInit, OnDestroy {
 	 * Método para guardar en la base de datos un nuevo perfil.
 	 * @param form formulario con la información del nuevo perfil
 	 */
-	guardar(form: NgForm) {
+	guardar(form: NgForm): void {
 		if (form.invalid) {
 			return;
 		}

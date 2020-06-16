@@ -59,6 +59,13 @@
             <code>src/app/admin/services/areaTecnica.service.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Servicio para hacer todo el CRUD respecto a las áreas técnicas.</p>
+
+            </p>
 
 
 
@@ -131,7 +138,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:19</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:22</a></div>
                             </td>
                         </tr>
 
@@ -196,14 +203,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="24"
-                            class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:24</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="29"
+                            class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:29</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Metodo para obtener todas las areas tecnicas almacenadas en la base de datos de firebase incluido su id.</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="../classes/AreaTecnica.html" target="_self" >Observable&lt;AreaTecnica[]&gt;</a></code>
@@ -235,14 +244,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="41"
-                            class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:41</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="49"
+                            class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:49</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Metodo para obtener un area tecnica especifica de Firebase.</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -252,6 +263,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -266,6 +278,10 @@
                                     </td>
 
 
+                                    <td>
+                                        <p>id del área técnica a consultar</p>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -310,7 +326,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:17</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:20</a></div>
                             </td>
                         </tr>
 
@@ -338,7 +354,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:16</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:19</a></div>
                             </td>
                         </tr>
 
@@ -366,7 +382,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:18</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:21</a></div>
                             </td>
                         </tr>
 
@@ -394,7 +410,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:19</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/admin/services/areaTecnica.service.ts:22</a></div>
                             </td>
                         </tr>
 
@@ -418,6 +434,9 @@ import { map } from &#x27;rxjs/operators&#x27;;
 
 import { AreaTecnica } from &#x27;../models/areaTecnica&#x27;;
 
+/**
+ * Servicio para hacer todo el CRUD respecto a las áreas técnicas.
+ */
 @Injectable({
 	providedIn: &#x27;root&#x27;
 })
@@ -429,7 +448,9 @@ export class AreaTecnicaService {
 
 	constructor(private afs: AngularFirestore) {}
 
-	// Metodo para obtener todas las areas tecnicas almacenadas en la base de datos de firebase incluido su id.
+	/**
+	 * Metodo para obtener todas las areas tecnicas almacenadas en la base de datos de firebase incluido su id.
+	 */
 	getAreasTecnicas(): Observable&lt;AreaTecnica[]&gt; {
 		this.areasTecnicasCollection &#x3D; this.afs.collection&lt;AreaTecnica&gt;(&#x27;areasTecnicas&#x27;);
 		return (this.areasTecnicas &#x3D; this.areasTecnicasCollection.snapshotChanges().pipe(
@@ -446,7 +467,10 @@ export class AreaTecnicaService {
 	// // TODO: Falta implementar metodo.
 	// addAreaTecnica(areaTecica: AreaTecnica) {}
 
-	// Metodo para obtener un area tecnica especifica de Firebase.
+	/**
+	 * Metodo para obtener un area tecnica especifica de Firebase.
+	 * @param id id del área técnica a consultar
+	 */
 	getAreaTecnica(id: string): Observable&lt;AreaTecnica&gt; {
 		this.areasTecnicasDoc &#x3D; this.afs.doc&lt;AreaTecnica&gt;(&#x60;areasTecnicas/${id}&#x60;); // Ruta del area en particular.
 		return (this.areaTecnica &#x3D; this.areasTecnicasDoc.snapshotChanges().pipe(

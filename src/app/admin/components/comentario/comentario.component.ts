@@ -13,21 +13,45 @@ import { ShowMessagesService } from '../../../out/services/show-messages.service
 // Iconos
 import { faExclamation, faSyncAlt, faTrash, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Componente para visualizar un comentario en especifico obtenido de la base de datos.
+ */
 @Component({
 	selector: 'app-comentario',
 	templateUrl: './comentario.component.html',
 	styleUrls: ['./comentario.component.css']
 })
 export class ComentarioComponent implements OnInit, OnDestroy {
+	/**
+	 * Variable para almacenar el comentario extraido de la base de datos.
+	 */
 	comentario: Mensaje;
+	/**
+	 * Variable para mostrar mensaje de cargando.
+	 */
 	cargando = false;
-	private ngUnsubscribe: Subject<any> = new Subject<any>(); // Observable para desubscribir todos los observables
 
-	// Iconos
-	faExclamation = faExclamation; // Icono de exclamación.
-	faSyncAlt = faSyncAlt; // Icono que gira al cargar los datos.
-	faTrash = faTrash; // Icono de eliminar.
-	faArrowLeft = faArrowLeft; // Icono de regresar
+	/**
+	 * Observable para desubscribir todos los observables.
+	 */
+	private ngUnsubscribe: Subject<any> = new Subject<any>();
+
+	/**
+	 * Icono de exclamación.
+	 */
+	faExclamation = faExclamation;
+	/**
+	 * Icono que gira al cargar los datos.
+	 */
+	faSyncAlt = faSyncAlt;
+	/**
+	 * Icono de eliminar.
+	 */
+	faTrash = faTrash;
+	/**
+	 * Icono de regresar
+	 */
+	faArrowLeft = faArrowLeft;
 
 	constructor(
 		private route: ActivatedRoute,

@@ -8,6 +8,9 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+/**
+ * Servicio para hacer todo el CRUD con respecto a los tipos de documento.
+ */
 @Injectable({
 	providedIn: 'root'
 })
@@ -19,8 +22,10 @@ export class TiposDocumentsService {
 
 	constructor(private afs: AngularFirestore) {}
 
-	// Metodo para obtener de la base de datos de firebase los tipos de documentos incluido su id.
-	getTiposDocuments() {
+	/**
+	 * Metodo para obtener de la base de datos de firebase los tipos de documentos incluido su id.
+	 */
+	getTiposDocuments(): Observable<Documento[]> {
 		this.documentosCollection = this.afs.collection<Documento>('tiposDocuments');
 		return (this.documentos = this.documentosCollection.snapshotChanges().pipe(
 			map((changes) => {
@@ -33,7 +38,10 @@ export class TiposDocumentsService {
 		));
 	}
 
-	// Método para agregar una unidad a la base de datos
+	/**
+	 * Método para agregar una unidad a la base de datos
+	 * @param documento documento a añadir a la base de datos.
+	 */
 	addDocumento(documento: Documento) {
 		this.documentosCollection = this.afs.collection<Documento>('tiposDocuments');
 		return this.documentosCollection.add({
@@ -44,8 +52,11 @@ export class TiposDocumentsService {
 		});
 	}
 
-	// Metodo para obtener una unidad especifica de Firebase.
-	getDocumento(id: string) {
+	/**
+	 * Metodo para obtener un tipo de documento en especifico de Firebase.
+	 * @param id id del documento a consultar.
+	 */
+	getDocumento(id: string): Observable<Documento> {
 		this.documentoDoc = this.afs.doc<Documento>(`tiposDocuments/${id}`); // Ruta de la unidad en particular.
 		return (this.documento = this.documentoDoc.snapshotChanges().pipe(
 			map((action) => {
@@ -60,7 +71,11 @@ export class TiposDocumentsService {
 		));
 	}
 
-	updateDocumento(documento: Documento) {
+	/**
+	 * Método para actualizar un tipo de documento en la base de datos.
+	 * @param documento documento a actualizar.
+	 */
+	updateDocumento(documento: Documento): Promise<void> {
 		const idDocumento = documento.id;
 		delete documento.id; // Le borramos el id al usuario para cuando lo vuelva a guardar no lo incluya dentro de sus atributos actualizados
 		return this.afs.collection<Documento>('tiposDocuments').doc(idDocumento).set(documento);
